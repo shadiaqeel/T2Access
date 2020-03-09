@@ -9,7 +9,7 @@ namespace T2Access.DAL
 {
     public interface IUserGateManager : IRepository<UserGate>
     {
-         bool Insert(string userId, string gateId);
-         bool Delete(string userId, string gateId);
+         bool Insert(Guid userId, Guid gateId);
+         bool Delete(Guid userId, Guid gateId);
     }
 }

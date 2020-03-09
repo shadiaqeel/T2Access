@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Data.SqlClient;
 using T2Access.Models;
 
@@ -9,118 +10,76 @@ namespace T2Access.DAL
         public bool Insert(UserGate userGate)
         {
 
-            bool resultState = false;
 
-            using (SqlConnection connection = new SqlConnection(Variables.ConnectionString))
+            Action<SqlCommand> FillCmd = delegate (SqlCommand cmd)
             {
-
-                connection.Open();
-
-                using (SqlCommand cmd = new SqlCommand("SP_Transaction_Insert", connection))
-                {
+                cmd.Parameters.AddWithValue("@userId", userGate.UserId);
+                cmd.Parameters.AddWithValue("@gateId", userGate.GateId);
+            };
 
 
-                    cmd.CommandType = CommandType.StoredProcedure;
+            return DatabaseExecuter.ExecuteNonQuery("SP_Transaction_Insert", FillCmd);
 
-                    cmd.Parameters.AddWithValue("@userId", userGate.UserId);
-                    cmd.Parameters.AddWithValue("@gateId", userGate.GateId);
-
-
-
-                    resultState = cmd.ExecuteNonQuery() > 0 ? true : false ;
-
-
-
-
-                }
-
-                connection.Close();
-
-            }
-
-            return resultState;
         }
 
 
 
 
-        public Transaction GetByGateId(string gateId, int status)
+        public Transaction GetByGateId(Guid gateId, int status)
         {
             Transaction transaction = new Transaction();
 
 
-            using (SqlConnection connection = new SqlConnection(Variables.ConnectionString))
+
+            Action<SqlCommand> FillCmd = delegate (SqlCommand cmd)
             {
 
-                connection.Open();
+                cmd.Parameters.AddWithValue("@gateId", gateId);
 
-                using (SqlCommand cmd = new SqlCommand("SP_Transaction_GetByGateId", connection))
-                {
-
-
-                    cmd.CommandType = CommandType.StoredProcedure;
-
-                    cmd.Parameters.AddWithValue("@gateId", gateId);
-
-                    cmd.Parameters.AddWithValue("@status", status);
+                cmd.Parameters.AddWithValue("@status", status);
+            };
 
 
 
 
 
-                    SqlDataReader reader = cmd.ExecuteReader();
+            Action<SqlDataReader> FillReader = delegate (SqlDataReader reader)
+          {
+              if (reader.HasRows && reader.Read())
+              {
+
+                  transaction.Id = reader.GetDecimal(0);
+                  transaction.UserId = reader.GetGuid(1);
+                  transaction.GateId = reader.GetGuid(2);
+                  transaction.CreatedDate = reader.GetDateTime(3);
+                  transaction.Status = reader.GetInt32(4);
+                  transaction.StatusDate = reader.GetDateTime(5);
+
+              }
+              else transaction = null;
+          };
 
 
 
-                    if (reader.HasRows && reader.Read())
-                    {
+            DatabaseExecuter.ExecuteQuery("SP_Transaction_GetByGateId",FillCmd,FillReader);
+            
 
-                        transaction.Id = reader.GetInt32(0);
-                        transaction.UserId = reader.GetString(1);
-                        transaction.GateId = reader.GetString(2);
-                        transaction.CreatedDate = reader.GetDateTime(3);
-                        transaction.Status = reader.GetInt32(4);
-                        transaction.StatusDate = reader.GetDateTime(5);
-
-                    }
-                    else transaction = null;
-
-
-                }
-
-                connection.Close();
-
-            }
 
             return transaction;
         }
 
+
+
         public bool Update(int id)
         {
-            bool resultState = false;
 
-
-            using (SqlConnection connection = new SqlConnection(Variables.ConnectionString))
+            Action<SqlCommand> FillCmd = delegate (SqlCommand cmd)
             {
-
-                connection.Open();
-
-                using (SqlCommand cmd = new SqlCommand("SP_Transaction_Update", connection))
-                {
+                cmd.Parameters.AddWithValue("@Id", id);
+            };
 
 
-                    cmd.CommandType = CommandType.StoredProcedure;
-
-                    cmd.Parameters.AddWithValue("@Id", id);
-
-                    resultState = cmd.ExecuteNonQuery() > 0 ? true : false;
-
-                }
-
-                connection.Close();
-
-            }
-            return resultState;
+            return DatabaseExecuter.ExecuteNonQuery("SP_Transaction_Update", FillCmd);
         }
     }
 }

@@ -14,10 +14,10 @@ namespace T2Access.API.Controllers
         ITransactionService transactionService = new TransactionService();
 
 
-        public HttpResponseMessage Get(string id)
+        public HttpResponseMessage Get(Guid id)
         {
 
-            Transaction  transaction =   transactionService.GetByGateId(id);
+            Transaction  transaction = transactionService.GetByGateId(id);
 
             if (transaction != null)
                 return Request.CreateResponse(HttpStatusCode.OK, transaction);
@@ -25,6 +25,10 @@ namespace T2Access.API.Controllers
                 return Request.CreateResponse(HttpStatusCode.NotFound);
 
         }
+
+
+
+
 
         [HttpPost]
         public HttpResponseMessage Create([FromBody] UserGate userGate)
@@ -40,7 +44,7 @@ namespace T2Access.API.Controllers
         }
 
         [HttpPut]
-        public HttpResponseMessage Update(int id, [FromBody]string value)
+        public HttpResponseMessage Update(int id)
         {
             if (transactionService.UpdateStatus(id))
                 return Request.CreateResponse(HttpStatusCode.OK);

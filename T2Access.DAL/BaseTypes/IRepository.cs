@@ -9,7 +9,7 @@ namespace T2Access.DAL
 {
     public interface IRepository<T> where T: BaseEntity
     {
-        bool Insert(T entity);
+      //  bool Insert(T entity);
 
     }
 }

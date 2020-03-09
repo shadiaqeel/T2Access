@@ -2,7 +2,6 @@
 using System.Data;
 using System.Data.SqlClient;
 using T2Access.Models;
-using System.Action;
 using System;
 
 namespace T2Access.DAL
@@ -13,53 +12,20 @@ namespace T2Access.DAL
 
         public bool Insert(Gate gateModel)
         {
-            bool resultState = false;
 
 
-            using (SqlConnection connection = new SqlConnection(Variables.ConnectionString))
+            Action<SqlCommand> FillCmd = delegate (SqlCommand cmd)
             {
+                cmd.Parameters.AddWithValue("@username", gateModel.Username);
+                cmd.Parameters.AddWithValue("@password", gateModel.HashedPassword);
+                cmd.Parameters.AddWithValue("@nameAr", gateModel.NameAr);
+                cmd.Parameters.AddWithValue("@nameEn", gateModel.NameEn);
+            };
 
-                connection.Open();
+           
 
-                using (SqlCommand cmd = new SqlCommand("SP_Gate_Insert", connection))
-                {
-
-
-                    cmd.CommandType = CommandType.StoredProcedure;
-
-
-                    
-                   
-                    cmd.Parameters.AddWithValue("@username", gateModel.Username);
-                    cmd.Parameters.AddWithValue("@password", gateModel.HashedPassword);
-                    cmd.Parameters.AddWithValue("@nameAr", gateModel.NameAr);
-                    cmd.Parameters.AddWithValue("@nameEn", gateModel.NameEn);
-
-
-                    resultState = cmd.ExecuteNonQuery() > 0 ? true : false;
-
-
-
-
-                }
-
-                connection.Close();
-
-            }
-
-            return resultState;
+            return DatabaseExecuter.ExecuteNonQuery("SP_Gate_Insert",FillCmd);
         }
-
-
-
-        DatabaseExecuter databaseExecuter = new DatabaseExecuter();
-
-       
-
-
-      
-
-
 
 
 
@@ -90,6 +56,8 @@ namespace T2Access.DAL
             };
 
 
+
+
             Action<SqlDataReader> FillReader = delegate (SqlDataReader reader)
 
             {
@@ -101,7 +69,7 @@ namespace T2Access.DAL
                         {
                             Gate _gate = new Gate();
 
-                            gateModel.Id = reader.GetString(0);
+                            gateModel.Id = reader.GetGuid(0);
                             gateModel.Username = reader.GetString(1);
                             gateModel.HashedPassword = reader.GetString(2);
                             gateModel.NameAr = reader.GetString(3);
@@ -123,7 +91,7 @@ namespace T2Access.DAL
             };
 
 
-             databaseExecuter.ExecuteQuery("SP_Gate_SelectWithFilter", FillCmd, FillReader);
+             DatabaseExecuter.ExecuteQuery("SP_Gate_SelectWithFilter", FillCmd, FillReader);
 
 
 

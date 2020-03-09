@@ -8,7 +8,7 @@ namespace T2Access.Models
 {
     public class Gate: BaseEntity
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
         public string Username { get; set; }
         public string HashedPassword { get; set; }
         public string NameAr { get; set; }

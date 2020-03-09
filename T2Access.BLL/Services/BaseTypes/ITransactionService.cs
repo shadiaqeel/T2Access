@@ -11,11 +11,11 @@ namespace T2Access.BLL.Services
     {
 
         bool Create(UserGate userGate);
-        Transaction GetByGateId(string gateId);
+        Transaction GetByGateId(Guid gateId);
         bool UpdateStatus(int id);
-        bool Assign(string userId, string gateId);
+        bool Assign(Guid userId, Guid gateId);
 
-        bool Unassign(string userId, string gateId);
+        bool Unassign(Guid userId, Guid gateId);
 
 
 

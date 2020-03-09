@@ -10,65 +10,32 @@ namespace T2Access.DAL
 {
     public class UserGateManager : IUserGateManager
     {
-        public bool Insert(string userId, string gateId)
+        public bool Insert(Guid userId, Guid gateId)
         {
-            bool resultState = false;
 
-            using (SqlConnection connection = new SqlConnection(Variables.ConnectionString))
+            Action<SqlCommand> FillCmd = delegate (SqlCommand cmd)
             {
-                connection.Open();
+                cmd.Parameters.AddWithValue("@userId", userId);
+                cmd.Parameters.AddWithValue("@gateId", gateId);
 
-                using (SqlCommand cmd = new SqlCommand("SP_UserGate_Insert",connection))
-                {
-
-                    cmd.CommandType = CommandType.StoredProcedure;
-
-                    cmd.Parameters.AddWithValue("@userId",userId);
-                    cmd.Parameters.AddWithValue("@gateId", gateId);
+            };
 
 
-                    resultState = cmd.ExecuteNonQuery() > 0 ? true : false;
+            return DatabaseExecuter.ExecuteNonQuery("SP_UserGate_Insert", FillCmd);
 
-
-
-
-                }
-                connection.Close();
-
-
-            }
-
-            return resultState;
         }
 
-        public bool Delete(string userId, string gateId)
+        public bool Delete(Guid userId, Guid gateId)
         {
-            bool resultState = false;
 
-            using (SqlConnection connection = new SqlConnection(Variables.ConnectionString))
+            Action<SqlCommand> FillCmd = delegate (SqlCommand cmd)
             {
-                connection.Open();
+                cmd.Parameters.AddWithValue("@userId", userId);
+                cmd.Parameters.AddWithValue("@gateId", gateId);
 
-                using (SqlCommand cmd = new SqlCommand("SP_UserGate_Delete", connection))
-                {
+            };
 
-                    cmd.CommandType = CommandType.StoredProcedure;
-
-                    cmd.Parameters.AddWithValue("@userId", userId);
-                    cmd.Parameters.AddWithValue("@gateId", gateId);
-
-
-                    resultState = cmd.ExecuteNonQuery() > 0 ? true : false;
-
-
-
-
-                }
-                connection.Close();
-
-
-            }
-            return resultState;
+            return DatabaseExecuter.ExecuteNonQuery("SP_UserGate_Delete",FillCmd);
         }
     }
 }
