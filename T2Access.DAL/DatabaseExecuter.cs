@@ -53,10 +53,10 @@ namespace T2Access.DAL
 
 
 
-        public static bool ExecuteNonQuery(string storedProcedure, Action<SqlCommand> FillCmd)
+        public static int  ExecuteNonQuery(string storedProcedure, Action<SqlCommand> FillCmd)
         {
 
-            bool resultState = false;
+            int result = 0;
 
             using (SqlConnection connection = new SqlConnection(Variables.ConnectionString))
             {
@@ -71,9 +71,12 @@ namespace T2Access.DAL
 
                     FillCmd(cmd);
 
-                    resultState = cmd.ExecuteNonQuery() > 0 ? true : false;
-
-
+                    try
+                    {
+                        result = cmd.ExecuteNonQuery();
+                    }
+                    catch (Exception e)
+                    { result = -1; }
 
 
                 }
@@ -83,7 +86,7 @@ namespace T2Access.DAL
             }
 
 
-            return resultState;
+            return result;
 
         }
     }

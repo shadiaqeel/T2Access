@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data;
 using System.Data.SqlClient;
 using T2Access.Models;
 
@@ -7,18 +6,14 @@ namespace T2Access.DAL
 {
     public class TransactionManager : ITransactionManager
     {
-        public bool Insert(UserGate userGate)
+        public bool Insert(UserGateModel userGate)
         {
 
-
-            Action<SqlCommand> FillCmd = delegate (SqlCommand cmd)
+            return DatabaseExecuter.ExecuteNonQuery("SP_Transaction_Insert", delegate (SqlCommand cmd)
             {
                 cmd.Parameters.AddWithValue("@userId", userGate.UserId);
                 cmd.Parameters.AddWithValue("@gateId", userGate.GateId);
-            };
-
-
-            return DatabaseExecuter.ExecuteNonQuery("SP_Transaction_Insert", FillCmd);
+            }) > 0 ? true : false ;
 
         }
 
@@ -27,42 +22,33 @@ namespace T2Access.DAL
 
         public Transaction GetByGateId(Guid gateId, int status)
         {
+
             Transaction transaction = new Transaction();
 
 
+            DatabaseExecuter.ExecuteQuery("SP_Transaction_GetByGateId", delegate (SqlCommand cmd)
+             {
 
-            Action<SqlCommand> FillCmd = delegate (SqlCommand cmd)
-            {
+                 cmd.Parameters.AddWithValue("@gateId", gateId);
 
-                cmd.Parameters.AddWithValue("@gateId", gateId);
+                 cmd.Parameters.AddWithValue("@status", status);
+             }, delegate (SqlDataReader reader)
+             {
+                 if (reader.Read())
+                 {
 
-                cmd.Parameters.AddWithValue("@status", status);
-            };
+                     transaction = new Transaction()
+                     {
+                         Id = reader.GetDecimal(0),
+                         UserId = reader.GetGuid(1),
+                         GateId = reader.GetGuid(2),
+                         CreatedDate = reader.GetDateTime(3),
+                         Status = reader.GetInt32(4),
+                         StatusDate = reader.GetDateTime(5)
+                     };
 
-
-
-
-
-            Action<SqlDataReader> FillReader = delegate (SqlDataReader reader)
-          {
-              if (reader.HasRows && reader.Read())
-              {
-
-                  transaction.Id = reader.GetDecimal(0);
-                  transaction.UserId = reader.GetGuid(1);
-                  transaction.GateId = reader.GetGuid(2);
-                  transaction.CreatedDate = reader.GetDateTime(3);
-                  transaction.Status = reader.GetInt32(4);
-                  transaction.StatusDate = reader.GetDateTime(5);
-
-              }
-              else transaction = null;
-          };
-
-
-
-            DatabaseExecuter.ExecuteQuery("SP_Transaction_GetByGateId",FillCmd,FillReader);
-            
+                 }
+             });
 
 
             return transaction;
@@ -70,16 +56,15 @@ namespace T2Access.DAL
 
 
 
-        public bool Update(int id)
+        public bool Update(decimal id)
         {
 
-            Action<SqlCommand> FillCmd = delegate (SqlCommand cmd)
+
+
+            return DatabaseExecuter.ExecuteNonQuery("SP_Transaction_Update", delegate (SqlCommand cmd)
             {
                 cmd.Parameters.AddWithValue("@Id", id);
-            };
-
-
-            return DatabaseExecuter.ExecuteNonQuery("SP_Transaction_Update", FillCmd);
+            }) > 0 ? true : false;
         }
     }
 }

@@ -1,39 +1,53 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using T2Access.Models;
+﻿using System.Collections.Generic;
 using T2Access.DAL;
+using T2Access.Models;
 
-namespace T2Access.BLL.Services.Impl
+namespace T2Access.BLL.Services
 {
 
 
-    class GateService : IGateService
+
+    public class GateService : IGateService
     {
 
         private IGateManager gateManager = new GateManager();
 
-        public bool Create(Gate gate)
+
+
+        public bool Create(GateSignUpModel gateModel)
         {
 
-            return gateManager.Insert(gate);
+            return gateManager.Insert(new Gate()
+            {
+                UserName = gateModel.UserName,
+                Password = gateModel.Password,
+                NameAr = gateModel.NameAr,
+                NameEn = gateModel.NameEn
+            });
 
+        }
 
+        public List<Gate> GetListWithFilter(Gate gate)
+        {
+
+            return gateManager.GetWithFilter(gate);
 
         }
 
 
-
-        public List<Gate> List(Gate gate)
+        public bool CheckUserName(string userName)
         {
-
-           return gateManager.GetWithFilter(gate);
+            return gateManager.GetByUserName(userName) == null ? true : false;
 
         }
 
 
+        public Gate Login(LoginModel gateModel)
+        {
 
+            return gateManager.Login(gateModel);
+
+
+        }
     }
 }

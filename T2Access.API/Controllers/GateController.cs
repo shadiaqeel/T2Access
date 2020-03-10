@@ -1,13 +1,103 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Web.Http;
+using System.Web.Http.Description;
+using Ole5.Tokenization.Models;
+using T2Access.API.Helper;
+using T2Access.BLL.Services;
+using T2Access.Models;
 
 namespace T2Access.API.Controllers
 {
-    public class GateController : ApiController
+
+    [RoutePrefix("api/gate")]
+    public class GateController : BaseController
     {
+        IGateService gateService = new GateService();
+
+
+        [Route("login")]
+        [HttpPost]
+        [ResponseType(typeof(string))]
+        public HttpResponseMessage Login(LoginModel gate)
+        {
+            if (!ModelState.IsValid)
+                return Request.CreateResponse(HttpStatusCode.NotFound, ModelState);
+
+
+            var _gate = gateService.Login(gate);
+
+
+            if (_gate != null)
+            {
+                List<Claim> cliamList = new List<Claim>();
+                cliamList.Add(new Claim("GateId", _gate.Id.ToString()));
+                cliamList.Add(new Claim("UserName", _gate.UserName));
+                cliamList.Add(new Claim("NameAr", _gate.NameAr));
+                cliamList.Add(new Claim("NameEn", _gate.NameEn));
+                cliamList.Add(new Claim("Role", "Gate"));
+
+
+
+                var Token = AuthrizationFactory.GetAuthrization().GenerateToken(new JWTContainerModel()
+                {
+
+                    ExpireMinutes = DateTime.Now.AddMinutes(15).Minute,
+                    Claims = cliamList.ToArray()
+
+                });
+
+                return Request.CreateResponse(HttpStatusCode.OK, Token);
+            }
+            else
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound, "Username isn't exist");
+
+            }
+
+
+        }
+
+
+        [Route("signup")]
+        [HttpPost]
+        [ResponseType(typeof(UserSignUpModel))]
+        public HttpResponseMessage SignUp(GateSignUpModel gate)
+        {
+
+            if (!ModelState.IsValid)
+                return Request.CreateResponse(HttpStatusCode.NotFound, ModelState);
+
+            if (gateService.CheckUserName(gate.UserName))
+            {
+                if (gateService.Create(gate))
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, gate);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "Signup process failed");
+
+                }
+            }
+            else {
+
+                return Request.CreateResponse(HttpStatusCode.NotFound, "Signup process failed ,  Username is used ");
+
+
+            }
+
+
+        }
+
+
+
+
+
+
+
     }
 }

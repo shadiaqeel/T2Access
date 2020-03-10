@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Net;
+using System.Net.Http;
+using System.Security.Principal;
+using System.Threading;
 using System.Web.Http;
 using System.Web.Http.Controllers;
-using System.Net.Http;
-using System.Text;
-using System.Threading;
-using System.Security.Principal;
+using Ole5.Tokenization.Services;
+using T2Access.API.Helper;
 
-namespace WebAPI.Attributes
+namespace T2Access.API.Attributes
 {
     public class CustomAuthorizeAttribute : AuthorizeAttribute
     {
@@ -17,42 +15,44 @@ namespace WebAPI.Attributes
 
         public override void OnAuthorization(HttpActionContext actionContext)
         {
-             //base.OnAuthorization(actionContext);
+            if (actionContext.Request.Headers.Authorization == null || string.IsNullOrEmpty(actionContext.Request.Headers.Authorization.Parameter))
+            {
+                actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized, "You are not authorized to use this resource");
+                return;
+            }
 
-            if (actionContext.Request.Headers.Authorization == null)
+
+
+
+            var token = actionContext.Request.Headers.Authorization.Parameter;
+
+            IAuthService authService = AuthrizationFactory.GetAuthrization();
+
+            
+            var role = ((JWTService)authService).GetTokenClaimValue(token, "Role");
+
+            if (!authService.IsTokenValid(token) || !Roles.Contains(role) )
             {
 
-
-
-                actionContext.Response = actionContext.Request.CreateResponse(System.Net.HttpStatusCode.Unauthorized);
-
-
+                actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized);
             }
             else
             {
-
-                string authenticationToken = actionContext.Request.Headers.Authorization.Parameter;
-               string decodedAuthenicationToken = Encoding.UTF8.GetString (Convert.FromBase64String(authenticationToken));
-               string [] usernamePasswordArray = decodedAuthenicationToken.Split(':');
-                string username = usernamePasswordArray[0];
-                string password = usernamePasswordArray[1];
+                var userName = ((JWTService)authService).GetTokenClaimValue(token, "UserName");
 
 
-
-                if (username.Equals("shadi") && password.Equals("123456"))
-                {
-
-
-                  Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity(username), null);
-                }
-                else
-                {
-
-                    actionContext.Response = actionContext.Request.CreateResponse(System.Net.HttpStatusCode.Unauthorized);
-
-                }
+                IPrincipal principal = new GenericPrincipal(new GenericIdentity(userName), new string[] { role });
+                Thread.CurrentPrincipal = principal;
+                actionContext.RequestContext.Principal = principal;
 
             }
+
+
         }
+
+
+
+
+
     }
 }

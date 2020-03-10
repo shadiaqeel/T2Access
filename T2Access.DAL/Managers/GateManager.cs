@@ -1,30 +1,25 @@
 ﻿using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
 using T2Access.Models;
-using System;
+using T2Access.Security;
 
 namespace T2Access.DAL
 {
     public class GateManager : IGateManager
     {
+        private IPasswordHasher passwordHasher = new PasswordHasher();
 
 
-        public bool Insert(Gate gateModel)
+        public bool  Insert(Gate gateModel)
         {
 
-
-            Action<SqlCommand> FillCmd = delegate (SqlCommand cmd)
+            return DatabaseExecuter.ExecuteNonQuery("SP_Gate_Insert", delegate (SqlCommand cmd)
             {
-                cmd.Parameters.AddWithValue("@username", gateModel.Username);
-                cmd.Parameters.AddWithValue("@password", gateModel.HashedPassword);
+                cmd.Parameters.AddWithValue("@username", gateModel.UserName);
+                cmd.Parameters.AddWithValue("@password", passwordHasher.HashPassword(gateModel.Password));
                 cmd.Parameters.AddWithValue("@nameAr", gateModel.NameAr);
                 cmd.Parameters.AddWithValue("@nameEn", gateModel.NameEn);
-            };
-
-           
-
-            return DatabaseExecuter.ExecuteNonQuery("SP_Gate_Insert",FillCmd);
+            }) > 0 ? true :  false ;
         }
 
 
@@ -36,62 +31,47 @@ namespace T2Access.DAL
             List<Gate> gateList = new List<Gate>();
 
 
-            Action<SqlCommand> FillCmd = delegate (SqlCommand cmd)
+            DatabaseExecuter.ExecuteQuery("SP_Gate_SelectWithFilter", delegate (SqlCommand cmd)
 
-            {
+                     {
 
-                if (gateModel.Username != null)
-                    cmd.Parameters.AddWithValue("@username", gateModel.Username);
+                         if (gateModel.UserName != null)
+                             cmd.Parameters.AddWithValue("@username", gateModel.UserName);
 
-                if (gateModel.NameAr != null)
-                    cmd.Parameters.AddWithValue("@nameAr", gateModel.NameAr);
+                         if (gateModel.NameAr != null)
+                             cmd.Parameters.AddWithValue("@nameAr", gateModel.NameAr);
 
-                if (gateModel.NameEn != null)
-                    cmd.Parameters.AddWithValue("@nameEn", gateModel.NameEn);
+                         if (gateModel.NameEn != null)
+                             cmd.Parameters.AddWithValue("@nameEn", gateModel.NameEn);
 
-                if (gateModel.Status != null)
-                    cmd.Parameters.AddWithValue("@status", gateModel.Status);
-
-
-            };
+                         if (gateModel.Status != null)
+                             cmd.Parameters.AddWithValue("@status", gateModel.Status);
 
 
+                     }, delegate (SqlDataReader reader)
+
+                     {
 
 
-            Action<SqlDataReader> FillReader = delegate (SqlDataReader reader)
-
-            {
-                do
-                {
-                    if (reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            Gate _gate = new Gate();
-
-                            gateModel.Id = reader.GetGuid(0);
-                            gateModel.Username = reader.GetString(1);
-                            gateModel.HashedPassword = reader.GetString(2);
-                            gateModel.NameAr = reader.GetString(3);
-                            gateModel.NameEn = reader.GetString(4);
-                            gateModel.CreatedDate = reader.GetDateTime(5);
-                            gateModel.Status = reader.GetInt32(6);
+                         while (reader.Read())
+                         {
 
 
+                             gateList.Add(
+                                            new Gate
+                                            {
+                                                Id = reader.GetGuid(0),
+                                                UserName = reader.GetString(1),
+                                                Password = reader.GetString(2),
+                                                NameAr = reader.GetString(3),
+                                                NameEn = reader.GetString(4),
+                                                CreatedDate = reader.GetDateTime(5),
+                                                Status = reader.GetInt32(6)
+                                            }
+                                            );
+                         }
 
-                            gateList.Add(_gate);
-
-                        }
-
-
-                    }
-                    else gateList = null;
-
-                } while (reader.NextResult());
-            };
-
-
-             DatabaseExecuter.ExecuteQuery("SP_Gate_SelectWithFilter", FillCmd, FillReader);
+                     });
 
 
 
@@ -101,5 +81,67 @@ namespace T2Access.DAL
         }
 
 
+
+        public Gate GetByUserName(string username)
+        {
+            Gate gate = null;
+            DatabaseExecuter.ExecuteQuery("SP_Gate_SelectByUserName", delegate (SqlCommand cmd)
+
+            {
+
+                if (username != null)
+                    cmd.Parameters.AddWithValue("@username", username);
+
+
+            }, delegate (SqlDataReader reader)
+
+            {
+
+
+                if (reader.Read())
+                {
+
+                    gate = new Gate()
+                    {
+                        Id = reader.GetGuid(0),
+                        UserName = reader.GetString(1),
+                        Password = reader.GetString(2),
+                        NameAr = reader.GetString(3),
+                        NameEn = reader.GetString(4),
+                        CreatedDate = reader.GetDateTime(5),
+                        Status = reader.GetInt32(6)
+                    };
+
+                }
+
+            });
+
+            return gate;
+
+
+
+        }
+
+
+
+        public Gate Login(LoginModel gateModel)
+        {
+
+
+            Gate gate = GetByUserName(gateModel.UserName);
+
+
+            if (gate != null && passwordHasher.VerifyHashedPassword(gate.Password, gateModel.Password))
+               {
+                gate.Password = "";
+                return gate;
+               }
+            else
+                return null;
+
+
+
+
+        }
     }
 }

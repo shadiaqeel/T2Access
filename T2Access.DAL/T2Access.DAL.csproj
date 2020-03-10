@@ -56,9 +56,13 @@
     <Compile Include="Variables.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\T2Access.DTO\T2Access.Models.csproj">
+    <ProjectReference Include="..\T2Access.Models\T2Access.Models.csproj">
       <Project>{cb24040d-4ae5-423d-92c2-bc34fe409fc8}</Project>
       <Name>T2Access.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\T2Access.Security\T2Access.Security.csproj">
+      <Project>{b60ddfd4-e199-4911-af07-785d49d1f708}</Project>
+      <Name>T2Access.Security</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

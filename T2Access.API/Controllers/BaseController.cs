@@ -7,7 +7,7 @@ using System.Web.Http;
 
 namespace T2Access.API.Controllers
 {
-    public class UserGateController : ApiController
+    public class BaseController : ApiController
     {
     }
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using T2Access.Models;
 
 
@@ -13,9 +9,9 @@ namespace T2Access.DAL
     {
         bool Insert(User user);
         List<User> GetWithFilter(User user);
+        User GetByUserName(string userName);
 
-
-
+        User Login(LoginModel user);
 
     }
 }

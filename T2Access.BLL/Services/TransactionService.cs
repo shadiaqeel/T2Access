@@ -13,15 +13,10 @@ namespace T2Access.BLL.Services
     public class TransactionService : ITransactionService
     {
         private readonly ITransactionManager transactionManager = new TransactionManager();
-        private readonly IUserGateManager userGateManager = new UserGateManager();
 
-        public bool Assign(Guid userId, Guid gateId)
-        {
 
-            return userGateManager.Insert(userId, gateId);
-        }
 
-        public bool Create(UserGate userGate)
+        public bool Create(UserGateModel userGate)
         {
             return transactionManager.Insert(userGate);
         }
@@ -31,13 +26,9 @@ namespace T2Access.BLL.Services
             return transactionManager.GetByGateId(gateId, 0);
         }
 
-        public bool Unassign(Guid userId, Guid gateId)
-        {
-            return userGateManager.Delete(userId, gateId);
 
-        }
 
-        public bool UpdateStatus(int id)
+        public bool UpdateStatus(decimal id)
         {
             return transactionManager.Update(id);
         }

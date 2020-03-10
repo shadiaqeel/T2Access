@@ -10,12 +10,10 @@ namespace T2Access.BLL.Services
     public interface ITransactionService
     {
 
-        bool Create(UserGate userGate);
+        bool Create(UserGateModel userGate);
         Transaction GetByGateId(Guid gateId);
-        bool UpdateStatus(int id);
-        bool Assign(Guid userId, Guid gateId);
+        bool UpdateStatus(decimal id);
 
-        bool Unassign(Guid userId, Guid gateId);
 
 
 

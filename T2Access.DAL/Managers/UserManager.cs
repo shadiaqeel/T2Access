@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.SqlClient;
 using T2Access.Models;
+using T2Access.Security;
 
 
 namespace T2Access.DAL
@@ -9,30 +9,31 @@ namespace T2Access.DAL
 
     public class UserManager : IUserManager
     {
+        private IPasswordHasher passwordHasher = new PasswordHasher();
+
+
         public bool Insert(User user)
         {
 
-            Action<SqlCommand> FillCmd = delegate (SqlCommand cmd)
+
+            return DatabaseExecuter.ExecuteNonQuery("SP_User_Insert", delegate (SqlCommand cmd)
             {
-                cmd.Parameters.AddWithValue("@username", user.Username);
-                cmd.Parameters.AddWithValue("@password", user.HashedPassword);
+                cmd.Parameters.AddWithValue("@username", user.UserName);
+                cmd.Parameters.AddWithValue("@password", passwordHasher.HashPassword(user.Password));
                 cmd.Parameters.AddWithValue("@firstname", user.FirstName);
                 cmd.Parameters.AddWithValue("@lastname", user.LastName);
-            };
-
-            return DatabaseExecuter.ExecuteNonQuery("SP_User_Insert", FillCmd);
+            }) > 0 ? true : false;
         }
-
         public List<User> GetWithFilter(User user)
         {
             List<User> userList = new List<User>();
 
 
-            Action<SqlCommand> FillCmd = delegate (SqlCommand cmd)
+            DatabaseExecuter.ExecuteQuery("SP_User_SelectWithFilter", delegate (SqlCommand cmd)
             {
 
-                if (user.Username != null)
-                    cmd.Parameters.AddWithValue("@username", user.Username);
+                if (user.UserName != null)
+                    cmd.Parameters.AddWithValue("@username", user.UserName);
 
                 if (user.FirstName != null)
                     cmd.Parameters.AddWithValue("@firstname", user.FirstName);
@@ -43,44 +44,26 @@ namespace T2Access.DAL
                 if (user.Status != null)
                     cmd.Parameters.AddWithValue("@status", user.Status);
 
-
-
-            };
-
-            Action<SqlDataReader> FillReader = delegate (SqlDataReader reader)
+            },
+            delegate (SqlDataReader reader)
             {
-                do
+
+                while (reader.Read())
                 {
-                    if (reader.HasRows)
+
+                    userList.Add(new User()
                     {
-                        while (reader.Read())
-                        {
-                            User _user = new User();
+                        Id = reader.GetGuid(0),
+                        UserName = reader.GetString(1),
+                        Password = reader.GetString(2),
+                        FirstName = reader.GetString(3),
+                        LastName = reader.GetString(4),
+                        CreatedDate = reader.GetDateTime(5),
+                        Status = reader.GetInt32(6)
+                    });
 
-                            user.Id = reader.GetGuid(0);
-                            user.Username = reader.GetString(1);
-                            user.HashedPassword = reader.GetString(2);
-                            user.FirstName = reader.GetString(3);
-                            user.LastName = reader.GetString(4);
-                            user.CreatedDate = reader.GetDateTime(5);
-                            user.Status = reader.GetInt32(6);
-
-
-
-                            userList.Add(_user);
-
-                        }
-
-
-                    }
-                    else userList = null;
-
-                } while (reader.NextResult());
-
-
-            };
-
-
+                }
+            });
 
             return userList;
 
@@ -89,7 +72,58 @@ namespace T2Access.DAL
 
 
 
+        public User GetByUserName(string userName) {
+
+            User user = null;
+
+            DatabaseExecuter.ExecuteQuery("SP_User_SelectByUserName", delegate (SqlCommand cmd)
+            {
+
+                if (userName != null)
+                    cmd.Parameters.AddWithValue("@username", userName);
+
+            },
+            delegate (SqlDataReader reader)
+            {
+
+                if (reader.Read())
+                {
+
+                    user = new User()
+                    {
+                        Id = reader.GetGuid(0),
+                        UserName = reader.GetString(1),
+                        Password = reader.GetString(2),
+                        FirstName = reader.GetString(3),
+                        LastName = reader.GetString(4),
+                        CreatedDate = reader.GetDateTime(5),
+                        Status = reader.GetInt32(6)
+                    };
+
+                }
+            });
 
 
+            return user;
+
+
+        }
+
+
+        public User Login(LoginModel userModel)
+        {
+
+
+            User user = GetByUserName(userModel.UserName);
+
+            if (user != null && passwordHasher.VerifyHashedPassword(user.Password, userModel.Password))
+            {
+                user.Password = "";
+                return user;
+            }
+            else
+                return null;
+
+        }
     }
 }

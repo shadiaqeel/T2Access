@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{58590D73-AFCF-429E-8813-D18B9AF0D56E}</ProjectGuid>
+    <ProjectGuid>{CB24040D-4AE5-423D-92C2-BC34FE409FC8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>T2Access.BLL</RootNamespace>
-    <AssemblyName>T2Access.BLL</AssemblyName>
+    <RootNamespace>T2Access.Models</RootNamespace>
+    <AssemblyName>T2Access.Models</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -32,6 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -41,27 +42,37 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Account\LoginModel.cs" />
+    <Compile Include="Account\UserSignUpModel.cs" />
+    <Compile Include="Entities\BaseTypes\BaseEntity.cs" />
+    <Compile Include="Entities\Gate.cs" />
+    <Compile Include="Entities\BaseTypes\IEntity.cs" />
+    <Compile Include="Account\BaseTypes\IAuthModel.cs" />
+    <Compile Include="Resources\Resource.ar.Designer.cs">
+      <DependentUpon>Resource.ar.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\Resource.Designer.cs">
+      <DependentUpon>Resource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Account\GateSignUpModel.cs" />
+    <Compile Include="Entities\Transaction.cs" />
+    <Compile Include="Entities\User.cs" />
+    <Compile Include="Entities\UserGateModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\BaseTypes\IGateService.cs" />
-    <Compile Include="Services\GateService.cs" />
-    <Compile Include="Services\TransactionService.cs" />
-    <Compile Include="Services\UserService.cs" />
-    <Compile Include="Services\BaseTypes\ITransactionService.cs" />
-    <Compile Include="Services\BaseTypes\IUserService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\T2Access.DAL\T2Access.DAL.csproj">
-      <Project>{d15b376c-2109-4b04-a2fc-1de472540532}</Project>
-      <Name>T2Access.DAL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\T2Access.Models\T2Access.Models.csproj">
-      <Project>{cb24040d-4ae5-423d-92c2-bc34fe409fc8}</Project>
-      <Name>T2Access.Models</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\T2Access.Security\T2Access.Security.csproj">
-      <Project>{B60DDFD4-E199-4911-AF07-785D49D1F708}</Project>
-      <Name>T2Access.Security</Name>
-    </ProjectReference>
+    <EmbeddedResource Include="Resources\Resource.ar.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.ar.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

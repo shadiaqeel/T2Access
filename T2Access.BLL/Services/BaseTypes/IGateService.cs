@@ -10,8 +10,11 @@ namespace T2Access.BLL.Services
     public interface IGateService
     {
 
-        bool Create(Gate gate);
-        List<Gate> List(Gate gate);
+        bool Create(GateSignUpModel gate);
+        Gate Login(LoginModel gate);
+
+        bool CheckUserName(string userName);
+        List<Gate> GetListWithFilter(Gate gate);
 
     }
 }

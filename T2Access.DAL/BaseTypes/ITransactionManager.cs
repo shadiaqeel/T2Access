@@ -7,11 +7,11 @@ using T2Access.Models;
 
 namespace T2Access.DAL
 {
-    public interface ITransactionManager : IRepository<UserGate>
+    public interface ITransactionManager : IRepository<UserGateModel>
     {
-        bool Insert(UserGate userGate);
+        bool Insert(UserGateModel userGate);
         Transaction GetByGateId(Guid gateId , int status);
-        bool Update(int id);
+        bool Update(decimal id);
 
     }
 }

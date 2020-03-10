@@ -1,41 +1,36 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Data;
 using System.Data.SqlClient;
+using T2Access.Models;
 
 namespace T2Access.DAL
 {
     public class UserGateManager : IUserGateManager
     {
-        public bool Insert(Guid userId, Guid gateId)
+        public bool Insert(UserGateModel userGate)
         {
 
-            Action<SqlCommand> FillCmd = delegate (SqlCommand cmd)
+
+
+            return DatabaseExecuter.ExecuteNonQuery("SP_UserGate_Insert", delegate (SqlCommand cmd)
             {
-                cmd.Parameters.AddWithValue("@userId", userId);
-                cmd.Parameters.AddWithValue("@gateId", gateId);
+                cmd.Parameters.AddWithValue("@userId", userGate.UserId);
+                cmd.Parameters.AddWithValue("@gateId", userGate.GateId);
 
-            };
-
-
-            return DatabaseExecuter.ExecuteNonQuery("SP_UserGate_Insert", FillCmd);
+            }) > 0 ? true : false;
 
         }
 
-        public bool Delete(Guid userId, Guid gateId)
+        public bool Delete(UserGateModel userGate)
         {
 
-            Action<SqlCommand> FillCmd = delegate (SqlCommand cmd)
-            {
-                cmd.Parameters.AddWithValue("@userId", userId);
-                cmd.Parameters.AddWithValue("@gateId", gateId);
 
-            };
 
-            return DatabaseExecuter.ExecuteNonQuery("SP_UserGate_Delete",FillCmd);
+            return DatabaseExecuter.ExecuteNonQuery("SP_UserGate_Delete", delegate (SqlCommand cmd)
+           {
+               cmd.Parameters.AddWithValue("@userId", userGate.UserId);
+               cmd.Parameters.AddWithValue("@gateId", userGate.GateId);
+
+           }) > 0 ? true : false;
         }
     }
 }

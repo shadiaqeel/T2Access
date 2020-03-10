@@ -7,9 +7,9 @@ using T2Access.Models;
 
 namespace T2Access.DAL
 {
-    public interface IUserGateManager : IRepository<UserGate>
+    public interface IUserGateManager : IRepository<UserGateModel>
     {
-         bool Insert(Guid userId, Guid gateId);
-         bool Delete(Guid userId, Guid gateId);
+        // bool Insert(Guid userId, Guid gateId);
+         bool Delete(UserGateModel userGate);
     }
 }
