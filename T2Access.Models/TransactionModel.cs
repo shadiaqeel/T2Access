@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace T2Access.Models
 {
-    public class Transaction: BaseEntity
+    public class TransactionModel: BaseModel
     {
         public decimal Id { get; set; }
         public Guid UserId { get; set; }

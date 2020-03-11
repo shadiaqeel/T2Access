@@ -11,10 +11,10 @@ namespace T2Access.BLL.Services
     {
 
         bool Create(UserGateModel userGate);
-        Transaction GetByGateId(Guid gateId);
+        TransactionModel GetByGateId(Guid gateId);
         bool UpdateStatus(decimal id);
 
-
+        bool ValidUserGate(UserGateModel userGate);
 
 
 

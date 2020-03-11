@@ -10,7 +10,7 @@ namespace T2Access.DAL
     public interface ITransactionManager : IRepository<UserGateModel>
     {
         bool Insert(UserGateModel userGate);
-        Transaction GetByGateId(Guid gateId , int status);
+        TransactionModel GetByGateId(Guid gateId , int status);
         bool Update(decimal id);
 
     }

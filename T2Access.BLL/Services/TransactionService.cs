@@ -18,10 +18,15 @@ namespace T2Access.BLL.Services
 
         public bool Create(UserGateModel userGate)
         {
-            return transactionManager.Insert(userGate);
+            if (ValidUserGate(userGate))
+            {
+                return transactionManager.Insert(userGate);
+            }
+            else
+            return false; 
         }
 
-        public Transaction GetByGateId(Guid gateId)
+        public TransactionModel GetByGateId(Guid gateId)
         {
             return transactionManager.GetByGateId(gateId, 0);
         }
@@ -31,6 +36,18 @@ namespace T2Access.BLL.Services
         public bool UpdateStatus(decimal id)
         {
             return transactionManager.Update(id);
+        }
+
+
+        public bool ValidUserGate(UserGateModel userGate)
+        {
+             IUserGateManager userGateManager = new UserGateManager();
+
+
+
+            //if (userManager.GetStatusById(userGate.UserId) ==0 && gateManager.GetStatusById(userGate.GateId) ==0 && )
+
+            return userGateManager.CheckIfValid(userGate);
         }
     }
 }

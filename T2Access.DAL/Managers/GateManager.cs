@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using T2Access.Models;
 using T2Access.Security;
@@ -10,7 +11,7 @@ namespace T2Access.DAL
         private IPasswordHasher passwordHasher = new PasswordHasher();
 
 
-        public bool  Insert(Gate gateModel)
+        public bool  Insert(GateSignUpModel gateModel)
         {
 
             return DatabaseExecuter.ExecuteNonQuery("SP_Gate_Insert", delegate (SqlCommand cmd)
@@ -26,9 +27,9 @@ namespace T2Access.DAL
 
 
 
-        public List<Gate> GetWithFilter(Gate gateModel)
+        public List<GateModel> GetWithFilter(GateModel gateModel)
         {
-            List<Gate> gateList = new List<Gate>();
+            List<GateModel> gateList = new List<GateModel>();
 
 
             DatabaseExecuter.ExecuteQuery("SP_Gate_SelectWithFilter", delegate (SqlCommand cmd)
@@ -58,14 +59,12 @@ namespace T2Access.DAL
 
 
                              gateList.Add(
-                                            new Gate
+                                            new GateModel()
                                             {
                                                 Id = reader.GetGuid(0),
                                                 UserName = reader.GetString(1),
-                                                Password = reader.GetString(2),
                                                 NameAr = reader.GetString(3),
                                                 NameEn = reader.GetString(4),
-                                                CreatedDate = reader.GetDateTime(5),
                                                 Status = reader.GetInt32(6)
                                             }
                                             );
@@ -82,15 +81,57 @@ namespace T2Access.DAL
 
 
 
-        public Gate GetByUserName(string username)
+        public GateModel GetByUserName(string username)
         {
-            Gate gate = null;
+            GateModel gate = null;
             DatabaseExecuter.ExecuteQuery("SP_Gate_SelectByUserName", delegate (SqlCommand cmd)
 
             {
 
                 if (username != null)
                     cmd.Parameters.AddWithValue("@username", username);
+
+
+            }, delegate (SqlDataReader reader)
+
+            {
+
+
+                if (reader.Read())
+                {
+
+                    gate = new GateModel()
+                    {
+                        Id = reader.GetGuid(0),
+                        UserName = reader.GetString(1),
+                        NameAr = reader.GetString(2),
+                        NameEn = reader.GetString(3),
+                        Status = reader.GetInt32(4)
+                    };
+
+                }
+
+            });
+
+            return gate;
+
+
+
+        }
+
+
+
+        public GateModel Login(LoginModel gateModel)
+        {
+
+
+            Gate gate = null;
+            DatabaseExecuter.ExecuteQuery("SP_Gate_Login", delegate (SqlCommand cmd)
+
+            {
+
+                if (gateModel != null)
+                    cmd.Parameters.AddWithValue("@username", gateModel.UserName);
 
 
             }, delegate (SqlDataReader reader)
@@ -108,15 +149,21 @@ namespace T2Access.DAL
                         Password = reader.GetString(2),
                         NameAr = reader.GetString(3),
                         NameEn = reader.GetString(4),
-                        CreatedDate = reader.GetDateTime(5),
-                        Status = reader.GetInt32(6)
+                        Status = reader.GetInt32(5)
                     };
 
                 }
 
             });
 
-            return gate;
+
+            if (gate != null && passwordHasher.VerifyHashedPassword(gate.Password, gateModel.Password))
+            {
+                return new GateModel() { Id = gate.Id, UserName = gate.UserName, NameAr = gate.NameAr, NameEn = gate.NameEn, Status = gate.Status };
+            }
+            else
+                return null;
+
 
 
 
@@ -124,20 +171,31 @@ namespace T2Access.DAL
 
 
 
-        public Gate Login(LoginModel gateModel)
+        public int GetStatusById(Guid id)
         {
 
+            int status = 255;
+            DatabaseExecuter.ExecuteQuery("SP_Gate_SelectStatusById", delegate (SqlCommand cmd)
 
-            Gate gate = GetByUserName(gateModel.UserName);
+            {
+
+                if (id != null)
+                    cmd.Parameters.AddWithValue("@Id", id);
 
 
-            if (gate != null && passwordHasher.VerifyHashedPassword(gate.Password, gateModel.Password))
-               {
-                gate.Password = "";
-                return gate;
-               }
-            else
-                return null;
+            }, delegate (SqlDataReader reader)
+
+            {
+                if (reader.Read())
+                {
+
+                    status = reader.GetInt32(0);
+
+                }
+
+            });
+
+            return status;
 
 
 

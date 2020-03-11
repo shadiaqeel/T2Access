@@ -1,4 +1,5 @@
 ﻿using System.Web.Http;
+using T2Access.API.Filters;
 
 namespace T2Access.API
 {
@@ -19,6 +20,9 @@ namespace T2Access.API
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            // Validate application model state 
+            config.Filters.Add(new ModelStateFilter());
         }
     }
 }

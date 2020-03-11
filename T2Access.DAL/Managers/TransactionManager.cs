@@ -20,10 +20,10 @@ namespace T2Access.DAL
 
 
 
-        public Transaction GetByGateId(Guid gateId, int status)
+        public TransactionModel GetByGateId(Guid gateId, int status)
         {
 
-            Transaction transaction = new Transaction();
+            TransactionModel transaction = new TransactionModel();
 
 
             DatabaseExecuter.ExecuteQuery("SP_Transaction_GetByGateId", delegate (SqlCommand cmd)
@@ -37,14 +37,13 @@ namespace T2Access.DAL
                  if (reader.Read())
                  {
 
-                     transaction = new Transaction()
+                     transaction = new TransactionModel()
                      {
                          Id = reader.GetDecimal(0),
                          UserId = reader.GetGuid(1),
                          GateId = reader.GetGuid(2),
-                         CreatedDate = reader.GetDateTime(3),
-                         Status = reader.GetInt32(4),
-                         StatusDate = reader.GetDateTime(5)
+                         Status = reader.GetInt32(3),
+                         StatusDate = reader.GetDateTime(4)
                      };
 
                  }

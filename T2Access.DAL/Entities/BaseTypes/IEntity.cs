@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace T2Access.Models
+namespace T2Access.DAL
 {
-    public class BaseEntity : IEntity
+    public interface IEntity
     {
-        public DateTime CreatedDate { get ; set ; } = DateTime.Now;
+         DateTime CreatedDate { get; set; }
+
     }
 }

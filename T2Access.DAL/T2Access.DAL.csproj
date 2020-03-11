@@ -42,13 +42,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseTypes\IRepository.cs" />
+    <Compile Include="Entities\BaseTypes\BaseEntity.cs" />
+    <Compile Include="Entities\BaseTypes\IEntity.cs" />
+    <Compile Include="Entities\Gate.cs" />
+    <Compile Include="Entities\Transaction.cs" />
+    <Compile Include="Entities\User.cs" />
+    <Compile Include="Entities\UserGate.cs" />
+    <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="DatabaseExecuter.cs" />
     <Compile Include="Managers\GateManager.cs" />
-    <Compile Include="BaseTypes\IGateManager.cs" />
-    <Compile Include="BaseTypes\ITransactionManager.cs" />
-    <Compile Include="BaseTypes\IUserManager.cs" />
-    <Compile Include="BaseTypes\IUserGateManager.cs" />
+    <Compile Include="Interfaces\IGateManager.cs" />
+    <Compile Include="Interfaces\ITransactionManager.cs" />
+    <Compile Include="Interfaces\IUserManager.cs" />
+    <Compile Include="Interfaces\IUserGateManager.cs" />
     <Compile Include="Managers\TransactionManager.cs" />
     <Compile Include="Managers\UserGateManager.cs" />
     <Compile Include="Managers\UserManager.cs" />

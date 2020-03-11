@@ -18,7 +18,7 @@ namespace T2Access.API.Controllers
 
         [HttpGet]
         [CustomAuthorize(Roles = "Gate")]
-        [ResponseType(typeof(Transaction))]
+        [ResponseType(typeof(TransactionModel))]
         public HttpResponseMessage GetByGateId(Guid id)
         {
 
@@ -39,6 +39,7 @@ namespace T2Access.API.Controllers
         public HttpResponseMessage Create( UserGateModel userGate)
         {
 
+
             if (transactionService.Create(userGate))
                 return Request.CreateResponse(HttpStatusCode.OK, userGate);
             else
@@ -46,6 +47,8 @@ namespace T2Access.API.Controllers
 
 
         }
+
+
 
         [HttpPut]
         [CustomAuthorize(Roles = "Gate")]

@@ -42,12 +42,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\BaseTypes\IGateService.cs" />
+    <Compile Include="Interfaces\IGateService.cs" />
     <Compile Include="Services\GateService.cs" />
     <Compile Include="Services\TransactionService.cs" />
     <Compile Include="Services\UserService.cs" />
-    <Compile Include="Services\BaseTypes\ITransactionService.cs" />
-    <Compile Include="Services\BaseTypes\IUserService.cs" />
+    <Compile Include="Interfaces\ITransactionService.cs" />
+    <Compile Include="Interfaces\IUserService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\T2Access.DAL\T2Access.DAL.csproj">

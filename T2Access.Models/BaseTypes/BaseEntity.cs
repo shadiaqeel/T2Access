@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace T2Access.Models
 {
-    public interface IEntity
+    public class BaseModel : IBaseModel
     {
-         DateTime CreatedDate { get; set; }
-
     }
 }

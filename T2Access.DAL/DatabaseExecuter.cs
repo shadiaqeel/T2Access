@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
-using T2Access.Models; 
 
 namespace T2Access.DAL
 {
@@ -13,7 +8,8 @@ namespace T2Access.DAL
     {
 
 
-        public static void ExecuteQuery(string storedProcedure , Action<SqlCommand> FillCmd , Action<SqlDataReader> FillReader) {
+        public static void ExecuteQuery(string storedProcedure, Action<SqlCommand> FillCmd, Action<SqlDataReader> FillReader)
+        {
 
 
 
@@ -30,10 +26,12 @@ namespace T2Access.DAL
 
                     cmd.CommandType = CommandType.StoredProcedure;
 
+                    cmd.Parameters.Clear();
+
 
                     FillCmd(cmd);
 
-                   SqlDataReader reader = cmd.ExecuteReader();
+                    SqlDataReader reader = cmd.ExecuteReader();
 
 
                     FillReader(reader);
@@ -53,7 +51,7 @@ namespace T2Access.DAL
 
 
 
-        public static int  ExecuteNonQuery(string storedProcedure, Action<SqlCommand> FillCmd)
+        public static int ExecuteNonQuery(string storedProcedure, Action<SqlCommand> FillCmd)
         {
 
             int result = 0;
@@ -68,6 +66,8 @@ namespace T2Access.DAL
 
 
                     cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Clear();
+
 
                     FillCmd(cmd);
 
@@ -76,7 +76,9 @@ namespace T2Access.DAL
                         result = cmd.ExecuteNonQuery();
                     }
                     catch (Exception e)
-                    { result = -1; }
+                    {
+                        result = -2;
+                    }
 
 
                 }

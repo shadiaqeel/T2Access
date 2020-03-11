@@ -24,8 +24,8 @@ namespace T2Access.API.Controllers
         [ResponseType(typeof(string))]
         public HttpResponseMessage Login(LoginModel gate)
         {
-            if (!ModelState.IsValid)
-                return Request.CreateResponse(HttpStatusCode.NotFound, ModelState);
+            //if (!ModelState.IsValid)
+            //    return Request.CreateResponse(HttpStatusCode.NotFound, ModelState);
 
 
             var _gate = gateService.Login(gate);
@@ -68,8 +68,10 @@ namespace T2Access.API.Controllers
         public HttpResponseMessage SignUp(GateSignUpModel gate)
         {
 
-            if (!ModelState.IsValid)
-                return Request.CreateResponse(HttpStatusCode.NotFound, ModelState);
+            //if (!ModelState.IsValid)
+            //    return Request.CreateResponse(HttpStatusCode.NotFound, ModelState);
+
+
 
             if (gateService.CheckUserName(gate.UserName))
             {

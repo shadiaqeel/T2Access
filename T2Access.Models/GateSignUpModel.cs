@@ -3,7 +3,7 @@ using T2Access.Models.Resources;
 
 namespace T2Access.Models
 {
-    public class GateSignUpModel:IAuthModel
+    public class GateSignUpModel: BaseModel, IAuthModel
     {
 
         [Required(ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "RequiredField")]

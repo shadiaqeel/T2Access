@@ -32,5 +32,46 @@ namespace T2Access.DAL
 
            }) > 0 ? true : false;
         }
+
+        public bool CheckIfValid(UserGateModel userGate)
+        {
+            UserGateModel _userGate = null;
+            int userStatus = 255;
+            int gateStatus = 255;
+
+
+
+             DatabaseExecuter.ExecuteQuery("SP_CheckIfValid", delegate (SqlCommand cmd)
+            {
+                cmd.Parameters.AddWithValue("@userId", userGate.UserId);
+                cmd.Parameters.AddWithValue("@gateId", userGate.GateId);
+
+            }, delegate (SqlDataReader reader)
+            {
+
+                if (reader.Read())
+                {
+
+                    _userGate = new UserGateModel()
+                    {
+                        UserId = reader.GetGuid(0),
+                        GateId = reader.GetGuid(1)
+
+                    };
+
+                    userStatus = reader.GetInt32(2);
+                    gateStatus = reader.GetInt32(3);
+
+
+
+                }
+            });
+
+
+            return (_userGate != null && userStatus == 0 && gateStatus == 0);
+
+
+        }
+
     }
 }

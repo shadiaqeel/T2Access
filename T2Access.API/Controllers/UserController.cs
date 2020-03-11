@@ -26,8 +26,8 @@ namespace T2Access.API.Controllers
         [ResponseType(typeof(string))]
         public HttpResponseMessage Login(LoginModel loginModel)
         {
-            if (!ModelState.IsValid)
-                return Request.CreateResponse(HttpStatusCode.NotFound, ModelState);
+            //if (!ModelState.IsValid)
+            //    return Request.CreateResponse(HttpStatusCode.NotFound, ModelState);
 
 
             var user = userService.Login(loginModel);
@@ -52,7 +52,8 @@ namespace T2Access.API.Controllers
 
                 });
 
-                return Request.CreateResponse(HttpStatusCode.OK, Token);
+
+                return Request.CreateResponse(HttpStatusCode.OK,Token);
 
             }
             else
@@ -71,8 +72,8 @@ namespace T2Access.API.Controllers
         public HttpResponseMessage SignUp(UserSignUpModel user)
         {
 
-            if (!ModelState.IsValid)
-                return Request.CreateResponse(HttpStatusCode.NotFound, ModelState);
+            //if (!ModelState.IsValid)
+            //    return Request.CreateResponse(HttpStatusCode.NotFound, ModelState);
 
 
 

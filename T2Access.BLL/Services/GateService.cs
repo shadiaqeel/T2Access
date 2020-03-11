@@ -17,17 +17,11 @@ namespace T2Access.BLL.Services
         public bool Create(GateSignUpModel gateModel)
         {
 
-            return gateManager.Insert(new Gate()
-            {
-                UserName = gateModel.UserName,
-                Password = gateModel.Password,
-                NameAr = gateModel.NameAr,
-                NameEn = gateModel.NameEn
-            });
+            return gateManager.Insert(gateModel);
 
         }
 
-        public List<Gate> GetListWithFilter(Gate gate)
+        public List<GateModel> GetListWithFilter(GateModel gate)
         {
 
             return gateManager.GetWithFilter(gate);
@@ -42,7 +36,7 @@ namespace T2Access.BLL.Services
         }
 
 
-        public Gate Login(LoginModel gateModel)
+        public GateModel Login(LoginModel gateModel)
         {
 
             return gateManager.Login(gateModel);
