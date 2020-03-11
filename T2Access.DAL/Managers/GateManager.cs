@@ -11,7 +11,9 @@ namespace T2Access.DAL
         private IPasswordHasher passwordHasher = new PasswordHasher();
 
 
-        public bool  Insert(GateSignUpModel gateModel)
+
+
+        public bool Insert(GateSignUpModel gateModel)
         {
 
             return DatabaseExecuter.ExecuteNonQuery("SP_Gate_Insert", delegate (SqlCommand cmd)
@@ -20,65 +22,48 @@ namespace T2Access.DAL
                 cmd.Parameters.AddWithValue("@password", passwordHasher.HashPassword(gateModel.Password));
                 cmd.Parameters.AddWithValue("@nameAr", gateModel.NameAr);
                 cmd.Parameters.AddWithValue("@nameEn", gateModel.NameEn);
-            }) > 0 ? true :  false ;
+            }) > 0 ? true : false;
         }
 
 
-
-
-
-        public List<GateModel> GetWithFilter(GateModel gateModel)
+        public List<GateModel> GetWithFilter(GateFilterModel filter)
         {
             List<GateModel> gateList = new List<GateModel>();
 
 
             DatabaseExecuter.ExecuteQuery("SP_Gate_SelectWithFilter", delegate (SqlCommand cmd)
-
                      {
+                         if (filter.UserName != null)
+                             cmd.Parameters.AddWithValue("@username", filter.UserName);
 
-                         if (gateModel.UserName != null)
-                             cmd.Parameters.AddWithValue("@username", gateModel.UserName);
+                         if (filter.NameAr != null)
+                             cmd.Parameters.AddWithValue("@nameAr", filter.NameAr);
 
-                         if (gateModel.NameAr != null)
-                             cmd.Parameters.AddWithValue("@nameAr", gateModel.NameAr);
+                         if (filter.NameEn != null)
+                             cmd.Parameters.AddWithValue("@nameEn", filter.NameEn);
 
-                         if (gateModel.NameEn != null)
-                             cmd.Parameters.AddWithValue("@nameEn", gateModel.NameEn);
-
-                         if (gateModel.Status != null)
-                             cmd.Parameters.AddWithValue("@status", gateModel.Status);
-
+                         if (filter.Status != null)
+                             cmd.Parameters.AddWithValue("@status", filter.Status);
 
                      }, delegate (SqlDataReader reader)
-
                      {
-
-
                          while (reader.Read())
                          {
-
-
                              gateList.Add(
-                                            new GateModel()
-                                            {
-                                                Id = reader.GetGuid(0),
-                                                UserName = reader.GetString(1),
-                                                NameAr = reader.GetString(3),
-                                                NameEn = reader.GetString(4),
-                                                Status = reader.GetInt32(6)
-                                            }
-                                            );
+                                        new GateModel()
+                                         {
+                                             Id = reader.GetGuid(0),
+                                             UserName = reader.GetString(1),
+                                             NameAr = reader.GetString(2),
+                                             NameEn = reader.GetString(3),
+                                             Status = reader.GetInt32(4)
+                                         }
+                                         );
                          }
-
                      });
 
-
-
-
             return gateList;
-
         }
-
 
 
         public GateModel GetByUserName(string username)
@@ -118,8 +103,6 @@ namespace T2Access.DAL
 
 
         }
-
-
 
         public GateModel Login(LoginModel gateModel)
         {
@@ -170,36 +153,27 @@ namespace T2Access.DAL
         }
 
 
-
         public int GetStatusById(Guid id)
         {
 
             int status = 255;
             DatabaseExecuter.ExecuteQuery("SP_Gate_SelectStatusById", delegate (SqlCommand cmd)
-
             {
-
                 if (id != null)
                     cmd.Parameters.AddWithValue("@Id", id);
-
-
             }, delegate (SqlDataReader reader)
-
             {
                 if (reader.Read())
                 {
-
                     status = reader.GetInt32(0);
-
                 }
-
             });
 
             return status;
-
-
-
-
         }
+
+
+
+
     }
 }

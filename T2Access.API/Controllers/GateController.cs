@@ -6,7 +6,9 @@ using System.Security.Claims;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Ole5.Tokenization.Models;
+using T2Access.API.Attributes;
 using T2Access.API.Helper;
+using T2Access.API.Resources;
 using T2Access.BLL.Services;
 using T2Access.Models;
 
@@ -54,7 +56,7 @@ namespace T2Access.API.Controllers
             }
             else
             {
-                return Request.CreateResponse(HttpStatusCode.NotFound, "Username isn't exist");
+                return Request.CreateResponse(HttpStatusCode.NotFound, Resource.UserNotExist);
 
             }
 
@@ -64,7 +66,7 @@ namespace T2Access.API.Controllers
 
         [Route("signup")]
         [HttpPost]
-        [ResponseType(typeof(UserSignUpModel))]
+        [ResponseType(typeof(string))]
         public HttpResponseMessage SignUp(GateSignUpModel gate)
         {
 
@@ -77,21 +79,36 @@ namespace T2Access.API.Controllers
             {
                 if (gateService.Create(gate))
                 {
-                    return Request.CreateResponse(HttpStatusCode.OK, gate);
+                    return Request.CreateResponse(HttpStatusCode.OK,  Resource.SignupSuccess);
                 }
                 else
                 {
-                    return Request.CreateResponse(HttpStatusCode.NotFound, "Signup process failed");
+                    return Request.CreateResponse(HttpStatusCode.NotFound, Resource.SignupFailed);
 
                 }
             }
             else {
 
-                return Request.CreateResponse(HttpStatusCode.NotFound, "Signup process failed ,  Username is used ");
+                return Request.CreateResponse(HttpStatusCode.NotFound,Resource.UserExist);
 
 
             }
 
+
+        }
+
+
+        [HttpGet]
+        [CustomAuthorize(Roles = "User")]
+        [ResponseType(typeof(List<UserModel>))]
+        public HttpResponseMessage GetListWithFilter([FromUri]GateFilterModel filter)
+        {
+            if (filter == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.FilterMiss);
+
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, gateService.GetListWithFilter(filter));
 
         }
 

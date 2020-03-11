@@ -14,7 +14,7 @@ namespace T2Access.BLL.Services
         GateModel Login(LoginModel gate);
 
         bool CheckUserName(string userName);
-        List<GateModel> GetListWithFilter(GateModel gate);
+        List<GateModel> GetListWithFilter(GateFilterModel filter);
 
     }
 }

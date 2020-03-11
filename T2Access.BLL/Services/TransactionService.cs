@@ -43,10 +43,6 @@ namespace T2Access.BLL.Services
         {
              IUserGateManager userGateManager = new UserGateManager();
 
-
-
-            //if (userManager.GetStatusById(userGate.UserId) ==0 && gateManager.GetStatusById(userGate.GateId) ==0 && )
-
             return userGateManager.CheckIfValid(userGate);
         }
     }

@@ -14,11 +14,7 @@ namespace T2Access.BLL.Services
         public bool Create(UserSignUpModel user)
         {
 
-            //UserModel _user = new UserModel();
-            //_user.UserName = user.UserName;
-            //_user.Password = user.Password;
-            //_user.FirstName = user.FirstName;
-            //_user.LastName= user.LastName;
+
 
             return userManager.Insert(user);
         }
@@ -30,25 +26,16 @@ namespace T2Access.BLL.Services
 
         }
 
-        //public bool CheckStatus(string userName)
-        //{
-        //    User user = userManager.GetByUserName(userName);
 
-        //    user.
-
-        //    return   
-
-        
-        //}
         public UserModel Login(LoginModel user)
         {
 
          return userManager.Login(user);
 
         }
-        public List<UserModel> GetList(UserModel user)
+        public List<UserModel> GetList(UserFilterModel filter)
         {
-            return userManager.GetWithFilter(user);
+            return userManager.GetWithFilter(filter);
         }
 
         public bool Assign(UserGateModel userGate)

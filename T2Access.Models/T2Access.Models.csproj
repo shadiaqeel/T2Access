@@ -46,6 +46,8 @@
     <Compile Include="BaseTypes\IBaseModel.cs" />
     <Compile Include="GateModel.cs" />
     <Compile Include="TransactionModel.cs" />
+    <Compile Include="GateFilterModel.cs" />
+    <Compile Include="UserFilterModel.cs" />
     <Compile Include="UserModel.cs" />
     <Compile Include="UserGateModel.cs" />
     <Compile Include="LoginModel.cs" />

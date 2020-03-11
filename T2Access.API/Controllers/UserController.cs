@@ -8,6 +8,7 @@ using System.Web.Http.Description;
 using Ole5.Tokenization.Models;
 using T2Access.API.Attributes;
 using T2Access.API.Helper;
+using T2Access.API.Resources;
 using T2Access.BLL.Services;
 using T2Access.Models;
 
@@ -58,7 +59,7 @@ namespace T2Access.API.Controllers
             }
             else
             {
-                return Request.CreateResponse(HttpStatusCode.NotFound, "Username isn't exist");
+                return Request.CreateResponse(HttpStatusCode.NotFound, Resource.UserNotExist);
 
             }
 
@@ -68,7 +69,7 @@ namespace T2Access.API.Controllers
 
 
         [HttpPost]
-        [ResponseType(typeof(UserSignUpModel))]
+        [ResponseType(typeof(string))]
         public HttpResponseMessage SignUp(UserSignUpModel user)
         {
 
@@ -82,17 +83,17 @@ namespace T2Access.API.Controllers
             {
                 if (userService.Create(user))
                 {
-                    return Request.CreateResponse(HttpStatusCode.OK, user);
+                    return Request.CreateResponse(HttpStatusCode.OK, Resource.SignupSuccess);
                 }
                 else
                 {
-                    return Request.CreateResponse(HttpStatusCode.NotFound, "Signup process failed");
+                    return Request.CreateResponse(HttpStatusCode.NotFound, Resource.SignupFailed);
 
                 }
             }
             else
             {
-                return Request.CreateResponse(HttpStatusCode.NotFound, "Signup process failed , Username is Used ");
+                return Request.CreateResponse(HttpStatusCode.NotFound, Resource.UserExist);
 
 
             }
@@ -106,34 +107,57 @@ namespace T2Access.API.Controllers
 
         [HttpPost]
         [CustomAuthorize(Roles = "User")]
-        [ResponseType(typeof(UserGateModel))]
+        [ResponseType(typeof(string))]
         public HttpResponseMessage AssignToGate(UserGateModel userGate)
         {
 
 
             if (userService.Assign(userGate))
             {
-                return Request.CreateResponse(HttpStatusCode.OK, userGate);
+                return Request.CreateResponse(HttpStatusCode.OK, Resource.AssignSuccess);
             }
             else
-                return Request.CreateResponse(HttpStatusCode.NotFound, "Assignment process Failed");
+                return Request.CreateResponse(HttpStatusCode.NotFound, Resource.AssignFailed);
         }
+
+
 
 
         [HttpPost]
         [CustomAuthorize(Roles = "User")]
-        [ResponseType(typeof(UserGateModel))]
+        [ResponseType(typeof(string))]
         public HttpResponseMessage UnassignToGate(UserGateModel userGate)
         {
 
 
             if (userService.Unassign(userGate))
             {
-                return Request.CreateResponse(HttpStatusCode.OK, userGate);
+                return Request.CreateResponse(HttpStatusCode.OK, Resource.UnassignSuccess);
             }
             else
-                return Request.CreateResponse(HttpStatusCode.NotFound, "Unassignment process Failed");
+                return Request.CreateResponse(HttpStatusCode.NotFound, Resource.UnassignFailed);
         }
+
+
+
+
+        [HttpGet]
+        [CustomAuthorize(Roles = "User")]
+        [ResponseType(typeof(List<UserModel>))]
+        public HttpResponseMessage GetListWithFilter([FromUri]UserFilterModel filter)
+        {
+            if (filter == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.FilterMiss);
+
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, userService.GetList(filter));
+
+        }
+
+
+
+
 
     }
 

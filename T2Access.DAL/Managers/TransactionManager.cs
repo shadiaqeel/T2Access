@@ -17,9 +17,6 @@ namespace T2Access.DAL
 
         }
 
-
-
-
         public TransactionModel GetByGateId(Guid gateId, int status)
         {
 
@@ -52,8 +49,6 @@ namespace T2Access.DAL
 
             return transaction;
         }
-
-
 
         public bool Update(decimal id)
         {

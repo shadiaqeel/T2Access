@@ -9,7 +9,7 @@ namespace T2Access.DAL
     public interface IUserManager : IRepository<UserSignUpModel>
     {
         //bool Insert(UserModel user);
-        List<UserModel> GetWithFilter(UserModel user);
+        List<UserModel> GetWithFilter(UserFilterModel filter);
         UserModel GetByUserName(string userName);
 
         UserModel Login(LoginModel user);

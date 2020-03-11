@@ -8,7 +8,7 @@ namespace T2Access.BLL.Services
         bool Create(UserSignUpModel user);
         UserModel Login(LoginModel user);
         bool CheckUserName(string userName);
-        List<UserModel> GetList(UserModel user);
+        List<UserModel> GetList(UserFilterModel user);
         bool Assign(UserGateModel userGate);
         bool Unassign(UserGateModel userGate);
     }

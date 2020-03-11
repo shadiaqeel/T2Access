@@ -8,6 +8,7 @@ using T2Access.BLL.Services;
 using T2Access.Models;
 using T2Access.API.Attributes;
 using System.Web.Http.Description;
+using T2Access.API.Resources;
 
 namespace T2Access.API.Controllers
 {
@@ -27,7 +28,7 @@ namespace T2Access.API.Controllers
             if (transaction != null)
                 return Request.CreateResponse(HttpStatusCode.OK, transaction);
             else
-                return Request.CreateResponse(HttpStatusCode.NotFound);
+                return Request.CreateResponse(HttpStatusCode.NotFound , Resource.TransactionNotExist);
 
         }
 
@@ -43,7 +44,7 @@ namespace T2Access.API.Controllers
             if (transactionService.Create(userGate))
                 return Request.CreateResponse(HttpStatusCode.OK, userGate);
             else
-                return Request.CreateResponse(HttpStatusCode.NotFound , "Create transaction failed");
+                return Request.CreateResponse(HttpStatusCode.NotFound , Resource.CreateTransactionFailed);
 
 
         }
@@ -56,9 +57,9 @@ namespace T2Access.API.Controllers
         public HttpResponseMessage UpdateStatus(decimal id) 
         {
             if (transactionService.UpdateStatus(id))
-                return Request.CreateResponse(HttpStatusCode.OK, $"the status was update successfully for id {id} ");
+                return Request.CreateResponse(HttpStatusCode.OK, Resource.StatusUpdateSuccess);
             else
-                return Request.CreateResponse(HttpStatusCode.NotFound , $"the status was update failed for id {id} ");
+                return Request.CreateResponse(HttpStatusCode.NotFound ,  Resource.StatusUpdateFail );
         }
 
 

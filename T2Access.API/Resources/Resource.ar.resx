@@ -117,13 +117,43 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="LessThen" xml:space="preserve">
-    <value>{0} must be less than {1}</value>
+  <data name="AssignFailed" xml:space="preserve">
+    <value>عملية التعيين فشلت</value>
   </data>
-  <data name="Mismatch" xml:space="preserve">
-    <value>The password and confirmation password do not match</value>
+  <data name="AssignSuccess" xml:space="preserve">
+    <value>عملية التعيين نجحت</value>
   </data>
-  <data name="RequiredField" xml:space="preserve">
-    <value>{0} required Field</value>
+  <data name="CreateTransactionFailed" xml:space="preserve">
+    <value>فشلت عملية انشاء معامله  </value>
+  </data>
+  <data name="FilterMiss" xml:space="preserve">
+    <value>الفلتر مفقود </value>
+  </data>
+  <data name="SignupFailed" xml:space="preserve">
+    <value>عملية التسجيل فشلت</value>
+  </data>
+  <data name="SignupSuccess" xml:space="preserve">
+    <value>عملية التسجيل نجحت</value>
+  </data>
+  <data name="StatusUpdateFail" xml:space="preserve">
+    <value>فشل تحديث الحاله للمعامله رقم {id}</value>
+  </data>
+  <data name="StatusUpdateSuccess" xml:space="preserve">
+    <value>تم تحديث الحاله للمعامله رقم {id}   </value>
+  </data>
+  <data name="TransactionNotExist" xml:space="preserve">
+    <value>المعامله غير موجوده</value>
+  </data>
+  <data name="UnassignFailed" xml:space="preserve">
+    <value>عملية الغاء التعيين فشلت</value>
+  </data>
+  <data name="UnassignSuccess" xml:space="preserve">
+    <value>عملية الغاء التعيين نجحت</value>
+  </data>
+  <data name="UserExist" xml:space="preserve">
+    <value>عملية التسجيل فشلت , اسم المستخدم موجود </value>
+  </data>
+  <data name="UserNotExist" xml:space="preserve">
+    <value>اسم المستخدم غير موجود</value>
   </data>
 </root>

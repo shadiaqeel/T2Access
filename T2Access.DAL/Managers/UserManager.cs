@@ -24,9 +24,11 @@ namespace T2Access.DAL
                 cmd.Parameters.AddWithValue("@firstname", user.FirstName);
                 cmd.Parameters.AddWithValue("@lastname", user.LastName);
             }) > 0 ? true : false;
+
         }
-       
-        public List<UserModel> GetWithFilter(UserModel user)
+    
+        
+        public List<UserModel> GetWithFilter(UserFilterModel filter)
         {
             List<UserModel> userList = new List<UserModel>();
 
@@ -34,17 +36,17 @@ namespace T2Access.DAL
             DatabaseExecuter.ExecuteQuery("SP_User_SelectWithFilter", delegate (SqlCommand cmd)
             {
 
-                if (user.UserName != null)
-                    cmd.Parameters.AddWithValue("@username", user.UserName);
+                if (filter.UserName != null)
+                    cmd.Parameters.AddWithValue("@username", filter.UserName);
 
-                if (user.FirstName != null)
-                    cmd.Parameters.AddWithValue("@firstname", user.FirstName);
+                if (filter.FirstName != null)
+                    cmd.Parameters.AddWithValue("@firstname", filter.FirstName);
 
-                if (user.LastName != null)
-                    cmd.Parameters.AddWithValue("@lastname", user.LastName);
+                if (filter.LastName != null)
+                    cmd.Parameters.AddWithValue("@lastname", filter.LastName);
 
-                if (user.Status != null)
-                    cmd.Parameters.AddWithValue("@status", user.Status);
+                if (filter.Status != null)
+                    cmd.Parameters.AddWithValue("@status", filter.Status);
 
             },
             delegate (SqlDataReader reader)
@@ -57,9 +59,9 @@ namespace T2Access.DAL
                     {
                         Id = reader.GetGuid(0),
                         UserName = reader.GetString(1),
-                        FirstName = reader.GetString(3),
-                        LastName = reader.GetString(4),
-                        Status = reader.GetInt32(6)
+                        FirstName = reader.GetString(2),
+                        LastName = reader.GetString(3),
+                        Status = reader.GetInt32(4)
                     });
 
                 }
@@ -69,7 +71,6 @@ namespace T2Access.DAL
 
 
         }
-
 
 
         public UserModel GetByUserName(string userName) {
@@ -106,6 +107,7 @@ namespace T2Access.DAL
 
 
         }
+
 
 
         public UserModel Login(LoginModel userModel)

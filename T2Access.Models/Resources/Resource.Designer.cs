@@ -61,6 +61,24 @@ namespace T2Access.Models.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} must be less than {1}.
+        /// </summary>
+        internal static string LessThen {
+            get {
+                return ResourceManager.GetString("LessThen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The password and confirmation password do not match.
+        /// </summary>
+        internal static string Mismatch {
+            get {
+                return ResourceManager.GetString("Mismatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} required Field.
         /// </summary>
         internal static string RequiredField {
