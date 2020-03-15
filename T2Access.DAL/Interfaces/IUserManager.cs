@@ -6,7 +6,7 @@ using T2Access.Models;
 
 namespace T2Access.DAL
 {
-    public interface IUserManager : IRepository<UserSignUpModel>
+    public interface IUserManager : IRepository<UserSignUpModel> 
     {
         //bool Insert(UserModel user);
         List<UserModel> GetWithFilter(UserFilterModel filter);
@@ -14,7 +14,6 @@ namespace T2Access.DAL
 
         UserModel Login(LoginModel user);
 
-        int GetStatusById(Guid id);
 
     }
 }

@@ -33,7 +33,7 @@ namespace T2Access.DAL
            }) > 0 ? true : false;
         }
 
-        public bool CheckIfValid(UserGateModel userGate)
+        public bool CheckIfExist(UserGateModel userGate)
         {
             UserGateModel _userGate = null;
             int userStatus = 255;

@@ -129,6 +129,9 @@
   <data name="FilterMiss" xml:space="preserve">
     <value>Missing filter values</value>
   </data>
+  <data name="NotAuthorized" xml:space="preserve">
+    <value>You are not authorized to use this resource</value>
+  </data>
   <data name="SignupFailed" xml:space="preserve">
     <value>Signup process failed</value>
   </data>

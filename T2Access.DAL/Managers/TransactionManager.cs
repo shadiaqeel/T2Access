@@ -50,7 +50,7 @@ namespace T2Access.DAL
             return transaction;
         }
 
-        public bool Update(decimal id)
+        public bool UpdateStatus(decimal id)
         {
 
 

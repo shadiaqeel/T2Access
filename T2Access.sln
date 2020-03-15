@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "T2Access.Models", "T2Access
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "T2Access.Security", "T2Access.Security\T2Access.Security.csproj", "{B60DDFD4-E199-4911-AF07-785D49D1F708}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "T2Access.Web", "T2Access.Web\T2Access.Web.csproj", "{727AFF85-35AF-4A57-BBAC-ED45E50D1DF7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "T2Access.Services", "T2Access.Services\T2Access.Services.csproj", "{95459EB7-752B-46BD-9A53-EBC44DD681CA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{B60DDFD4-E199-4911-AF07-785D49D1F708}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B60DDFD4-E199-4911-AF07-785D49D1F708}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B60DDFD4-E199-4911-AF07-785D49D1F708}.Release|Any CPU.Build.0 = Release|Any CPU
+		{727AFF85-35AF-4A57-BBAC-ED45E50D1DF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{727AFF85-35AF-4A57-BBAC-ED45E50D1DF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{727AFF85-35AF-4A57-BBAC-ED45E50D1DF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{727AFF85-35AF-4A57-BBAC-ED45E50D1DF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95459EB7-752B-46BD-9A53-EBC44DD681CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95459EB7-752B-46BD-9A53-EBC44DD681CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95459EB7-752B-46BD-9A53-EBC44DD681CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95459EB7-752B-46BD-9A53-EBC44DD681CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

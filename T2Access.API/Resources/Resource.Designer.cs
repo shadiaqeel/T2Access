@@ -97,6 +97,15 @@ namespace T2Access.API.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You are not authorized to use this resource.
+        /// </summary>
+        internal static string NotAuthorized {
+            get {
+                return ResourceManager.GetString("NotAuthorized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Signup process failed.
         /// </summary>
         internal static string SignupFailed {

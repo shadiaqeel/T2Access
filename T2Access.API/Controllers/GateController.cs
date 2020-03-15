@@ -5,12 +5,12 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Web.Http;
 using System.Web.Http.Description;
-using Ole5.Tokenization.Models;
 using T2Access.API.Attributes;
 using T2Access.API.Helper;
 using T2Access.API.Resources;
 using T2Access.BLL.Services;
 using T2Access.Models;
+using T2Access.Security.Tokenization.Models;
 
 namespace T2Access.API.Controllers
 {

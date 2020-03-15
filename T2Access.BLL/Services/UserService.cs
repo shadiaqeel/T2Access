@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using T2Access.DAL;
+using T2Access.DAL.Helper;
 using T2Access.Models;
 
 namespace T2Access.BLL.Services
 {
     public class UserService : IUserService
     {
-        private readonly IUserManager userManager = new UserManager();
-        private readonly IUserGateManager userGateManager = new UserGateManager();
+        private readonly IUserManager userManager = ManagerFactory.GetUserManager(Variables.DatabaseProvider);
+        private readonly IUserGateManager userGateManager = ManagerFactory.GetUserGateManager(Variables.DatabaseProvider);
 
 
         public bool Create(UserSignUpModel user)

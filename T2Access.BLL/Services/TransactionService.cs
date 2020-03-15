@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using T2Access.DAL;
+using T2Access.DAL.Helper;
 using T2Access.Models;
 
 namespace T2Access.BLL.Services
@@ -12,7 +13,7 @@ namespace T2Access.BLL.Services
 
     public class TransactionService : ITransactionService
     {
-        private readonly ITransactionManager transactionManager = new TransactionManager();
+        private readonly ITransactionManager transactionManager = ManagerFactory.GetTransactionManager(Variables.DatabaseProvider);
 
 
 
@@ -35,15 +36,15 @@ namespace T2Access.BLL.Services
 
         public bool UpdateStatus(decimal id)
         {
-            return transactionManager.Update(id);
+            return transactionManager.UpdateStatus(id);
         }
 
 
         public bool ValidUserGate(UserGateModel userGate)
         {
-             IUserGateManager userGateManager = new UserGateManager();
+             IUserGateManager userGateManager = ManagerFactory.GetUserGateManager(Variables.DatabaseProvider);
 
-            return userGateManager.CheckIfValid(userGate);
+            return userGateManager.CheckIfExist(userGate);
         }
     }
 }

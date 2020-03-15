@@ -5,13 +5,12 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Web.Http;
 using System.Web.Http.Description;
-using Ole5.Tokenization.Models;
 using T2Access.API.Attributes;
 using T2Access.API.Helper;
 using T2Access.API.Resources;
 using T2Access.BLL.Services;
 using T2Access.Models;
-
+using T2Access.Security.Tokenization.Models;
 
 namespace T2Access.API.Controllers
 {
@@ -45,7 +44,7 @@ namespace T2Access.API.Controllers
 
 
 
-                var Token = AuthrizationFactory.GetAuthrization().GenerateToken(new JWTContainerModel()
+                var token = AuthrizationFactory.GetAuthrization().GenerateToken(new JWTContainerModel()
                 {
 
                     ExpireMinutes = DateTime.Now.AddMinutes(15).Minute,
@@ -54,7 +53,7 @@ namespace T2Access.API.Controllers
                 });
 
 
-                return Request.CreateResponse(HttpStatusCode.OK,Token);
+                return Request.CreateResponse(HttpStatusCode.OK, token);
 
             }
             else
@@ -149,8 +148,8 @@ namespace T2Access.API.Controllers
             if (filter == null)
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.FilterMiss);
-
             }
+
             return Request.CreateResponse(HttpStatusCode.OK, userService.GetList(filter));
 
         }

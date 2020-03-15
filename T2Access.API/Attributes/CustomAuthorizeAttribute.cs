@@ -4,8 +4,9 @@ using System.Security.Principal;
 using System.Threading;
 using System.Web.Http;
 using System.Web.Http.Controllers;
-using Ole5.Tokenization.Services;
 using T2Access.API.Helper;
+using T2Access.API.Resources;
+using T2Access.Security.Tokenization.Services;
 
 namespace T2Access.API.Attributes
 {
@@ -17,7 +18,7 @@ namespace T2Access.API.Attributes
         {
             if (actionContext.Request.Headers.Authorization == null || string.IsNullOrEmpty(actionContext.Request.Headers.Authorization.Parameter))
             {
-                actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized, "You are not authorized to use this resource");
+                actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized, Resource.NotAuthorized);
                 return;
             }
 
@@ -29,7 +30,7 @@ namespace T2Access.API.Attributes
             IAuthService authService = AuthrizationFactory.GetAuthrization();
 
             
-            var role = ((JWTService)authService).GetTokenClaimValue(token, "Role");
+            var role = authService.GetTokenClaimValue(token, "Role");
 
             if (!authService.IsTokenValid(token) || !Roles.Contains(role) )
             {
@@ -42,6 +43,7 @@ namespace T2Access.API.Attributes
 
 
                 IPrincipal principal = new GenericPrincipal(new GenericIdentity(userName), new string[] { role });
+               
                 Thread.CurrentPrincipal = principal;
                 actionContext.RequestContext.Principal = principal;
 

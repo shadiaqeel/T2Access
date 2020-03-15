@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 
 
 namespace T2Access.Security
 {
-    public  class PasswordHasher : IPasswordHasher
+    public class PasswordHasher : IPasswordHasher
     {
-        public  string HashPassword(string password)
+        public string HashPassword(string password)
         {
             byte[] salt;
             byte[] buffer2;
@@ -30,7 +26,7 @@ namespace T2Access.Security
             return Convert.ToBase64String(dst);
         }
 
-        public  bool VerifyHashedPassword(string hashedPassword, string password)
+        public bool VerifyHashedPassword(string hashedPassword, string password)
         {
             byte[] buffer4;
             if (hashedPassword == null)
@@ -58,7 +54,7 @@ namespace T2Access.Security
         }
 
 
-        public  bool ByteArraysEqual(byte[] b1, byte[] b2)
+        public bool ByteArraysEqual(byte[] b1, byte[] b2)
         {
             if (b1 == b2) return true;
             if (b1 == null || b2 == null) return false;

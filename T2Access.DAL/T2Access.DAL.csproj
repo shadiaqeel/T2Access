@@ -31,6 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MySql.Data, Version=8.0.19.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
+    <Reference Include="MySql.Web, Version=8.0.19.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -48,8 +50,13 @@
     <Compile Include="Entities\Transaction.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="Entities\UserGate.cs" />
+    <Compile Include="Helper\ManagerFactory.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="DatabaseExecuter.cs" />
+    <Compile Include="MySqlManagers\MySqlGateManager.cs" />
+    <Compile Include="MySqlManagers\MySqlTransactionManager.cs" />
+    <Compile Include="MySqlManagers\MySqlUserGateManager.cs" />
+    <Compile Include="MySqlManagers\MySqlUserManager.cs" />
     <Compile Include="Managers\GateManager.cs" />
     <Compile Include="Interfaces\IGateManager.cs" />
     <Compile Include="Interfaces\ITransactionManager.cs" />

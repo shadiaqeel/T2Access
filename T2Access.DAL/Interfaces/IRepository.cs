@@ -11,5 +11,6 @@ namespace T2Access.DAL
     {
         bool Insert(T entity);
 
+
     }
 }

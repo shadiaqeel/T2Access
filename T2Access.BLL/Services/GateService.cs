@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using T2Access.DAL;
+using T2Access.DAL.Helper;
 using T2Access.Models;
 
 namespace T2Access.BLL.Services
@@ -10,7 +11,7 @@ namespace T2Access.BLL.Services
     public class GateService : IGateService
     {
 
-        private IGateManager gateManager = new GateManager();
+        private IGateManager gateManager = ManagerFactory.GetGateManager(Variables.DatabaseProvider);
 
 
 
