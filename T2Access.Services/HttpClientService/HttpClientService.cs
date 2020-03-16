@@ -22,28 +22,27 @@ namespace T2Access.Services.HttpClientService
         }
 
 
-        public  async Task<HttpResponseMessage> GetAsync(string Route)
+        public  async Task<HttpResponseMessage> GetAsync(string uri)
         {
             using (HttpClient httpClient = new HttpClient())
             {
                 httpClient.BaseAddress = BaseUri;
 
-                var httpResponse = await httpClient.GetAsync(new Uri(Route));
+                var httpResponse = await httpClient.GetAsync(uri);
 
                 return httpResponse;
             }
         }
-        public  async Task<HttpResponseMessage> PostAsync(string Route, object Model)
+        public  async Task<HttpResponseMessage> PostAsync(string uri, object Model)
         {
             using (HttpClient httpClient = new HttpClient())
             {
                 httpClient.BaseAddress = BaseUri;
 
-                var uri = new Uri(Route);
                 
-                string jsonTransport = JsonConvert.SerializeObject(Model);
-                var jsonPayload = new StringContent(jsonTransport, Encoding.UTF8, "application/json");
+                var jsonPayload = new StringContent(JsonConvert.SerializeObject(Model), Encoding.UTF8, "application/json");
                 var httpResponse = await httpClient.PostAsync(uri, jsonPayload);
+
                 
 
                 return httpResponse;
@@ -51,26 +50,25 @@ namespace T2Access.Services.HttpClientService
         }
 
 
-        public  async Task<HttpResponseMessage> PutAsync(string Route, object Model)
+        public  async Task<HttpResponseMessage> PutAsync(string uri, object Model)
         {
             using (HttpClient httpClient = new HttpClient())
             {
                 httpClient.BaseAddress = BaseUri;
 
-                var uri = new Uri(Route);
                 string jsonTransport = JsonConvert.SerializeObject(Model);
                 var jsonPayload = new StringContent(jsonTransport, Encoding.UTF8, "application/json");
                 var httpResponse = await httpClient.PutAsync(uri, jsonPayload);
                 return httpResponse;
             }
         }
-        public  async Task<HttpResponseMessage> DeleteAsync(string Route)
+        public  async Task<HttpResponseMessage> DeleteAsync(string uri)
         {
             using (HttpClient httpClient = new HttpClient())
             {
                 httpClient.BaseAddress = BaseUri;
 
-                var httpResponse = await httpClient.DeleteAsync(new Uri(Route));
+                var httpResponse = await httpClient.DeleteAsync(uri);
                 return httpResponse;
             }
         }

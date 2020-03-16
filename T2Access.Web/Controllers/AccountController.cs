@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Mvc;
-using Newtonsoft.Json;
-using T2Access.Web.Models;
-using T2Access.Security.Tokenization.Services;
-using  T2Access.Web.Helper;
 using System.Security.Principal;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+using T2Access.Security.Tokenization.Services;
 using T2Access.Services.HttpClientService;
+using T2Access.Web.Helper;
+using T2Access.Web.Models;
+using T2Access.Web.Filters;
+using System.Collections;
+using T2Access.Web.Attributes;
 
 namespace T2Access.Web.Controllers
 {
@@ -18,7 +18,7 @@ namespace T2Access.Web.Controllers
 
 
 
-        IHttpClientService httpService = new HttpClientService(new Uri (Variables.ServerBaseAddress));
+        IHttpClientService httpService = new HttpClientService(new Uri(Variables.ServerBaseAddress));
 
 
         // GET: Account
@@ -40,45 +40,37 @@ namespace T2Access.Web.Controllers
             }
 
 
-           // var response =  await httpService.PostAsync("user/Login", model);
-           
+            var response = await httpService.PostAsync("user/Login", model);
 
-            using (var client = new HttpClient())
+
+
+            if (response.IsSuccessStatusCode)
             {
+                string token = await response.Content.ReadAsStringAsync();
+                token = token.Replace("\"", "");
 
-                client.BaseAddress = new Uri(Variables.ServerBaseAddress);
+                IAuthService authService = AuthrizationFactory.GetAuthrization();
 
-
-                // var content = new StringContent(jsonObject.ToString(), Encoding.UTF8, "application/json");
-                var content = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
-
-                var postTask =  client.PostAsync("user/Login", content);
-                postTask.Wait();
-
-                
-                var result = postTask.Result;
-                if (result.IsSuccessStatusCode)
-                {
-                    string token = await result.Content.ReadAsStringAsync();
-                    token = token.Replace("\"", "");
-                    
-                    IAuthService authService = AuthrizationFactory.GetAuthrization();
-
-                   IPrincipal principal =  authService.GetPrincipal(token);
+               
+               
+                Session["Token"] = token;
+                //Session["Principal"] = authService.GetPrincipal(token);
+                Session["Username"] = authService.GetTokenClaimValue(token, "Username");
+                Session["Role"] = authService.GetTokenClaimValue(token, "Role");
+                Session["FirstName"] = authService.GetTokenClaimValue(token, "FirstName");
+                Session["LastName"] = authService.GetTokenClaimValue(token, "LastName");
 
 
-                    Thread.CurrentPrincipal = principal;
-                    System.Web.HttpContextBase httpContext = HttpContext;
-                    httpContext.User = principal;
-
-                    return RedirectToAction("index", "Home");
-                }
-
-                ModelState.AddModelError(string.Empty, "Server Error. Please contact administrator.");
-                return View();
-
-
+                return RedirectToAction("index", "Home");
             }
+
+
+
+            ModelState.AddModelError(string.Empty, "Server Error. Please contact administrator.");
+            return View();
+
+
+
         }
 
 
@@ -91,6 +83,13 @@ namespace T2Access.Web.Controllers
             return View();
         }
 
+
+        public ActionResult LogOff()
+        {
+            Session.Clear();
+
+            return RedirectToAction("index", "Home");
+        }
 
 
 

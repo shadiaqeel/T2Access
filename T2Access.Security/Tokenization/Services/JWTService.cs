@@ -71,7 +71,7 @@ namespace T2Access.Security.Tokenization.Services
                                             _audienceId,
                                             model.Claims,
                                             DateTime.Now,
-                                            DateTime.Now.AddMinutes(Convert.ToInt32(model.ExpireMinutes)),
+                                            DateTime.Now.AddMinutes(model.ExpireMinutes),
                                             DateTime.Now)
                             ));
             }

@@ -37,7 +37,7 @@ namespace T2Access.API.Controllers
             {
                 List<Claim> cliamList = new List<Claim>();
                 cliamList.Add(new Claim("UserId", user.Id.ToString()));
-                cliamList.Add(new Claim("UserName", user.UserName));
+                cliamList.Add(new Claim("Username", user.UserName));
                 cliamList.Add(new Claim("FirstName", user.FirstName));
                 cliamList.Add(new Claim("LastName", user.LastName));
                 cliamList.Add(new Claim("Role", "User"));

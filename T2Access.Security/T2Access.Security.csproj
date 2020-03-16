@@ -61,6 +61,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tokenization\Models\Constants.cs" />
     <Compile Include="Tokenization\Models\IAuthContainerModel.cs" />
+    <Compile Include="Tokenization\Models\IJWTClaimsModel.cs" />
     <Compile Include="Tokenization\Models\JWTContainerModel.cs" />
     <Compile Include="Tokenization\Services\IAuthService.cs" />
     <Compile Include="Tokenization\Services\JWTService.cs" />
