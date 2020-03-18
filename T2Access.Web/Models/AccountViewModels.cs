@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace T2Access.Web.Models
 {
-  
+
     public class ForgotViewModel
     {
         [Required]

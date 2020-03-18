@@ -147,12 +147,15 @@ namespace T2Access.DAL
 
         }
 
+        public bool Delete(Guid id)
+        {
 
+            return DatabaseExecuter.MySqlExecuteNonQuery("SP_User_Delete", delegate (MySqlCommand cmd)
+            {
+                cmd.Parameters.AddWithValue("_id", id);
 
-        
+            }) > 0 ? true : false;
 
-
-
-        
+        }
     }
 }

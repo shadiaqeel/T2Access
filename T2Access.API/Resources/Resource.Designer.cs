@@ -88,6 +88,24 @@ namespace T2Access.API.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Deletion process Failed.
+        /// </summary>
+        internal static string DeleteFailed {
+            get {
+                return ResourceManager.GetString("DeleteFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deletion process was successful.
+        /// </summary>
+        internal static string DeleteSuccess {
+            get {
+                return ResourceManager.GetString("DeleteSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Missing filter values.
         /// </summary>
         internal static string FilterMiss {

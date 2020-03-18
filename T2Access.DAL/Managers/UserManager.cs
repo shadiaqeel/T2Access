@@ -184,5 +184,10 @@ namespace T2Access.DAL
 
 
         }
+
+        public bool Delete(Guid id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

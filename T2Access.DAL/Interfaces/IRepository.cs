@@ -7,9 +7,11 @@ using T2Access.Models;
 
 namespace T2Access.DAL
 {
-    public interface IRepository<T> where T: class
+    public interface IRepository<T,D> where T: class
     {
         bool Insert(T entity);
+
+        bool Delete(D id);
 
 
     }

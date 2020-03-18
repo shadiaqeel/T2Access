@@ -5,10 +5,10 @@ namespace T2Access.Services.HttpClientService
 {
     public interface IHttpClientService
     {
-        Task<HttpResponseMessage> GetAsync(string Route);
-        Task<HttpResponseMessage> PostAsync(string Route, object Model);
+        Task<HttpResponseMessage> GetAsync(string uri, string accept = "application/json", string token = null);
+        Task<HttpResponseMessage> PostAsync(string uri, object Model, string accept = "application/json", string token = null);
         Task<HttpResponseMessage> PutAsync(string Route, object Model);
-        Task<HttpResponseMessage> DeleteAsync(string Route);
+        Task<HttpResponseMessage> DeleteAsync(string uri, string token = null);
 
 
 

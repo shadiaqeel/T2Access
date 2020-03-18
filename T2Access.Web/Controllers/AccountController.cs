@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Security.Principal;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+
 using T2Access.Security.Tokenization.Services;
 using T2Access.Services.HttpClientService;
 using T2Access.Web.Helper;
 using T2Access.Web.Models;
-using T2Access.Web.Filters;
-using System.Collections;
-using T2Access.Web.Attributes;
 
 namespace T2Access.Web.Controllers
 {
@@ -51,8 +47,8 @@ namespace T2Access.Web.Controllers
 
                 IAuthService authService = AuthrizationFactory.GetAuthrization();
 
-               
-               
+
+
                 Session["Token"] = token;
                 //Session["Principal"] = authService.GetPrincipal(token);
                 Session["Username"] = authService.GetTokenClaimValue(token, "Username");
@@ -60,8 +56,9 @@ namespace T2Access.Web.Controllers
                 Session["FirstName"] = authService.GetTokenClaimValue(token, "FirstName");
                 Session["LastName"] = authService.GetTokenClaimValue(token, "LastName");
 
+                Session["Culture"] = "ar";
 
-                return RedirectToAction("index", "Home");
+                return RedirectToAction("index", "User");
             }
 
 
@@ -77,14 +74,14 @@ namespace T2Access.Web.Controllers
 
 
 
-        [AllowAnonymous]
-        public ActionResult Register()
-        {
-            return View();
-        }
+        //[AllowAnonymous]
+        //public ActionResult Register()
+        //{
+        //    return View();
+        //}
 
 
-        public ActionResult LogOff()
+        public ActionResult LogOut()
         {
             Session.Clear();
 

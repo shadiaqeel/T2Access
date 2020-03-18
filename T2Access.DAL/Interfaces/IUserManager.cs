@@ -6,7 +6,7 @@ using T2Access.Models;
 
 namespace T2Access.DAL
 {
-    public interface IUserManager : IRepository<UserSignUpModel> 
+    public interface IUserManager : IRepository<UserSignUpModel,Guid> 
     {
         //bool Insert(UserModel user);
         List<UserModel> GetWithFilter(UserFilterModel filter);

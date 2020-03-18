@@ -60,5 +60,10 @@ namespace T2Access.DAL
                 cmd.Parameters.AddWithValue("_Id", id);
             }) > 0 ? true : false;
         }
+
+        public bool Delete(decimal id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

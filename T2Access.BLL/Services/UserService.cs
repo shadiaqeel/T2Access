@@ -12,6 +12,10 @@ namespace T2Access.BLL.Services
         private readonly IUserGateManager userGateManager = ManagerFactory.GetUserGateManager(Variables.DatabaseProvider);
 
 
+
+
+
+
         public bool Create(UserSignUpModel user)
         {
 
@@ -39,6 +43,22 @@ namespace T2Access.BLL.Services
             return userManager.GetWithFilter(filter);
         }
 
+        public bool Delete(Guid id)
+        {
+            return userManager.Delete(id);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
         public bool Assign(UserGateModel userGate)
         {
 
@@ -52,6 +72,11 @@ namespace T2Access.BLL.Services
             return userGateManager.Delete(userGate);
 
         }
+
+
+
+
+
 
     }
 

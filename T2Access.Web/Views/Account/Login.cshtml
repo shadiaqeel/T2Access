@@ -6,67 +6,147 @@
 }
 
 
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title</title>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>@ViewBag.Title</title>
 
-    @Styles.Render("~/Assets/Account/Login/login.css")
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
+       
 
-</head>
-<body class=" body-login ">
+            
+
+    <!--===============================================================================================-->
+        <link rel="icon" type="image/png" href="~/Assets/Account/Login/images/icons/favicon.ico" />
+        <!--===============================================================================================-->
+
+        @Styles.Render("~/Assets/lib/bootstrap/css/bootstrap.min.css")
+        <!--===============================================================================================-->
+        @Styles.Render("~/Assets/fonts/font-awesome-4.7.0/css/font-awesome.min.css")
+        <!--===============================================================================================-->
+        @Styles.Render("~/Assets/fonts/Linearicons-Free-v1.0.0/icon-font.min.css")
+        <!--===============================================================================================-->
+        @Styles.Render("~/Assets/lib/animate/animate.css")
+        <!--===============================================================================================-->
+        @Styles.Render("~/Assets/lib/css-hamburgers/hamburgers.min.css")
+        <!--===============================================================================================-->
+        @Styles.Render("~/Assets/lib/animsition/css/animsition.min.css")
+        <!--===============================================================================================-->
+        @Styles.Render("~/Assets/lib/select2/select2.min.css")
+        <!--===============================================================================================-->
+        @Styles.Render("~/Assets/lib/daterangepicker/daterangepicker.css")
+        <!--===============================================================================================-->
+        @Styles.Render("~/Assets/Account/Login/css/util.css")
+        @Styles.Render("~/Assets/Account/Login/css/main.css")
+        <!--===============================================================================================-->
+            
+    </head>
+    <body class=" body-login ">
+
+
+
+        <div class="limiter" >
+            <div class="container-login100 " style="background-image: linear-gradient(-225deg, #B7F8DB 0%, #50A7C2 100%);" >
+                <div class="wrap-login100">
+                    <div class="login100-form-title" style="background-image: url(/Assets/Account/Login/images/bg-01.jpg);">
+                        <span class="login100-form-title-1">
+                            SIGN IN
+                        </span>
+                    </div>
+                    @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "login100-form validate-form", role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+
+
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
 
 
 
-    @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal form-login ", role = "form" }))
-    {
-        @Html.AntiForgeryToken()
-        <h3 class=" text-center">@ViewBag.Title</h3>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            <div class="col-md-10 col-md-offset-2">
-                @Html.TextBoxFor(m => m.Username, new { @class = "form-control", @placeholder = "Username" })
-                @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-10 col-md-offset-2">
-                @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "Password" })
-                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <div class="checkbox">
-                    @Html.CheckBoxFor(m => m.RememberMe)
-                    @Html.LabelFor(m => m.RememberMe)
+                        <div class="wrap-input100 validate-input m-b-26" data-validate="Username is required">
+                            <span class="label-input100">Username : </span>    <!--TODO : ADD RESOURCE-->
+                            @Html.TextBoxFor(m => m.Username, new { @class = "input100", @placeholder = "Enter username" })
+                            <span class="focus-input100"></span>
+                            @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
+
+                        </div>
+
+
+
+
+
+
+
+
+                        <div class="wrap-input100 validate-input m-b-18" data-validate="Password is required">
+                            <span class="label-input100">Password : </span>
+                            @Html.PasswordFor(m => m.Password, new { @class = "input100", @placeholder = "Enter password" })
+
+                            <span class="focus-input100"></span>
+                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+
+                        </div>
+
+
+                        <div class="flex-sb-m w-full p-b-30">
+                            <div class="contact100-form-checkbox">
+                                @Html.CheckBoxFor(m => m.RememberMe, new { @class = "input-checkbox100" })
+                                @Html.LabelFor(m => m.RememberMe , new { @class = "label-checkbox100"})
+                            </div>
+
+                            <div>
+                                <a href="#" class="txt1">
+                                    Forgot Password?
+                                </a>
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="container-login100-form-btn m-t-17">
+                            <button class="login100-form-btn">
+                                Sign In
+                            </button>
+                        </div>
+
+
+                    }
                 </div>
             </div>
         </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Log in" class="btn btn-default  btn-lg  btn-block" />
-            </div>
-        </div>
-        <p>
-            @Html.ActionLink("Register as a new user", "Register")
-        </p>
-
-    }
 
 
-
-    @section Scripts {
-        @Scripts.Render("~/bundles/jqueryval")
-        @Scripts.Render("~/bundles/jquery")
-        @Scripts.Render("~/bundles/bootstrap")
-    }
+        <div id="dropDownSelect1"></div>
 
 
 
 
-</body>
+
+        <!--===============================================================================================-->
+        @Scripts.Render("~/Assets/lib/jquery/jquery.min.js")
+        <!--===============================================================================================-->
+        @Scripts.Render("~/Assets/lib/animsition/js/animsition.min.js")
+        <!--===============================================================================================-->
+        @Scripts.Render("~/Assets/lib/bootstrap/js/popper.js")
+        @Scripts.Render("~/Assets/lib/bootstrap/js/bootstrap.min.js")
+        <!--===============================================================================================-->
+        @Scripts.Render("~/Assets/lib/select2/select2.min.js")
+        <!--===============================================================================================-->
+        @Scripts.Render("~/Assets/lib/daterangepicker/moment.min.js")
+        @Scripts.Render("~/Assets/lib/daterangepicker/daterangepicker.js")
+        <!--===============================================================================================-->
+        @Scripts.Render("~/Assets/lib/countdowntime/countdowntime.js")
+        <!--===============================================================================================-->
+        @Scripts.Render("~/Assets/Account/Login/js/main.js")
+
+        @section Scripts {
+            @Scripts.Render("~/bundles/jqueryval")
+            @Scripts.Render("~/bundles/jquery")
+            @Scripts.Render("~/bundles/bootstrap")
+        }
+
+
+
+
+    </body>

@@ -1,38 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Security.Principal;
-using System.Threading;
-using System.Web;
-using System.Web.Mvc;
-using T2Access.Web.Attributes;
+﻿using System.Web.Mvc;
 
 namespace T2Access.Web.Controllers
 {
-    [CustomAuthorize]
+    // [CustomAuthorize]
     public class HomeController : Controller
     {
         [AllowAnonymous]
         public ActionResult Index()
         {
-           
-            return View();
+            if (string.IsNullOrEmpty((string)Session["Token"]))
+                return RedirectToAction("Login", "Account");
+
+            return RedirectToAction("Index", "Admin");
+
+
         }
 
 
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
 
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
     }
 }

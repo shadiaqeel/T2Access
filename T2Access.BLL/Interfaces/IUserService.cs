@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using T2Access.Models;
 
 namespace T2Access.BLL.Services
@@ -11,5 +12,6 @@ namespace T2Access.BLL.Services
         List<UserModel> GetList(UserFilterModel user);
         bool Assign(UserGateModel userGate);
         bool Unassign(UserGateModel userGate);
+        bool Delete(Guid id);
     }
 }

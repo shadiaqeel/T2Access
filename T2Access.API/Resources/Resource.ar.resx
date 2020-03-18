@@ -126,6 +126,12 @@
   <data name="CreateTransactionFailed" xml:space="preserve">
     <value>فشلت عملية انشاء معامله  </value>
   </data>
+  <data name="DeleteFailed" xml:space="preserve">
+    <value>فشلت عملية الحذف</value>
+  </data>
+  <data name="DeleteSuccess" xml:space="preserve">
+    <value>نجحت عملية الحذف</value>
+  </data>
   <data name="FilterMiss" xml:space="preserve">
     <value>الفلتر مفقود </value>
   </data>

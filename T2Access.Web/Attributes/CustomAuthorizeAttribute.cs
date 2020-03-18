@@ -3,6 +3,7 @@ using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+
 using T2Access.Security.Tokenization.Services;
 using T2Access.Web.Helper;
 
@@ -18,10 +19,10 @@ namespace T2Access.Web.Attributes
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
 
-         
 
 
-        var token = httpContext.Session["Token"];
+
+            var token = httpContext.Session["Token"];
 
             if (string.IsNullOrEmpty((string)token) || !authService.IsTokenValid((string)token))
             {
@@ -52,7 +53,7 @@ namespace T2Access.Web.Attributes
         protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
         {
 
-            filterContext.Result = new RedirectToRouteResult(   new RouteValueDictionary{  { "action", "Login" },  { "controller", "Account" } });
+            filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary { { "action", "Login" }, { "controller", "Account" } });
 
 
         }

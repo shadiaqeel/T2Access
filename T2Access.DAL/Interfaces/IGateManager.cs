@@ -4,7 +4,7 @@ using T2Access.Models;
 
 namespace T2Access.DAL
 {
-    public interface IGateManager :IRepository<GateSignUpModel>
+    public interface IGateManager :IRepository<GateSignUpModel,Guid>
     {
         List<GateModel> GetWithFilter(GateFilterModel gate);
         GateModel GetByUserName(string username);

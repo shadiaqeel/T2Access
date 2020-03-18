@@ -172,8 +172,9 @@ namespace T2Access.DAL
             return status;
         }
 
-
-
-
+        public bool Delete(Guid id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

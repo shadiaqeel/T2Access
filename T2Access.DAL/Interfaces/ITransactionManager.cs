@@ -7,7 +7,7 @@ using T2Access.Models;
 
 namespace T2Access.DAL
 {
-    public interface ITransactionManager : IRepository<UserGateModel>
+    public interface ITransactionManager : IRepository<UserGateModel, decimal>
     {
         TransactionModel GetByGateId(Guid gateId , int status);
         bool UpdateStatus(decimal id);

@@ -67,6 +67,13 @@ namespace T2Access.API.Controllers
 
 
 
+
+
+
+
+
+        #region Admin Operations
+
         [HttpPost]
         [ResponseType(typeof(string))]
         public HttpResponseMessage SignUp(UserSignUpModel user)
@@ -100,6 +107,47 @@ namespace T2Access.API.Controllers
 
 
         }
+
+
+
+
+        [HttpGet]
+        [CustomAuthorize(Roles = "User")]
+        [ResponseType(typeof(List<UserModel>))]
+        public HttpResponseMessage GetListWithFilter([FromUri]UserFilterModel filter)
+        {
+            if (filter == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.FilterMiss);
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK, userService.GetList(filter));
+
+        }
+
+
+
+        [HttpDelete()]
+        [CustomAuthorize(Roles = "User")]
+        [ResponseType(typeof(List<UserModel>))]
+        public HttpResponseMessage Delete(Guid id )
+        {
+            if (userService.Delete(id))
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.DeleteFailed);
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK, Resource.DeleteSuccess);
+
+        }
+
+
+
+
+
+
+
+
 
 
 
@@ -140,20 +188,8 @@ namespace T2Access.API.Controllers
 
 
 
-        [HttpGet]
-        [CustomAuthorize(Roles = "User")]
-        [ResponseType(typeof(List<UserModel>))]
-        public HttpResponseMessage GetListWithFilter([FromUri]UserFilterModel filter)
-        {
-            if (filter == null)
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.FilterMiss);
-            }
 
-            return Request.CreateResponse(HttpStatusCode.OK, userService.GetList(filter));
-
-        }
-
+        #endregion
 
 
 

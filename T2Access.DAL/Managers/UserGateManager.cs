@@ -23,7 +23,7 @@ namespace T2Access.DAL
         public bool Delete(UserGateModel userGate)
         {
 
-
+             
 
             return DatabaseExecuter.ExecuteNonQuery("SP_UserGate_Delete", delegate (SqlCommand cmd)
            {
@@ -72,6 +72,7 @@ namespace T2Access.DAL
 
 
         }
+
 
     }
 }
