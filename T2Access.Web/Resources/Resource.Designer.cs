@@ -79,6 +79,15 @@ namespace T2Access.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string Cancel {
+            get {
+                return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create.
         /// </summary>
         public static string Create {
@@ -88,11 +97,38 @@ namespace T2Access.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Gate.
+        /// </summary>
+        public static string CreateGate {
+            get {
+                return ResourceManager.GetString("CreateGate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New User.
         /// </summary>
         public static string CreateUser {
             get {
                 return ResourceManager.GetString("CreateUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete.
+        /// </summary>
+        public static string Delete {
+            get {
+                return ResourceManager.GetString("Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit.
+        /// </summary>
+        public static string Edit {
+            get {
+                return ResourceManager.GetString("Edit", resourceCulture);
             }
         }
         
@@ -129,6 +165,15 @@ namespace T2Access.Web.Resources {
         public static string Password {
             get {
                 return ResourceManager.GetString("Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset Password.
+        /// </summary>
+        public static string Reset {
+            get {
+                return ResourceManager.GetString("Reset", resourceCulture);
             }
         }
         

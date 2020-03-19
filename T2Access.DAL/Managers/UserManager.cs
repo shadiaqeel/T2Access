@@ -13,7 +13,7 @@ namespace T2Access.DAL
         private IPasswordHasher passwordHasher = new PasswordHasher();
 
 
-        public bool Insert(UserSignUpModel user)
+        public bool Create(UserSignUpModel user)
         {
 
 
@@ -186,6 +186,20 @@ namespace T2Access.DAL
         }
 
         public bool Delete(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+
+
+
+
+        public bool Update(UserModel editmodel)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool ResetPassword(ResetPasswordModel model)
         {
             throw new NotImplementedException();
         }

@@ -6,7 +6,7 @@ namespace T2Access.DAL
 {
     public class MySqlUserGateManager : IUserGateManager
     {
-        public bool Insert(UserGateModel userGate)
+        public bool Create(UserGateModel userGate)
         {
 
 
@@ -73,5 +73,9 @@ namespace T2Access.DAL
 
         }
 
+        public bool Update(UserGateModel editmodel)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

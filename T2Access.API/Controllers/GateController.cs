@@ -100,7 +100,7 @@ namespace T2Access.API.Controllers
 
         [HttpGet]
         [CustomAuthorize(Roles = "User")]
-        [ResponseType(typeof(List<UserModel>))]
+        [ResponseType(typeof(List<GateModel>))]
         public HttpResponseMessage GetListWithFilter([FromUri]GateFilterModel filter)
         {
             if (filter == null)
@@ -116,6 +116,53 @@ namespace T2Access.API.Controllers
 
 
 
+
+
+        [HttpDelete()]
+        [CustomAuthorize(Roles = "User")]
+        [ResponseType(typeof(string))]
+        public HttpResponseMessage Delete(Guid id)
+        {
+            if (gateService.Delete(id))
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, Resource.DeleteSuccess);
+            }
+
+            return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.DeleteFailed);
+
+        }
+
+
+        [HttpPut]
+        [CustomAuthorize(Roles = "User,Admin")]
+        [ResponseType(typeof(string))]
+        public HttpResponseMessage Edit(Guid id, [FromBody] GateModel model)
+        {
+            model.Id = id;
+            if (gateService.Edit(model))
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, Resource.EditSuccess);
+            }
+
+            return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.EditFailed);
+
+        }
+
+
+        [HttpPut]
+        [CustomAuthorize(Roles = "User,Admin")]
+        [ResponseType(typeof(string))]
+        public HttpResponseMessage ResetPassword(Guid id, [FromBody] ResetPasswordModel model)
+        {
+            model.Id = id;
+            if (gateService.ResetPassword(model))
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, Resource.EditSuccess);
+            }
+
+            return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.EditFailed);
+
+        }
 
 
     }

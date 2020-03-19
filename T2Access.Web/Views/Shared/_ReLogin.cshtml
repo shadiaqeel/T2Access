@@ -1,0 +1,47 @@
+﻿@model T2Access.Models.LoginModel
+
+
+
+
+
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-title"></h4>
+
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+</div>
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+<div class="modal-body">
+    <p class="centered"><img style="border-radius:50%" width="80" height="80" src="@HttpContext.Current.Session["UserImg"]"></p>
+    <h5 class="centered">@HttpContext.Current.Session["Firstname"] @HttpContext.Current.Session["Lastname"]</h5>
+
+
+
+    <input data-val="true" data-val-required="The Id field is required." id="Username" name="Username" type="hidden" value="@HttpContext.Current.Session["Username"]">
+
+
+    <div class="form-group">
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control placeholder-no-fix", @placeholder = "Password", @autocomplete = "off" } })
+            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+        </div>
+    </div>
+</div>
+    <div class="modal-footer ">
+        <div class="form-group">
+            <button data-dismiss="modal" class="btn btn-danger" type="button">Cancel</button>
+            <input type="submit" value="Confirm" class="btn btn-primary" />
+
+        </div>
+    </div>
+
+
+    }
+
+
+
+

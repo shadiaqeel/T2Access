@@ -13,7 +13,7 @@ namespace T2Access.DAL
 
 
 
-        public bool Insert(GateSignUpModel gateModel)
+        public bool Create(GateSignUpModel gateModel)
         {
 
             return DatabaseExecuter.ExecuteNonQuery("SP_Gate_Insert", delegate (SqlCommand cmd)
@@ -173,6 +173,16 @@ namespace T2Access.DAL
         }
 
         public bool Delete(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Update(GateModel editmodel)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool ResetPassword(ResetPasswordModel model)
         {
             throw new NotImplementedException();
         }

@@ -16,7 +16,7 @@ namespace T2Access.Web.Controllers
     public class UserController : Controller
     {
 
-        IHttpClientService httpService = new HttpClientService(new Uri(Variables.ServerBaseAddress));
+        IHttpClientService httpService = new HttpClientService(new Uri(Variables.ServerBaseAddress + "user/"));
 
 
         // GET: User
@@ -36,11 +36,13 @@ namespace T2Access.Web.Controllers
         #region User Managment
 
 
+
+
         public async Task<ActionResult> UserManagment()
         {
 
 
-            var response = await httpService.GetAsync("user/GetListWithFilter/", token: (string)Session["Token"]);
+            var response = await httpService.GetAsync("GetListWithFilter/", token: (string)Session["Token"]);
 
 
             if (response.IsSuccessStatusCode)
@@ -56,10 +58,13 @@ namespace T2Access.Web.Controllers
             return View();
         }
 
-        public async Task< ActionResult> Delete(Guid id)
+
+
+
+        public async Task<ActionResult> Delete(Guid id)
         {
 
-            var response = await httpService.DeleteAsync($"user/Delete?id={id}",(string)Session["Token"]);
+            var response = await httpService.DeleteAsync($"Delete?id={id}", (string)Session["Token"]);
 
             var result = await response.Content.ReadAsStringAsync();
 
@@ -69,7 +74,8 @@ namespace T2Access.Web.Controllers
                 ViewBag.StateMessage = result;
 
             }
-            else {
+            else
+            {
 
                 ViewBag.ErrorMessage = result;
 
@@ -82,6 +88,7 @@ namespace T2Access.Web.Controllers
         }
 
 
+        #region Create User
         public ActionResult Create()
         {
 
@@ -101,9 +108,7 @@ namespace T2Access.Web.Controllers
                 return View();
             }
 
-
-
-            var response = await httpService.PostAsync("user/Signup/", model, token: (string)Session["Token"]);
+            var response = await httpService.PostAsync("    Signup/", model, token: (string)Session["Token"]);
 
 
             if (response.IsSuccessStatusCode)
@@ -116,15 +121,115 @@ namespace T2Access.Web.Controllers
                 var error = await response.Content.ReadAsStringAsync();
                 ViewBag.ErrorMessage = error;
 
-                ModelState.AddModelError("UserName",error);
+                ModelState.AddModelError("UserName", error);
 
 
                 return View(model);
-            
-            
+
+
             }
 
         }
+        #endregion
+
+        #region Edit
+
+        public ActionResult Edit()
+        {
+
+            return PartialView("_Edit");
+        }
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(UserModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return PartialView("_Edit");
+            }
+
+            var response = await httpService.PutAsync($"Edit?id={model.Id}", model, token: (string)Session["Token"]);
+
+
+            if (response.IsSuccessStatusCode)
+
+                return Json(new { success = true });
+            else
+            {
+
+
+                var error = await response.Content.ReadAsStringAsync();
+                ViewBag.ErrorMessage = error;
+
+                // ModelState.AddModelError("UserName", error);
+
+
+                return PartialView("_Edit", model);
+
+
+            }
+
+        }
+
+
+
+
+
+        #endregion
+
+        #region Reset Password
+
+        public ActionResult ResetPassword()
+        {
+
+            return PartialView("_ResetPassword");
+        }
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ResetPassword(ResetPasswordModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return PartialView("_ResetPassword");
+            }
+
+
+            if (!(bool)Session["ConfirmedOperation"])
+            {
+
+                return Json(new { confirm = true });
+            }
+
+
+            var response = await httpService.PutAsync($"ResetPassword?id={model.Id}", model, token: (string)Session["Token"]);
+
+
+            if (response.IsSuccessStatusCode)
+
+                return Json(new { success = true });
+            else
+            {
+
+
+                var error = await response.Content.ReadAsStringAsync();
+                ViewBag.ErrorMessage = error;
+
+
+
+                return PartialView("_ResetPassword", model);
+
+
+            }
+
+        }
+
+        #endregion
 
 
 

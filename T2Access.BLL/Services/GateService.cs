@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using T2Access.DAL;
 using T2Access.DAL.Helper;
 using T2Access.Models;
@@ -18,8 +19,13 @@ namespace T2Access.BLL.Services
         public bool Create(GateSignUpModel gateModel)
         {
 
-            return gateManager.Insert(gateModel);
+            return gateManager.Create(gateModel);
 
+        }
+
+        public bool Edit(GateModel model)
+        {
+            return gateManager.Update(model);
         }
 
         public List<GateModel> GetListWithFilter(GateFilterModel filter)
@@ -44,5 +50,17 @@ namespace T2Access.BLL.Services
 
 
         }
+
+        public bool Delete(Guid id)
+        {
+            return gateManager.Delete(id);
+        }  
+        
+        public bool ResetPassword(ResetPasswordModel model)
+        {
+            return gateManager.ResetPassword(model);
+        }
+
+
     }
 }

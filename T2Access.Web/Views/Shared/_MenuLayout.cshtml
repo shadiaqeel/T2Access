@@ -7,7 +7,7 @@
     }*@
 
 <!DOCTYPE html>
-<html  dir="@(System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.IsRightToLeft? "rtl" : "ltr")">
+<html dir="@(System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.IsRightToLeft? "rtl" : "ltr")">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,25 +26,23 @@
     <!-- Custom styles for this template -------->
     @Styles.Render("~/Assets/User/css/style.css")
     @Styles.Render("~/Assets/User/css/style-responsive.css")
-    <!--==========================================================================================================================================================================================
-    @RenderSection("Styles", false)
+    <!--========================================================================================================================================================================================== -->
+        @RenderSection("Styles", false)
+
 
 
 
     </head>
-    <body>
-        <body>
+    <body  @*onload="getTime()"*@
             <section id="container">
-    <!-- **********************************************************************************************************************************************************
-    TOP BAR CONTENT & NOTIFICATIONS
-    *********************************************************************************************************************************************************** -->
+    <!-- TOP BAR CONTENT & NOTIFICATIONS -->
     <!--header start-->
     <header class="header black-bg">
         <div class="sidebar-toggle-box">
             <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
         </div>
         <!--logo start-->
-        <a href="index.html" class="logo"><b>t<span id="t">t</span><span>Ac</span>cess</b></a>
+        <a href="@Url.Action("Index","User")" class="logo"><b>t<span id="t">t</span><span>Ac</span>cess</b></a>
         <!--logo end-->
         <div class="nav notify-row" id="top_menu">
 
@@ -58,111 +56,101 @@
         </div>
     </header>
     <!--header end-->
-    <!-- **********************************************************************************************************************************************************
-    MAIN SIDEBAR MENU
-    *********************************************************************************************************************************************************** -->
+    <!--MAIN SIDEBAR MENU -->
     <!--sidebar start-->
-    <aside>
-        <div id="sidebar" class="nav-collapse ">
-            <!-- sidebar menu start-->
-            <ul class="sidebar-menu" id="nav-accordion">
-                <!--<p class="centered"><a href="profile.html"><img src="Assets/User/shadi.jpg" class="img-circle" width="100" height="100"></a></p>-->
-                <h5 class="centered">@Session["FirstName"]  @Session["LastName"]  </h5>
-                <li class="mt">
-                    <a class="@Html.IsSelected("User","Index","active")" href="@Url.Action("Index","User")">
-                        <i class="fa fa-dashboard"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-                <li class="sub-menu">
-                    <a href="javascript:;" class="@Html.IsSelected("Gate,User","UserManagment,GateManagment","active")">
-                        <i class="fa fa-desktop"></i>
-                        <span>@Resource.Accounts</span>
-                    </a>
-                    <ul class="sub">
 
-                        <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "UserManagment" ? "active" : "")"> <a href="@Url.Action("UserManagment","User")">@Resource.Users</a></li>
-                        <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "GateManagment" ? "active" : "")"><a href="@Url.Action("GateManagment","Gate")">@Resource.Gates</a></li>
+        <aside>
+            <div id="sidebar" class="nav-collapse ">
+                <!-- sidebar menu start-->
+                <ul class="sidebar-menu" id="nav-accordion">
+                    <!--<p class="centered"><a href="profile.html"><img src="Assets/User/shadi.jpg" class="img-circle" width="100" height="100"></a></p>-->
+                    <h5 class="centered">@Session["FirstName"]  @Session["LastName"]  </h5>
+                    <li class="mt">
+                        <a class="@Html.IsSelected("User","Index","active")" href="@Url.Action("Index","User")">
+                            <i class="fa fa-dashboard"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="sub-menu">
+                        <a href="javascript:;" class="@Html.IsSelected("Gate,User","UserManagment,GateManagment","active")">
+                            <i class="fa fa-desktop"></i>
+                            <span>@Resource.Accounts</span>
+                        </a>
+                        <ul class="sub">
 
-                    </ul>
-                </li>
+                            <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "UserManagment" ? "active" : "")"> <a href="@Url.Action("UserManagment","User")">@Resource.Users</a></li>
+                            <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "GateManagment" ? "active" : "")"><a href="@Url.Action("GateManagment","Gate")">@Resource.Gates</a></li>
 
-            </ul>
-            <!-- sidebar menu end-->
-        </div>
-    </aside>
-    <!--sidebar end-->
-    <!-- **********************************************************************************************************************************************************
-    MAIN CONTENT
-    *********************************************************************************************************************************************************** -->
-    <!--main content start-->
-    <section id="main-content">
-        <section class="wrapper site-min-height">
+                        </ul>
+                    </li>
 
-
-
-
-
-
-
-
-
-
-            @RenderBody()
-
-
-
-
-
-
-
-
-
-
-        </section>
-        <!--main content end-->
-
-        <!--footer start-->
-        <footer class="site-footer navbar-fixed-bottom">
-            <div class="text-center">
-                <p>
-                    &copy; Copyrights <strong>T2 - business research and development </strong><br>All Rights Reserved
-                </p>
-
-                <a href="index.html#" class="go-top">
-                    <i class="fa fa-angle-up"></i>
-                </a>
+                </ul>
+                <!-- sidebar menu end-->
             </div>
-        </footer>
-    </section>
-    <!--footer end-->
-    </section>
+        </aside>
+        <!--sidebar end-->
+        <!-- **********************************************************************************************************************************************************
+        MAIN CONTENT
+        *********************************************************************************************************************************************************** -->
+        <!--main content start-->
+                </section>
+            <section id="main-content">
+                <section class="wrapper">
 
 
 
 
 
 
-    @*@Scripts.Render("~/bundles/jquery")
-        @Scripts.Render("~/bundles/bootstrap")*@
-    <!--=================================================================================================-->
-    @Scripts.Render("~/Assets/lib/jquery/jquery.min.js")
-    @Scripts.Render("~/Assets/lib/bootstrap/js/popper.min.js")
-    @Scripts.Render("~/Assets/lib/bootstrap/js/tooltip.js")
-    @Scripts.Render("~/Assets/lib/bootstrap/js/bootstrap.min.js")
-    @Scripts.Render("~/Assets/lib/jquery.dcjqaccordion.2.7.js")
-    @Scripts.Render("~/Assets/lib/jquery.scrollTo.min.js")
-    @Scripts.Render("~/Assets/lib/jquery.nicescroll.js")
-    @Scripts.Render("~/Assets/lib/jquery.sparkline.js")
-    <!--common script for all pages-->
-    @Scripts.Render("~/Assets/lib/common-scripts.js")
-    @Scripts.Render("~/Assets/lib/gritter/js/jquery.gritter.js")
-    <!--=================================================================================================-->
-
-    @RenderSection("Scripts", false)
 
 
 
+
+                    @RenderBody()
+
+                    
+
+
+
+
+
+
+
+                </section>
+
+                <!--main content end-->
+                <!--footer start-->
+                <footer class="site-footer navbar-fixed-bottom footer">
+                    <div class="text-center">
+                        <p>&copy; Copyrights <strong>T2 - business research and development </strong> All Rights Reserved</p>
+
+
+                    </div>
+                </footer>
+
+            </section>
+        
+        <!--footer end-->
+
+
+
+        @*@Scripts.Render("~/bundles/jquery")
+            @Scripts.Render("~/bundles/bootstrap")*@
+        <!--=================================================================================================-->
+        @Scripts.Render("~/Assets/lib/jquery/jquery.min.js")
+        @Scripts.Render("~/Assets/lib/bootstrap/js/popper.min.js")
+        @Scripts.Render("~/Assets/lib/bootstrap/js/tooltip.js")
+        @Scripts.Render("~/Assets/lib/bootstrap/js/bootstrap.min.js")
+        @Scripts.Render("~/Assets/lib/jquery.dcjqaccordion.2.7.js")
+        @Scripts.Render("~/Assets/lib/jquery.scrollTo.min.js")
+        @Scripts.Render("~/Assets/lib/jquery.nicescroll.js")
+        @Scripts.Render("~/Assets/lib/jquery.sparkline.js")
+        <!--common script for all pages-->
+        @Scripts.Render("~/Assets/lib/common-scripts.js")
+        @Scripts.Render("~/Assets/lib/gritter/js/jquery.gritter.js")
+        <!--=================================================================================================-->
+
+        @RenderSection("Scripts", false)
 
 
 

@@ -19,10 +19,25 @@ namespace T2Access.BLL.Services
         public bool Create(UserSignUpModel user)
         {
 
-
-
-            return userManager.Insert(user);
+            return userManager.Create(user);
         }
+
+        public List<UserModel> GetList(UserFilterModel filter)
+        {
+            return userManager.GetWithFilter(filter);
+        }
+
+        public bool Edit(UserModel model)
+        {
+            return userManager.Update(model);
+        }
+
+        public bool Delete(Guid id)
+        {
+            return userManager.Delete(id);
+        }
+
+
 
         public bool CheckUserName(string userName) {
 
@@ -38,31 +53,17 @@ namespace T2Access.BLL.Services
          return userManager.Login(user);
 
         }
-        public List<UserModel> GetList(UserFilterModel filter)
+
+        public bool ResetPassword(ResetPasswordModel model)
         {
-            return userManager.GetWithFilter(filter);
+            return userManager.ResetPassword(model);
         }
-
-        public bool Delete(Guid id)
-        {
-            return userManager.Delete(id);
-        }
-
-
-
-
-
-
-
-
-
-
 
 
         public bool Assign(UserGateModel userGate)
         {
 
-            return userGateManager.Insert(userGate);
+            return userGateManager.Create(userGate);
         }
 
 

@@ -132,6 +132,12 @@
   <data name="DeleteSuccess" xml:space="preserve">
     <value>Deletion process was successful</value>
   </data>
+  <data name="EditFailed" xml:space="preserve">
+    <value>Edit process failed</value>
+  </data>
+  <data name="EditSuccess" xml:space="preserve">
+    <value>Edit process was successful</value>
+  </data>
   <data name="FilterMiss" xml:space="preserve">
     <value>Missing filter values</value>
   </data>

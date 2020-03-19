@@ -106,6 +106,33 @@ namespace T2Access.Models.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} must be more than {1}.
+        /// </summary>
+        public static string MoreThen {
+            get {
+                return ResourceManager.GetString("MoreThen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Arabic Name.
+        /// </summary>
+        public static string NameAr {
+            get {
+                return ResourceManager.GetString("NameAr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to English Name.
+        /// </summary>
+        public static string NameEn {
+            get {
+                return ResourceManager.GetString("NameEn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password.
         /// </summary>
         public static string Password {
@@ -120,6 +147,15 @@ namespace T2Access.Models.Resources {
         public static string RequiredField {
             get {
                 return ResourceManager.GetString("RequiredField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status.
+        /// </summary>
+        public static string Status {
+            get {
+                return ResourceManager.GetString("Status", resourceCulture);
             }
         }
         

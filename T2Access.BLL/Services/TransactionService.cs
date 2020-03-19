@@ -21,7 +21,7 @@ namespace T2Access.BLL.Services
         {
             if (ValidUserGate(userGate))
             {
-                return transactionManager.Insert(userGate);
+                return transactionManager.Create(userGate);
             }
             else
             return false; 

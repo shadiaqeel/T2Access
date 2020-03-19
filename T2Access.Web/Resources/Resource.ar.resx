@@ -123,11 +123,23 @@
   <data name="Back" xml:space="preserve">
     <value>رجوع</value>
   </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>الغاء</value>
+  </data>
   <data name="Create" xml:space="preserve">
     <value>انشاء</value>
   </data>
+  <data name="CreateGate" xml:space="preserve">
+    <value>اضافة مدخل</value>
+  </data>
   <data name="CreateUser" xml:space="preserve">
     <value>مستخدم جديد</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>حذف</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>تحرير</value>
   </data>
   <data name="Gates" xml:space="preserve">
     <value>البوابات</value>
@@ -140,6 +152,9 @@
   </data>
   <data name="Password" xml:space="preserve">
     <value>كلمة السر</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>تغير كلمة السر</value>
   </data>
   <data name="Username" xml:space="preserve">
     <value>اسم المستخدم</value>

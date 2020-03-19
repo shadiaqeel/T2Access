@@ -44,14 +44,12 @@
   <ItemGroup>
     <Compile Include="BaseTypes\BaseEntity.cs" />
     <Compile Include="BaseTypes\IBaseModel.cs" />
-    <Compile Include="GateModel.cs" />
+    <Compile Include="GateModels.cs" />
+    <Compile Include="ResetPasswordModel .cs" />
     <Compile Include="TransactionModel.cs" />
-    <Compile Include="GateFilterModel.cs" />
-    <Compile Include="UserFilterModel.cs" />
-    <Compile Include="UserModel.cs" />
+    <Compile Include="UserModels.cs" />
     <Compile Include="UserGateModel.cs" />
     <Compile Include="LoginModel.cs" />
-    <Compile Include="UserSignUpModel.cs" />
     <Compile Include="BaseTypes\IAuthModel.cs" />
     <Compile Include="Resources\Resource.ar.Designer.cs">
       <DependentUpon>Resource.ar.resx</DependentUpon>
@@ -63,7 +61,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="GateSignUpModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

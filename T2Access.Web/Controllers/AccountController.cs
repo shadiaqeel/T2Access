@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-
+using T2Access.Models;
 using T2Access.Security.Tokenization.Services;
 using T2Access.Services.HttpClientService;
 using T2Access.Web.Helper;
@@ -55,7 +55,8 @@ namespace T2Access.Web.Controllers
                 Session["Role"] = authService.GetTokenClaimValue(token, "Role");
                 Session["FirstName"] = authService.GetTokenClaimValue(token, "FirstName");
                 Session["LastName"] = authService.GetTokenClaimValue(token, "LastName");
-
+                Session["ConfirmedOperation"] = false;
+                Session["UserImg"] = "/Assets/User/shadi.jpg";
                 Session["Culture"] = "ar";
 
                 return RedirectToAction("index", "User");
@@ -69,9 +70,6 @@ namespace T2Access.Web.Controllers
 
 
         }
-
-
-
 
 
         //[AllowAnonymous]
@@ -88,6 +86,59 @@ namespace T2Access.Web.Controllers
             return RedirectToAction("index", "Home");
         }
 
+
+
+
+        public ActionResult ReLogin()
+        {
+
+            return PartialView("_ReLogin");
+        }
+
+
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ReLogin(LoginModel model )
+        {
+            if (!ModelState.IsValid)
+            {
+                return PartialView("_ReLogin", model);
+
+            }
+
+
+            var response = await httpService.PostAsync("user/Login", model);
+
+
+
+            if (response.IsSuccessStatusCode)
+            {
+                string token = await response.Content.ReadAsStringAsync();
+                token = token.Replace("\"", "");
+
+                IAuthService authService = AuthrizationFactory.GetAuthrization();
+
+
+
+                Session["Token"] = token;
+                Session["Username"] = authService.GetTokenClaimValue(token, "Username");
+                Session["Role"] = authService.GetTokenClaimValue(token, "Role");
+                Session["ConfirmedOperation"] = true;
+
+                return Json(new { success = true });
+            }
+
+
+
+            ModelState.AddModelError(string.Empty, "Server Error. Please contact administrator.");
+            return PartialView("_ReLogin",model);
+
+
+
+        }
 
 
 

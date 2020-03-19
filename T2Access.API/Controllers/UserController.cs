@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Web.Http;
 using System.Web.Http.Description;
+
 using T2Access.API.Attributes;
 using T2Access.API.Helper;
 using T2Access.API.Resources;
@@ -112,7 +113,7 @@ namespace T2Access.API.Controllers
 
 
         [HttpGet]
-        [CustomAuthorize(Roles = "User")]
+        [CustomAuthorize(Roles = "User,Admin")]
         [ResponseType(typeof(List<UserModel>))]
         public HttpResponseMessage GetListWithFilter([FromUri]UserFilterModel filter)
         {
@@ -127,17 +128,51 @@ namespace T2Access.API.Controllers
 
 
 
-        [HttpDelete()]
-        [CustomAuthorize(Roles = "User")]
-        [ResponseType(typeof(List<UserModel>))]
-        public HttpResponseMessage Delete(Guid id )
+        [HttpDelete]
+        [CustomAuthorize(Roles = "User,Admin")]
+        [ResponseType(typeof(string))]
+        public HttpResponseMessage Delete(Guid id)
         {
             if (userService.Delete(id))
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.DeleteFailed);
+                return Request.CreateResponse(HttpStatusCode.OK, Resource.DeleteSuccess);
             }
 
-            return Request.CreateResponse(HttpStatusCode.OK, Resource.DeleteSuccess);
+            return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.DeleteFailed);
+
+        }
+
+
+
+        [HttpPut]
+        [CustomAuthorize(Roles = "User,Admin")]
+        [ResponseType(typeof(List<string>))]
+        public HttpResponseMessage Edit(Guid id, [FromBody] UserModel model)
+        {
+            model.Id = id;
+            if (userService.Edit(model))
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, Resource.EditSuccess);
+            }
+
+            return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.EditFailed);
+
+        }
+
+
+
+        [HttpPut]
+        [CustomAuthorize(Roles = "User,Admin")]
+        [ResponseType(typeof(List<string>))]
+        public HttpResponseMessage ResetPassword(Guid id, [FromBody] ResetPasswordModel model)
+        {
+            model.Id = id;
+            if (userService.ResetPassword(model))
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, Resource.EditSuccess);
+            }
+
+            return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.EditFailed);
 
         }
 
@@ -149,11 +184,8 @@ namespace T2Access.API.Controllers
 
 
 
-
-
-
         [HttpPost]
-        [CustomAuthorize(Roles = "User")]
+        [CustomAuthorize(Roles = "User,Admin")]
         [ResponseType(typeof(string))]
         public HttpResponseMessage AssignToGate(UserGateModel userGate)
         {
@@ -171,7 +203,7 @@ namespace T2Access.API.Controllers
 
 
         [HttpPost]
-        [CustomAuthorize(Roles = "User")]
+        [CustomAuthorize(Roles = "User,Admin")]
         [ResponseType(typeof(string))]
         public HttpResponseMessage UnassignToGate(UserGateModel userGate)
         {

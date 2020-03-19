@@ -12,8 +12,8 @@ namespace T2Access.DAL
 
 
 
-
-        public bool Insert(GateSignUpModel gateModel)
+        #region CRUD
+        public bool Create(GateSignUpModel gateModel)
         {
 
             return DatabaseExecuter.MySqlExecuteNonQuery("SP_Gate_Insert", delegate (MySqlCommand cmd)
@@ -24,6 +24,43 @@ namespace T2Access.DAL
                 cmd.Parameters.AddWithValue("_nameEn", gateModel.NameEn);
             }) > 0 ? true : false;
         }
+
+        public bool Update(GateModel model)
+        {
+            if (model.Id == null)
+                return false;
+
+            return DatabaseExecuter.MySqlExecuteNonQuery("SP_Gate_Update", delegate (MySqlCommand cmd)
+            {
+                cmd.Parameters.AddWithValue("_id", model.Id);
+
+                cmd.Parameters.AddWithValue("_username", model.UserName != null ? model.UserName : "");
+
+                cmd.Parameters.AddWithValue("_nameAr", model.NameAr != null ? model.NameAr : "");
+
+                cmd.Parameters.AddWithValue("_nameEn", model.NameEn != null ? model.NameEn : "");
+
+                cmd.Parameters.AddWithValue("_status", model.Status != null ? model.Status : -1);
+
+            }) > 0 ? true : false;
+        }
+
+        public bool Delete(Guid id)
+        {
+
+            return DatabaseExecuter.MySqlExecuteNonQuery("SP_Gate_Delete", delegate (MySqlCommand cmd)
+            {
+                cmd.Parameters.AddWithValue("_id", id);
+
+            }) > 0 ? true : false;
+
+        } 
+
+
+        #endregion
+
+
+
 
 
         public List<GateModel> GetWithFilter(GateFilterModel filter)
@@ -145,9 +182,20 @@ namespace T2Access.DAL
 
         }
 
-        public bool Delete(Guid id)
+        public bool ResetPassword(ResetPasswordModel model)
         {
-            throw new NotImplementedException();
+            if (model.Id == null)
+                return false;
+
+            return DatabaseExecuter.MySqlExecuteNonQuery("SP_Gate_ResetPassword", delegate (MySqlCommand cmd)
+            {
+                cmd.Parameters.AddWithValue("_id", model.Id);
+
+                cmd.Parameters.AddWithValue("_password", model.Password != null ? passwordHasher.HashPassword(model.Password) : "");
+
+
+            }) > 0 ? true : false;
         }
+
     }
 }

@@ -65,11 +65,16 @@ namespace T2Access.Services.HttpClientService
         }
 
 
-        public async Task<HttpResponseMessage> PutAsync(string uri, object Model)
+        public async Task<HttpResponseMessage> PutAsync(string uri, object Model  , string accept = "application/json", string token = null)
         {
             using (HttpClient httpClient = new HttpClient())
             {
                 httpClient.BaseAddress = BaseUri;
+                httpClient.DefaultRequestHeaders.Clear();
+                httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(accept));
+                if (token != null)
+                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
 
                 string jsonTransport = JsonConvert.SerializeObject(Model);
                 var jsonPayload = new StringContent(jsonTransport, Encoding.UTF8, "application/json");

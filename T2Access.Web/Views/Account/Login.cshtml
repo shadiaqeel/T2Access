@@ -1,4 +1,5 @@
 ﻿@using T2Access.Web.Models;
+@using T2Access.Web.Resources;
 @model LoginViewModel
 @{
     ViewBag.Title = "LOGIN";
@@ -18,10 +19,9 @@
     <!--===============================================================================================-->
         <link rel="icon" type="image/png" href="~/Assets/Account/Login/images/icons/favicon.ico" />
         <!--===============================================================================================-->
-
         @Styles.Render("~/Assets/lib/bootstrap/css/bootstrap.min.css")
         <!--===============================================================================================-->
-        @Styles.Render("~/Assets/fonts/font-awesome-4.7.0/css/font-awesome.min.css")
+        @Styles.Render("~/Assets/fonts/font-awesome/css/font-awesome.min.css")
         <!--===============================================================================================-->
         @Styles.Render("~/Assets/fonts/Linearicons-Free-v1.0.0/icon-font.min.css")
         <!--===============================================================================================-->
@@ -46,13 +46,13 @@
 
         <div class="limiter" >
             <div class="container-login100 " style="background-image: linear-gradient(-225deg, #B7F8DB 0%, #50A7C2 100%);" >
-                <div class="wrap-login100">
+                <div class="wrap-login100 animated fadeInDown">
                     <div class="login100-form-title" style="background-image: url(/Assets/Account/Login/images/bg-01.jpg);">
-                        <span class="login100-form-title-1">
+                        <span class="login100-form-title-1 ">
                             SIGN IN
                         </span>
                     </div>
-                    @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "login100-form validate-form", role = "form" }))
+                    @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "login100-form validate-form ", role = "form" }))
                     {
                         @Html.AntiForgeryToken()
 
@@ -64,7 +64,7 @@
 
 
                         <div class="wrap-input100 validate-input m-b-26" data-validate="Username is required">
-                            <span class="label-input100">Username : </span>    <!--TODO : ADD RESOURCE-->
+                            <span class="label-input100">@Resource.Username : </span>    <!--TODO : ADD RESOURCE-->
                             @Html.TextBoxFor(m => m.Username, new { @class = "input100", @placeholder = "Enter username" })
                             <span class="focus-input100"></span>
                             @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
@@ -79,9 +79,8 @@
 
 
                         <div class="wrap-input100 validate-input m-b-18" data-validate="Password is required">
-                            <span class="label-input100">Password : </span>
+                            <span class="label-input100">@Resource.Password : </span>
                             @Html.PasswordFor(m => m.Password, new { @class = "input100", @placeholder = "Enter password" })
-
                             <span class="focus-input100"></span>
                             @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
 

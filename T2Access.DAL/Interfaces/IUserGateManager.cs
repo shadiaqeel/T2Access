@@ -2,7 +2,7 @@
 
 namespace T2Access.DAL
 {
-    public interface IUserGateManager : IRepository<UserGateModel , UserGateModel>
+    public interface IUserGateManager : IRepository<UserGateModel , UserGateModel,UserGateModel>
     {
         bool CheckIfExist(UserGateModel userGate);
     }

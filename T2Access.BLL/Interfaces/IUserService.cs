@@ -13,5 +13,9 @@ namespace T2Access.BLL.Services
         bool Assign(UserGateModel userGate);
         bool Unassign(UserGateModel userGate);
         bool Delete(Guid id);
+
+        bool Edit(UserModel model);
+        bool ResetPassword(ResetPasswordModel model);
+
     }
 }

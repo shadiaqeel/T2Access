@@ -22,7 +22,7 @@ namespace T2Access.API.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resource {
+    public class Resource {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace T2Access.API.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("T2Access.API.Resources.Resource", typeof(Resource).Assembly);
@@ -51,7 +51,7 @@ namespace T2Access.API.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace T2Access.API.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Assignment process Failed.
         /// </summary>
-        internal static string AssignFailed {
+        public static string AssignFailed {
             get {
                 return ResourceManager.GetString("AssignFailed", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace T2Access.API.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Assignment process was successful.
         /// </summary>
-        internal static string AssignSuccess {
+        public static string AssignSuccess {
             get {
                 return ResourceManager.GetString("AssignSuccess", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace T2Access.API.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Create transaction failed.
         /// </summary>
-        internal static string CreateTransactionFailed {
+        public static string CreateTransactionFailed {
             get {
                 return ResourceManager.GetString("CreateTransactionFailed", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace T2Access.API.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Deletion process Failed.
         /// </summary>
-        internal static string DeleteFailed {
+        public static string DeleteFailed {
             get {
                 return ResourceManager.GetString("DeleteFailed", resourceCulture);
             }
@@ -99,16 +99,34 @@ namespace T2Access.API.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Deletion process was successful.
         /// </summary>
-        internal static string DeleteSuccess {
+        public static string DeleteSuccess {
             get {
                 return ResourceManager.GetString("DeleteSuccess", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit process failed.
+        /// </summary>
+        public static string EditFailed {
+            get {
+                return ResourceManager.GetString("EditFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit process was successful.
+        /// </summary>
+        public static string EditSuccess {
+            get {
+                return ResourceManager.GetString("EditSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Missing filter values.
         /// </summary>
-        internal static string FilterMiss {
+        public static string FilterMiss {
             get {
                 return ResourceManager.GetString("FilterMiss", resourceCulture);
             }
@@ -117,7 +135,7 @@ namespace T2Access.API.Resources {
         /// <summary>
         ///   Looks up a localized string similar to You are not authorized to use this resource.
         /// </summary>
-        internal static string NotAuthorized {
+        public static string NotAuthorized {
             get {
                 return ResourceManager.GetString("NotAuthorized", resourceCulture);
             }
@@ -126,7 +144,7 @@ namespace T2Access.API.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Signup process failed.
         /// </summary>
-        internal static string SignupFailed {
+        public static string SignupFailed {
             get {
                 return ResourceManager.GetString("SignupFailed", resourceCulture);
             }
@@ -135,7 +153,7 @@ namespace T2Access.API.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Signup process was successful.
         /// </summary>
-        internal static string SignupSuccess {
+        public static string SignupSuccess {
             get {
                 return ResourceManager.GetString("SignupSuccess", resourceCulture);
             }
@@ -144,7 +162,7 @@ namespace T2Access.API.Resources {
         /// <summary>
         ///   Looks up a localized string similar to the status was update failed for id {id}.
         /// </summary>
-        internal static string StatusUpdateFail {
+        public static string StatusUpdateFail {
             get {
                 return ResourceManager.GetString("StatusUpdateFail", resourceCulture);
             }
@@ -153,7 +171,7 @@ namespace T2Access.API.Resources {
         /// <summary>
         ///   Looks up a localized string similar to the status was update successfully for id {id}.
         /// </summary>
-        internal static string StatusUpdateSuccess {
+        public static string StatusUpdateSuccess {
             get {
                 return ResourceManager.GetString("StatusUpdateSuccess", resourceCulture);
             }
@@ -162,7 +180,7 @@ namespace T2Access.API.Resources {
         /// <summary>
         ///   Looks up a localized string similar to The transaction does not exist.
         /// </summary>
-        internal static string TransactionNotExist {
+        public static string TransactionNotExist {
             get {
                 return ResourceManager.GetString("TransactionNotExist", resourceCulture);
             }
@@ -171,7 +189,7 @@ namespace T2Access.API.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Unassignment process Failed.
         /// </summary>
-        internal static string UnassignFailed {
+        public static string UnassignFailed {
             get {
                 return ResourceManager.GetString("UnassignFailed", resourceCulture);
             }
@@ -180,7 +198,7 @@ namespace T2Access.API.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Unassignment process was successful.
         /// </summary>
-        internal static string UnassignSuccess {
+        public static string UnassignSuccess {
             get {
                 return ResourceManager.GetString("UnassignSuccess", resourceCulture);
             }
@@ -189,7 +207,7 @@ namespace T2Access.API.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Signup process failed , Username is Used.
         /// </summary>
-        internal static string UserExist {
+        public static string UserExist {
             get {
                 return ResourceManager.GetString("UserExist", resourceCulture);
             }
@@ -198,7 +216,7 @@ namespace T2Access.API.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Username isn&apos;t exist.
         /// </summary>
-        internal static string UserNotExist {
+        public static string UserNotExist {
             get {
                 return ResourceManager.GetString("UserNotExist", resourceCulture);
             }

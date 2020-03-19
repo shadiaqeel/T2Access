@@ -6,7 +6,7 @@ namespace T2Access.DAL
 {
     public class TransactionManager : ITransactionManager
     {
-        public bool Insert(UserGateModel userGate)
+        public bool Create(UserGateModel userGate)
         {
 
             return DatabaseExecuter.ExecuteNonQuery("SP_Transaction_Insert", delegate (SqlCommand cmd)
@@ -62,6 +62,11 @@ namespace T2Access.DAL
         }
 
         public bool Delete(decimal id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Update(TransactionModel editmodel)
         {
             throw new NotImplementedException();
         }
