@@ -210,7 +210,7 @@ iframe {
   background-size: cover;
   background-position: center;
 
-  padding: 70px 15px 74px 15px;
+  padding: 60px 15px 50px 15px;
 }
 
 .login100-form-title-1 {
@@ -247,7 +247,7 @@ iframe {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  padding: 50px 130px;
+  padding: 50px 110px;
 }
 
 

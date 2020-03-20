@@ -33,7 +33,7 @@
 
 
     </head>
-    <body  @*onload="getTime()"*@
+<body @*onload="getTime()"*@ >
             <section id="container">
     <!-- TOP BAR CONTENT & NOTIFICATIONS -->
     <!--header start-->
@@ -107,8 +107,10 @@
 
 
                     @RenderBody()
+                    @Html.Partial("_ConfirmModal")
 
-                    
+
+
 
 
 
@@ -129,10 +131,11 @@
                 </footer>
 
             </section>
-        
+
         <!--footer end-->
 
 
+        @RenderSection("Scripts", false)
 
         @*@Scripts.Render("~/bundles/jquery")
             @Scripts.Render("~/bundles/bootstrap")*@
@@ -150,7 +153,6 @@
         @Scripts.Render("~/Assets/lib/gritter/js/jquery.gritter.js")
         <!--=================================================================================================-->
 
-        @RenderSection("Scripts", false)
 
 
 

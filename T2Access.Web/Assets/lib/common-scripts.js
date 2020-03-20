@@ -1,3 +1,117 @@
+
+/*--- BindForm in Modal----*/
+var createModal = function () {
+
+    $("#addEditModalContent").load(createUrl, function () {
+        $("#addEditModal").modal("show");
+        bindForm(this);
+    });
+}
+
+
+var ResetPasswordModal = function (data) {
+    $("#addEditModalContent").load(resetpasswordUrl, function () {
+
+        $("#Id").val(data.Id);
+        $("#UserName").val(data.UserName);
+        $("#Password").val(data.Password);
+        $("#ConfirmPassword").val(data.ConfirmPassword);
+
+        $("#addEditModal").modal("show");
+
+        bindForm(this);
+
+    });
+}
+
+function bindForm(dialog) {
+
+    $('form', dialog).submit(function () {
+        var action = this.action;
+        var data = $(this).serialize();
+        $.ajax({
+            url: this.action,
+            type: this.method,
+            data: $(this).serialize(),
+            success: function (result) {
+                console.log(result);
+
+                if (result.confirm) {
+                    console.log("test")
+                    $('#addEditModal').modal('hide');
+                    ConfirmAdmin(action, data);
+
+                }
+                else if (result.success) {
+                    $('#addEditModal').modal('hide');
+                    location.reload();
+                } else {
+                    $('#addEditModalContent').html(result);
+                    bindForm(dialog);
+                }
+
+            }
+        });
+
+        return false;
+    });
+
+
+}
+
+function ConfirmAdmin(returnUrl, dataForm) {
+
+    $("#confirmModalContent").load(ReLoginUrl, function () {
+        $('#confirmModal').modal('show');
+        bindConfirm(this, returnUrl, dataForm);
+
+
+    });
+
+
+}
+
+function bindConfirm(dialog, returnUrl, dataForm) {
+
+
+    $('form', dialog).submit(function () {
+
+        $.ajax({
+            url: this.action,
+            type: this.method,
+            data: $(this).serialize(),
+            success: function (result) {
+                if (result.success) {
+                    $.post(returnUrl, dataForm).done(function (data) {
+
+                        $('#confirmModal').modal('hide');
+                        //location.reload();
+                    });
+
+                } else {
+                    $('#confirmModalContent').html(result);
+                    bindConfirm(dialog, dataForm);
+                }
+
+            }
+        });
+
+        return false;
+    });
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
 /*---LEFT BAR ACCORDION----*/
 $(function() {
   $('#nav-accordion').dcAccordion({

@@ -305,7 +305,6 @@
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Shared\_MenuLayout.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\User\Index.cshtml" />
@@ -314,11 +313,13 @@
     <Content Include="Views\User\Create.cshtml" />
     <Content Include="Views\User\_Edit.cshtml" />
     <Content Include="Views\Gate\_Create.cshtml" />
-    <Content Include="Views\Shared\_ModalPartial.cshtml" />
     <Content Include="Views\Gate\_Edit.cshtml" />
     <Content Include="Views\Gate\_ResetPassword.cshtml" />
     <Content Include="Views\User\_ResetPassword.cshtml" />
     <Content Include="Views\Shared\_ReLogin.cshtml" />
+    <Content Include="Views\Shared\_AddEditModal.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Shared\_ConfirmModal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -133,7 +133,7 @@ namespace T2Access.Web.Controllers
 
 
 
-            ModelState.AddModelError(string.Empty, "Server Error. Please contact administrator.");
+            ModelState.AddModelError(string.Empty, "Password is wrong. Please contact administrator.");
             return PartialView("_ReLogin",model);
 
 

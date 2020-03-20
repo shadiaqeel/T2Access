@@ -83,29 +83,21 @@
 
 
 
-        @Html.Partial("_ModalPartial")
+        @Html.Partial("_AddEditModal")
 
         @section Scripts
   {
 
-
-
             <script>
 
 
-            var createGateUrl = "@Url.Action("Create", "Gate")";
+            var createUrl = "@Url.Action("Create", "Gate")";
             var editGateUrl = "@Url.Action("Edit", "Gate")";
-            var resetpasswordGateUrl = "@Url.Action("ResetPassword", "Gate")";
+            var resetpasswordUrl = "@Url.Action("ResetPassword", "Gate")";
+            var ReLoginUrl = "@Url.Action("ReLogin", "Account")";
 
-            var createModal = function () {
 
-                $("#addEditModalContent").load(createGateUrl, function () {
-                    $("#addEditModal").modal("show");
-                    bindForm(this);
-                 });
-            }
-
-                var editModal = function (data) {
+            var editModal = function (data) {
                     console.log(data);
                 $("#addEditModalContent").load(editGateUrl,function () {
 
@@ -123,62 +115,10 @@
 
                  });
             }
-                var ResetPasswordModal = function (data) {
-                    console.log(data);
-                $("#addEditModalContent").load(resetpasswordGateUrl,function () {
-
-
-                    $("#Id").val(data.Id);
-                    $("#UserName").val(data.UserName);
-                    $("#Password").val(data.Password);
-                    $("#ConfirmPassword").val(data.ConfirmPassword);
-
-                    $("#addEditModal").modal("show");
-
-
-                    bindForm(this);
-
-                 });
-            }
-
-
-
-
-                function bindForm(dialog) {
-
-
-                    $('form', dialog).submit(function () {
-
-                        console.log(this);
-                        $.ajax({
-                            url: this.action,
-                            type: this.method,
-                            data: $(this).serialize(),
-                            success: function (result) {
-                                if (result.success) {
-                                    $('#addEditModal').modal('hide');
-                                    location.reload();
-                                } else {
-                                    $('#addEditModalContent').html(result);
-                                    bindForm(dialog);
-                                }
-                                                                console.log(result);
-
-                                console.log(this);
-                            }
-                        });
-
-                        return false;
-                    });
-
-
-                }
 
 
 
             </script>
-
-
 
 
         }

@@ -87,7 +87,7 @@
 
 
 
-@Html.Partial("_ModalPartial")
+@Html.Partial("_AddEditModal")
 
 @section Scripts
   {
@@ -95,23 +95,14 @@
     <script>
 
 
-            var createGateUrl = "@Url.Action("Create", "User")";
-            var editGateUrl = "@Url.Action("Edit", "User")";
-            var resetpasswordGateUrl = "@Url.Action("ResetPassword", "User")";
-
-
-
-            var createModal = function () {
-
-                $("#addEditModalContent").load(createGateUrl, function () {
-                    $("#addEditModal").modal("show");
-                    bindForm(this);
-                 });
-            }
+            var createUrl = "@Url.Action("Create", "User")";
+            var editUserUrl = "@Url.Action("Edit", "User")";
+            var resetpasswordUrl = "@Url.Action("ResetPassword", "User")";
+            var ReLoginUrl = "@Url.Action("ReLogin", "Account")";
 
             var editModal = function (data) {
                     console.log(data);
-                $("#addEditModalContent").load(editGateUrl,function () {
+                $("#addEditModalContent").load(editUserUrl,function () {
 
 
                     $("#Id").val(data.Id);
@@ -127,105 +118,6 @@
 
                  });
             }
-
-            var ResetPasswordModal = function (data) {
-            $("#addEditModalContent").load(resetpasswordGateUrl, function () {
-
-
-                $("#Id").val(data.Id);
-                $("#UserName").val(data.UserName);
-                $("#Password").val(data.Password);
-                $("#ConfirmPassword").val(data.ConfirmPassword);
-
-                $("#addEditModal").modal("show");
-
-                bindForm(this);
-
-            });
-        }
-
-           function bindForm(dialog) {
-
-            $('form', dialog).submit(function () {
-
-                console.log("submit" + this);
-                $.ajax({
-                    url: this.action,
-                    type: this.method,
-                    data: $(this).serialize(),
-                    success: function (result) {
-                        console.log(result);
-
-                        if (result.confirm) {
-
-                            ConfirmAdmin(this.action,$(this).serialize());
-                        }
-                        else if (result.success) {
-                            $('#addEditModal').modal('hide');
-                            location.reload();
-                        } else {
-                            $('#addEditModalContent').html(result);
-                            bindForm(dialog);
-                        }
-
-                    }
-                });
-
-                return false;
-            });
-
-
-        }
-
-           function ConfirmAdmin(returnUrl, dataForm) {
-              console.log("ConfirmAdmin");
-
-            $("#addEditModalContent").load("@Url.Action("ReLogin", "Account")", function () {
-                $("#modal-title").val("Comfirm Operation");
-
-                console.log("ConfirmAdmin1"+returnUrl+dataForm);
-
-                bindConfirm(this, returnUrl,dataForm);
-
-
-            });
-
-
-        }
-
-           function bindConfirm(dialog,returnUrl,dataForm) {
-
-                console.log("bindConfirm");
-
-            $('form', dialog).submit(function () {
-
-                console.log("dataForm" + dataForm);
-                $.ajax({
-                    url: this.action,
-                    type: this.method,
-                    data: $(this).serialize(),
-                    success: function (result) {
-                        if (result.success) {
-                            $.post(returnUrl, dataForm).done(function (data) {
-
-                                  $('#addEditModal').modal('hide');
-                                   location.reload();
-                            });
-                          
-                        } else {
-                            $('#addEditModalContent').html(result);
-                            bindConfirm(dialog, dataForm);
-                        }
-
-                    }
-                });
-
-                return false;
-            });
-
-
-        }
-
 
 
     </script>

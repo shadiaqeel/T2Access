@@ -199,6 +199,14 @@ namespace T2Access.Web.Controllers
                 return PartialView("_ResetPassword");
             }
 
+            if (!(bool)Session["ConfirmedOperation"])
+            {
+
+                return Json(new { confirm = true });
+            }
+            Session["ConfirmedOperation"] = false;
+
+
             var response = await httpService.PutAsync($"ResetPassword?id={model.Id}", model, token: (string)Session["Token"]);
 
 
@@ -214,7 +222,7 @@ namespace T2Access.Web.Controllers
 
 
 
-                return PartialView("_Edit", model);
+                return PartialView("_ResetPassword", model);
 
 
             }

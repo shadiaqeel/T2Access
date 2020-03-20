@@ -15,13 +15,12 @@ using T2Access.Security.Tokenization.Models;
 namespace T2Access.API.Controllers
 {
 
-    [RoutePrefix("api/gate")]
+    [Route("api/gate/{action}")]
     public class GateController : BaseController
     {
         IGateService gateService = new GateService();
 
 
-        [Route("login")]
         [HttpPost]
         [ResponseType(typeof(string))]
         public HttpResponseMessage Login(LoginModel gate)
@@ -64,7 +63,6 @@ namespace T2Access.API.Controllers
         }
 
 
-        [Route("signup")]
         [HttpPost]
         [ResponseType(typeof(string))]
         public HttpResponseMessage SignUp(GateSignUpModel gate)
@@ -111,11 +109,6 @@ namespace T2Access.API.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, gateService.GetListWithFilter(filter));
 
         }
-
-
-
-
-
 
 
         [HttpDelete()]
