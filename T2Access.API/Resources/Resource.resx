@@ -121,7 +121,7 @@
     <value>Assignment process Failed</value>
   </data>
   <data name="AssignSuccess" xml:space="preserve">
-    <value>Assignment process was successful</value>
+    <value>Assignment  successfully</value>
   </data>
   <data name="CreateTransactionFailed" xml:space="preserve">
     <value>Create transaction failed</value>
@@ -130,13 +130,13 @@
     <value>Deletion process Failed</value>
   </data>
   <data name="DeleteSuccess" xml:space="preserve">
-    <value>Deletion process was successful</value>
+    <value>Deleted successfully</value>
   </data>
   <data name="EditFailed" xml:space="preserve">
-    <value>Edit process failed</value>
+    <value>Edit failed</value>
   </data>
   <data name="EditSuccess" xml:space="preserve">
-    <value>Edit process was successful</value>
+    <value>Edited successfully</value>
   </data>
   <data name="FilterMiss" xml:space="preserve">
     <value>Missing filter values</value>
@@ -145,10 +145,10 @@
     <value>You are not authorized to use this resource</value>
   </data>
   <data name="SignupFailed" xml:space="preserve">
-    <value>Signup process failed</value>
+    <value>Signup failed</value>
   </data>
   <data name="SignupSuccess" xml:space="preserve">
-    <value>Signup process was successful</value>
+    <value>Signup successfully</value>
   </data>
   <data name="StatusUpdateFail" xml:space="preserve">
     <value>the status was update failed for id {id}</value>
@@ -160,13 +160,13 @@
     <value>The transaction does not exist</value>
   </data>
   <data name="UnassignFailed" xml:space="preserve">
-    <value>Unassignment process Failed</value>
+    <value>Unassignment Failed</value>
   </data>
   <data name="UnassignSuccess" xml:space="preserve">
-    <value>Unassignment process was successful</value>
+    <value>Unassignment  successfully</value>
   </data>
   <data name="UserExist" xml:space="preserve">
-    <value>Signup process failed , Username is Used</value>
+    <value>Signup failed , Username is Used</value>
   </data>
   <data name="UserNotExist" xml:space="preserve">
     <value>Username isn't exist</value>

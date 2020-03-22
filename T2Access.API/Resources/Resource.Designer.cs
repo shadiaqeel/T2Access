@@ -70,7 +70,7 @@ namespace T2Access.API.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assignment process was successful.
+        ///   Looks up a localized string similar to Assignment  successfully.
         /// </summary>
         public static string AssignSuccess {
             get {
@@ -97,7 +97,7 @@ namespace T2Access.API.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Deletion process was successful.
+        ///   Looks up a localized string similar to Deleted successfully.
         /// </summary>
         public static string DeleteSuccess {
             get {
@@ -106,7 +106,7 @@ namespace T2Access.API.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit process failed.
+        ///   Looks up a localized string similar to Edit failed.
         /// </summary>
         public static string EditFailed {
             get {
@@ -115,7 +115,7 @@ namespace T2Access.API.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit process was successful.
+        ///   Looks up a localized string similar to Edited successfully.
         /// </summary>
         public static string EditSuccess {
             get {
@@ -142,7 +142,7 @@ namespace T2Access.API.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Signup process failed.
+        ///   Looks up a localized string similar to Signup failed.
         /// </summary>
         public static string SignupFailed {
             get {
@@ -151,7 +151,7 @@ namespace T2Access.API.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Signup process was successful.
+        ///   Looks up a localized string similar to Signup successfully.
         /// </summary>
         public static string SignupSuccess {
             get {
@@ -187,7 +187,7 @@ namespace T2Access.API.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unassignment process Failed.
+        ///   Looks up a localized string similar to Unassignment Failed.
         /// </summary>
         public static string UnassignFailed {
             get {
@@ -196,7 +196,7 @@ namespace T2Access.API.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unassignment process was successful.
+        ///   Looks up a localized string similar to Unassignment  successfully.
         /// </summary>
         public static string UnassignSuccess {
             get {
@@ -205,7 +205,7 @@ namespace T2Access.API.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Signup process failed , Username is Used.
+        ///   Looks up a localized string similar to Signup failed , Username is Used.
         /// </summary>
         public static string UserExist {
             get {

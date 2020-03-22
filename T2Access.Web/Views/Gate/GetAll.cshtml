@@ -1,0 +1,36 @@
+﻿@model IEnumerable<T2Access.Models.GateModel>
+@using T2Access.Web.Resources
+
+
+
+
+@if (Model != null)
+{
+    foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NameAr)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NameEn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+
+                <button title="@Resource.Edit" class="btn btn-primary btn-s  fa fa-pencil" data-toggle="modal" onclick='editModal(@Html.Raw(Json.Encode(item)))'></button>
+                <button title="@Resource.Delete" class="btn btn-danger btn-s  fa fa-trash-o btnDelete" data-toggle="modal" data-id="@item.Id" title="Delete User" @*onclick="Delete('@Url.Action("Delete","Gate",new { id = item.Id })','@Resource.ConfirmDelete')"*@></button>
+                <button title=" @Resource.Reset" class="btn btn-warning btn-s fa fa-key" data-toggle="modal" onclick='ResetPasswordModal(@Html.Raw(Json.Encode(item)))'></button>
+
+            </td>
+        </tr>
+    }
+
+}
+
+

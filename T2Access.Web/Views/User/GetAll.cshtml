@@ -1,0 +1,37 @@
+﻿@model IEnumerable<T2Access.Models.UserModel>
+@using T2Access.Web.Resources
+
+
+
+
+
+@if (Model != null)
+{
+    foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                <button title="@Resource.Edit" class="btn btn- btn-primary btn-s fa fa-pencil" data-toggle="modal" title="Edit User" onclick='editModal(@Html.Raw(Json.Encode(item)))'></button>
+                <button title="@Resource.Delete" class="btn btn-danger btn-s  fa fa-trash-o" data-toggle="modal" title="Delete User" onclick="Delete('@Url.Action("Delete","User",new { id = item.Id })','@Resource.ConfirmDelete')"></button>
+                <button title=" @Resource.Reset" class="btn btn-warning btn-s fa fa-key" data-toggle="modal" title="Edit password" onclick='ResetPasswordModal(@Html.Raw(Json.Encode(item)))'></button>
+
+            </td>
+        </tr>
+    }
+}
+
+
+
+

@@ -120,6 +120,9 @@
   <data name="Accounts" xml:space="preserve">
     <value>Accounts Managment</value>
   </data>
+  <data name="Actions" xml:space="preserve">
+    <value>Actions</value>
+  </data>
   <data name="Back" xml:space="preserve">
     <value>Back</value>
   </data>
@@ -128,6 +131,9 @@
   </data>
   <data name="Confirm" xml:space="preserve">
     <value>Confirm</value>
+  </data>
+  <data name="ConfirmDelete" xml:space="preserve">
+    <value>Are sure wants to delete?</value>
   </data>
   <data name="Create" xml:space="preserve">
     <value>Create</value>

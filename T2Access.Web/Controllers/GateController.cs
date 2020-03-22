@@ -38,9 +38,16 @@ namespace T2Access.Web.Controllers
         #region Gate Managment
 
 
-        public async Task<ActionResult> GateManagment()
+        public ActionResult GateManagment()
         {
 
+                return View();
+        }
+
+
+
+        public async Task<ActionResult> GetAll()
+        {
             var response = await httpService.GetAsync("GetListWithFilter/", token: (string)Session["Token"]);
 
 
@@ -48,12 +55,11 @@ namespace T2Access.Web.Controllers
             {
                 var Gates = await response.Content.ReadAsAsync<List<GateModel>>();
 
-                return View(Gates);
+                return PartialView(Gates);
             }
-            else
-                return View();
-        }
 
+            return null;
+        }
 
 
 
@@ -79,12 +85,12 @@ namespace T2Access.Web.Controllers
             }
 
             var response = await httpService.PostAsync("Signup/", model, token: (string)Session["Token"]);
+            var result = await response.Content.ReadAsStringAsync();
 
 
             if (response.IsSuccessStatusCode)
 
-                // return RedirectToAction("GateManagment");
-                return  Json(new { success = true });
+                return Json(new { success = true, message = result.Split('\"') });
             else
             {
 
@@ -109,6 +115,9 @@ namespace T2Access.Web.Controllers
         public async Task<ActionResult> Delete(Guid id)
         {
 
+
+
+
             var response = await httpService.DeleteAsync($"Delete?id={id}", (string)Session["Token"]);
 
             var result = await response.Content.ReadAsStringAsync();
@@ -116,16 +125,15 @@ namespace T2Access.Web.Controllers
             if (response.IsSuccessStatusCode)
             {
 
-                ViewBag.StateMessage = result;
+                return Json(new { success = true, message = result.Split('\"') }, JsonRequestBehavior.AllowGet) ;
 
             }
             else
             {
 
-                ViewBag.ErrorMessage = result;
+                return Json(new { success = false, message = result.Split('\"') }, JsonRequestBehavior.AllowGet);
 
             }
-            return RedirectToAction("GateManagment");
 
 
 
@@ -154,12 +162,12 @@ namespace T2Access.Web.Controllers
             }
 
             var response = await httpService.PutAsync($"Edit?id={model.Id}", model, token: (string)Session["Token"]);
+            var result = await response.Content.ReadAsStringAsync();
 
 
             if (response.IsSuccessStatusCode)
 
-                // return RedirectToAction("GateManagment");
-                return Json(new { success = true });
+                return Json(new { success = true, message = result.Split('\"') });
             else
             {
 

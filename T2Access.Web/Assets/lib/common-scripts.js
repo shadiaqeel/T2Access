@@ -1,3 +1,81 @@
+/*--- AJAX----*/
+
+function AjaxPost(form) {
+
+    //$.validator.unobtrusive.parse(form);
+    //if ($(form).valid()) { }
+
+    var ajaxConfig = {
+
+        type: 'POST',
+        url: form.action,
+        data: new FormData(form),
+        success: function (result) {
+
+
+        }
+    }
+
+    if ($(form).attr('enctype') == "multipart/form-data") {
+
+        ajaxConfig["contentType"] = false;
+        ajaxConfig["processData"] = false;
+    }
+    $.ajax(ajaxConfig);
+
+    return false;
+}
+
+
+
+$("#DTable").on('click', '.btnDelete', function () {
+
+    var btn = this;
+    var table = $('#DTable').DataTable();
+    
+    if (confirm(confirmMessage))
+        $.ajax({
+            type: 'GET',
+            url: deleteUrl + "/" + $(btn).attr("data-id"),
+            success: function (result) {
+                if (result.success) {
+                    table.row($(btn).parents('tr')).remove().draw(false);
+                    toastr.success(result.message, "Success")
+                } else {
+                    toastr.error(result.message, "Error")
+                }
+            }
+
+        });
+
+});
+
+
+
+
+/*--- Toastr ----*/
+
+
+var setupToastr = function () {
+    toastr.options = {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": false,
+        "positionClass": "toast-bottom-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "slideDown",
+        "hideMethod": "fadeOut"
+    }
+
+}
 
 /*--- BindForm in Modal----*/
 var createModal = function () {
@@ -24,8 +102,14 @@ var ResetPasswordModal = function (data) {
     });
 }
 
+
+
+
 function bindForm(dialog) {
 
+    var table = $('#DTable').DataTable();
+
+    
     $('form', dialog).submit(function () {
         var action = this.action;
         var data = $(this).serialize();
@@ -34,17 +118,19 @@ function bindForm(dialog) {
             type: this.method,
             data: $(this).serialize(),
             success: function (result) {
-                console.log(result);
 
                 if (result.confirm) {
-                    console.log("test")
                     $('#addEditModal').modal('hide');
-                    ConfirmAdmin(action, data);
+                    ConfirmAdmin(action,data);
 
                 }
                 else if (result.success) {
+
                     $('#addEditModal').modal('hide');
-                    location.reload();
+                    table.row.add(data).draw(false);
+                    $('#tbodyPartial').load(TableUrl);
+
+                    toastr.success(result.message)
                 } else {
                     $('#addEditModalContent').html(result);
                     bindForm(dialog);

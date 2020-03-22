@@ -19,20 +19,12 @@
     <!--===============================================================================================-->
         <link rel="icon" type="image/png" href="~/Assets/Account/Login/images/icons/favicon.ico" />
         <!--===============================================================================================-->
-        @Styles.Render("~/Assets/lib/bootstrap/css/bootstrap.min.css")
-        <!--===============================================================================================-->
-        @Styles.Render("~/Assets/fonts/font-awesome/css/font-awesome.min.css")
-        <!--===============================================================================================-->
+
         @Styles.Render("~/Assets/fonts/Linearicons-Free-v1.0.0/icon-font.min.css")
-        <!--===============================================================================================-->
         @Styles.Render("~/Assets/lib/animate/animate.css")
-        <!--===============================================================================================-->
         @Styles.Render("~/Assets/lib/css-hamburgers/hamburgers.min.css")
-        <!--===============================================================================================-->
         @Styles.Render("~/Assets/lib/animsition/css/animsition.min.css")
-        <!--===============================================================================================-->
         @Styles.Render("~/Assets/lib/select2/select2.min.css")
-        <!--===============================================================================================-->
         @Styles.Render("~/Assets/lib/daterangepicker/daterangepicker.css")
         <!--===============================================================================================-->
         @Styles.Render("~/Assets/Account/Login/css/util.css")
@@ -63,7 +55,7 @@
 
 
 
-                        <div class="wrap-input100 validate-input m-b-26" data-validate="Username is required">
+                        <div class="wrap-input100 validate-input m-b-26 " data-validate="Username is required">
                             @*<span class="label-input100">@Resource.Username : </span>*@   
                             @Html.TextBoxFor(m => m.Username, new { @class = "input100", @placeholder = "Enter username" })
                             <span class="focus-input100"></span>
@@ -123,27 +115,15 @@
 
 
         <!--===============================================================================================-->
-        @Scripts.Render("~/Assets/lib/jquery/jquery.min.js")
-        <!--===============================================================================================-->
         @Scripts.Render("~/Assets/lib/animsition/js/animsition.min.js")
-        <!--===============================================================================================-->
-        @Scripts.Render("~/Assets/lib/bootstrap/js/popper.js")
-        @Scripts.Render("~/Assets/lib/bootstrap/js/bootstrap.min.js")
-        <!--===============================================================================================-->
         @Scripts.Render("~/Assets/lib/select2/select2.min.js")
-        <!--===============================================================================================-->
         @Scripts.Render("~/Assets/lib/daterangepicker/moment.min.js")
         @Scripts.Render("~/Assets/lib/daterangepicker/daterangepicker.js")
-        <!--===============================================================================================-->
         @Scripts.Render("~/Assets/lib/countdowntime/countdowntime.js")
         <!--===============================================================================================-->
         @Scripts.Render("~/Assets/Account/Login/js/main.js")
 
-        @section Scripts {
-            @Scripts.Render("~/bundles/jqueryval")
-            @Scripts.Render("~/bundles/jquery")
-            @Scripts.Render("~/bundles/bootstrap")
-        }
+
 
 
 

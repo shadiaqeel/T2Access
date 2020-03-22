@@ -15,8 +15,8 @@ namespace T2Access.Web.Controllers
     [CustomAuthorize]
     public class UserController : Controller
     {
+        readonly IHttpClientService httpService = new HttpClientService(new Uri(Variables.ServerBaseAddress + "user/"));
 
-        IHttpClientService httpService = new HttpClientService(new Uri(Variables.ServerBaseAddress + "user/"));
 
 
         // GET: User
@@ -38,21 +38,10 @@ namespace T2Access.Web.Controllers
 
 
 
-        public async Task<ActionResult> UserManagment()
+
+
+        public ActionResult UserManagment()
         {
-
-
-            var response = await httpService.GetAsync("GetListWithFilter/", token: (string)Session["Token"]);
-
-
-            if (response.IsSuccessStatusCode)
-            {
-                var Users = await response.Content.ReadAsAsync<List<UserModel>>();
-
-                return View(Users);
-            }
-
-
 
 
             return View();
@@ -60,9 +49,31 @@ namespace T2Access.Web.Controllers
 
 
 
+        public async Task<ActionResult> GetAll()
+        {
+            var response = await httpService.GetAsync("GetListWithFilter/", token: (string)Session["Token"]);
+
+
+            if (response.IsSuccessStatusCode)
+            {
+                var Users = await response.Content.ReadAsAsync<List<UserModel>>();
+
+                return PartialView(Users);
+            }
+
+            return null;
+        }
+
+
+
+
+
+
 
         public async Task<ActionResult> Delete(Guid id)
         {
+
+
 
             var response = await httpService.DeleteAsync($"Delete?id={id}", (string)Session["Token"]);
 
@@ -71,16 +82,15 @@ namespace T2Access.Web.Controllers
             if (response.IsSuccessStatusCode)
             {
 
-                ViewBag.StateMessage = result;
+                return Json(new { success = true, message = result.Split('\"') } , JsonRequestBehavior.AllowGet);
 
             }
             else
             {
 
-                ViewBag.ErrorMessage = result;
+                return Json(new { success = false, message = result.Split('\"') }, JsonRequestBehavior.AllowGet);
 
             }
-            return RedirectToAction("UserManagment");
 
 
 
@@ -108,7 +118,7 @@ namespace T2Access.Web.Controllers
                 return View();
             }
 
-            var response = await httpService.PostAsync("    Signup/", model, token: (string)Session["Token"]);
+            var response = await httpService.PostAsync(" Signup/", model, token: (string)Session["Token"]);
 
 
             if (response.IsSuccessStatusCode)
@@ -152,11 +162,12 @@ namespace T2Access.Web.Controllers
             }
 
             var response = await httpService.PutAsync($"Edit?id={model.Id}", model, token: (string)Session["Token"]);
+            var result = await response.Content.ReadAsStringAsync();
 
 
             if (response.IsSuccessStatusCode)
 
-                return Json(new { success = true });
+                return Json(new { success = true, message = result.Split('\"') });
             else
             {
 
