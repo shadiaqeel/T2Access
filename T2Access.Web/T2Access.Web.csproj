@@ -135,8 +135,8 @@
     </Compile>
     <Compile Include="Helper\AuthrizationFactory.cs" />
     <Compile Include="Helper\MenuHelper.cs" />
+    <Compile Include="Helper\HtmlExtensions.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\ModalBag.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Resource.ar.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -158,6 +158,7 @@
     <Content Include="Assets\Account\Login\images\icons\map-marker.png" />
     <Content Include="Assets\Account\Login\js\main.js" />
     <Content Include="Assets\Account\Login\js\map-custom.js" />
+    <Content Include="Assets\Gate\js\get-list.js" />
     <Content Include="Assets\lib\advanced-datatable\css\demo_page.css" />
     <Content Include="Assets\lib\advanced-datatable\css\demo_table.css" />
     <Content Include="Assets\lib\advanced-datatable\css\demo_table_jui.css" />
@@ -224,9 +225,6 @@
     <Content Include="Assets\User\img\av-expand.png" />
     <Content Include="Assets\User\css\style-responsive.css" />
     <Content Include="Assets\User\css\style.css" />
-    <Content Include="Assets\User\css\table-responsive.css" />
-    <Content Include="Assets\User\css\to-do.css" />
-    <Content Include="Assets\User\css\zabuto_calendar.css" />
     <Content Include="Assets\User\shadi.jpg" />
     <Content Include="Assets\fonts\Linearicons-Free-v1.0.0\icon-font.min.css" />
     <Content Include="Assets\fonts\Linearicons-Free-v1.0.0\WebFont\Linearicons-Free.svg" />
@@ -485,6 +483,7 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\User\GetAll.cshtml" />
     <Content Include="Views\Gate\GetAll.cshtml" />
+    <Content Include="Views\Gate\_GetList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

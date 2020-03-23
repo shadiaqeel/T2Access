@@ -1,0 +1,50 @@
+﻿@model IEnumerable<T2Access.Models.GateViewModel>
+@using T2Access.Web.Helper
+
+<link href="~/Assets/lib/MDB/css/addons/datatables-select.min.css" rel="stylesheet" />
+<link href="~/Assets/lib/MDB/css/addons/datatables.min.css" rel="stylesheet" />
+
+
+<table class="table table-striped  table-hover table-bordered " id="GTable">
+    <thead class="thead-dark">
+        <tr>
+            <th><span class="fa fa-check-square-o "></span></th>
+            <th>
+                @Html.DisplayNameFor(model => model.NameAr)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NameEn)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td></td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NameAr)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NameEn)
+                    </td>
+                </tr>
+            }
+
+        }
+    </tbody>
+
+
+</table>
+
+
+
+@{
+
+    Html.RegisterScript("~/Assets/Gate/js/get-list.js");
+    Html.RegisterScript("~/Assets/lib/MDB/js/addons/datatables-select.min.js");
+    Html.RegisterScript("~/Assets/lib/MDB/js/addons/datatables.min.js");
+}

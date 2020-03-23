@@ -1,4 +1,4 @@
-﻿@model T2Access.Models.UserModel
+﻿@model T2Access.Models.UserViewModel
 @using T2Access.Web.Resources
 
 @{
@@ -50,7 +50,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-md-10" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.Status, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.EnumDropDownListFor(model => model.Status, htmlAttributes : new { @class = "dropdown-toggle" })
                     @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
                 </div>
             </div>

@@ -7,7 +7,7 @@
     }*@
 
 <!DOCTYPE html>
-<html dir="@(System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.IsRightToLeft? "rtl" : "ltr")">
+<html dir="@(System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.IsRightToLeft ? "rtl" : "ltr")">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,9 +15,7 @@
 
     <!--==========================================================================================================================================================================================
     <!-- Bootstrap core CSS -->
-    @Styles.Render("~/content/css")
-    @Styles.Render("~/Content/bootstrap.css")
-    @Scripts.Render("~/bundles/modernizr")
+    @Styles.Render("~/Content/css")
     <!--------------external css----------------->
     @Styles.Render("~/Assets/lib/gritter/css/jquery.gritter.css")
     @Styles.Render("~/Assets/lib/toastr/css/toastr.min.css")
@@ -30,7 +28,8 @@
 
 
 
-    </head>
+
+</head>
 <body @*onload="getTime()"*@>
     <section id="container">
         <!-- TOP BAR CONTENT & NOTIFICATIONS -->
@@ -40,7 +39,7 @@
                 <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
             </div>
             <!--logo start-->
-            <a href="@Url.Action("Index","User")" class="logo "><b>t<span id="t">t</span><span>Ac</span>cess</b></a>
+            <a href="@Url.Action("Index", "User")" class="logo "><b>t<span id="t">t</span><span>Ac</span>cess</b></a>
             <!--logo end-->
             <div class="nav notify-row" id="top_menu ">
 
@@ -64,20 +63,20 @@
                     <!--<p class="centered"><a href="profile.html"><img src="Assets/User/shadi.jpg" class="img-circle" width="100" height="100"></a></p>-->
                     <h5 class="centered">@Session["FirstName"]  @Session["LastName"]  </h5>
                     <li class="mt">
-                        <a class="@Html.IsSelected("User","Index","active")" href="@Url.Action("Index","User")">
+                        <a class="@Html.IsSelected("User", "Index", "active")" href="@Url.Action("Index", "User")">
                             <i class="fa fa-dashboard"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
                     <li class="sub-menu">
-                        <a href="javascript:;" class="@Html.IsSelected("Gate,User","UserManagment,GateManagment","active")">
+                        <a href="javascript:;" class="@Html.IsSelected("Gate,User", "UserManagment,GateManagment,Create", "active")">
                             <i class="fa fa-desktop"></i>
                             <span>@Resource.Accounts</span>
                         </a>
                         <ul class="sub">
 
-                            <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "UserManagment" ? "active" : "")"> <a href="@Url.Action("UserManagment","User")">@Resource.Users</a></li>
-                            <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "GateManagment" ? "active" : "")"><a href="@Url.Action("GateManagment","Gate")">@Resource.Gates</a></li>
+                            <li class="@Html.IsSelected("User", "UserManagment,Create", "active")"> <a href="@Url.Action("UserManagment", "User")">@Resource.Users</a></li>
+                            <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "GateManagment" ? "active" : "")"><a href="@Url.Action("GateManagment", "Gate")">@Resource.Gates</a></li>
 
                         </ul>
                     </li>
@@ -130,40 +129,41 @@
 
 
     <!--footer end-->
+    <!--=================================================================================================-->
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/modernizr")
     <!--=================================================================================================-->
     @Scripts.Render("~/Assets/lib/jquery.dcjqaccordion.2.7.js")
     @Scripts.Render("~/Assets/lib/jquery.scrollTo.min.js")
     @Scripts.Render("~/Assets/lib/jquery.nicescroll.js")
     @Scripts.Render("~/Assets/lib/jquery.sparkline.js")
-
-
+    <!--Scripts for Page-->
     @RenderSection("Scripts", false)
-
+    @Html.RegisteredScripts()
     <!--common script for all pages-->
     @Scripts.Render("~/Assets/lib/common-scripts.js")
     @Scripts.Render("~/Assets/lib/gritter/js/jquery.gritter.js")
     @Scripts.Render("~/Assets/lib/toastr/js/toastr.min.js")
     <!--=================================================================================================-->
-
-
-
     <script>
-
         $(document).ready(function () {
+                    setupToastr();
 
-            setupToastr();
+
+                @if (!string.IsNullOrWhiteSpace(ViewBag.toastrMessage))
+                {
+                    @: toastr.success("@ViewBag.toastrMessage", "Success");
+        }
+
 
         });
 
-
-
-
-
-
-
     </script>
+
+
+
+
 
 
 </body>

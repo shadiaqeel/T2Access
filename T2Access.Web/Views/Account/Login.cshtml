@@ -12,14 +12,16 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>@ViewBag.Title</title>
 
-       
 
-            
 
-    <!--===============================================================================================-->
+
+
+        <!--===============================================================================================-->
         <link rel="icon" type="image/png" href="~/Assets/Account/Login/images/icons/favicon.ico" />
         <!--===============================================================================================-->
-
+        <!-- Bootstrap core CSS -->
+        @Styles.Render("~/Content/css")
+        <!--------------external css----------------->
         @Styles.Render("~/Assets/fonts/Linearicons-Free-v1.0.0/icon-font.min.css")
         @Styles.Render("~/Assets/lib/animate/animate.css")
         @Styles.Render("~/Assets/lib/css-hamburgers/hamburgers.min.css")
@@ -30,14 +32,15 @@
         @Styles.Render("~/Assets/Account/Login/css/util.css")
         @Styles.Render("~/Assets/Account/Login/css/main.css")
         <!--===============================================================================================-->
-            
+
+
     </head>
     <body class=" body-login ">
 
 
 
-        <div class="limiter" >
-            <div class="container-login100 " style="background-image: linear-gradient(-225deg, #B7F8DB 0%, #50A7C2 100%);" >
+        <div class="limiter">
+            <div class="container-login100 " style="background-image: linear-gradient(-225deg, #B7F8DB 0%, #50A7C2 100%);">
                 <div class="wrap-login100 animated fadeInDown">
                     <div class="login100-form-title" style="background-image: url(/Assets/Account/Login/images/bg-01.jpg);">
                         <span class="login100-form-title-1 ">
@@ -56,7 +59,7 @@
 
 
                         <div class="wrap-input100 validate-input m-b-26 " data-validate="Username is required">
-                            @*<span class="label-input100">@Resource.Username : </span>*@   
+                            @*<span class="label-input100">@Resource.Username : </span>*@
                             @Html.TextBoxFor(m => m.Username, new { @class = "input100", @placeholder = "Enter username" })
                             <span class="focus-input100"></span>
                             @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
@@ -82,7 +85,7 @@
                         <div class="flex-sb-m w-full p-b-30">
                             <div class="contact100-form-checkbox">
                                 @Html.CheckBoxFor(m => m.RememberMe, new { @class = "input-checkbox100" })
-                                @Html.LabelFor(m => m.RememberMe , new { @class = "label-checkbox100"})
+                                @Html.LabelFor(m => m.RememberMe, new { @class = "label-checkbox100" })
                             </div>
 
                             <div>
@@ -115,13 +118,18 @@
 
 
         <!--===============================================================================================-->
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+        @Scripts.Render("~/bundles/modernizr")
+        <!--=================================================================================================-->
+
         @Scripts.Render("~/Assets/lib/animsition/js/animsition.min.js")
         @Scripts.Render("~/Assets/lib/select2/select2.min.js")
         @Scripts.Render("~/Assets/lib/daterangepicker/moment.min.js")
         @Scripts.Render("~/Assets/lib/daterangepicker/daterangepicker.js")
         @Scripts.Render("~/Assets/lib/countdowntime/countdowntime.js")
-        <!--===============================================================================================-->
         @Scripts.Render("~/Assets/Account/Login/js/main.js")
+        <!--===============================================================================================-->
 
 
 

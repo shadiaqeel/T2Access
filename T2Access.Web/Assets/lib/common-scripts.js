@@ -127,8 +127,11 @@ function bindForm(dialog) {
                 else if (result.success) {
 
                     $('#addEditModal').modal('hide');
-                    table.row.add(data).draw(false);
-                    $('#tbodyPartial').load(TableUrl);
+
+                    table.clear().destroy();
+                    $('#tbodyPartial').load(TableUrl, function () { 
+                        $("#DTable").DataTable(dataTableConfig).draw(false);
+                    });
 
                     toastr.success(result.message)
                 } else {

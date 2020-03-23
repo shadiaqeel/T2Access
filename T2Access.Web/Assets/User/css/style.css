@@ -2003,7 +2003,7 @@ ul li {
 
 /*LOGIN CONFIGURATION PAGE*/
 .form-login {
-	max-width: 330px;
+	/*max-width: 330px;*/
 	margin: 100px auto 0;
 	background: #fff;
 	border-radius: 5px;
@@ -3522,6 +3522,61 @@ ul.chat-available-user li a:hover {
   font-weight: 600;
   margin: 15px 0;
 }
+
+
+.dropdown-toggle {
+    color: #333;
+    background-color: #fff;
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+
+
+
+.badge-Block {
+    color: #fff;
+    background-color: #dc3545;
+    font-size: 0.7rem;
+    width: 60px;
+}
+
+.badge-Regular {
+    color: #fff;
+    background-color: #007bff;
+    font-size: 0.7rem;
+    width: 60px;
+}
+
+.badge-Admin {
+    color: #fff;
+    background-color: #28a745;
+    font-size: 0.7rem;
+    width: 60px;
+}
+
+
+
+
+
+
 
 
 /* Copyrights */

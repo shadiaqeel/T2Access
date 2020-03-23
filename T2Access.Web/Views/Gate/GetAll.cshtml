@@ -1,5 +1,6 @@
-﻿@model IEnumerable<T2Access.Models.GateModel>
+﻿@model IEnumerable<T2Access.Models.GateViewModel>
 @using T2Access.Web.Resources
+@using T2Access.Web.Helper
 
 
 
@@ -19,12 +20,14 @@
                 @Html.DisplayFor(modelItem => item.NameEn)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Status)
+                
+                    <span class="badge badge-@Html.DisplayFor(modelItem=>item.Status)">@Html.DisplayFor(modelItem=>item.Status)</span>
+                
             </td>
             <td>
 
                 <button title="@Resource.Edit" class="btn btn-primary btn-s  fa fa-pencil" data-toggle="modal" onclick='editModal(@Html.Raw(Json.Encode(item)))'></button>
-                <button title="@Resource.Delete" class="btn btn-danger btn-s  fa fa-trash-o btnDelete" data-toggle="modal" data-id="@item.Id" title="Delete User" @*onclick="Delete('@Url.Action("Delete","Gate",new { id = item.Id })','@Resource.ConfirmDelete')"*@></button>
+                <button title="@Resource.Delete" class="btn btn-danger btn-s  fa fa-trash-o btnDelete" data-toggle="modal" data-id="@item.Id" title="Delete Gate"></button>
                 <button title=" @Resource.Reset" class="btn btn-warning btn-s fa fa-key" data-toggle="modal" onclick='ResetPasswordModal(@Html.Raw(Json.Encode(item)))'></button>
 
             </td>

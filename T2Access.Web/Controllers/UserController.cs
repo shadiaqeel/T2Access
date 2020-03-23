@@ -42,7 +42,8 @@ namespace T2Access.Web.Controllers
 
         public ActionResult UserManagment()
         {
-
+            if(TempData["toastrMessage"]!=null)
+               ViewBag.toastrMessage = TempData["toastrMessage"] as string;
 
             return View();
         }
@@ -56,7 +57,7 @@ namespace T2Access.Web.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                var Users = await response.Content.ReadAsAsync<List<UserModel>>();
+                var Users = await response.Content.ReadAsAsync<List<UserViewModel>>();
 
                 return PartialView(Users);
             }
@@ -64,38 +65,6 @@ namespace T2Access.Web.Controllers
             return null;
         }
 
-
-
-
-
-
-
-        public async Task<ActionResult> Delete(Guid id)
-        {
-
-
-
-            var response = await httpService.DeleteAsync($"Delete?id={id}", (string)Session["Token"]);
-
-            var result = await response.Content.ReadAsStringAsync();
-
-            if (response.IsSuccessStatusCode)
-            {
-
-                return Json(new { success = true, message = result.Split('\"') } , JsonRequestBehavior.AllowGet);
-
-            }
-            else
-            {
-
-                return Json(new { success = false, message = result.Split('\"') }, JsonRequestBehavior.AllowGet);
-
-            }
-
-
-
-
-        }
 
 
         #region Create User
@@ -119,11 +88,14 @@ namespace T2Access.Web.Controllers
             }
 
             var response = await httpService.PostAsync(" Signup/", model, token: (string)Session["Token"]);
+            var result = await response.Content.ReadAsStringAsync();
 
 
-            if (response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode) {
 
+                TempData["toastrMessage"] = result.Split('\"')[1];
                 return RedirectToAction("UserManagment");
+            }
             else
             {
 
@@ -142,6 +114,7 @@ namespace T2Access.Web.Controllers
         }
         #endregion
 
+
         #region Edit
 
         public ActionResult Edit()
@@ -154,7 +127,7 @@ namespace T2Access.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(UserModel model)
+        public async Task<ActionResult> Edit(UserViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -190,6 +163,37 @@ namespace T2Access.Web.Controllers
 
 
         #endregion
+
+
+        public async Task<ActionResult> Delete(Guid id)
+        {
+
+
+
+            var response = await httpService.DeleteAsync($"Delete?id={id}", (string)Session["Token"]);
+
+            var result = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+
+                return Json(new { success = true, message = result.Split('\"') } , JsonRequestBehavior.AllowGet);
+
+            }
+            else
+            {
+
+                return Json(new { success = false, message = result.Split('\"') }, JsonRequestBehavior.AllowGet);
+
+            }
+
+
+
+
+        }
+
+
+
 
         #region Reset Password
 

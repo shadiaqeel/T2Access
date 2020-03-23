@@ -53,7 +53,7 @@ namespace T2Access.Web.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                var Gates = await response.Content.ReadAsAsync<List<GateModel>>();
+                var Gates = await response.Content.ReadAsAsync<List<GateViewModel>>();
 
                 return PartialView(Gates);
             }
@@ -98,7 +98,6 @@ namespace T2Access.Web.Controllers
                 var error = await response.Content.ReadAsStringAsync();
                 ViewBag.ErrorMessage = error;
 
-               // ModelState.AddModelError("UserName", error);
 
 
                 return PartialView("_Create", model);
@@ -154,7 +153,7 @@ namespace T2Access.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit( GateModel model)
+        public async Task<ActionResult> Edit( GateViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -241,6 +240,29 @@ namespace T2Access.Web.Controllers
 
         #endregion
         #endregion
+
+
+
+
+        public async Task<ActionResult> GetFilterd()
+        {
+            var response = await httpService.GetAsync($"GetListWithFilter?Status={0}", token: (string)Session["Token"]);
+
+
+            if (response.IsSuccessStatusCode)
+            {
+                var filterdGates = await response.Content.ReadAsAsync<List<GateViewModel>>();
+
+                return PartialView("_GetList", filterdGates);
+            }
+
+            return PartialView("_GetList");
+        }
+
+
+
+
+
         #endregion
 
 

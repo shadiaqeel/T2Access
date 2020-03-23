@@ -1,4 +1,4 @@
-﻿@model T2Access.Models.GateModel
+﻿@model T2Access.Models.GateViewModel
 @using T2Access.Web.Resources
 
 @{
@@ -8,18 +8,15 @@
 @section Styles {
 
 
-
-
     <link href="~/Assets/lib/MDB/css/addons/datatables-select.min.css" rel="stylesheet" />
     <link href="~/Assets/lib/MDB/css/addons/datatables.min.css" rel="stylesheet" />
-
 
 }
 
 
 <div class="row mt">
     <div class="col-md-12">
-        <div class="content-panel  ">
+        <div class="content-panel   ">
 
             <h4 style="display:inline-block;">@Resource.GateTable</h4>
             <button class=" fa  fa-plus btn btn-success pull-right" data-toggle="modal" onclick="createModal()"> @Resource.CreateGate</button>
@@ -29,6 +26,7 @@
                 <thead>
                     <tr>
                         <th>
+                            
                             <span class=" fa fa-user"></span>
                             @Html.DisplayNameFor((model => model.UserName))
                         </th>
@@ -45,6 +43,7 @@
                             @Html.DisplayNameFor(model => model.Status)
                         </th>
                         <th>
+                            
                             <span class=" fa fa-flash"></span>
                             @Resource.Actions
                         </th>
@@ -55,10 +54,9 @@
                     @Html.Action("GetAll")
 
 
-
+                    </tbody>
             </table>
 
-            </table>
         </div>
         <!-- /content-panel -->
     </div>
@@ -82,16 +80,14 @@
 
         <script>
 
-
-
-            $(document).ready(function () {
-                $("#DTable").DataTable({
+            var dataTableConfig = {
+                    destroy:true,
                     bFilter: true,
                     bInfo: true,
-                    bAutoWidth: true,
+                    bAutoWidth: false,
                     bSortable: false,
                     columnDefs: [
-                        { "orderable": false, "targets": 4 }
+                        { orderable: false, targets: 4 }
                     ],
                     language: {
                         "lengthMenu": "Display _MENU_ records per page",
@@ -100,24 +96,18 @@
                         "infoEmpty": "No records available",
                         "infoFiltered": "(filtered from _MAX_ total records)"
                     }
-                });
+                }
+
+            $(document).ready(function () {
+                $("#DTable").DataTable(dataTableConfig);
 
             });
           
 
-              
-
-
-
-
-
 
             var createUrl = "@Url.Action("Create", "Gate")";
             var editGateUrl = "@Url.Action("Edit", "Gate")";
-
             var deleteUrl = "@Url.Action("Delete", "Gate")";
-
-
             var resetpasswordUrl = "@Url.Action("ResetPassword", "Gate")";
             var ReLoginUrl = "@Url.Action("ReLogin", "Account")";
             var TableUrl = "@Url.Action("GetAll", "Gate")";
@@ -126,7 +116,6 @@
 
 
             var editModal = function (data) {
-                    console.log(data);
                 $("#addEditModalContent").load(editGateUrl,function () {
 
 
