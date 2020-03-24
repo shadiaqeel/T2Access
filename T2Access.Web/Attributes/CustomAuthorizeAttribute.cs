@@ -53,7 +53,8 @@ namespace T2Access.Web.Attributes
         protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
         {
 
-            filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary { { "action", "Login" }, { "controller", "Account" } });
+            var returnUrl = filterContext.HttpContext.Request.Url;
+            filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary { { "action", "Login" }, { "controller", "Account" },{ "returnUrl", returnUrl } });
 
 
         }

@@ -132,7 +132,6 @@
 
 
             var editModal = function (data) {
-                    console.log(data);
                 $("#addEditModalContent").load(editUserUrl,function () {
 
 
@@ -143,7 +142,6 @@
                     $("#Status").val(data.Status);
 
                     $("#addEditModal").modal("show");
-
 
                     bindForm(this);
 

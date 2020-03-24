@@ -106,11 +106,10 @@ var ResetPasswordModal = function (data) {
 
 
 function bindForm(dialog) {
-
     var table = $('#DTable').DataTable();
-
     
-    $('form', dialog).submit(function () {
+    
+    $('form',dialog).submit(function () {
         var action = this.action;
         var data = $(this).serialize();
         $.ajax({
@@ -118,14 +117,11 @@ function bindForm(dialog) {
             type: this.method,
             data: $(this).serialize(),
             success: function (result) {
-
                 if (result.confirm) {
                     $('#addEditModal').modal('hide');
                     ConfirmAdmin(action,data);
-
                 }
                 else if (result.success) {
-
                     $('#addEditModal').modal('hide');
 
                     table.clear().destroy();

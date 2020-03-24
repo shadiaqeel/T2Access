@@ -3550,10 +3550,16 @@ ul.chat-available-user li a:hover {
 
 
 
+.badge- {
+    color: #fff;
+    background-color: #777;
+    font-size: 0.7rem;
+    width: 60px;
+}
 
 .badge-Block {
     color: #fff;
-    background-color: #dc3545;
+    background-color: #d9534f;
     font-size: 0.7rem;
     width: 60px;
 }
@@ -3567,7 +3573,7 @@ ul.chat-available-user li a:hover {
 
 .badge-Admin {
     color: #fff;
-    background-color: #28a745;
+    background-color: #5cb85c;
     font-size: 0.7rem;
     width: 60px;
 }

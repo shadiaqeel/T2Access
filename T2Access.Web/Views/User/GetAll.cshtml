@@ -23,7 +23,8 @@
                 <span class="badge badge-@Html.DisplayFor(modelItem=>item.Status)">@Html.DisplayFor(modelItem => item.Status)</span>
             </td>
             <td>
-                <button title="@Resource.Edit" class="btn btn- btn-primary btn-s fa fa-pencil" data-toggle="modal" title="Edit User" onclick='editModal(@Html.Raw(Json.Encode(item)))'></button>
+                @*<button title="@Resource.Edit" class="btn btn- btn-primary btn-s fa fa-pencil" data-toggle="modal" title="Edit User" onclick='editModal(@Html.Raw(Json.Encode(item)))'></button>*@
+                @Html.ActionLink(" ", "Edit", "User", new { id = item.Id} , new { @class = "btn btn- btn-primary btn-s fa fa-pencil"  , @title=@Resource.Edit})
                 <button title="@Resource.Delete" class="btn btn-danger btn-s  fa fa-trash-o btnDelete" data-toggle="modal" data-id="@item.Id"  title="Delete User" ></button>
                 <button title=" @Resource.Reset" class="btn btn-warning btn-s fa fa-key" data-toggle="modal" title="Edit password" onclick='ResetPasswordModal(@Html.Raw(Json.Encode(item)))'></button>
 

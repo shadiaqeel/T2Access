@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using T2Access.Models;
 using T2Access.Services.HttpClientService;
 using T2Access.Web.Attributes;
+using T2Access.Web.Models;
 
 namespace T2Access.Web.Controllers
 {
@@ -57,9 +58,9 @@ namespace T2Access.Web.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                var Users = await response.Content.ReadAsAsync<List<UserViewModel>>();
+                var users = await response.Content.ReadAsAsync<List<UserViewModel>>();
 
-                return PartialView(Users);
+                return PartialView(users);
             }
 
             return null;
@@ -86,6 +87,8 @@ namespace T2Access.Web.Controllers
             {
                 return View();
             }
+
+  
 
             var response = await httpService.PostAsync(" Signup/", model, token: (string)Session["Token"]);
             var result = await response.Content.ReadAsStringAsync();
@@ -117,10 +120,20 @@ namespace T2Access.Web.Controllers
 
         #region Edit
 
-        public ActionResult Edit()
+
+        public async Task<ActionResult> Edit(Guid id)
         {
 
-            return PartialView("_Edit");
+            var response = await httpService.GetAsync($"GetListWithFilter/?id={id}", token: (string)Session["Token"]);
+            if (response.IsSuccessStatusCode)
+            {
+                var users = await response.Content.ReadAsAsync<List<UserViewModel>>();
+                return View(users[0]);
+
+                
+            }
+
+            return null;
         }
 
 
@@ -129,18 +142,20 @@ namespace T2Access.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(UserViewModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return PartialView("_Edit");
-            }
+
+            model.UserName = null;
+
 
             var response = await httpService.PutAsync($"Edit?id={model.Id}", model, token: (string)Session["Token"]);
             var result = await response.Content.ReadAsStringAsync();
 
 
             if (response.IsSuccessStatusCode)
+            {  TempData["toastrMessage"] = result.Split('\"')[1];
 
-                return Json(new { success = true, message = result.Split('\"') });
+            return RedirectToAction("UserManagment");
+            }
+
             else
             {
 
@@ -151,7 +166,7 @@ namespace T2Access.Web.Controllers
                 // ModelState.AddModelError("UserName", error);
 
 
-                return PartialView("_Edit", model);
+                return View( model);
 
 
             }

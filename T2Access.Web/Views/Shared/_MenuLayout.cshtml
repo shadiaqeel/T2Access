@@ -63,19 +63,19 @@
                     <!--<p class="centered"><a href="profile.html"><img src="Assets/User/shadi.jpg" class="img-circle" width="100" height="100"></a></p>-->
                     <h5 class="centered">@Session["FirstName"]  @Session["LastName"]  </h5>
                     <li class="mt">
-                        <a class="@Html.IsSelected("User", "Index", "active")" href="@Url.Action("Index", "User")">
+                        <a class="@Html.IsSelected("User","index", "active")" href="@Url.Action("Index", "User")">
                             <i class="fa fa-dashboard"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
                     <li class="sub-menu">
-                        <a href="javascript:;" class="@Html.IsSelected("Gate,User", "UserManagment,GateManagment,Create", "active")">
+                        <a href="javascript:;" class="@Html.IsSelected("Gate,User", "UserManagment,GateManagment,Create,Edit", "active")">
                             <i class="fa fa-desktop"></i>
                             <span>@Resource.Accounts</span>
                         </a>
                         <ul class="sub">
 
-                            <li class="@Html.IsSelected("User", "UserManagment,Create", "active")"> <a href="@Url.Action("UserManagment", "User")">@Resource.Users</a></li>
+                            <li class="@Html.IsSelected("User", "UserManagment,Create,Edit", "active")"> <a href="@Url.Action("UserManagment", "User")">@Resource.Users</a></li>
                             <li class="@(ViewContext.RouteData.Values["Action"].ToString() == "GateManagment" ? "active" : "")"><a href="@Url.Action("GateManagment", "Gate")">@Resource.Gates</a></li>
 
                         </ul>
@@ -140,9 +140,9 @@
     @Scripts.Render("~/Assets/lib/jquery.sparkline.js")
     <!--Scripts for Page-->
     @RenderSection("Scripts", false)
-    @Html.RegisteredScripts()
+  
     <!--common script for all pages-->
-    @Scripts.Render("~/Assets/lib/common-scripts.js")
+    @Scripts.Render("~/Assets/common-scripts.js")
     @Scripts.Render("~/Assets/lib/gritter/js/jquery.gritter.js")
     @Scripts.Render("~/Assets/lib/toastr/js/toastr.min.js")
     <!--=================================================================================================-->

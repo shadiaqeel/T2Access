@@ -38,6 +38,7 @@ namespace T2Access.Web.Controllers
 
             var response = await httpService.PostAsync("user/Login", model);
 
+            var result = await response.Content.ReadAsStringAsync();
 
 
             if (response.IsSuccessStatusCode)
@@ -59,12 +60,16 @@ namespace T2Access.Web.Controllers
                 Session["UserImg"] = "/Assets/User/shadi.jpg";
                 Session["Culture"] = "ar";
 
+                if (!string.IsNullOrEmpty(returnUrl))
+                    return Redirect(returnUrl);
+                
                 return RedirectToAction("index", "User");
             }
 
 
+            ViewBag.ReturnUrl = returnUrl;
 
-            ModelState.AddModelError(string.Empty, "Server Error. Please contact administrator.");
+            ModelState.AddModelError(string.Empty, "The username and Password you’ve entered doesn’t match any account");
             return View();
 
 
@@ -133,7 +138,7 @@ namespace T2Access.Web.Controllers
 
 
 
-            ModelState.AddModelError(string.Empty, "Password is wrong. Please contact administrator.");
+            ModelState.AddModelError(string.Empty, "Password is wrong. Please contact administrator");
             return PartialView("_ReLogin",model);
 
 

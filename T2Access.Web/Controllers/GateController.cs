@@ -159,7 +159,7 @@ namespace T2Access.Web.Controllers
             {
                 return PartialView("_Edit");
             }
-
+            model.UserName = null;
             var response = await httpService.PutAsync($"Edit?id={model.Id}", model, token: (string)Session["Token"]);
             var result = await response.Content.ReadAsStringAsync();
 

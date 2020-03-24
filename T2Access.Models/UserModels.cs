@@ -12,11 +12,9 @@ namespace T2Access.Models
 
     public class UserModel : BaseModel
     {
+        [Key]
         public Guid Id { get; set; }
 
-        [Required(ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "RequiredField")]
-        [MaxLength(150, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "LessThen")]
-        [MinLength(8, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "MoreThen")]
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.UserName))]
         public string UserName { get; set; }
 
@@ -36,6 +34,8 @@ namespace T2Access.Models
 
     public class UserFilterModel : BaseModel
     {
+        [Key]
+        public Guid Id { get; set; }
 
         public string UserName { get; set; }
         public string FirstName { get; set; }
@@ -88,6 +88,8 @@ namespace T2Access.Models
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.LastName))]
 
         public string LastName { get; set; }
+
+        public string GateList { get; set; }
 
 
     }

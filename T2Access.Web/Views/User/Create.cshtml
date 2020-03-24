@@ -1,4 +1,6 @@
 ﻿@model T2Access.Models.UserSignUpModel
+@using T2Access.Web.Helper
+
 
 @using T2Access.Web.Resources
 
@@ -8,7 +10,7 @@
 
 
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("Create", "User", FormMethod.Post, new { onsubmit = " return CreateUser()" }))
 {
     @Html.AntiForgeryToken()
 
@@ -18,78 +20,115 @@
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
         <div class="form-group">
-            <br>
-
             @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
             {<p class="alert alert-danger" role="alert">@ViewBag.ErrorMessage</p>}
-
             <div class="row mt">
-                <div class="form-group col-md-4  ">
-                    @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "col-md-12" })
+                <div class="form-group col-md-12 ">
+                    @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label col-md-12" })
                     <div class="col-md-12">
-                        @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                        @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                </div>
+                <div class="row mt">
+                    <div class="form-group col-md-6  ">
+                        @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "col-md-12" })
+                        <div class="col-md-12">
+                            @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 ">
+                        @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-12" })
+                        <div class="col-md-12">
+                            @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                        </div>
                     </div>
                 </div>
 
-                <div class="form-group col-md-4 ">
-                    @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-12" })
-                    <div class="col-md-12">
-                        @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+
+                <div class="row mt">
+                    <div class="form-group col-md-6">
+                        @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-12" })
+                        <div class="col-md-12">
+                            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label col-md-12" })
-                <div class="col-md-6">
-                    @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="row mt">
-                <div class="form-group col-md-4">
-                    @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-12" })
-                    <div class="col-md-12">
-                        @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+
+                    <div class="form-group col-md-6 ">
+                        @Html.LabelFor(model => model.ConfirmPassword, htmlAttributes: new { @class = "control-label col-md-12" })
+                        <div class="col-md-12">
+                            @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+                        </div>
                     </div>
                 </div>
 
-                <div class="form-group col-md-4">
-                    @Html.LabelFor(model => model.ConfirmPassword, htmlAttributes: new { @class = "control-label col-md-12" })
-                    <div class="col-md-12">
-                        @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+
+
+
+
+
+                <div class="mt">
+                    <div class="form-group form-panel  ">
+                        <h6>Gate List</h6>
+                        <div class="centered">
+                            @Html.HiddenFor(model => model.GateList)
+                            @Html.Action("GetFilterd", "Gate")
+                        </div>
                     </div>
-                </div>
-            </div>
 
 
 
+                    <div class="form-group centered ">
+                        <div>
+                            <hr />
+                            <input type="submit" value=@Resource.Create class="btn btn-primary  btn-lg  col-md-2  " />
+                            @Html.ActionLink(Resource.Back, "UserManagment", "User", null, new { @class = "btn btn-dark btn-lg col-md-1 " })
 
-
-
-            <div class="mt">
-                <p>Assign Gate</p>
-                <div class="form-group  form-panel col-md-11 offset-md-1">
-                    @Html.Action("GetFilterd", "Gate")
-
-                </div>
-                <div class="form-group centered ">
-                    <div>
-                        <hr />
-                        <input type="submit" value=@Resource.Create class="btn btn-primary  btn-lg col-md-2 " />
-                        @Html.ActionLink(Resource.Back, "UserManagment", "User", null, new { @class = "btn btn-dark btn-lg  col-md-1 " })
-
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+
+}
+
+
+
+@section Scripts
+  {
+
+    @Html.RegisteredScripts()
+
+    <script>
+        var CreateUser = function () {
+            
+            var form = this;
+            var table = $("#GTable").DataTable();
+            var rowsel = table.rows('.selected').indexes();
+            var selectedGuid = [];
+
+            $.each(rowsel, function (index, rowId) {
+                selectedGuid.push(table.rows(rowId).nodes().to$().find("input[type='hidden']").attr("value"));
+            });
+
+            form.GateList.value = selectedGuid.toString();
+
+              return true;
+
         }
 
+       
 
+        </script>
+
+
+
+}
 
 
 

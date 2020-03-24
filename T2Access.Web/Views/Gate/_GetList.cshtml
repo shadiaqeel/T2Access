@@ -6,6 +6,7 @@
 
 
 <table class="table table-striped  table-hover table-bordered " id="GTable">
+
     <thead class="thead-dark">
         <tr>
             <th><span class="fa fa-check-square-o "></span></th>
@@ -24,7 +25,10 @@
             foreach (var item in Model)
             {
                 <tr>
+
                     <td></td>
+                    @Html.HiddenFor(modelItem => item.Id)
+
                     <td>
                         @Html.DisplayFor(modelItem => item.NameAr)
                     </td>

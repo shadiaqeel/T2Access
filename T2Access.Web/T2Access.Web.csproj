@@ -229,7 +229,7 @@
     <Content Include="Assets\fonts\Linearicons-Free-v1.0.0\icon-font.min.css" />
     <Content Include="Assets\fonts\Linearicons-Free-v1.0.0\WebFont\Linearicons-Free.svg" />
     <Content Include="Assets\fonts\montserrat\OFL.txt" />
-    <Content Include="Assets\lib\common-scripts.js" />
+    <Content Include="Assets\common-scripts.js" />
     <Content Include="Assets\lib\gritter\css\jquery.gritter.css" />
     <Content Include="Assets\lib\gritter\css\jquery.gritter0.css" />
     <Content Include="Assets\lib\gritter\images\gritter-light.png" />
@@ -464,7 +464,7 @@
     <Content Include="Views\User\UserManagment.cshtml" />
     <Content Include="Views\Gate\GateManagment.cshtml" />
     <Content Include="Views\User\Create.cshtml" />
-    <Content Include="Views\User\_Edit.cshtml" />
+    <Content Include="Views\User\Edit.cshtml" />
     <Content Include="Views\Gate\_Create.cshtml" />
     <Content Include="Views\Gate\_Edit.cshtml" />
     <Content Include="Views\Gate\_ResetPassword.cshtml" />

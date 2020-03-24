@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using MySql.Data.MySqlClient;
+
+using T2Access.DAL.Helper;
 using T2Access.Models;
 using T2Access.Security;
 
@@ -20,15 +23,40 @@ namespace T2Access.DAL
 
         public bool Create(UserSignUpModel user)
         {
+            Guid id = Guid.Empty;
 
+            DatabaseExecuter.MySqlExecuteQuery("SP_User_Insert", delegate (MySqlCommand cmd)
+           {
+               cmd.Parameters.AddWithValue("_username", user.UserName);
+               cmd.Parameters.AddWithValue("_password", passwordHasher.HashPassword(user.Password));
+               cmd.Parameters.AddWithValue("_firstname", user.FirstName);
+               cmd.Parameters.AddWithValue("_lastname", user.LastName);
+           }, delegate (MySqlDataReader reader)
+           {
 
-            return DatabaseExecuter.MySqlExecuteNonQuery("SP_User_Insert", delegate (MySqlCommand cmd)
+               if (reader.Read())
+               {
+                   id = reader.GetGuid(0);
+
+               }
+           });
+
+            if (id == Guid.Empty)
+                return false;
+
+            if (string.IsNullOrEmpty(user.GateList))
+                return true;
+
+            Guid gateId;
+            var gatelist = user.GateList.Split(',');
+            IUserGateManager userGateManager = ManagerFactory.GetUserGateManager(Variables.DatabaseProvider);
+            foreach (string gate in gatelist)
             {
-                cmd.Parameters.AddWithValue("_username", user.UserName);
-                cmd.Parameters.AddWithValue("_password", passwordHasher.HashPassword(user.Password));
-                cmd.Parameters.AddWithValue("_firstname", user.FirstName);
-                cmd.Parameters.AddWithValue("_lastname", user.LastName);
-            }) > 0 ? true : false;
+                if (Guid.TryParse(gate, out gateId))
+                    userGateManager.Create(new UserGateModel() { UserId = id, GateId = gateId });
+            }
+
+            return true;
 
         }
 
@@ -75,6 +103,8 @@ namespace T2Access.DAL
 
             DatabaseExecuter.MySqlExecuteQuery("SP_User_SelectWithFilter", delegate (MySqlCommand cmd)
             {
+                
+                cmd.Parameters.AddWithValue("_id", filter.Id != null ? filter.Id : Guid.Empty);
 
                 cmd.Parameters.AddWithValue("_username", filter.UserName != null ? filter.UserName : "");
 
@@ -196,11 +226,12 @@ namespace T2Access.DAL
             {
                 cmd.Parameters.AddWithValue("_id", model.Id);
 
-                cmd.Parameters.AddWithValue("_password", model.Password != null ? passwordHasher.HashPassword(model.Password):"");
+                cmd.Parameters.AddWithValue("_password", model.Password != null ? passwordHasher.HashPassword(model.Password) : "");
 
 
             }) > 0 ? true : false;
         }
 
+  
     }
 }

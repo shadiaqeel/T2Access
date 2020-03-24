@@ -17,9 +17,7 @@ namespace T2Access.Models
     {
         public Guid Id { get; set; }
 
-        [Required(ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "RequiredField")]
-        [MaxLength(150, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "LessThen")]
-        [MinLength(8, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "MoreThen")]
+
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.UserName))]
         public string UserName { get; set; }
 

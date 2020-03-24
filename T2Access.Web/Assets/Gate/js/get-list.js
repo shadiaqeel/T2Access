@@ -3,8 +3,8 @@
 
 
 var dataTableConfig = {
-    bFilter: false,
-    bInfo: false,
+    bFilter: true,
+    bInfo: true,
     bAutoWidth: true,
     bSortable: false,
     scrollY: "400px",
@@ -28,10 +28,13 @@ var dataTableConfig = {
 
 }
 
+
+var selectGateTable;
+
 $(document).ready(function () {
-    $("#GTable").DataTable(dataTableConfig);
-    console.log($("#GTable").DataTable());
+     selectGateTable = $("#GTable").DataTable(dataTableConfig);
 
 });
+
 
 
