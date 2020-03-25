@@ -27,7 +27,7 @@ namespace T2Access.BLL.Services
             return userManager.GetWithFilter(filter);
         }
 
-        public bool Edit(UserModel model)
+        public bool Edit(UserUpdateModel model)
         {
             return userManager.Update(model);
         }
@@ -43,6 +43,13 @@ namespace T2Access.BLL.Services
 
 
             return userManager.GetByUserName(userName) == null ? true : false;
+
+        }    
+        
+        public UserModel GetById(Guid userId) {
+
+
+            return userManager.GetById(userId);
 
         }
 

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Dynamic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -14,7 +16,7 @@ namespace T2Access.Web.Controllers
 
   [CustomAuthorize]
 
-    public class GateController : Controller
+    public class GateController : WebController
     {
 
 
@@ -53,13 +55,51 @@ namespace T2Access.Web.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                var Gates = await response.Content.ReadAsAsync<List<GateViewModel>>();
+                var gates = await response.Content.ReadAsAsync<List<GateViewModel>>();
 
-                return PartialView(Gates);
+                if (Request.IsAjaxRequest())
+                {
+                    //Server Side Parameter
+                    int start = Convert.ToInt32(Request["start"]);
+                    int length = Convert.ToInt32(Request["length"]);
+                    string searchValue = Request["search[value]"];
+                    string sortColumnName = Request[$"columns[{Request["order[0][column]"]}][name]"];
+                    string sortDirection = Request["order[0][dir]"];
+
+
+
+                    int totalrows = gates.Count;
+
+                    //filter
+                    if (!string.IsNullOrEmpty(searchValue))
+                    {
+                        gates = gates.Where(x => x.UserName.ToLower().Contains(searchValue.ToLower())
+                                        || x.NameAr.ToLower().Contains(searchValue.ToLower())
+                                        || x.NameEn.ToLower().Contains(searchValue.ToLower())
+                        ).ToList<GateViewModel>();
+
+                    }
+                    int totalrowsafterfiltering = gates.Count;
+
+
+                    //sorting 
+                    if (!string.IsNullOrEmpty(sortColumnName))
+                        gates = gates.OrderBy($"{sortColumnName} {sortDirection}").ToList<GateViewModel>();
+
+                    //paging
+                    gates = gates.Skip(start).Take(length).ToList<GateViewModel>();
+
+
+
+                    return Json(new { view = RenderViewToString(ControllerContext, "GetAll", gates, true), draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
+                }
+
+                return PartialView(gates);
             }
 
-            return null;
+            return PartialView();
         }
+
 
 
 
@@ -254,6 +294,22 @@ namespace T2Access.Web.Controllers
                 var filterdGates = await response.Content.ReadAsAsync<List<GateViewModel>>();
 
                 return PartialView("_GetList", filterdGates);
+            }
+
+            return PartialView("_GetList");
+        }
+
+
+        public async Task<ActionResult> GetCheckedByUserId(Guid userId)
+        {
+            var response = await httpService.GetAsync($"GetCheckedListByUserId/?userId={userId}", token: (string)Session["Token"]);
+
+
+            if (response.IsSuccessStatusCode)
+            {
+                var CheckedGates = await response.Content.ReadAsAsync<List<GateViewModel>>();
+
+                return PartialView("_GetList", CheckedGates);
             }
 
             return PartialView("_GetList");

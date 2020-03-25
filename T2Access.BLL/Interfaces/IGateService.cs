@@ -14,6 +14,7 @@ namespace T2Access.BLL.Services
         GateModel Login(LoginModel gate);
         bool CheckUserName(string userName);
         List<GateModel> GetListWithFilter(GateFilterModel filter);
+        List<CheckedGateModel> GetCheckedListByUserId(Guid userId);
         bool Delete(Guid id);
         bool Edit(GateModel model);
         bool ResetPassword(ResetPasswordModel model);

@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Linq.Dynamic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -7,14 +10,13 @@ using System.Web.Mvc;
 using T2Access.Models;
 using T2Access.Services.HttpClientService;
 using T2Access.Web.Attributes;
-using T2Access.Web.Models;
 
 namespace T2Access.Web.Controllers
 {
 
 
     [CustomAuthorize]
-    public class UserController : Controller
+    public class UserController : WebController
     {
         readonly IHttpClientService httpService = new HttpClientService(new Uri(Variables.ServerBaseAddress + "user/"));
 
@@ -43,16 +45,17 @@ namespace T2Access.Web.Controllers
 
         public ActionResult UserManagment()
         {
-            if(TempData["toastrMessage"]!=null)
-               ViewBag.toastrMessage = TempData["toastrMessage"] as string;
+            if (TempData["toastrMessage"] != null)
+                ViewBag.toastrMessage = TempData["toastrMessage"] as string;
 
             return View();
         }
 
 
-
         public async Task<ActionResult> GetAll()
         {
+
+
             var response = await httpService.GetAsync("GetListWithFilter/", token: (string)Session["Token"]);
 
 
@@ -60,10 +63,47 @@ namespace T2Access.Web.Controllers
             {
                 var users = await response.Content.ReadAsAsync<List<UserViewModel>>();
 
-                return PartialView(users);
-            }
+                if (Request.IsAjaxRequest())
+                {
+                    //Server Side Parameter
+                    int start = Convert.ToInt32(Request["start"]);
+                    int length = Convert.ToInt32(Request["length"]);
+                    string searchValue = Request["search[value]"];
+                    string sortColumnName = Request[$"columns[{Request["order[0][column]"]}][name]"];
+                    string sortDirection = Request["order[0][dir]"];
 
-            return null;
+
+
+                    int totalrows = users.Count;
+
+                    //filter
+                    if (!string.IsNullOrEmpty(searchValue))
+                    {
+                        users = users.Where(x => x.UserName.ToLower().Contains(searchValue.ToLower())
+                                        || x.FirstName.ToLower().Contains(searchValue.ToLower())
+                                        || x.LastName.ToLower().Contains(searchValue.ToLower())
+                        ).ToList<UserViewModel>();
+
+                    }
+                    int totalrowsafterfiltering = users.Count;
+
+
+                    //sorting 
+                    if (!string.IsNullOrEmpty(sortColumnName))
+                        users = users.OrderBy($"{sortColumnName} {sortDirection}").ToList<UserViewModel>();
+
+                    //paging
+                    users = users.Skip(start).Take(length).ToList<UserViewModel>();
+
+
+
+                    return Json(new { view = RenderViewToString(ControllerContext, "GetAll", users, true), draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
+                }
+
+                return PartialView(users);
+                }
+
+            return PartialView(); 
         }
 
 
@@ -88,13 +128,14 @@ namespace T2Access.Web.Controllers
                 return View();
             }
 
-  
+
 
             var response = await httpService.PostAsync(" Signup/", model, token: (string)Session["Token"]);
             var result = await response.Content.ReadAsStringAsync();
 
 
-            if (response.IsSuccessStatusCode) {
+            if (response.IsSuccessStatusCode)
+            {
 
                 TempData["toastrMessage"] = result.Split('\"')[1];
                 return RedirectToAction("UserManagment");
@@ -124,13 +165,12 @@ namespace T2Access.Web.Controllers
         public async Task<ActionResult> Edit(Guid id)
         {
 
-            var response = await httpService.GetAsync($"GetListWithFilter/?id={id}", token: (string)Session["Token"]);
+            var response = await httpService.GetAsync($"GetById/?id={id}", token: (string)Session["Token"]);
             if (response.IsSuccessStatusCode)
             {
-                var users = await response.Content.ReadAsAsync<List<UserViewModel>>();
-                return View(users[0]);
+                var user = await response.Content.ReadAsAsync<UserViewModel>();
+                return View(user);
 
-                
             }
 
             return null;
@@ -151,23 +191,21 @@ namespace T2Access.Web.Controllers
 
 
             if (response.IsSuccessStatusCode)
-            {  TempData["toastrMessage"] = result.Split('\"')[1];
+            {
+                TempData["toastrMessage"] = result.Split('\"')[1];
 
-            return RedirectToAction("UserManagment");
+                return RedirectToAction("UserManagment");
             }
 
             else
             {
-
 
                 var error = await response.Content.ReadAsStringAsync();
                 ViewBag.ErrorMessage = error;
 
                 // ModelState.AddModelError("UserName", error);
 
-
-                return View( model);
-
+                return View(model);
 
             }
 
@@ -192,7 +230,7 @@ namespace T2Access.Web.Controllers
             if (response.IsSuccessStatusCode)
             {
 
-                return Json(new { success = true, message = result.Split('\"') } , JsonRequestBehavior.AllowGet);
+                return Json(new { success = true, message = result.Split('\"') }, JsonRequestBehavior.AllowGet);
 
             }
             else
@@ -277,6 +315,9 @@ namespace T2Access.Web.Controllers
 
 
 
+        
 
+
+       
     }
 }

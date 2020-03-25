@@ -11,7 +11,7 @@
 
 
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("Edit", "User", FormMethod.Post, new { onsubmit = " return EditUser(this)" }))
 {
     @Html.AntiForgeryToken()
 
@@ -63,8 +63,8 @@
                 <h6>Gate List</h6>
                 <div class="centered">
                     <div class="form-group">
-                        @*@Html.HiddenFor(model => model.GateList)*@
-                        @Html.Action("GetFilterd", "Gate")
+                        @Html.HiddenFor(model => model.GateList)
+                        @Html.Action("GetCheckedByUserId", "Gate", new { UserId = Model.Id })
                     </div>
                 </div>
             </div>
@@ -88,15 +88,36 @@
 
 
         </div>
-        </div>
-            }
+    </div>
+}
 
 
 
 
-            @section Scripts
+@section Scripts
   {
-                @Html.RegisteredScripts()
+    @Html.RegisteredScripts()
 
-            }
+    <script>
+        var EditUser =function (form) {
+
+            var table = $("#GTable").DataTable();
+            var rowsel = table.rows('.selected').indexes();
+            var selectedGuid = [];
+
+            $.each(rowsel, function (index, rowId) {
+                selectedGuid.push(table.rows(rowId).nodes().to$().find("input[type='hidden']").attr("value"));
+            });
+
+            form.GateList.value = selectedGuid.toString();
+            
+              return true;
+
+        }
+
+
+
+    </script>
+
+}
 

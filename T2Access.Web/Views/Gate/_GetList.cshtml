@@ -24,22 +24,24 @@
         {
             foreach (var item in Model)
             {
-                <tr>
+               
+                    <tr   @(item.Checked ? "class= selected ": string.Empty ) >
 
-                    <td></td>
-                    @Html.HiddenFor(modelItem => item.Id)
+                        <td></td>
+                        @Html.HiddenFor(modelItem => item.Id)
 
-                    <td>
-                        @Html.DisplayFor(modelItem => item.NameAr)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.NameEn)
-                    </td>
-                </tr>
-            }
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NameAr)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NameEn)
+                        </td>
+                    </tr>
+                    }
+                    }
 
-        }
-    </tbody>
+
+                </tbody>
 
 
 </table>

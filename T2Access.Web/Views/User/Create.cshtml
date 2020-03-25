@@ -10,7 +10,7 @@
 
 
 
-@using (Html.BeginForm("Create", "User", FormMethod.Post, new { onsubmit = " return CreateUser()" }))
+@using (Html.BeginForm("Create", "User", FormMethod.Post, new { onsubmit = "return CreateUser(this)" }))
 {
     @Html.AntiForgeryToken()
 
@@ -105,9 +105,9 @@
     @Html.RegisteredScripts()
 
     <script>
-        var CreateUser = function () {
+        var CreateUser = function (form) {
             
-            var form = this;
+            //var form = $("form",this);
             var table = $("#GTable").DataTable();
             var rowsel = table.rows('.selected').indexes();
             var selectedGuid = [];
@@ -117,7 +117,7 @@
             });
 
             form.GateList.value = selectedGuid.toString();
-
+            debugger
               return true;
 
         }

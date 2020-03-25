@@ -24,9 +24,17 @@ namespace T2Access.Models
 
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.Status))]
         public int? Status { get; set; }
+
+
     }
 
     //=====================================================================================================
+
+    public class CheckedGateModel : GateModel 
+    {
+        public bool Checked { get; set; }
+
+    }
 
 
 

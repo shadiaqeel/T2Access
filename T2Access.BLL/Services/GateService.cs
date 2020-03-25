@@ -15,7 +15,6 @@ namespace T2Access.BLL.Services
         private IGateManager gateManager = ManagerFactory.GetGateManager(Variables.DatabaseProvider);
 
 
-
         public bool Create(GateSignUpModel gateModel)
         {
 
@@ -35,6 +34,12 @@ namespace T2Access.BLL.Services
 
         }
 
+        public List<CheckedGateModel> GetCheckedListByUserId(Guid userId)
+        {
+
+            return gateManager.GetCheckedByUserId(userId);
+
+        }
 
         public bool CheckUserName(string userName)
         {

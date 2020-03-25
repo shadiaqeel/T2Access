@@ -14,6 +14,7 @@ namespace T2Access.DAL
     public class MySqlUserManager : IUserManager
     {
         private IPasswordHasher passwordHasher = new PasswordHasher();
+        IUserGateManager userGateManager = ManagerFactory.GetUserGateManager(Variables.DatabaseProvider);
 
 
 
@@ -49,7 +50,6 @@ namespace T2Access.DAL
 
             Guid gateId;
             var gatelist = user.GateList.Split(',');
-            IUserGateManager userGateManager = ManagerFactory.GetUserGateManager(Variables.DatabaseProvider);
             foreach (string gate in gatelist)
             {
                 if (Guid.TryParse(gate, out gateId))
@@ -60,28 +60,59 @@ namespace T2Access.DAL
 
         }
 
-        public bool Update(UserModel model)
+        public bool Update(UserUpdateModel user)
         {
-            if (model.Id == null)
+            if (user.Id == null)
                 return false;
 
-            return DatabaseExecuter.MySqlExecuteNonQuery("SP_User_Update", delegate (MySqlCommand cmd)
+            if (!(DatabaseExecuter.MySqlExecuteNonQuery("SP_User_Update", delegate (MySqlCommand cmd)
+           {
+               cmd.Parameters.AddWithValue("_id", user.Id);
+
+               cmd.Parameters.AddWithValue("_username", ""); // Can't update username /*user.UserName != null ? user.UserName : "" */ 
+
+               cmd.Parameters.AddWithValue("_firstname", user.FirstName != null ? user.FirstName : "");
+
+               cmd.Parameters.AddWithValue("_lastname", user.LastName != null ? user.LastName : "");
+
+               cmd.Parameters.AddWithValue("_status", user.Status != null ? user.Status : -1);
+
+           }) > 0))
+
+                return false;
+
+
+
+            //if (string.IsNullOrEmpty(user.GateList) )
+            //    return true;
+
+
+
+
+
+            //Clear previous records
+            userGateManager.Delete(new UserGateModel() { UserId = user.Id });
+
+
+            if (string.IsNullOrEmpty(user.GateList))
+                return true;
+            //Create new records
+            Guid gateId;
+            var gatelist = user.GateList.Split(',');
+            foreach (string gate in gatelist)
             {
-                cmd.Parameters.AddWithValue("_id", model.Id);
+                if (Guid.TryParse(gate, out gateId))
+                    userGateManager.Create(new UserGateModel() { UserId = user.Id, GateId = gateId });
+            }
 
-                cmd.Parameters.AddWithValue("_username", model.UserName != null ? model.UserName : "");
 
-                cmd.Parameters.AddWithValue("_firstname", model.FirstName != null ? model.FirstName : "");
+            return true;
 
-                cmd.Parameters.AddWithValue("_lastname", model.LastName != null ? model.LastName : "");
-
-                cmd.Parameters.AddWithValue("_status", model.Status != null ? model.Status : -1);
-
-            }) > 0 ? true : false;
         }
 
         public bool Delete(Guid id)
         {
+            userGateManager.Delete(new UserGateModel() { UserId = id });
 
             return DatabaseExecuter.MySqlExecuteNonQuery("SP_User_Delete", delegate (MySqlCommand cmd)
             {
@@ -103,8 +134,8 @@ namespace T2Access.DAL
 
             DatabaseExecuter.MySqlExecuteQuery("SP_User_SelectWithFilter", delegate (MySqlCommand cmd)
             {
-                
-                cmd.Parameters.AddWithValue("_id", filter.Id != null ? filter.Id : Guid.Empty);
+
+                //cmd.Parameters.AddWithValue("_id", filter.Id != null ? filter.Id : Guid.Empty);
 
                 cmd.Parameters.AddWithValue("_username", filter.UserName != null ? filter.UserName : "");
 
@@ -175,6 +206,50 @@ namespace T2Access.DAL
         }
 
 
+        public UserModel GetById(Guid usedId)
+        {
+
+            UserModel user = null;
+
+            DatabaseExecuter.MySqlExecuteQuery("SP_User_SelectById", delegate (MySqlCommand cmd)
+            {
+
+                cmd.Parameters.AddWithValue("_id", usedId != null ? usedId : Guid.Empty);
+
+            },
+            delegate (MySqlDataReader reader)
+            {
+
+                if (reader.Read())
+                {
+
+                    user = new UserModel()
+                    {
+                        Id = reader.GetGuid(0),
+                        UserName = reader.GetString(1),
+                        FirstName = reader.GetString(2),
+                        LastName = reader.GetString(3),
+                        Status = reader.GetInt32(4)
+                    };
+
+                }
+            });
+
+
+            if (user == null)
+                return null;
+
+
+            //user.GateList = userGateManager.GetByUserId(user.Id);
+
+
+            return user;
+
+
+        }
+
+
+
 
         public UserModel Login(LoginModel userModel)
         {
@@ -232,6 +307,6 @@ namespace T2Access.DAL
             }) > 0 ? true : false;
         }
 
-  
+
     }
 }

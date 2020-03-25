@@ -34,6 +34,8 @@ namespace T2Access.Models
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.Status))]
         public UserStatus Status { get; set; }
 
+        public string GateList { get; set; }
+
 
     }
 }

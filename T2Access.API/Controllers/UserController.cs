@@ -126,6 +126,26 @@ namespace T2Access.API.Controllers
 
         }
 
+        [HttpGet]
+        [CustomAuthorize(Roles = "User,Admin")]
+        [ResponseType(typeof(UserModel))]
+        public HttpResponseMessage GetById(Guid id)
+        {
+            if (id == null)
+              return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.FilterMiss);
+            
+
+            UserModel user = userService.GetById(id);
+
+            if(user==null)
+              return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.UserNotExist);
+
+
+
+            return Request.CreateResponse(HttpStatusCode.OK, user);
+
+        }
+
 
 
         [HttpDelete]
@@ -147,7 +167,7 @@ namespace T2Access.API.Controllers
         [HttpPut]
         [CustomAuthorize(Roles = "User,Admin")]
         [ResponseType(typeof(List<string>))]
-        public HttpResponseMessage Edit(Guid id, [FromBody] UserModel model)
+        public HttpResponseMessage Edit(Guid id, [FromBody] UserUpdateModel model)
         {
             model.Id = id;
             if (userService.Edit(model))

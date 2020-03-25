@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using T2Access.Models;
 
@@ -74,6 +75,16 @@ namespace T2Access.DAL
         }
 
         public bool Update(UserGateModel editmodel)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Guid> GetByUserId(Guid userid)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool DeleteAllByUserId(Guid userId)
         {
             throw new NotImplementedException();
         }

@@ -54,6 +54,9 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Linq.Dynamic, Version=1.0.6132.35681, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Linq.Dynamic.1.0.7\lib\net40\System.Linq.Dynamic.dll</HintPath>
+    </Reference>
     <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
@@ -130,6 +133,7 @@
     <Compile Include="Controllers\GateController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\WebController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -225,7 +229,7 @@
     <Content Include="Assets\User\img\av-expand.png" />
     <Content Include="Assets\User\css\style-responsive.css" />
     <Content Include="Assets\User\css\style.css" />
-    <Content Include="Assets\User\shadi.jpg" />
+    <Content Include="Assets\User\shadii.jpg" />
     <Content Include="Assets\fonts\Linearicons-Free-v1.0.0\icon-font.min.css" />
     <Content Include="Assets\fonts\Linearicons-Free-v1.0.0\WebFont\Linearicons-Free.svg" />
     <Content Include="Assets\fonts\montserrat\OFL.txt" />
@@ -487,6 +491,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Web\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

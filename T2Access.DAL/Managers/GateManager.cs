@@ -186,5 +186,10 @@ namespace T2Access.DAL
         {
             throw new NotImplementedException();
         }
+
+        public List<CheckedGateModel> GetCheckedByUserId(Guid userId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

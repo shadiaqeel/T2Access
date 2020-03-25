@@ -124,10 +124,12 @@ function bindForm(dialog) {
                 else if (result.success) {
                     $('#addEditModal').modal('hide');
 
-                    table.clear().destroy();
-                    $('#tbodyPartial').load(TableUrl, function () { 
-                        $("#DTable").DataTable(dataTableConfig).draw(false);
-                    });
+                   // table.clear().destroy();
+                    $("#DTable").DataTable().ajax.reload();
+
+                    //$('#tbodyPartial').load(TableUrl, function () {
+                    //   // $("#DTable").DataTable(dataTableConfig).draw(false);
+                    //});
 
                     toastr.success(result.message)
                 } else {

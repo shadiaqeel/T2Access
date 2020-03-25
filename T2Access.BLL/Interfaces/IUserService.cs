@@ -9,12 +9,13 @@ namespace T2Access.BLL.Services
         bool Create(UserSignUpModel user);
         UserModel Login(LoginModel user);
         bool CheckUserName(string userName);
+        UserModel GetById(Guid userId);
         List<UserModel> GetList(UserFilterModel user);
         bool Assign(UserGateModel userGate);
         bool Unassign(UserGateModel userGate);
         bool Delete(Guid id);
 
-        bool Edit(UserModel model);
+        bool Edit(UserUpdateModel model);
         bool ResetPassword(ResetPasswordModel model);
 
     }

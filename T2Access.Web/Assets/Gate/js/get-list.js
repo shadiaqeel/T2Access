@@ -4,10 +4,10 @@
 
 var dataTableConfig = {
     bFilter: true,
-    bInfo: true,
+    bInfo: false,
     bAutoWidth: true,
     bSortable: false,
-    scrollY: "400px",
+    scrollY: "300px",
     scrollCollapse: true,
     paging: false,
     multiSelect:true,

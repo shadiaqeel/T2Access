@@ -203,5 +203,15 @@ namespace T2Access.DAL
         {
             throw new NotImplementedException();
         }
+
+        public UserModel GetById(Guid usedId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Update(UserUpdateModel editmodel)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

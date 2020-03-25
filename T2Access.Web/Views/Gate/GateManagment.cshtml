@@ -80,28 +80,56 @@
 
         <script>
 
-            var dataTableConfig = {
-                    destroy:true,
-                    bFilter: true,
-                    bInfo: true,
-                    bAutoWidth: false,
-                    bSortable: false,
-                    columnDefs: [
-                        { orderable: false, targets: 4 }
-                    ],
-                    language: {
-                        "lengthMenu": "Display _MENU_ records per page",
-                        "zeroRecords": "Nothing found - sorry",
-                        // "info": "Showing page _PAGE_ of _PAGES_",
-                        "infoEmpty": "No records available",
-                        "infoFiltered": "(filtered from _MAX_ total records)"
-                    }
+
+            $("#DTable").DataTable({
+                ajax: function (data, callback, settings) {
+
+                    // make a regular ajax request using data.start and data.length
+                    $.get("@Url.Action("GetAll", "Gate")", data
+                        , function (result) {
+
+                            // map your server's response to the DataTables format and pass it to
+                            // DataTables' callback
+
+                            debugger
+                            callback({
+                                recordsTotal: result.recordsTotal,
+                                recordsFiltered: result.recordsFiltered,
+                                draw: result.draw,
+                                data: result
+                            });
+                            $("#tbodyPartial").html(result.view);
+
+
+                        });
+                },
+                destroy: true,
+                serverSide: true,
+                processing: true,
+                bFilter: true,
+                bInfo: true,
+                bAutoWidth: true,
+                bSortable: false,
+                aaSorting: false,
+                // order: [3, "asc"],
+                columns: [
+                    { data: "UserName", name: "UserName" },
+                    { data: "NameAr", name: "NameAr" },
+                    { data: "NameEn", name: "NameEn" },
+                    { data: "Status", name: "Status" },
+                    { data: null, "orderable": false }
+
+                ],
+                language: {
+                    "lengthMenu": "Display _MENU_ records per page",
+                    "zeroRecords": "Nothing found - sorry",
+                    // "info": "Showing page _PAGE_ of _PAGES_",
+                    "infoEmpty": "No records available",
+                    "infoFiltered": "(filtered from _MAX_ total records)",
+                    "processing": "Processing ... please wait"
                 }
-
-            $(document).ready(function () {
-                $("#DTable").DataTable(dataTableConfig);
-
             });
+
           
 
 

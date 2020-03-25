@@ -22,7 +22,7 @@
 <div class="row mt">
     <div class="col-md-12">
         <div class="content-panel  ">
-            <table class="table table-striped table-advance table-hover" id="DTable">
+            <table class="table table-striped table-advance table-hover  " id="DTable" width="100%">
 
                 <h4 style="display:inline-block;"> @Resource.UserTable </h4>
                 @Html.ActionLink($"   {Resource.CreateUser}", "Create", "User", null, new { @class = "fa  fa-plus btn  btn-success pull-right" })
@@ -65,7 +65,7 @@
                 <tbody id="tbodyPartial">
 
 
-                    @Html.Action("GetAll")
+                    @*@Html.Action("GetAll")*@
 
 
 
@@ -90,63 +90,72 @@
     @Scripts.Render("~/Assets/lib/MDB/js/addons/datatables-select.min.js")
 
     <script>
+        
+
+        $(document).ready(function () {
+            $("#DTable").DataTable({
+                ajax: function (data, callback, settings) {
+                    
+                    // make a regular ajax request using data.start and data.length
+                    $.get("@Url.Action("GetAll", "User")", data
+                        , function (result) {
+                            
+                            // map your server's response to the DataTables format and pass it to
+                            // DataTables' callback
+                            
+
+                            callback({
+                                recordsTotal: result.recordsTotal,
+                                recordsFiltered: result.recordsFiltered,
+                                draw: result.draw,
+                                data: result
+                            });
+                            $("#tbodyPartial").html(result.view);
 
 
+                        });
+                },
 
-         var dataTableConfig = {
-                    destroy:true,
-                    bFilter: true,
-                    bInfo: true,
-                    bAutoWidth: true,
-                    bSortable: false,
-                    columnDefs: [
-                        { "orderable": false, "targets": 4 }
-                    ],
-                    language: {
-                        "lengthMenu": "Display _MENU_ records per page",
-                        "zeroRecords": "Nothing found - sorry",
-                        // "info": "Showing page _PAGE_ of _PAGES_",
-                        "infoEmpty": "No records available",
-                        "infoFiltered": "(filtered from _MAX_ total records)"
-                    }
+                serverSide: true,
+                processing: true,
+                bFilter: true,
+                bInfo: true,
+                pagingType: "full_numbers",
+                bSortable: false,
+                order: [3, "asc"],
+                columns: [
+                    { data: "UserName", name: "UserName", autoWidth :true },
+                    { data: "FirstName", name: "FirstName" , autoWidth :true },
+                    { data: "LastName", name: "LastName", autoWidth :true },
+                    { data: "Status", name: "Status", autoWidth :true },
+                    { data: null, "orderable": false, autoWidth :true }
+
+                ],
+                language: {
+                    "lengthMenu": "Display _MENU_ records per page",
+                    "zeroRecords": "Nothing found - sorry",
+                    // "info": "Showing page _PAGE_ of _PAGES_",
+                    "infoEmpty": "No records available",
+                    "infoFiltered": "(filtered from _MAX_ total records)",
+                    "processing": "Processing ... please wait"
                 }
-
-
-
-                  $(document).ready(function () {
-                $("#DTable").DataTable(dataTableConfig);
-
             });
+
+        });
 
 
 
             // Variables
-            var createUrl = "@Url.Action("Create", "User")";
-            var editUserUrl = "@Url.Action("Edit", "User")";
             var deleteUrl = "@Url.Action("Delete", "User")";
             var resetpasswordUrl = "@Url.Action("ResetPassword", "User")";
             var ReLoginUrl = "@Url.Action("ReLogin", "Account")";
-            var TableUrl = "@Url.Action("GetAll", "User")";
+            @*var TableUrl = "@Url.Action("GetAll", "User")";*@
 
             var confirmMessage = "@Resource.ConfirmDelete";
 
 
-            var editModal = function (data) {
-                $("#addEditModalContent").load(editUserUrl,function () {
-
-
-                    $("#Id").val(data.Id);
-                    $("#UserName").val(data.UserName);
-                    $("#FirstName").val(data.FirstName);
-                    $("#LastName").val(data.LastName);
-                    $("#Status").val(data.Status);
-
-                    $("#addEditModal").modal("show");
-
-                    bindForm(this);
-
-                 });
-        }
+           
+       
 
 
         

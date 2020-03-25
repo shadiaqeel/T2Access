@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 using T2Access.Models.Resources;
@@ -26,6 +27,14 @@ namespace T2Access.Models
 
         [Display(ResourceType = typeof(Resource), Name = nameof(Resource.Status))]
         public int? Status { get; set; }
+
+
+    }
+    //=====================================================================================================
+
+    public class UserUpdateModel : UserModel
+    {
+        public string GateList { get; set; }
 
     }
 

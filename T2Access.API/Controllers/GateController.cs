@@ -97,7 +97,7 @@ namespace T2Access.API.Controllers
 
 
         [HttpGet]
-        [CustomAuthorize(Roles = "User")]
+        [CustomAuthorize(Roles = "User,Admin")]
         [ResponseType(typeof(List<GateModel>))]
         public HttpResponseMessage GetListWithFilter([FromUri]GateFilterModel filter)
         {
@@ -111,8 +111,23 @@ namespace T2Access.API.Controllers
         }
 
 
+        [HttpGet]
+        [CustomAuthorize(Roles = "User,Admin")]
+        [ResponseType(typeof(List<GateModel>))]
+        public HttpResponseMessage GetCheckedListByUserId(Guid userId)
+        {
+            if (userId == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.FilterMiss);
+
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, gateService.GetCheckedListByUserId(userId));
+
+        }
+
+
         [HttpDelete()]
-        [CustomAuthorize(Roles = "User")]
+        [CustomAuthorize(Roles = "User,Admin")]
         [ResponseType(typeof(string))]
         public HttpResponseMessage Delete(Guid id)
         {

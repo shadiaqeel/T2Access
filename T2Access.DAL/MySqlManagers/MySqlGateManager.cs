@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using MySql.Data.MySqlClient;
+using T2Access.DAL.Helper;
 using T2Access.Models;
 using T2Access.Security;
 
@@ -48,6 +49,10 @@ namespace T2Access.DAL
         public bool Delete(Guid id)
         {
 
+            IUserGateManager userGateManager = ManagerFactory.GetUserGateManager(Variables.DatabaseProvider);
+            userGateManager.Delete(new UserGateModel() { GateId = id });
+
+
             return DatabaseExecuter.MySqlExecuteNonQuery("SP_Gate_Delete", delegate (MySqlCommand cmd)
             {
                 cmd.Parameters.AddWithValue("_id", id);
@@ -62,7 +67,7 @@ namespace T2Access.DAL
 
 
 
-
+         
         public List<GateModel> GetWithFilter(GateFilterModel filter)
         {
             List<GateModel> gateList = new List<GateModel>();
@@ -97,6 +102,39 @@ namespace T2Access.DAL
                      });
 
             return gateList;
+        }
+
+        public List<CheckedGateModel> GetCheckedByUserId(Guid userId)
+        {
+            List<CheckedGateModel> checkedGateList = new List<CheckedGateModel>();
+
+
+            DatabaseExecuter.MySqlExecuteQuery("SP_Gate_SelectCheckedByUserId", delegate (MySqlCommand cmd)
+            {
+                cmd.Parameters.AddWithValue("_userId", userId);
+
+
+
+
+            }, delegate (MySqlDataReader reader)
+            {
+                while (reader.Read())
+                {
+                    checkedGateList.Add(
+                               new CheckedGateModel()
+                               {
+                                   Checked = reader.GetBoolean(0),
+                                   Id = reader.GetGuid(1),
+                                   UserName = reader.GetString(2),
+                                   NameAr = reader.GetString(3),
+                                   NameEn = reader.GetString(4),
+                                   Status = reader.GetInt32(5)
+                               }
+                                );
+                }
+            });
+
+            return checkedGateList;
         }
 
 

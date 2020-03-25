@@ -12,7 +12,7 @@ namespace T2Access.Models
     {
 
         [Required(ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "RequiredField")]
-        public Guid UserId { get; set; }
+        public Guid UserId { get; set; } 
         [Required(ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "RequiredField")]
         public Guid GateId { get; set; }
     }
