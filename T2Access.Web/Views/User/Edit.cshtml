@@ -64,7 +64,9 @@
                 <div class="centered">
                     <div class="form-group">
                         @Html.HiddenFor(model => model.GateList)
-                        @Html.Action("GetCheckedByUserId", "Gate", new { UserId = Model.Id })
+                        @Html.Action("GetList", "Gate")
+
+                        @*@Html.Action("GetCheckedByUserId", "Gate", new { UserId = Model.Id })*@
                     </div>
                 </div>
             </div>
@@ -96,22 +98,26 @@
 
 @section Scripts
   {
+    <script>var ajaxUrl = "@Url.Action("GetCheckedByUserId","Gate", new { UserId = Model.Id })";</script>
+
     @Html.RegisteredScripts()
 
     <script>
-        var EditUser =function (form) {
+        var EditUser = function (form) {
 
             var table = $("#GTable").DataTable();
             var rowsel = table.rows('.selected').indexes();
             var selectedGuid = [];
 
             $.each(rowsel, function (index, rowId) {
-                selectedGuid.push(table.rows(rowId).nodes().to$().find("input[type='hidden']").attr("value"));
+                selectedGuid.push(table.rows(rowId).data()[0]["Id"]);
+                //selectedGuid.push(table.rows(rowId).nodes().to$().find("input[type='hidden']").attr("value"));
             });
 
+            debugger
             form.GateList.value = selectedGuid.toString();
-            
-              return true;
+
+            return true;
 
         }
 

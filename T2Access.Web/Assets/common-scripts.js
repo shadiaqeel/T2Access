@@ -53,6 +53,8 @@ $("#DTable").on('click', '.btnDelete', function () {
 
 
 
+
+
 /*--- Toastr ----*/
 
 
@@ -125,7 +127,7 @@ function bindForm(dialog) {
                     $('#addEditModal').modal('hide');
 
                    // table.clear().destroy();
-                    $("#DTable").DataTable().ajax.reload();
+                    $("#DTable").DataTable().ajax.reload(null,false);
 
                     //$('#tbodyPartial').load(TableUrl, function () {
                     //   // $("#DTable").DataTable(dataTableConfig).draw(false);

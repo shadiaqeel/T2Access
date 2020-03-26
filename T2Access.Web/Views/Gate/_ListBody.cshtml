@@ -1,0 +1,23 @@
+﻿@model IEnumerable<T2Access.Models.GateViewModel>
+
+
+
+@if (Model != null)
+{
+    foreach (var item in Model)
+    {
+
+        <tr @(item.Checked ? "class= selected " : string.Empty)>
+
+            <td @*class="select-checkbox"*@></td>
+            @Html.HiddenFor(modelItem => item.Id)
+
+            <td>
+                @Html.DisplayFor(modelItem => item.NameAr)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NameEn)
+            </td>
+        </tr>
+    }
+}

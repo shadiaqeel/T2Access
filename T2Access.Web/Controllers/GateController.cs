@@ -284,19 +284,60 @@ namespace T2Access.Web.Controllers
 
 
 
+        public ActionResult GetList()
+        {
+
+            return PartialView();
+
+        }
+
+
+
+
+
         public async Task<ActionResult> GetFilterd()
         {
             var response = await httpService.GetAsync($"GetListWithFilter?Status={0}", token: (string)Session["Token"]);
 
 
-            if (response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode && Request.IsAjaxRequest())
             {
                 var filterdGates = await response.Content.ReadAsAsync<List<GateViewModel>>();
 
-                return PartialView("_GetList", filterdGates);
+
+                //Server Side Parameter
+                int start = Convert.ToInt32(Request["start"]);
+                int length = Convert.ToInt32(Request["length"]);
+                string searchValue = Request["search[value]"];
+                string sortColumnName = Request[$"columns[{Request["order[0][column]"]}][name]"];
+                string sortDirection = Request["order[0][dir]"];
+
+
+                int totalrows = filterdGates.Count;
+
+                if (!string.IsNullOrEmpty(searchValue))
+                {
+                    filterdGates = filterdGates.Where(x => x.UserName.ToLower().Contains(searchValue.ToLower())
+                                    || x.NameAr.ToLower().Contains(searchValue.ToLower())
+                                    || x.NameEn.ToLower().Contains(searchValue.ToLower())
+                    ).ToList<GateViewModel>();
+
+                }
+                int totalrowsafterfiltering = filterdGates.Count;
+
+
+                //sorting 
+                if (!string.IsNullOrEmpty(sortColumnName))
+                    filterdGates = filterdGates.OrderBy($"{sortColumnName} {sortDirection}").ToList<GateViewModel>();
+
+
+                //view = RenderViewToString(ControllerContext, "_ListBody", filterdGates, true)
+
+
+                return Json(new {data = filterdGates, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
             }
 
-            return PartialView("_GetList");
+            return null;
         }
 
 
@@ -305,14 +346,42 @@ namespace T2Access.Web.Controllers
             var response = await httpService.GetAsync($"GetCheckedListByUserId/?userId={userId}", token: (string)Session["Token"]);
 
 
-            if (response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode && Request.IsAjaxRequest())
             {
                 var CheckedGates = await response.Content.ReadAsAsync<List<GateViewModel>>();
 
-                return PartialView("_GetList", CheckedGates);
+                //Server Side Parameter
+                int start = Convert.ToInt32(Request["start"]);
+                int length = Convert.ToInt32(Request["length"]);
+                string searchValue = Request["search[value]"];
+                string sortColumnName = Request[$"columns[{Request["order[0][column]"]}][name]"];
+                string sortDirection = Request["order[0][dir]"];
+
+
+                int totalrows = CheckedGates.Count;
+
+                if (!string.IsNullOrEmpty(searchValue))
+                {
+                    CheckedGates = CheckedGates.Where(x => x.UserName.ToLower().Contains(searchValue.ToLower())
+                                    || x.NameAr.ToLower().Contains(searchValue.ToLower())
+                                    || x.NameEn.ToLower().Contains(searchValue.ToLower())
+                    ).ToList<GateViewModel>();
+
+                }
+                int totalrowsafterfiltering = CheckedGates.Count;
+
+
+                //sorting 
+                if (!string.IsNullOrEmpty(sortColumnName))
+                    CheckedGates = CheckedGates.OrderBy($"{sortColumnName} {sortDirection}").ToList<GateViewModel>();
+
+
+                // view = RenderViewToString(ControllerContext, "_ListBody", CheckedGates, true)
+                return Json(new {data = CheckedGates, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
             }
 
-            return PartialView("_GetList");
+
+            return null;
         }
 
 

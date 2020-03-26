@@ -77,7 +77,7 @@
                         <h6>Gate List</h6>
                         <div class="centered">
                             @Html.HiddenFor(model => model.GateList)
-                            @Html.Action("GetFilterd", "Gate")
+                            @Html.Action("GetList", "Gate")
                         </div>
                     </div>
 
@@ -102,6 +102,7 @@
 @section Scripts
   {
 
+    <script>var ajaxUrl = "@Url.Action("GetFilterd", "Gate")";</script>
     @Html.RegisteredScripts()
 
     <script>
@@ -110,6 +111,7 @@
             //var form = $("form",this);
             var table = $("#GTable").DataTable();
             var rowsel = table.rows('.selected').indexes();
+            var rowsell = table.column(0).checkboxes.selected();
             var selectedGuid = [];
 
             $.each(rowsel, function (index, rowId) {

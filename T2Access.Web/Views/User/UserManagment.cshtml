@@ -95,15 +95,10 @@
         $(document).ready(function () {
             $("#DTable").DataTable({
                 ajax: function (data, callback, settings) {
-                    
-                    // make a regular ajax request using data.start and data.length
+                 
                     $.get("@Url.Action("GetAll", "User")", data
                         , function (result) {
                             
-                            // map your server's response to the DataTables format and pass it to
-                            // DataTables' callback
-                            
-
                             callback({
                                 recordsTotal: result.recordsTotal,
                                 recordsFiltered: result.recordsFiltered,
@@ -122,6 +117,7 @@
                 bInfo: true,
                 pagingType: "full_numbers",
                 bSortable: false,
+                aaSorting: false,
                 order: [3, "asc"],
                 columns: [
                     { data: "UserName", name: "UserName", autoWidth :true },
@@ -142,6 +138,8 @@
             });
 
         });
+
+
 
 
 

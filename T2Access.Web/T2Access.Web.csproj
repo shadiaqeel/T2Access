@@ -487,7 +487,8 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\User\GetAll.cshtml" />
     <Content Include="Views\Gate\GetAll.cshtml" />
-    <Content Include="Views\Gate\_GetList.cshtml" />
+    <Content Include="Views\Gate\GetList.cshtml" />
+    <Content Include="Views\Gate\_ListBody.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
