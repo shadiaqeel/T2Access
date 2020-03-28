@@ -1,4 +1,5 @@
 ﻿@model T2Access.Models.UserViewModel
+@using T2Access.Models.Resources
 @using T2Access.Web.Resources
 
 
@@ -12,20 +13,24 @@
 
 
 
-    <link href="~/Assets/lib/MDB/css/addons/datatables-select.min.css" rel="stylesheet" />
+    @*<link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />*@
     <link href="~/Assets/lib/MDB/css/addons/datatables.min.css" rel="stylesheet" />
+    <link href="~/Assets/lib/MDB/css/addons/datatables-select.min.css" rel="stylesheet" />
 
 
+    
 }
 
 
 <div class="row mt">
     <div class="col-md-12">
         <div class="content-panel  ">
+
+            @*DataTable Area*@
             <table class="table table-striped table-advance table-hover  " id="DTable" width="100%">
 
                 <h4 style="display:inline-block;"> @Resource.UserTable </h4>
-                @Html.ActionLink($"   {Resource.CreateUser}", "Create", "User", null, new { @class = "fa  fa-plus btn  btn-success pull-right" })
+                @Html.ActionLink($"{Resource.CreateUser}", "Create", "User", null, new { @class = "fa  fa-plus btn btn-lg  btn-success pull-right" })
 
                 @if (!string.IsNullOrEmpty(ViewBag.StateMessage))
                 {
@@ -37,7 +42,19 @@
 
                 }
 
-                <br>
+
+                @*Search Area*@
+                <div class="row mt mb">
+
+                    <div class="dataTables_filter col-md-3"><input id="txtFilterByUserName" type="search" class="form-control form-control-sm" placeholder="@ModelResource.UserName" aria-controls="DTable"></div>
+                    <div class="dataTables_filter col-md-3"><input id="txtFilterByFirstName" type="search" class="form-control form-control-sm" placeholder="@ModelResource.FirstName" aria-controls="DTable"></div>
+                    <div class="dataTables_filter col-md-3 "><input id="txtFilterByLastName" type="search" class="form-control form-control-sm" placeholder="@ModelResource.LastName" aria-controls="DTable"></div>
+                    <div class="dataTables_filter col-md-3">
+                        @Html.EnumDropDownListFor(model => model.Status, "Status", htmlAttributes: new { @class = "dropdown-toggle  form-control-sm ", @id = "txtFilterByStatus" })
+                        <button id="btnSearch" class="fa  fa-search btn  btn-info  btn-lg  fa-pull-right"></button>
+                    </div>
+                </div>
+
                 <thead>
                     <tr>
                         <th data-sortable="true">
@@ -89,23 +106,24 @@
     @Scripts.Render("~/Assets/lib/MDB/js/addons/datatables.min.js")
     @Scripts.Render("~/Assets/lib/MDB/js/addons/datatables-select.min.js")
 
-    <script>
-        
+    @*@Scripts.Render("https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js")
+        @Scripts.Render("https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js")*@
 
+    <script>
+        var DTable;
         $(document).ready(function () {
-            $("#DTable").DataTable({
+            DTable = $("#DTable").DataTable({
                 ajax: function (data, callback, settings) {
-                 
-                    $.get("@Url.Action("GetAll", "User")", data
+
+                    $.get("@Url.Action("LoadData", "User")", data
                         , function (result) {
-                            
+
                             callback({
-                                recordsTotal: result.recordsTotal,
-                                recordsFiltered: result.recordsFiltered,
+                                recordsFiltered: result.recordsTotal,
                                 draw: result.draw,
-                                data: result
+                                data: JSON.parse(result.data)
                             });
-                            $("#tbodyPartial").html(result.view);
+                            //$("#tbodyPartial").html(result.view);
 
 
                         });
@@ -113,18 +131,29 @@
 
                 serverSide: true,
                 processing: true,
+                dom:'<"top"l>rt<"button row mt"<"col-md-6"i><"col-md-6"p>><"clear">',
                 bFilter: true,
                 bInfo: true,
                 pagingType: "full_numbers",
                 bSortable: false,
-                aaSorting: false,
-                order: [3, "asc"],
+                aaSorting: true,
+                 order: [],
                 columns: [
                     { data: "UserName", name: "UserName", autoWidth :true },
                     { data: "FirstName", name: "FirstName" , autoWidth :true },
-                    { data: "LastName", name: "LastName", autoWidth :true },
-                    { data: "Status", name: "Status", autoWidth :true },
-                    { data: null, "orderable": false, autoWidth :true }
+                    { data: "LastName", name: "LastName", autoWidth: true },
+                    {
+                        data: "Status", name: "Status", autoWidth: true, render: function (data) {
+                            return '<span class="badge badge-' + data + '">' + data + '</span>';
+                        }
+                    },
+                    {
+                        data: null, "orderable": false, autoWidth: true, render: function (type, data, row) {
+                            return `<a title="@Resource.Edit" class="btn btn- btn-primary btn-s fa fa-pencil"  href="/User/Edit/${row["Id"]}" ></a>
+                                    <button title="@Resource.Delete" class="btn btn-danger btn-s  fa fa-trash-o btnDelete" data-toggle="modal" data-id="${row["Id"]}"  title="Delete User" ></button>
+                                    <button title=" @Resource.Reset" class="btn btn-warning btn-s fa fa-key" data-toggle="modal" title="Edit password" onclick='ResetPasswordModal({Id:"${row["Id"]}",UserName:"${row["UserName"]}"})'></button> `;
+                        }
+                    }
 
                 ],
                 language: {
@@ -132,12 +161,34 @@
                     "zeroRecords": "Nothing found - sorry",
                     // "info": "Showing page _PAGE_ of _PAGES_",
                     "infoEmpty": "No records available",
-                    "infoFiltered": "(filtered from _MAX_ total records)",
-                    "processing": "Processing ... please wait"
+                    //"infoFiltered": "(filtered from _MAX_ total records)",
+                    "sInfoFiltered": "",
+                    "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading....</span> '
                 }
             });
 
         });
+
+
+        //Apply Custom search on  jQuery Datatable
+        $('#btnSearch').click(function(){
+            //Apply search for User Name
+            DTable.columns(0).search($('#txtFilterByUserName').val().trim());
+
+            //Apply search for First Name
+            DTable.columns(1).search($('#txtFilterByFirstName').val().trim());
+
+            //Apply search for Last Name
+            DTable.columns(2).search($('#txtFilterByLastName').val().trim());
+
+            //Apply search for Status
+            DTable.columns(3).search($('#txtFilterByStatus').val().trim());
+
+            DTable.draw();
+
+        });
+
+
 
 
 
@@ -147,16 +198,15 @@
             var deleteUrl = "@Url.Action("Delete", "User")";
             var resetpasswordUrl = "@Url.Action("ResetPassword", "User")";
             var ReLoginUrl = "@Url.Action("ReLogin", "Account")";
-            @*var TableUrl = "@Url.Action("GetAll", "User")";*@
 
             var confirmMessage = "@Resource.ConfirmDelete";
 
 
-           
-       
 
 
-        
+
+
+
 
     </script>
 

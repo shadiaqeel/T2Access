@@ -48,27 +48,30 @@ namespace T2Access.Web.Controllers
 
                 IAuthService authService = AuthrizationFactory.GetAuthrization();
 
+                if (authService.GetTokenClaimValue(token, "Role").Contains("Admin"))
+                {
+                    Session["Token"] = token;
+                    //Session["Principal"] = authService.GetPrincipal(token);
+                    Session["Username"] = authService.GetTokenClaimValue(token, "Username");
+                    Session["Role"] = authService.GetTokenClaimValue(token, "Role");
+                    Session["FirstName"] = authService.GetTokenClaimValue(token, "FirstName");
+                    Session["LastName"] = authService.GetTokenClaimValue(token, "LastName");
+                    Session["ConfirmedOperation"] = false;
+                    Session["UserImg"] = "/Assets/User/shadi.jpg";
+                    Session["Culture"] = "ar";
 
+                    if (!string.IsNullOrEmpty(returnUrl))
+                        return Redirect(returnUrl);
 
-                Session["Token"] = token;
-                //Session["Principal"] = authService.GetPrincipal(token);
-                Session["Username"] = authService.GetTokenClaimValue(token, "Username");
-                Session["Role"] = authService.GetTokenClaimValue(token, "Role");
-                Session["FirstName"] = authService.GetTokenClaimValue(token, "FirstName");
-                Session["LastName"] = authService.GetTokenClaimValue(token, "LastName");
-                Session["ConfirmedOperation"] = false;
-                Session["UserImg"] = "/Assets/User/shadi.jpg";
-                Session["Culture"] = "ar";
-
-                if (!string.IsNullOrEmpty(returnUrl))
-                    return Redirect(returnUrl);
-                
-                return RedirectToAction("index", "User");
+                    return RedirectToAction("index", "User");
+                }
+                ViewBag.ReturnUrl = returnUrl;
+                ModelState.AddModelError(string.Empty, "You are not authorized to access this resource");
+                return View();
             }
 
 
             ViewBag.ReturnUrl = returnUrl;
-
             ModelState.AddModelError(string.Empty, "The username and Password you’ve entered doesn’t match any account");
             return View();
 

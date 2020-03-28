@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Linq;
 using MySql.Data.MySqlClient;
 
 using T2Access.DAL.Helper;
@@ -127,7 +127,7 @@ namespace T2Access.DAL
 
 
 
-        public List<UserModel> GetWithFilter(UserFilterModel filter)
+        public ResponseFilteredUserList GetWithFilter(UserFilterModel filter)
         {
             List<UserModel> userList = new List<UserModel>();
 
@@ -164,7 +164,17 @@ namespace T2Access.DAL
                 }
             });
 
-            return userList;
+
+            var _totalSize = userList.Count; 
+
+            //paging
+            if (filter.Skip != null && filter.PageSize != null)
+                userList = userList.Skip((int)filter.Skip).Take((int)filter.PageSize).ToList<UserModel>();
+
+
+
+
+            return new ResponseFilteredUserList() { ResponseList = userList, totalEntities = _totalSize }; ;
 
 
         }

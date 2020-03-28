@@ -1,38 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
-using T2Access.Models;
-using T2Access.Models.Resources;
 
+using T2Access.Models.Resources;
 namespace T2Access.Models
 {
+    //[JsonConverter(typeof(StringEnumConverter))]
     public enum UserStatus
     {
-       
         Regular = 0,
         Admin = 1,
         Block = 2
 
     }
 
-    public class UserViewModel 
+
+    public class UserViewModel
     {
         public Guid Id { get; set; }
 
-
-        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.UserName))]
+        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.UserName))]
         public string UserName { get; set; }
 
-        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.FirstName))]
+        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.FirstName))]
         public string FirstName { get; set; }
 
-        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.LastName))]
+        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.LastName))]
         public string LastName { get; set; }
 
-        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.Status))]
-        public UserStatus Status { get; set; }
+        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.Status))]
+
+        public UserStatus? Status { get; set; } = 0;
 
         public string GateList { get; set; }
 

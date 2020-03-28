@@ -54,7 +54,8 @@ namespace T2Access.Web.Attributes
         {
 
             var returnUrl = filterContext.HttpContext.Request.Url;
-            filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary { { "action", "Login" }, { "controller", "Account" },{ "returnUrl", returnUrl } });
+            //var returnUrl = filterContext.HttpContext.Request.Url;
+                filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary { { "action", "Login" }, { "controller", "Account" },{ "returnUrl", returnUrl } });
 
 
         }

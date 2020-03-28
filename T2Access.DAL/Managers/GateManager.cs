@@ -26,7 +26,7 @@ namespace T2Access.DAL
         }
 
 
-        public List<GateModel> GetWithFilter(GateFilterModel filter)
+        public ResponseFilteredGateList GetWithFilter(GateFilterModel filter)
         {
             List<GateModel> gateList = new List<GateModel>();
 
@@ -62,7 +62,7 @@ namespace T2Access.DAL
                          }
                      });
 
-            return gateList;
+            return new ResponseFilteredGateList() { ResponseList=gateList , totalEntities = gateList.Count };
         }
 
 

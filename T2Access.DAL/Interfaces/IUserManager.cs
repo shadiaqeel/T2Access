@@ -8,7 +8,7 @@ namespace T2Access.DAL
 {
     public interface IUserManager : IRepository<UserSignUpModel,Guid, UserUpdateModel> 
     {
-        List<UserModel> GetWithFilter(UserFilterModel filter);
+        ResponseFilteredUserList GetWithFilter(UserFilterModel filter);
         UserModel GetByUserName(string userName);
         UserModel GetById(Guid usedId);
 

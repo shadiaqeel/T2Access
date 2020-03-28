@@ -53,18 +53,21 @@
 
 
 
-                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @Html.ValidationSummary(true, "", new { @class="alert alert-danger text-left" , @role="alert" , @style="font-size: smaller;" })
 
 
 
 
-                        <div class="wrap-input100 validate-input m-b-26 " data-validate="Username is required">
-                            @*<span class="label-input100">@Resource.Username : </span>*@
-                            @Html.TextBoxFor(m => m.Username, new { @class = "input100", @placeholder = "Enter username" })
-                            <span class="focus-input100"></span>
-                            @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
+                <div class="wrap-input100 validate-input m-b-26 " data-validate="Username is required">
+                    @*<span class="label-input100">@Resource.Username : </span>*@
 
-                        </div>
+                    @Html.TextBoxFor(m => m.Username, new { @class = "input100", @placeholder = @Resource.Username })
+                    <i class="fa fa-user" style="position: absolute;left: 10px;top: 12px;color:#999;"></i>
+                    <span class="focus-input100"></span>
+
+                    @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
+
+                </div>
 
 
 
@@ -75,8 +78,10 @@
 
                         <div class="wrap-input100 validate-input m-b-18" data-validate="Password is required">
                             @*<span class="label-input100">@Resource.Password : </span>*@
-                            @Html.PasswordFor(m => m.Password, new { @class = "input100", @placeholder = "Enter password" })
+                            @Html.PasswordFor(m => m.Password, new { @class = "input100", @placeholder = @Resource.Password })
                             <span class="focus-input100"></span>
+                            <i class="fa fa-lock" style="position: absolute;left: 10px;top: 12px;color:#999;"></i>
+
                             @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
 
                         </div>
@@ -98,7 +103,7 @@
 
 
 
-                        <div class="container-login100-form-btn m-t-17">
+                        <div class="container-login100-form-btn m-t-17 ">
                             <button class="login100-form-btn">
                                 Sign In
                             </button>

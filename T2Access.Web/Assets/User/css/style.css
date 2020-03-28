@@ -3592,7 +3592,7 @@ ul.chat-available-user li a:hover {
 
 
 
-.badge- {
+.badge {
     color: #fff;
     background-color: #777;
     font-size: 0.7rem;
@@ -3606,7 +3606,7 @@ ul.chat-available-user li a:hover {
     width: 60px;
 }
 
-.badge-Regular {
+.badge-Regular, .badge-User, .badge-Gate {
     color: #fff;
     background-color: #007bff;
     font-size: 0.7rem;

@@ -1,28 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using T2Access.Models.Resources;
 
 namespace T2Access.Models
 {
-    public class GateModel: BaseModel
+
+    public class GateModel : BaseModel
     {
         public Guid Id { get; set; }
 
 
-        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.UserName))]
+        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.UserName))]
         public string UserName { get; set; }
 
-        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.NameAr))]
+        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.NameAr))]
         public string NameAr { get; set; }
 
-        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.NameEn))]
+        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.NameEn))]
         public string NameEn { get; set; }
 
-        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.Status))]
+        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.Status))]
         public int? Status { get; set; }
 
 
@@ -30,7 +28,7 @@ namespace T2Access.Models
 
     //=====================================================================================================
 
-    public class CheckedGateModel : GateModel 
+    public class CheckedGateModel : GateModel
     {
         public bool Checked { get; set; }
 
@@ -45,6 +43,8 @@ namespace T2Access.Models
         public string NameAr { get; set; }
         public string NameEn { get; set; }
         public int? Status { get; set; }
+        public int? PageSize { get; set; }
+        public int? Skip { get; set; }
 
     }
 
@@ -61,41 +61,41 @@ namespace T2Access.Models
     public class GateSignUpModel : BaseModel, IAuthModel
     {
 
-        [Required(ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "RequiredField")]
-        [MaxLength(150, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "LessThen")]
-        [MinLength(8, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "MoreThen")]
-        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.UserName))]
+        [Required(ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "RequiredField")]
+        [MaxLength(150, ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "LessThen")]
+        [MinLength(8, ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "MoreThen")]
+        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.UserName))]
 
         public string UserName { get; set; }
 
-        [Required(ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "RequiredField")]
-        [MaxLength(150, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "LessThen")]
-        [MinLength(8, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "MoreThen")]
-        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.Password))]
+        [Required(ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "RequiredField")]
+        [MaxLength(150, ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "LessThen")]
+        [MinLength(8, ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "MoreThen")]
+        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.Password))]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
 
 
-        [Required(ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "RequiredField")]
-        [MaxLength(150, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "LessThen")]
-        [MinLength(8, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "MoreThen")]
-        [Compare("Password", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "Mismatch")]
-        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.ConfirmPassword))]
+        [Required(ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "RequiredField")]
+        [MaxLength(150, ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "LessThen")]
+        [MinLength(8, ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "MoreThen")]
+        [Compare("Password", ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "Mismatch")]
+        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.ConfirmPassword))]
         [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
 
 
 
-        [Required(ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "RequiredField")]
-        [MaxLength(150, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "LessThen")]
-        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.NameAr))]
+        [Required(ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "RequiredField")]
+        [MaxLength(150, ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "LessThen")]
+        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.NameAr))]
 
         public string NameAr { get; set; }
 
-        [Required(ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "RequiredField")]
-        [MaxLength(150, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "LessThen")]
-        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.NameEn))]
+        [Required(ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "RequiredField")]
+        [MaxLength(150, ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "LessThen")]
+        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.NameEn))]
 
         public string NameEn { get; set; }
 

@@ -6,7 +6,7 @@ using System.Linq.Dynamic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-
+using Newtonsoft.Json;
 using T2Access.Models;
 using T2Access.Services.HttpClientService;
 using T2Access.Web.Attributes;
@@ -52,52 +52,52 @@ namespace T2Access.Web.Controllers
         }
 
 
-        public async Task<ActionResult> GetAll()
+        public async Task<ActionResult> LoadData()
         {
 
+            //Server Side Parameter
+            var draw = Convert.ToInt32(Request["draw"]);
+            var start = Convert.ToInt32(Request["start"]);
+            var length = Convert.ToInt32(Request["length"]);
+            var sortColumnName = Request[$"columns[{Request["order[0][column]"]}][name]"];
+            var sortDirection = Request["order[0][dir]"];
+            //var searchValue = Request["search[value]"];
 
-            var response = await httpService.GetAsync("GetListWithFilter/", token: (string)Session["Token"]);
+
+
+
+            //find search columns info
+            var userName = Request["columns[0][search][value]"];
+            var firstName = Request["columns[1][search][value]"];
+            var lastName = Request["columns[2][search][value]"];
+            var status = Request["columns[3][search][value]"];
+
+
+        
+
+
+            var response = await httpService.GetAsync($"GetListWithFilter?UserName={userName}&FirstName={firstName}&LastName={lastName}&Status={status}&Skip={start}&PageSize={length}", token: (string)Session["Token"]);
 
 
             if (response.IsSuccessStatusCode)
             {
-                var users = await response.Content.ReadAsAsync<List<UserViewModel>>();
+                var users = await response.Content.ReadAsAsync<ResponseFilteredList<UserViewModel>>();
 
                 if (Request.IsAjaxRequest())
                 {
-                    //Server Side Parameter
-                    int start = Convert.ToInt32(Request["start"]);
-                    int length = Convert.ToInt32(Request["length"]);
-                    string searchValue = Request["search[value]"];
-                    string sortColumnName = Request[$"columns[{Request["order[0][column]"]}][name]"];
-                    string sortDirection = Request["order[0][dir]"];
 
 
-
-                    int totalrows = users.Count;
-
-                    //filter
-                    if (!string.IsNullOrEmpty(searchValue))
-                    {
-                        users = users.Where(x => x.UserName.ToLower().Contains(searchValue.ToLower())
-                                        || x.FirstName.ToLower().Contains(searchValue.ToLower())
-                                        || x.LastName.ToLower().Contains(searchValue.ToLower())
-                        ).ToList<UserViewModel>();
-
-                    }
-                    int totalrowsafterfiltering = users.Count;
+                    int totalrowsafterfiltering = users.ResponseList.Count;
 
 
                     //sorting 
                     if (!string.IsNullOrEmpty(sortColumnName))
-                        users = users.OrderBy($"{sortColumnName} {sortDirection}").ToList<UserViewModel>();
-
-                    //paging
-                    users = users.Skip(start).Take(length).ToList<UserViewModel>();
+                        users.ResponseList = users.ResponseList.OrderBy($"{sortColumnName} {sortDirection}").ToList<UserViewModel>();
 
 
 
-                    return Json(new { view = RenderViewToString(ControllerContext, "GetAll", users, true), draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
+
+                    return Json(new { data = JsonConvert.SerializeObject(users.ResponseList, new Newtonsoft.Json.Converters.StringEnumConverter()), draw = Request["draw"], recordsTotal = users.totalEntities },JsonRequestBehavior.AllowGet );
                 }
 
                 return PartialView(users);

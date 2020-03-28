@@ -22,7 +22,7 @@ namespace T2Access.BLL.Services
             return userManager.Create(user);
         }
 
-        public List<UserModel> GetList(UserFilterModel filter)
+        public ResponseFilteredUserList GetList(UserFilterModel filter)
         {
             return userManager.GetWithFilter(filter);
         }

@@ -90,12 +90,12 @@ var createModal = function () {
 
 
 var ResetPasswordModal = function (data) {
+    debugger
     $("#addEditModalContent").load(resetpasswordUrl, function () {
 
         $("#Id").val(data.Id);
         $("#UserName").val(data.UserName);
-        $("#Password").val(data.Password);
-        $("#ConfirmPassword").val(data.ConfirmPassword);
+
 
         $("#addEditModal").modal("show");
 
@@ -110,7 +110,8 @@ var ResetPasswordModal = function (data) {
 function bindForm(dialog) {
     var table = $('#DTable').DataTable();
     
-    
+    console.log(true);
+
     $('form',dialog).submit(function () {
         var action = this.action;
         var data = $(this).serialize();
@@ -119,11 +120,17 @@ function bindForm(dialog) {
             type: this.method,
             data: $(this).serialize(),
             success: function (result) {
+                console.log(result);
+
                 if (result.confirm) {
+                    console.log("confirm");
+
                     $('#addEditModal').modal('hide');
                     ConfirmAdmin(action,data);
                 }
                 else if (result.success) {
+                    console.log("success");
+
                     $('#addEditModal').modal('hide');
 
                    // table.clear().destroy();
@@ -135,6 +142,9 @@ function bindForm(dialog) {
 
                     toastr.success(result.message)
                 } else {
+                    console.log("else");
+
+                    
                     $('#addEditModalContent').html(result);
                     bindForm(dialog);
                 }

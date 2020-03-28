@@ -41,8 +41,13 @@ namespace T2Access.API.Controllers
                 cliamList.Add(new Claim("Username", user.UserName));
                 cliamList.Add(new Claim("FirstName", user.FirstName));
                 cliamList.Add(new Claim("LastName", user.LastName));
-                cliamList.Add(new Claim("Role", "User"));
 
+
+
+                if (Enum.IsDefined(typeof(UserStatus),user.Status))
+                    cliamList.Add(new Claim("Role",  $"{(UserStatus)user.Status},User"));
+                else
+                    cliamList.Add(new Claim("Role", $"{(UserStatus)0},User"));
 
 
                 var token = AuthrizationFactory.GetAuthrization().GenerateToken(new JWTContainerModel()
@@ -113,8 +118,8 @@ namespace T2Access.API.Controllers
 
 
         [HttpGet]
-        [CustomAuthorize(Roles = "User,Admin")]
-        [ResponseType(typeof(List<UserModel>))]
+        [CustomAuthorize(Roles = "Admin,User")]
+        [ResponseType(typeof(ResponseFilteredUserList))]
         public HttpResponseMessage GetListWithFilter([FromUri]UserFilterModel filter)
         {
             if (filter == null)
@@ -127,7 +132,7 @@ namespace T2Access.API.Controllers
         }
 
         [HttpGet]
-        [CustomAuthorize(Roles = "User,Admin")]
+        [CustomAuthorize(Roles = "Admin,User")]
         [ResponseType(typeof(UserModel))]
         public HttpResponseMessage GetById(Guid id)
         {
@@ -149,7 +154,7 @@ namespace T2Access.API.Controllers
 
 
         [HttpDelete]
-        [CustomAuthorize(Roles = "User,Admin")]
+        [CustomAuthorize(Roles = "Admin,User")]
         [ResponseType(typeof(string))]
         public HttpResponseMessage Delete(Guid id)
         {
@@ -165,7 +170,7 @@ namespace T2Access.API.Controllers
 
 
         [HttpPut]
-        [CustomAuthorize(Roles = "User,Admin")]
+        [CustomAuthorize(Roles = "Admin,User")]
         [ResponseType(typeof(List<string>))]
         public HttpResponseMessage Edit(Guid id, [FromBody] UserUpdateModel model)
         {
@@ -182,7 +187,7 @@ namespace T2Access.API.Controllers
 
 
         [HttpPut]
-        [CustomAuthorize(Roles = "User,Admin")]
+        [CustomAuthorize(Roles = "Admin,User")]
         [ResponseType(typeof(List<string>))]
         public HttpResponseMessage ResetPassword(Guid id, [FromBody] ResetPasswordModel model)
         {
@@ -205,7 +210,7 @@ namespace T2Access.API.Controllers
 
 
         [HttpPost]
-        [CustomAuthorize(Roles = "User,Admin")]
+        [CustomAuthorize(Roles = "Admin")]
         [ResponseType(typeof(string))]
         public HttpResponseMessage AssignToGate(UserGateModel userGate)
         {
@@ -223,7 +228,7 @@ namespace T2Access.API.Controllers
 
 
         [HttpPost]
-        [CustomAuthorize(Roles = "User,Admin")]
+        [CustomAuthorize(Roles = "Admin")]
         [ResponseType(typeof(string))]
         public HttpResponseMessage UnassignToGate(UserGateModel userGate)
         {

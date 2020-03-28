@@ -1,4 +1,5 @@
 ﻿@model T2Access.Models.GateViewModel
+@using T2Access.Models.Resources
 @using T2Access.Web.Resources
 
 @{
@@ -22,11 +23,21 @@
             <button class=" fa  fa-plus btn btn-success pull-right" data-toggle="modal" onclick="createModal()"> @Resource.CreateGate</button>
             <br />
             <table class="table table-striped table-advance table-hover" id="DTable" width="100%">
+                @*Search Area*@
+                <div class="row mt mb">
 
+                    <div class="dataTables_filter col-md-3"><input id="txtFilterByUserName" type="search" class="form-control form-control-sm" placeholder="@ModelResource.UserName" aria-controls="DTable"></div>
+                    <div class="dataTables_filter col-md-3"><input id="txtFilterByNameAr" type="search" class="form-control form-control-sm" placeholder="@ModelResource.FirstName" aria-controls="DTable"></div>
+                    <div class="dataTables_filter col-md-3 "><input id="txtFilterByNameEn" type="search" class="form-control form-control-sm" placeholder="@ModelResource.LastName" aria-controls="DTable"></div>
+                    <div class="dataTables_filter col-md-3">
+                        @Html.EnumDropDownListFor(model => model.Status, ModelResource.Status , htmlAttributes: new { @class = "dropdown-toggle  form-control-sm ", @id = "txtFilterByStatus" })
+                        <button id="btnSearch" class="fa  fa-search btn  btn-info  btn-lg  fa-pull-right"></button>
+                    </div>
+                </div>
                 <thead>
                     <tr>
                         <th>
-                            
+
                             <span class=" fa fa-user"></span>
                             @Html.DisplayNameFor((model => model.UserName))
                         </th>
@@ -43,7 +54,7 @@
                             @Html.DisplayNameFor(model => model.Status)
                         </th>
                         <th>
-                            
+
                             <span class=" fa fa-flash"></span>
                             @Resource.Actions
                         </th>
@@ -51,10 +62,10 @@
                 </thead>
                 <tbody id="tbodyPartial">
 
-                    @Html.Action("GetAll")
+                    @*@Html.Action("GetAll")*@
 
 
-                    </tbody>
+                </tbody>
             </table>
 
         </div>
@@ -80,55 +91,92 @@
 
         <script>
 
+              var DTable;
+            $(document).ready(function () {
+                DTable = $("#DTable").DataTable({
+                    ajax: function (data, callback, settings) {
 
-            $("#DTable").DataTable({
-                ajax: function (data, callback, settings) {
+                        $.get("@Url.Action("GetAll", "Gate")", data
+                            , function (result) {
 
-                    $.get("@Url.Action("GetAll", "Gate")", data
-                        , function (result) {
+                                debugger
+                                callback({
+                                    recordsFiltered: result.recordsTotal,
+                                    draw: result.draw,
+                                    data: JSON.parse(result.data)
+                                });
 
+                                //$("#tbodyPartial").html(result.view);
 
-
-                            debugger
-                            callback({
-                                recordsTotal: result.recordsTotal,
-                                recordsFiltered: result.recordsFiltered,
-                                draw: result.draw,
-                                data: result
                             });
+                    },
+                    dom: '<"top"l>rt<"button row mt"<"col-md-6"i><"col-md-6"p>><"clear">',
+                    serverSide: true,
+                    processing: true,
+                    bFilter: true,
+                    bInfo: true,
+                    bAutoWidth: true,
+                    aaSorting: true,
+                    order: [],
+                    columns: [
+                        { data: "UserName", name: "UserName" },
+                        { data: "NameAr", name: "NameAr" },
+                        { data: "NameEn", name: "NameEn" },
+                        {
+                            data: "Status", name: "Status", render: function (data) {
+                                return '<span class="badge badge-' + data + '">' + data + '</span>';
+                            }
+                        },
+                        {
+                            data: null, "orderable": false, render: function (type, data, row) {
 
-                           $("#tbodyPartial").html(result.view);
+                                return `<button title="@Resource.Edit" class="btn btn-primary btn-s  fa fa-pencil" data-toggle="modal" onclick='editModal({Id:"${row["Id"]}",UserName:"${row["UserName"]}",NameAr:"${row["NameAr"]}",NameEn:"${row["NameEn"]}",Status:"${row["Status"]}"})'></button>
+                                    <button title="@Resource.Delete" class="btn btn-danger btn-s  fa fa-trash-o btnDelete" data-toggle="modal" data-id="${row["Id"]}" title="Delete Gate"></button>
+                                    <button title=" @Resource.Reset" class="btn btn-warning btn-s fa fa-key" data-toggle="modal" onclick='ResetPasswordModal({Id:"${row["Id"]}",UserName:"${row["UserName"]}"})'></button>
+`;
+                            }
 
-                        });
-                },
-                destroy: true,
-                serverSide: true,
-                processing: true,
-                bFilter: true,
-                bInfo: true,
-                bAutoWidth: true,
-                bSortable: false,
-                aaSorting: false,
-                // order: [3, "asc"],
-                columns: [
-                    { data: "UserName", name: "UserName" },
-                    { data: "NameAr", name: "NameAr" },
-                    { data: "NameEn", name: "NameEn" },
-                    { data: "Status", name: "Status" },
-                    { data: null, "orderable": false }
 
-                ],
-                language: {
-                    "lengthMenu": "Display _MENU_ records per page",
-                    "zeroRecords": "Nothing found - sorry",
-                    // "info": "Showing page _PAGE_ of _PAGES_",
-                    "infoEmpty": "No records available",
-                    "infoFiltered": "(filtered from _MAX_ total records)",
-                    "processing": "Processing ... please wait"
-                }
+                        }
+
+
+                    ],
+                    language: {
+                        "lengthMenu": "Display _MENU_ records per page",
+                        "zeroRecords": "Nothing found - sorry",
+                        // "info": "Showing page _PAGE_ of _PAGES_",
+                        "infoEmpty": "No records available",
+                        //"infoFiltered": "(filtered from _MAX_ total records)",
+                        "sInfoFiltered": "",
+                        "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading....</span> '
+                    }
+                });
             });
-
           
+
+               //Apply Custom search on  jQuery Datatable 
+        $('#btnSearch').click(function(){
+            //Apply search for User Name 
+            DTable.columns(0).search($('#txtFilterByUserName').val().trim());
+
+            //Apply search for First Name 
+            DTable.columns(1).search($('#txtFilterByNameAr').val().trim());
+
+            //Apply search for Last Name 
+            DTable.columns(2).search($('#txtFilterByNameEn').val().trim());
+
+            //Apply search for Status 
+            DTable.columns(3).search($('#txtFilterByStatus').val().trim());
+
+            DTable.draw();
+
+        });
+
+
+
+
+
+
 
 
             var createUrl = "@Url.Action("Create", "Gate")";
@@ -142,8 +190,8 @@
 
 
             var editModal = function (data) {
-                $("#addEditModalContent").load(editGateUrl,function () {
-
+                $("#addEditModalContent").load(editGateUrl, function () {
+                    console.log(data);
 
                     $("#Id").val(data.Id);
                     $("#UserName").val(data.UserName);

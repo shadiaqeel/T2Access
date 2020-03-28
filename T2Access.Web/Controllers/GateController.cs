@@ -6,7 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-
+using Newtonsoft.Json;
 using T2Access.Models;
 using T2Access.Services.HttpClientService;
 using T2Access.Web.Attributes;
@@ -50,48 +50,49 @@ namespace T2Access.Web.Controllers
 
         public async Task<ActionResult> GetAll()
         {
-            var response = await httpService.GetAsync("GetListWithFilter/", token: (string)Session["Token"]);
+
+            //Server Side Parameter
+            var draw = Convert.ToInt32(Request["draw"]);
+            var start = Convert.ToInt32(Request["start"]);
+            var length = Convert.ToInt32(Request["length"]);
+            var sortColumnName = Request[$"columns[{Request["order[0][column]"]}][name]"];
+            var sortDirection = Request["order[0][dir]"];
+            //var searchValue = Request["search[value]"];
+
+
+
+            //find search columns info
+            var userName = Request["columns[0][search][value]"];
+            var NameAr = Request["columns[1][search][value]"];
+            var NameEn = Request["columns[2][search][value]"];
+            var status = Request["columns[3][search][value]"];
+
+            var response = await httpService.GetAsync($"GetListWithFilter?UserName={userName}&NameAr={NameAr}&NameEn={NameEn}&Status={status}&PageSize={length}&Skip={start}", token: (string)Session["Token"]);
 
 
             if (response.IsSuccessStatusCode)
             {
-                var gates = await response.Content.ReadAsAsync<List<GateViewModel>>();
+                var gates = await response.Content.ReadAsAsync <ResponseFilteredList< GateViewModel>>();
 
                 if (Request.IsAjaxRequest())
                 {
-                    //Server Side Parameter
-                    int start = Convert.ToInt32(Request["start"]);
-                    int length = Convert.ToInt32(Request["length"]);
-                    string searchValue = Request["search[value]"];
-                    string sortColumnName = Request[$"columns[{Request["order[0][column]"]}][name]"];
-                    string sortDirection = Request["order[0][dir]"];
+                    
 
 
 
-                    int totalrows = gates.Count;
 
-                    //filter
-                    if (!string.IsNullOrEmpty(searchValue))
-                    {
-                        gates = gates.Where(x => x.UserName.ToLower().Contains(searchValue.ToLower())
-                                        || x.NameAr.ToLower().Contains(searchValue.ToLower())
-                                        || x.NameEn.ToLower().Contains(searchValue.ToLower())
-                        ).ToList<GateViewModel>();
-
-                    }
-                    int totalrowsafterfiltering = gates.Count;
+                    int totalrowsafterfiltering = gates.ResponseList.Count;
 
 
                     //sorting 
                     if (!string.IsNullOrEmpty(sortColumnName))
-                        gates = gates.OrderBy($"{sortColumnName} {sortDirection}").ToList<GateViewModel>();
-
-                    //paging
-                    gates = gates.Skip(start).Take(length).ToList<GateViewModel>();
+                        gates.ResponseList = gates.ResponseList.OrderBy($"{sortColumnName} {sortDirection}").ToList<GateViewModel>();
 
 
 
-                    return Json(new { view = RenderViewToString(ControllerContext, "GetAll", gates, true), draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
+
+
+                    return Json(new { data = JsonConvert.SerializeObject(gates.ResponseList, new Newtonsoft.Json.Converters.StringEnumConverter()) , draw = Request["draw"], recordsTotal = gates.totalEntities  }, JsonRequestBehavior.AllowGet);
                 }
 
                 return PartialView(gates);

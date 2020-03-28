@@ -11,9 +11,9 @@ namespace T2Access.Models
     public class UserGateModel : BaseModel
     {
 
-        [Required(ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "RequiredField")]
+        [Required(ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "RequiredField")]
         public Guid UserId { get; set; } 
-        [Required(ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "RequiredField")]
+        [Required(ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "RequiredField")]
         public Guid GateId { get; set; }
     }
 }

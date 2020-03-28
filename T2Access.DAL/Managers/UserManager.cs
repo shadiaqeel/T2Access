@@ -28,7 +28,7 @@ namespace T2Access.DAL
         }
     
         
-        public List<UserModel> GetWithFilter(UserFilterModel filter)
+        public ResponseFilteredUserList GetWithFilter(UserFilterModel filter)
         {
             List<UserModel> userList = new List<UserModel>();
 
@@ -67,7 +67,8 @@ namespace T2Access.DAL
                 }
             });
 
-            return userList;
+
+            return new ResponseFilteredUserList() { ResponseList = userList , totalEntities = userList.Count};
 
 
         }

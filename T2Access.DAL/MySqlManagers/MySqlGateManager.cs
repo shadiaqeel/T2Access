@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using MySql.Data.MySqlClient;
 using T2Access.DAL.Helper;
 using T2Access.Models;
@@ -68,7 +69,7 @@ namespace T2Access.DAL
 
 
          
-        public List<GateModel> GetWithFilter(GateFilterModel filter)
+        public ResponseFilteredGateList GetWithFilter(GateFilterModel filter)
         {
             List<GateModel> gateList = new List<GateModel>();
 
@@ -101,7 +102,25 @@ namespace T2Access.DAL
                          }
                      });
 
-            return gateList;
+
+
+
+            var _totalSize = gateList.Count;
+
+
+
+            //paging
+
+            if (filter.Skip != null && filter.PageSize != null)
+                gateList = gateList.Skip((int)filter.Skip).Take((int)filter.PageSize).ToList<GateModel>();
+
+
+
+
+            return new ResponseFilteredGateList() { ResponseList = gateList, totalEntities = _totalSize }; 
+
+
+
         }
 
         public List<CheckedGateModel> GetCheckedByUserId(Guid userId)

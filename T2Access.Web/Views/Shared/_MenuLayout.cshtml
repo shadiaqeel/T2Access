@@ -1,17 +1,18 @@
 ﻿@using T2Access.Web.Resources;
 @using T2Access.Web.Helper;
-@*@{
+@{
     Culture = UICulture = "en";
 
-    System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(Culture);
-    }*@
+    System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture(Culture);
+    System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(Culture);
+    }
 
 <!DOCTYPE html>
-<html dir="@(System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.IsRightToLeft ? "rtl" : "ltr")">
+<html lang="@Culture" dir="@(System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.IsRightToLeft ? "rtl" : "ltr")">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - User</title>
+    <title>@ViewBag.Title</title>
 
     <!--==========================================================================================================================================================================================
     <!-- Bootstrap core CSS -->

@@ -16,16 +16,16 @@ namespace T2Access.Models
         [Key]
         public Guid Id { get; set; }
 
-        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.UserName))]
+        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.UserName))]
         public string UserName { get; set; }
 
-        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.FirstName))]
+        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.FirstName))]
         public string FirstName { get; set; }
 
-        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.LastName))]
+        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.LastName))]
         public string LastName { get; set; }
 
-        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.Status))]
+        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.Status))]
         public int? Status { get; set; }
 
 
@@ -50,6 +50,8 @@ namespace T2Access.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public int? Status { get; set; }
+        public int? PageSize { get; set; }
+        public int? Skip { get; set; }
 
     }
 
@@ -60,41 +62,41 @@ namespace T2Access.Models
 
     public class UserSignUpModel : BaseModel, IAuthModel
     {
-        [Required(ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "RequiredField")]
-        [MaxLength(150, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "LessThen")]
-        [MinLength(8, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "MoreThen")]
-        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.UserName))]
+        [Required(ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "RequiredField")]
+        [MaxLength(150, ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "LessThen")]
+        [MinLength(8, ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "MoreThen")]
+        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.UserName))]
         public string UserName { get; set; }
 
-        [Required(ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "RequiredField")]
-        [MaxLength(150, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "LessThen")]
-        [MinLength(8, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "MoreThen")]
-        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.Password))]
+        [Required(ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "RequiredField")]
+        [MaxLength(150, ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "LessThen")]
+        [MinLength(8, ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "MoreThen")]
+        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.Password))]
         [DataType(DataType.Password)]
 
         public string Password { get; set; }
 
 
 
-        [Required(ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "RequiredField")]
-        [MaxLength(150, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "LessThen")]
-        [MinLength(8, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "MoreThen")]
-        [Compare("Password", ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "Mismatch")]
-        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.ConfirmPassword))]
+        [Required(ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "RequiredField")]
+        [MaxLength(150, ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "LessThen")]
+        [MinLength(8, ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "MoreThen")]
+        [Compare("Password", ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "Mismatch")]
+        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.ConfirmPassword))]
         [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
 
 
 
-        [Required(ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "RequiredField")]
-        [MaxLength(150, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "LessThen")]
-        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.FirstName))]
+        [Required(ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "RequiredField")]
+        [MaxLength(150, ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "LessThen")]
+        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.FirstName))]
 
         public string FirstName { get; set; }
 
-        [Required(ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "RequiredField")]
-        [MaxLength(150, ErrorMessageResourceType = typeof(Resource), ErrorMessageResourceName = "LessThen")]
-        [Display(ResourceType = typeof(Resource), Name = nameof(Resource.LastName))]
+        [Required(ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "RequiredField")]
+        [MaxLength(150, ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "LessThen")]
+        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.LastName))]
 
         public string LastName { get; set; }
 

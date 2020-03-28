@@ -8,10 +8,15 @@ using T2Access.API.Helper;
 using T2Access.API.Resources;
 using T2Access.Security.Tokenization.Services;
 
+using System.Linq;
+
+
 namespace T2Access.API.Attributes
 {
     public class CustomAuthorizeAttribute : AuthorizeAttribute
     {
+
+        public string Roles { get; set; }
 
 
         public override void OnAuthorization(HttpActionContext actionContext)
@@ -23,27 +28,29 @@ namespace T2Access.API.Attributes
             }
 
 
-            
+
 
 
             var token = actionContext.Request.Headers.Authorization.Parameter;
 
             IAuthService authService = AuthrizationFactory.GetAuthrization();
 
-            
+
             var role = authService.GetTokenClaimValue(token, "Role");
 
-            if (!authService.IsTokenValid(token) || !Roles.Contains(role) )
+           
+
+            if (!authService.IsTokenValid(token) || !Roles.Intersect(role).Any())
             {
 
                 actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized);
             }
             else
             {
-                var userName = ((JWTService)authService).GetTokenClaimValue(token, "UserName");
+                var userName = ((JWTService)authService).GetTokenClaimValue(token, "Username");
 
 
-                IPrincipal principal = new GenericPrincipal(new GenericIdentity(userName), new string[] { role });
+                IPrincipal principal = new GenericPrincipal(new GenericIdentity(userName),  role.Split(','));
                
                 Thread.CurrentPrincipal = principal;
                 actionContext.RequestContext.Principal = principal;

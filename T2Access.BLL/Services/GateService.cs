@@ -27,7 +27,7 @@ namespace T2Access.BLL.Services
             return gateManager.Update(model);
         }
 
-        public List<GateModel> GetListWithFilter(GateFilterModel filter)
+        public ResponseFilteredGateList GetListWithFilter(GateFilterModel filter)
         {
 
             return gateManager.GetWithFilter(filter);

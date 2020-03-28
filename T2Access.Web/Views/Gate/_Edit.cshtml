@@ -19,7 +19,9 @@
 
 
     <div class="form-horizontal">
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })       
+        @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+        {<p class="alert alert-danger" role="alert">@ViewBag.ErrorMessage</p>}
         @Html.HiddenFor(model => model.Id)
 
         <div class="row">

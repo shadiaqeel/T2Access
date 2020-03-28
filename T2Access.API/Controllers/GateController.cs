@@ -97,8 +97,8 @@ namespace T2Access.API.Controllers
 
 
         [HttpGet]
-        [CustomAuthorize(Roles = "User,Admin")]
-        [ResponseType(typeof(List<GateModel>))]
+        [CustomAuthorize(Roles = "Admin")]
+        [ResponseType(typeof(ResponseFilteredGateList))]
         public HttpResponseMessage GetListWithFilter([FromUri]GateFilterModel filter)
         {
             if (filter == null)
@@ -112,7 +112,7 @@ namespace T2Access.API.Controllers
 
 
         [HttpGet]
-        [CustomAuthorize(Roles = "User,Admin")]
+        [CustomAuthorize(Roles = "Admin")]
         [ResponseType(typeof(List<GateModel>))]
         public HttpResponseMessage GetCheckedListByUserId(Guid userId)
         {
@@ -127,7 +127,7 @@ namespace T2Access.API.Controllers
 
 
         [HttpDelete()]
-        [CustomAuthorize(Roles = "User,Admin")]
+        [CustomAuthorize(Roles = "Admin")]
         [ResponseType(typeof(string))]
         public HttpResponseMessage Delete(Guid id)
         {
@@ -142,7 +142,7 @@ namespace T2Access.API.Controllers
 
 
         [HttpPut]
-        [CustomAuthorize(Roles = "User,Admin")]
+        [CustomAuthorize(Roles = "Admin")]
         [ResponseType(typeof(string))]
         public HttpResponseMessage Edit(Guid id, [FromBody] GateModel model)
         {
@@ -158,7 +158,7 @@ namespace T2Access.API.Controllers
 
 
         [HttpPut]
-        [CustomAuthorize(Roles = "User,Admin")]
+        [CustomAuthorize(Roles = "Admin")]
         [ResponseType(typeof(string))]
         public HttpResponseMessage ResetPassword(Guid id, [FromBody] ResetPasswordModel model)
         {
