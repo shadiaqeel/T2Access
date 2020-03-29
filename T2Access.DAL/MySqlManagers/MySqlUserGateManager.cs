@@ -9,7 +9,7 @@ namespace T2Access.DAL
 {
     public class MySqlUserGateManager : IUserGateManager
     {
-        public bool Create(UserGateModel userGate)
+        public UserGate Create(UserGate userGate)
         {
 
 
@@ -19,11 +19,11 @@ namespace T2Access.DAL
                 cmd.Parameters.AddWithValue("_userId", userGate.UserId);
                 cmd.Parameters.AddWithValue("_gateId", userGate.GateId);
 
-            }) > 0 ? true : false;
+            }) > 0 ? userGate : null;
 
         }
 
-        public bool Delete(UserGateModel userGate)
+        public bool Delete(UserGate userGate)
         {
             if (userGate == null || (userGate.UserId == Guid.Empty && userGate.GateId == Guid.Empty))
                 return false;
@@ -47,9 +47,9 @@ namespace T2Access.DAL
 
         }
 
-        public bool CheckIfExist(UserGateModel userGate)
+        public bool CheckIfExist(UserGate userGate)
         {
-            UserGateModel _userGate = null;
+            UserGate _userGate = null;
             int userStatus = 255;
             int gateStatus = 255;
 
@@ -66,7 +66,7 @@ namespace T2Access.DAL
                if (reader.Read())
                {
 
-                   _userGate = new UserGateModel()
+                   _userGate = new UserGate()
                    {
                        UserId = reader.GetGuid(0),
                        GateId = reader.GetGuid(1)
@@ -112,7 +112,7 @@ namespace T2Access.DAL
         }
 
 
-        public bool Update(UserGateModel editmodel)
+        public bool Update(UserGate editmodel)
         {
             throw new NotImplementedException();
         }

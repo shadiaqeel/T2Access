@@ -19,7 +19,7 @@ namespace T2Access.DAL.Helper
             {
 
                 case "MSSQL":
-                    return new UserManager();
+                  //  return new UserManager();
                 case "MYSQL":
                     return new MySqlUserManager();
 
@@ -38,7 +38,7 @@ namespace T2Access.DAL.Helper
             {
 
                 case "MSSQL":
-                    return new GateManager();
+                   // return new GateManager();
                 case "MYSQL":
                     return new MySqlGateManager();
 
@@ -58,7 +58,7 @@ namespace T2Access.DAL.Helper
             {
 
                 case "MSSQL":
-                    return new UserGateManager();
+                  //  return new UserGateManager();
                 case "MYSQL":
                     return new MySqlUserGateManager();
 
@@ -79,7 +79,7 @@ namespace T2Access.DAL.Helper
             {
 
                 case "MSSQL":
-                    return new TransactionManager();
+                  //  return new TransactionManager();
                 case "MYSQL":
                     return new MySqlTransactionManager();
 

@@ -57,14 +57,10 @@
     <Compile Include="MySqlManagers\MySqlTransactionManager.cs" />
     <Compile Include="MySqlManagers\MySqlUserGateManager.cs" />
     <Compile Include="MySqlManagers\MySqlUserManager.cs" />
-    <Compile Include="Managers\GateManager.cs" />
     <Compile Include="Interfaces\IGateManager.cs" />
     <Compile Include="Interfaces\ITransactionManager.cs" />
     <Compile Include="Interfaces\IUserManager.cs" />
     <Compile Include="Interfaces\IUserGateManager.cs" />
-    <Compile Include="Managers\TransactionManager.cs" />
-    <Compile Include="Managers\UserGateManager.cs" />
-    <Compile Include="Managers\UserManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Variables.cs" />
   </ItemGroup>
@@ -77,6 +73,9 @@
       <Project>{b60ddfd4-e199-4911-af07-785d49d1f708}</Project>
       <Name>T2Access.Security</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Managers\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

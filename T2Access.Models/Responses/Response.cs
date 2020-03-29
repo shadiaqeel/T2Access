@@ -16,7 +16,7 @@ namespace T2Access.Models
 
     public class ListResponse<T> : ResponseBase
     {
-        public List<T> ResponseList { get; set; }
+        public IList<T> ResponseList { get; set; }
         public int? totalEntities { get; set; }
 
     }

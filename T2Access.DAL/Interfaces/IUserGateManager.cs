@@ -4,9 +4,9 @@ using T2Access.Models;
 
 namespace T2Access.DAL
 {
-    public interface IUserGateManager : IRepository<UserGateModel , UserGateModel,UserGateModel>
+    public interface IUserGateManager : IRepository<UserGate>
     {
-        bool CheckIfExist(UserGateModel userGate);
+        bool CheckIfExist(UserGate userGate);
         List<Guid> GetByUserId(Guid userid);
         bool DeleteAllByUserId(Guid userId);
     }

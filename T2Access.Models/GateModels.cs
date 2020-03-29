@@ -36,13 +36,10 @@ namespace T2Access.Models
 
 
 
-    public class GateFilterModel : BaseModel
+    public class GateFilterModel : GateModel
     {
 
-        public string UserName { get; set; }
-        public string NameAr { get; set; }
-        public string NameEn { get; set; }
-        public int? Status { get; set; }
+
         public int? PageSize { get; set; }
         public int? Skip { get; set; }
 
@@ -58,7 +55,7 @@ namespace T2Access.Models
     //=====================================================================================================
 
 
-    public class GateSignUpModel : BaseModel, IAuthModel
+    public class GateSignUpModel : GateModel, IAuthModel
     {
 
         [Required(ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "RequiredField")]
@@ -66,7 +63,7 @@ namespace T2Access.Models
         [MinLength(8, ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "MoreThen")]
         [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.UserName))]
 
-        public string UserName { get; set; }
+         new public  string UserName { get; set; }
 
         [Required(ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "RequiredField")]
         [MaxLength(150, ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "LessThen")]
@@ -91,13 +88,13 @@ namespace T2Access.Models
         [MaxLength(150, ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "LessThen")]
         [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.NameAr))]
 
-        public string NameAr { get; set; }
+        new public string NameAr { get; set; }
 
         [Required(ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "RequiredField")]
         [MaxLength(150, ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "LessThen")]
         [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.NameEn))]
 
-        public string NameEn { get; set; }
+        new public string NameEn { get; set; }
 
 
     }

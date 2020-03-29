@@ -6,15 +6,14 @@ using T2Access.Models;
 
 namespace T2Access.DAL
 {
-    public interface IUserManager : IRepository<UserSignUpModel,Guid, UserUpdateModel> 
+    public interface IUserManager : IRepository<User> 
     {
-        UserListResponse GetWithFilter(UserFilterModel filter);
-        UserModel GetByUserName(string userName);
-        UserModel GetById(Guid usedId);
+        IList<User> GetWithFilter(User filter);
+        User GetByUserName(string userName);
+        User GetById(Guid usedId);
 
-
-        UserModel Login(LoginModel user);
-         bool ResetPassword(ResetPasswordModel model);
+        User Login(IAuthModel user);
+         bool ResetPassword(IAuthModel user);
 
 
     }

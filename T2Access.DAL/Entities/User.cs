@@ -13,7 +13,7 @@ namespace T2Access.DAL
         public string Password { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public int  Status { get; set; }
+        public int?  Status { get; set; }
 
     }
 }

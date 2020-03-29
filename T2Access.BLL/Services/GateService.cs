@@ -4,7 +4,7 @@ using T2Access.DAL;
 using T2Access.DAL.Helper;
 using T2Access.Models;
 using T2Access.BLL.Extensions;
-
+using System.Linq;
 
 namespace T2Access.BLL.Services
 {
@@ -20,23 +20,39 @@ namespace T2Access.BLL.Services
         public bool Create(GateSignUpModel gateModel)
         {
 
-            return gateManager.Create(gateModel);
+            return gateManager.Create(gateModel.ToEntity()) == null ? false : true ;
 
         }
 
         public bool Edit(GateModel model)
         {
-            return gateManager.Update(model);
+            return gateManager.Update(model.ToEntity());
         }
 
         public GateListResponse GetListWithFilter(GateFilterModel filter)
         {
 
-            return gateManager.GetWithFilter(filter);
+
+            var gateList =  gateManager.GetWithFilter(filter.ToEntity());
+
+
+            var _totalSize = gateList.Count;
+
+
+
+            //paging
+
+            if (filter.Skip != null && filter.PageSize != null)
+                gateList = gateList.Skip((int)filter.Skip).Take((int)filter.PageSize).ToList<Gate>();
+
+
+
+
+            return new GateListResponse() { ResponseList = gateList.ToModel(), totalEntities = _totalSize };
 
         }
 
-        public List<CheckedGateModel> GetCheckedListByUserId(Guid userId)
+        public IList<CheckedGateModel> GetCheckedListByUserId(Guid userId)
         {
 
             return gateManager.GetCheckedByUserId(userId);
@@ -53,14 +69,14 @@ namespace T2Access.BLL.Services
         public GateModel Login(LoginModel gateModel)
         {
 
-            return gateManager.Login(gateModel);
+            return gateManager.Login(gateModel).ToModel();
 
 
         }
 
         public bool Delete(Guid id)
         {
-            return gateManager.Delete(id);
+            return gateManager.Delete(new Gate() { Id = id});
         }  
         
         public bool ResetPassword(ResetPasswordModel model)

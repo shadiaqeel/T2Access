@@ -6,21 +6,21 @@ namespace T2Access.DAL
 {
     public class MySqlTransactionManager : ITransactionManager
     {
-        public bool Create(UserGateModel userGate)
+        public Transaction Create(Transaction transaction)
         {
 
             return DatabaseExecuter.MySqlExecuteNonQuery("SP_Transaction_Insert", delegate (MySqlCommand cmd)
             {
-                cmd.Parameters.AddWithValue("_userId", userGate.UserId);
-                cmd.Parameters.AddWithValue("_gateId", userGate.GateId);
-            }) > 0 ? true : false ;
+                cmd.Parameters.AddWithValue("_userId", transaction.UserId);
+                cmd.Parameters.AddWithValue("_gateId", transaction.GateId);
+            }) > 0 ? transaction : null ;
 
         }
 
-        public TransactionModel GetByGateId(Guid gateId, int status)
+        public Transaction GetByGateId(Guid gateId, int status)
         {
 
-            TransactionModel transaction = new TransactionModel();
+            Transaction transaction = new Transaction();
 
 
             DatabaseExecuter.MySqlExecuteQuery("SP_Transaction_GetByGateId", delegate (MySqlCommand cmd)
@@ -34,7 +34,7 @@ namespace T2Access.DAL
                  if (reader.Read())
                  {
 
-                     transaction = new TransactionModel()
+                     transaction = new Transaction()
                      {
                          Id = reader.GetDecimal(0),
                          UserId = reader.GetGuid(1),
@@ -61,12 +61,14 @@ namespace T2Access.DAL
             }) > 0 ? true : false;
         }
 
-        public bool Delete(decimal id)
+
+
+        public bool Update(Transaction editmodel)
         {
             throw new NotImplementedException();
         }
 
-        public bool Update(TransactionModel editmodel)
+        public bool Delete(Transaction entity)
         {
             throw new NotImplementedException();
         }

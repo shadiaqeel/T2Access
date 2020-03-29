@@ -15,19 +15,21 @@ namespace T2Access.DAL
 
 
         #region CRUD
-        public bool Create(GateSignUpModel gateModel)
+        public Gate Create(Gate gate)
         {
 
             return DatabaseExecuter.MySqlExecuteNonQuery("SP_Gate_Insert", delegate (MySqlCommand cmd)
             {
-                cmd.Parameters.AddWithValue("_username", gateModel.UserName);
-                cmd.Parameters.AddWithValue("_password", passwordHasher.HashPassword(gateModel.Password));
-                cmd.Parameters.AddWithValue("_nameAr", gateModel.NameAr);
-                cmd.Parameters.AddWithValue("_nameEn", gateModel.NameEn);
-            }) > 0 ? true : false;
+                cmd.Parameters.AddWithValue("_username", gate.UserName);
+                cmd.Parameters.AddWithValue("_password", passwordHasher.HashPassword(gate.Password));
+                cmd.Parameters.AddWithValue("_nameAr", gate.NameAr);
+                cmd.Parameters.AddWithValue("_nameEn", gate.NameEn);
+            }) > 0 ? gate : null;
         }
 
-        public bool Update(GateModel model)
+
+
+        public bool Update(Gate model)
         {
             if (model.Id == null)
                 return false;
@@ -47,16 +49,16 @@ namespace T2Access.DAL
             }) > 0 ? true : false;
         }
 
-        public bool Delete(Guid id)
+        public bool Delete(Gate gate)
         {
 
             IUserGateManager userGateManager = ManagerFactory.GetUserGateManager(Variables.DatabaseProvider);
-            userGateManager.Delete(new UserGateModel() { GateId = id });
+            userGateManager.Delete(new UserGate() { GateId = gate.Id });
 
 
             return DatabaseExecuter.MySqlExecuteNonQuery("SP_Gate_Delete", delegate (MySqlCommand cmd)
             {
-                cmd.Parameters.AddWithValue("_id", id);
+                cmd.Parameters.AddWithValue("_id", gate.Id);
 
             }) > 0 ? true : false;
 
@@ -69,9 +71,9 @@ namespace T2Access.DAL
 
 
          
-        public GateListResponse GetWithFilter(GateFilterModel filter)
+        public IList<Gate> GetWithFilter(Gate filter)
         {
-            List<GateModel> gateList = new List<GateModel>();
+            List<Gate> gateList = new List<Gate>();
 
 
             DatabaseExecuter.MySqlExecuteQuery("SP_Gate_SelectWithFilter", delegate (MySqlCommand cmd)
@@ -90,7 +92,7 @@ namespace T2Access.DAL
                          while (reader.Read())
                          {
                              gateList.Add(
-                                        new GateModel()
+                                        new Gate()
                                         {
                                             Id = reader.GetGuid(0),
                                             UserName = reader.GetString(1),
@@ -103,29 +105,13 @@ namespace T2Access.DAL
                      });
 
 
-
-
-            var _totalSize = gateList.Count;
-
-
-
-            //paging
-
-            if (filter.Skip != null && filter.PageSize != null)
-                gateList = gateList.Skip((int)filter.Skip).Take((int)filter.PageSize).ToList<GateModel>();
-
-
-
-
-            return new GateListResponse() { ResponseList = gateList, totalEntities = _totalSize }; 
-
-
+            return gateList;
 
         }
 
-        public List<CheckedGateModel> GetCheckedByUserId(Guid userId)
+        public IList<CheckedGateModel> GetCheckedByUserId(Guid userId)
         {
-            List<CheckedGateModel> checkedGateList = new List<CheckedGateModel>();
+            IList<CheckedGateModel> checkedGateList = new List<CheckedGateModel>();
 
 
             DatabaseExecuter.MySqlExecuteQuery("SP_Gate_SelectCheckedByUserId", delegate (MySqlCommand cmd)
@@ -157,9 +143,9 @@ namespace T2Access.DAL
         }
 
 
-        public GateModel GetByUserName(string username)
+        public Gate GetByUserName(string username)
         {
-            GateModel gate = null;
+            Gate gate = null;
             DatabaseExecuter.MySqlExecuteQuery("SP_Gate_SelectByUserName", delegate (MySqlCommand cmd)
 
             {
@@ -173,7 +159,7 @@ namespace T2Access.DAL
                 if (reader.Read())
                 {
 
-                    gate = new GateModel()
+                    gate = new Gate()
                     {
                         Id = reader.GetGuid(0),
                         UserName = reader.GetString(1),
@@ -192,7 +178,7 @@ namespace T2Access.DAL
 
         }
 
-        public GateModel Login(LoginModel gateModel)
+        public Gate Login(IAuthModel Gate)
         {
 
 
@@ -201,7 +187,7 @@ namespace T2Access.DAL
 
             {
 
-                cmd.Parameters.AddWithValue("_username", gateModel != null ? gateModel.UserName : "");
+                cmd.Parameters.AddWithValue("_username", Gate != null ? Gate.UserName : "");
 
 
             }, delegate (MySqlDataReader reader)
@@ -227,9 +213,9 @@ namespace T2Access.DAL
             });
 
 
-            if (gate != null && passwordHasher.VerifyHashedPassword(gate.Password, gateModel.Password))
+            if (gate != null && passwordHasher.VerifyHashedPassword(gate.Password, Gate.Password))
             {
-                return new GateModel() { Id = gate.Id, UserName = gate.UserName, NameAr = gate.NameAr, NameEn = gate.NameEn, Status = gate.Status };
+                return new Gate() { Id = gate.Id, UserName = gate.UserName, NameAr = gate.NameAr, NameEn = gate.NameEn, Status = gate.Status };
             }
             else
                 return null;
@@ -239,7 +225,7 @@ namespace T2Access.DAL
 
         }
 
-        public bool ResetPassword(ResetPasswordModel model)
+        public bool ResetPassword(IAuthModel model)
         {
             if (model.Id == null)
                 return false;

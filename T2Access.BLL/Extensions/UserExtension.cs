@@ -20,7 +20,7 @@ namespace T2Access.BLL.Extensions
                 UserName = model.UserName,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
-                Status = (int)model.Status
+                Status = model.Status
 
             };
         }
@@ -38,7 +38,14 @@ namespace T2Access.BLL.Extensions
                 Status = (int)user.Status
 
             };
-        } 
+        }
+
+        public static IList<UserModel> ToModel(this IList<User> user)
+        {
+
+            return user.Select(c => c.ToModel()).ToList<UserModel>();
+
+        }
         #endregion
     }
 }

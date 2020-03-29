@@ -22,7 +22,7 @@ namespace T2Access.DAL
 
         #region CRUD
 
-        public bool Create(UserSignUpModel user)
+        public User Create(User user)
         {
             Guid id = Guid.Empty;
 
@@ -42,30 +42,17 @@ namespace T2Access.DAL
                }
            });
 
-            if (id == Guid.Empty)
-                return false;
-
-            if (string.IsNullOrEmpty(user.GateList))
-                return true;
-
-            Guid gateId;
-            var gatelist = user.GateList.Split(',');
-            foreach (string gate in gatelist)
-            {
-                if (Guid.TryParse(gate, out gateId))
-                    userGateManager.Create(new UserGateModel() { UserId = id, GateId = gateId });
-            }
-
-            return true;
+            user.Id = id;
+                return user;
 
         }
 
-        public bool Update(UserUpdateModel user)
+        public bool Update(User user)
         {
             if (user.Id == null)
                 return false;
 
-            if (!(DatabaseExecuter.MySqlExecuteNonQuery("SP_User_Update", delegate (MySqlCommand cmd)
+            return (DatabaseExecuter.MySqlExecuteNonQuery("SP_User_Update", delegate (MySqlCommand cmd)
            {
                cmd.Parameters.AddWithValue("_id", user.Id);
 
@@ -77,46 +64,21 @@ namespace T2Access.DAL
 
                cmd.Parameters.AddWithValue("_status", user.Status != null ? user.Status : -1);
 
-           }) > 0))
-
-                return false;
-
-
-
-            //if (string.IsNullOrEmpty(user.GateList) )
-            //    return true;
+           }) > 0 ? true : false);
 
 
 
 
 
-            //Clear previous records
-            userGateManager.Delete(new UserGateModel() { UserId = user.Id });
-
-
-            if (string.IsNullOrEmpty(user.GateList))
-                return true;
-            //Create new records
-            Guid gateId;
-            var gatelist = user.GateList.Split(',');
-            foreach (string gate in gatelist)
-            {
-                if (Guid.TryParse(gate, out gateId))
-                    userGateManager.Create(new UserGateModel() { UserId = user.Id, GateId = gateId });
-            }
-
-
-            return true;
 
         }
 
-        public bool Delete(Guid id)
+        public bool Delete(User user)
         {
-            userGateManager.Delete(new UserGateModel() { UserId = id });
 
             return DatabaseExecuter.MySqlExecuteNonQuery("SP_User_Delete", delegate (MySqlCommand cmd)
             {
-                cmd.Parameters.AddWithValue("_id", id);
+                cmd.Parameters.AddWithValue("_id", user.Id);
 
             }) > 0 ? true : false;
 
@@ -127,9 +89,9 @@ namespace T2Access.DAL
 
 
 
-        public UserListResponse GetWithFilter(UserFilterModel filter)
+        public IList<User> GetWithFilter(User filter)
         {
-            List<UserModel> userList = new List<UserModel>();
+            List<User> userList = new List<User>();
 
 
             DatabaseExecuter.MySqlExecuteQuery("SP_User_SelectWithFilter", delegate (MySqlCommand cmd)
@@ -152,7 +114,7 @@ namespace T2Access.DAL
                 while (reader.Read())
                 {
 
-                    userList.Add(new UserModel()
+                    userList.Add(new User()
                     {
                         Id = reader.GetGuid(0),
                         UserName = reader.GetString(1),
@@ -165,25 +127,18 @@ namespace T2Access.DAL
             });
 
 
-            var _totalSize = userList.Count; 
+            return userList;
 
-            //paging
-            if (filter.Skip != null && filter.PageSize != null)
-                userList = userList.Skip((int)filter.Skip).Take((int)filter.PageSize).ToList<UserModel>();
-
-
-
-
-            return new UserListResponse() { ResponseList = userList, totalEntities = _totalSize }; 
+          
 
 
         }
 
 
-        public UserModel GetByUserName(string userName)
+        public User GetByUserName(string userName)
         {
 
-            UserModel user = null;
+            User user = null;
 
             DatabaseExecuter.MySqlExecuteQuery("SP_User_SelectByUserName", delegate (MySqlCommand cmd)
             {
@@ -197,7 +152,7 @@ namespace T2Access.DAL
                 if (reader.Read())
                 {
 
-                    user = new UserModel()
+                    user = new User()
                     {
                         Id = reader.GetGuid(0),
                         UserName = reader.GetString(1),
@@ -216,10 +171,10 @@ namespace T2Access.DAL
         }
 
 
-        public UserModel GetById(Guid usedId)
+        public User GetById(Guid usedId)
         {
 
-            UserModel user = null;
+            User user = null;
 
             DatabaseExecuter.MySqlExecuteQuery("SP_User_SelectById", delegate (MySqlCommand cmd)
             {
@@ -233,7 +188,7 @@ namespace T2Access.DAL
                 if (reader.Read())
                 {
 
-                    user = new UserModel()
+                    user = new User()
                     {
                         Id = reader.GetGuid(0),
                         UserName = reader.GetString(1),
@@ -261,7 +216,7 @@ namespace T2Access.DAL
 
 
 
-        public UserModel Login(LoginModel userModel)
+        public User Login(IAuthModel User)
         {
 
             User user = null;
@@ -269,7 +224,7 @@ namespace T2Access.DAL
             DatabaseExecuter.MySqlExecuteQuery("SP_User_Login", delegate (MySqlCommand cmd)
             {
 
-                cmd.Parameters.AddWithValue("_username", userModel != null ? userModel.UserName : "");
+                cmd.Parameters.AddWithValue("_username", User != null ? User.UserName : "");
 
             },
             delegate (MySqlDataReader reader)
@@ -293,16 +248,16 @@ namespace T2Access.DAL
 
 
 
-            if (user != null && passwordHasher.VerifyHashedPassword(user.Password, userModel.Password))
+            if (user != null && passwordHasher.VerifyHashedPassword(user.Password, User.Password))
             {
-                return new UserModel() { Id = user.Id, UserName = user.UserName, FirstName = user.FirstName, LastName = user.LastName, Status = user.Status };
+                return new User() { Id = user.Id, UserName = user.UserName, FirstName = user.FirstName, LastName = user.LastName, Status = user.Status };
             }
             else
                 return null;
 
         }
 
-        public bool ResetPassword(ResetPasswordModel model)
+        public bool ResetPassword(IAuthModel model)
         {
             if (model.Id == null)
                 return false;

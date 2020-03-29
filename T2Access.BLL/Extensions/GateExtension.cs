@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using T2Access.DAL;
 using T2Access.Models;
 
@@ -21,7 +19,7 @@ namespace T2Access.BLL.Extensions
                 UserName = model.UserName,
                 NameAr = model.NameAr,
                 NameEn = model.NameEn,
-                Status = (int)model.Status
+                Status = model.Status
 
             };
         }
@@ -40,7 +38,15 @@ namespace T2Access.BLL.Extensions
 
             };
 
-        } 
+        }
+
+
+        public static IList<GateModel> ToModel(this IList<Gate> gates)
+        {
+
+            return gates.Select(c => c.ToModel()).ToList<GateModel>();
+
+        }
         #endregion
     }
 }

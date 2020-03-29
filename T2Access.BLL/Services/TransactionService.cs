@@ -21,9 +21,9 @@ namespace T2Access.BLL.Services
 
         public bool Create(UserGateModel userGate)
         {
-            if (ValidUserGate(userGate))
+            if (ValidUserGate(userGate.ToEntity()))
             {
-                return transactionManager.Create(userGate);
+                return transactionManager.Create(new Transaction() { UserId = userGate.UserId , GateId = userGate.GateId }) == null ? false : true;
             }
             else
             return false; 
@@ -31,7 +31,7 @@ namespace T2Access.BLL.Services
 
         public TransactionModel GetByGateId(Guid gateId)
         {
-            return transactionManager.GetByGateId(gateId, 0);
+            return transactionManager.GetByGateId(gateId, 0).ToModel();
         }
 
 
@@ -42,7 +42,7 @@ namespace T2Access.BLL.Services
         }
 
 
-        public bool ValidUserGate(UserGateModel userGate)
+        public bool ValidUserGate(UserGate userGate)
         {
              IUserGateManager userGateManager = ManagerFactory.GetUserGateManager(Variables.DatabaseProvider);
 

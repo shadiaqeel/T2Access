@@ -43,13 +43,7 @@ namespace T2Access.Models
 
     public class UserFilterModel : UserModel
     {
-        [Key]
-        public Guid Id { get; set; }
 
-        public string UserName { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public int? Status { get; set; }
         public int? PageSize { get; set; }
         public int? Skip { get; set; }
 
@@ -60,13 +54,13 @@ namespace T2Access.Models
 
 
 
-    public class UserSignUpModel : BaseModel, IAuthModel
+    public class UserSignUpModel : UserModel, IAuthModel
     {
         [Required(ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "RequiredField")]
         [MaxLength(150, ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "LessThen")]
         [MinLength(8, ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "MoreThen")]
         [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.UserName))]
-        public string UserName { get; set; }
+        new public string UserName { get; set; }
 
         [Required(ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "RequiredField")]
         [MaxLength(150, ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "LessThen")]
@@ -92,13 +86,13 @@ namespace T2Access.Models
         [MaxLength(150, ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "LessThen")]
         [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.FirstName))]
 
-        public string FirstName { get; set; }
+        new public string FirstName { get; set; }
 
         [Required(ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "RequiredField")]
         [MaxLength(150, ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "LessThen")]
         [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.LastName))]
 
-        public string LastName { get; set; }
+        new public string LastName { get; set; }
 
         public string GateList { get; set; }
 
