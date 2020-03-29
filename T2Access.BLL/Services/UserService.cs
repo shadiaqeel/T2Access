@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using T2Access.DAL;
 using T2Access.DAL.Helper;
 using T2Access.Models;
+using T2Access.BLL.Extensions;
 
 namespace T2Access.BLL.Services
 {
@@ -22,7 +23,7 @@ namespace T2Access.BLL.Services
             return userManager.Create(user);
         }
 
-        public ResponseFilteredUserList GetList(UserFilterModel filter)
+        public UserListResponse GetList(UserFilterModel filter)
         {
             return userManager.GetWithFilter(filter);
         }
@@ -40,7 +41,6 @@ namespace T2Access.BLL.Services
 
 
         public bool CheckUserName(string userName) {
-
 
             return userManager.GetByUserName(userName) == null ? true : false;
 

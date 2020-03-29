@@ -72,7 +72,7 @@ namespace T2Access.Web.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                var gates = await response.Content.ReadAsAsync <ResponseFilteredList< GateViewModel>>();
+                var gates = await response.Content.ReadAsAsync <ListResponse< GateViewModel>>();
 
                 if (Request.IsAjaxRequest())
                 {

@@ -26,7 +26,7 @@ namespace T2Access.Models
         public string LastName { get; set; }
 
         [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.Status))]
-        public int? Status { get; set; }
+        public int? Status { get; set; } = 0;
 
 
     }
@@ -41,7 +41,7 @@ namespace T2Access.Models
     //=====================================================================================================
 
 
-    public class UserFilterModel : BaseModel
+    public class UserFilterModel : UserModel
     {
         [Key]
         public Guid Id { get; set; }

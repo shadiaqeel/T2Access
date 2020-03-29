@@ -9,7 +9,7 @@ using T2Access.Web.Models;
 
 namespace T2Access.Web.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : WebController
     {
 
 

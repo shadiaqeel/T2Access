@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace T2Access.Models
 {
-    public class BaseModel : IBaseModel
+    public class BaseModel:IBaseModel
     {
+
     }
 }

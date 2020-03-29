@@ -119,7 +119,7 @@ namespace T2Access.API.Controllers
 
         [HttpGet]
         [CustomAuthorize(Roles = "Admin,User")]
-        [ResponseType(typeof(ResponseFilteredUserList))]
+        [ResponseType(typeof(UserListResponse))]
         public HttpResponseMessage GetListWithFilter([FromUri]UserFilterModel filter)
         {
             if (filter == null)

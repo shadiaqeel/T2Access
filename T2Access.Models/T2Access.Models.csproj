@@ -43,7 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseTypes\BaseEntity.cs" />
+    <Compile Include="BaseTypes\BaseModel.cs" />
     <Compile Include="BaseTypes\IBaseModel.cs" />
     <Compile Include="GateModels.cs" />
     <Compile Include="ResetPasswordModel .cs" />
@@ -77,6 +77,5 @@
       <LastGenOutput>ModelResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -4,9 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using T2Access.Web.Attributes;
+
 
 namespace T2Access.Web.Controllers
 {
+    [LogActionFilter]
     public class WebController : Controller
     {
 

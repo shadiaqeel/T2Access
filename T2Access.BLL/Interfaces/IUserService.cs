@@ -10,7 +10,7 @@ namespace T2Access.BLL.Services
         UserModel Login(LoginModel user);
         bool CheckUserName(string userName);
         UserModel GetById(Guid userId);
-        ResponseFilteredUserList GetList(UserFilterModel user);
+        UserListResponse GetList(UserFilterModel user);
         bool Assign(UserGateModel userGate);
         bool Unassign(UserGateModel userGate);
         bool Delete(Guid id);

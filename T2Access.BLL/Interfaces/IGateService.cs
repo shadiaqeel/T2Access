@@ -13,7 +13,7 @@ namespace T2Access.BLL.Services
         bool Create(GateSignUpModel gate);
         GateModel Login(LoginModel gate);
         bool CheckUserName(string userName);
-        ResponseFilteredGateList GetListWithFilter(GateFilterModel filter);
+        GateListResponse GetListWithFilter(GateFilterModel filter);
         List<CheckedGateModel> GetCheckedListByUserId(Guid userId);
         bool Delete(Guid id);
         bool Edit(GateModel model);

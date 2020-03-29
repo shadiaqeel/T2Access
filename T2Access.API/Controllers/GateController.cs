@@ -98,7 +98,7 @@ namespace T2Access.API.Controllers
 
         [HttpGet]
         [CustomAuthorize(Roles = "Admin")]
-        [ResponseType(typeof(ResponseFilteredGateList))]
+        [ResponseType(typeof(GateListResponse))]
         public HttpResponseMessage GetListWithFilter([FromUri]GateFilterModel filter)
         {
             if (filter == null)

@@ -14,17 +14,17 @@ namespace T2Access.Models
     { }
 
 
-    public class ResponseFilteredList<T> : ResponseBase
+    public class ListResponse<T> : ResponseBase
     {
         public List<T> ResponseList { get; set; }
         public int? totalEntities { get; set; }
 
     }
 
-    public class ResponseFilteredGateList : ResponseFilteredList<GateModel>
+    public class GateListResponse : ListResponse<GateModel>
     { }
 
-    public class ResponseFilteredUserList : ResponseFilteredList<UserModel>
+    public class UserListResponse : ListResponse<UserModel>
     { }
 
 }

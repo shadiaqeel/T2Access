@@ -41,6 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\GateExtension.cs" />
+    <Compile Include="Extensions\UserExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Interfaces\IGateService.cs" />
     <Compile Include="Services\GateService.cs" />

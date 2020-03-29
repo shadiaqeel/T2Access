@@ -14,7 +14,6 @@ using T2Access.Web.Attributes;
 namespace T2Access.Web.Controllers
 {
 
-
     [CustomAuthorize]
     public class UserController : WebController
     {
@@ -81,7 +80,7 @@ namespace T2Access.Web.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                var users = await response.Content.ReadAsAsync<ResponseFilteredList<UserViewModel>>();
+                var users = await response.Content.ReadAsAsync<ListResponse<UserViewModel>>();
 
                 if (Request.IsAjaxRequest())
                 {

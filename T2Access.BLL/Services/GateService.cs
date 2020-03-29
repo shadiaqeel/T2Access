@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using T2Access.DAL;
 using T2Access.DAL.Helper;
 using T2Access.Models;
+using T2Access.BLL.Extensions;
+
 
 namespace T2Access.BLL.Services
 {
@@ -27,7 +29,7 @@ namespace T2Access.BLL.Services
             return gateManager.Update(model);
         }
 
-        public ResponseFilteredGateList GetListWithFilter(GateFilterModel filter)
+        public GateListResponse GetListWithFilter(GateFilterModel filter)
         {
 
             return gateManager.GetWithFilter(filter);

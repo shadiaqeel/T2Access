@@ -6,7 +6,7 @@ namespace T2Access.DAL
 {
     public interface IGateManager :IRepository<GateSignUpModel,Guid,GateModel>
     {
-        ResponseFilteredGateList GetWithFilter(GateFilterModel gate);
+        GateListResponse GetWithFilter(GateFilterModel gate);
         List<CheckedGateModel> GetCheckedByUserId(Guid userId);
         GateModel GetByUserName(string username);
         GateModel Login(LoginModel gate);
