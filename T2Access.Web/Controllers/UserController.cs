@@ -95,8 +95,7 @@ namespace T2Access.Web.Controllers
 
 
 
-
-                    return Json(new { data = JsonConvert.SerializeObject(users.ResponseList, new Newtonsoft.Json.Converters.StringEnumConverter()), draw = Request["draw"], recordsTotal = users.totalEntities },JsonRequestBehavior.AllowGet );
+                    return Json(new { data = JsonConvert.SerializeObject(users.ResponseList,new T2Access.Web.Helper.DisplayEnumConverter()), draw = Request["draw"], recordsTotal = users.totalEntities },JsonRequestBehavior.AllowGet );
                 }
 
                 return PartialView(users);

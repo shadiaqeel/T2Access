@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using T2Access.Models;
@@ -97,6 +98,7 @@ namespace T2Access.Web.Controllers
 
 
 
+
         public ActionResult ReLogin()
         {
 
@@ -149,6 +151,24 @@ namespace T2Access.Web.Controllers
         }
 
 
+
+
+
+        // Regex to find only the language code part of the URL - language (aa) or locale (aa-AA) syntax
+        static readonly Regex removeLanguage = new Regex(@"/[a-z]{2}/|/[a-z]{2}-[a-zA-Z]{2}/", RegexOptions.Compiled);
+
+        [AllowAnonymous]
+        public ActionResult ChangeLanguage(string id)
+        {
+            if (!string.IsNullOrEmpty(id))
+            {
+                // Decode the return URL and remove any language selector from it
+                id = Server.UrlDecode(id);
+                id = removeLanguage.Replace(id, @"/");
+                return Redirect(id);
+            }
+            return Redirect(@"/");
+        }
 
 
     }

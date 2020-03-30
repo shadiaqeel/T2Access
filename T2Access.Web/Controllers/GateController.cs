@@ -92,7 +92,7 @@ namespace T2Access.Web.Controllers
 
 
 
-                    return Json(new { data = JsonConvert.SerializeObject(gates.ResponseList, new Newtonsoft.Json.Converters.StringEnumConverter()) , draw = Request["draw"], recordsTotal = gates.totalEntities  }, JsonRequestBehavior.AllowGet);
+                    return Json(new { data = JsonConvert.SerializeObject(gates.ResponseList, new T2Access.Web.Helper.DisplayEnumConverter()) , draw = Request["draw"], recordsTotal = gates.totalEntities  }, JsonRequestBehavior.AllowGet);
                 }
 
                 return PartialView(gates);
@@ -303,7 +303,7 @@ namespace T2Access.Web.Controllers
 
             if (response.IsSuccessStatusCode && Request.IsAjaxRequest())
             {
-                var filterdGates = await response.Content.ReadAsAsync<List<GateViewModel>>();
+                var filterdGates = await response.Content.ReadAsAsync<ListResponse<GateViewModel>>();
 
 
                 //Server Side Parameter
@@ -314,28 +314,28 @@ namespace T2Access.Web.Controllers
                 string sortDirection = Request["order[0][dir]"];
 
 
-                int totalrows = filterdGates.Count;
+                int totalrows = filterdGates.ResponseList.Count;
 
                 if (!string.IsNullOrEmpty(searchValue))
                 {
-                    filterdGates = filterdGates.Where(x => x.UserName.ToLower().Contains(searchValue.ToLower())
+                    filterdGates.ResponseList = filterdGates.ResponseList.Where(x => x.UserName.ToLower().Contains(searchValue.ToLower())
                                     || x.NameAr.ToLower().Contains(searchValue.ToLower())
                                     || x.NameEn.ToLower().Contains(searchValue.ToLower())
                     ).ToList<GateViewModel>();
 
                 }
-                int totalrowsafterfiltering = filterdGates.Count;
+                int totalrowsafterfiltering = filterdGates.ResponseList.Count;
 
 
                 //sorting 
                 if (!string.IsNullOrEmpty(sortColumnName))
-                    filterdGates = filterdGates.OrderBy($"{sortColumnName} {sortDirection}").ToList<GateViewModel>();
+                    filterdGates.ResponseList = filterdGates.ResponseList.OrderBy($"{sortColumnName} {sortDirection}").ToList<GateViewModel>();
 
 
                 //view = RenderViewToString(ControllerContext, "_ListBody", filterdGates, true)
 
 
-                return Json(new {data = filterdGates, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
+                return Json(new {data = filterdGates.ResponseList, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = filterdGates.totalEntities }, JsonRequestBehavior.AllowGet);
             }
 
             return null;

@@ -144,11 +144,17 @@
   <data name="CreateUser" xml:space="preserve">
     <value>New User</value>
   </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
   </data>
   <data name="Edit" xml:space="preserve">
     <value>Edit</value>
+  </data>
+  <data name="First" xml:space="preserve">
+    <value>first</value>
   </data>
   <data name="Gates" xml:space="preserve">
     <value>Gates</value>
@@ -156,14 +162,32 @@
   <data name="GateTable" xml:space="preserve">
     <value>Gate Table</value>
   </data>
+  <data name="Last" xml:space="preserve">
+    <value>last</value>
+  </data>
+  <data name="lengthMenu" xml:space="preserve">
+    <value>Display _MENU_ records per page</value>
+  </data>
   <data name="Logout" xml:space="preserve">
     <value>Logout</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>next</value>
   </data>
   <data name="Password" xml:space="preserve">
     <value>Password</value>
   </data>
+  <data name="Previous" xml:space="preserve">
+    <value>previous</value>
+  </data>
   <data name="Reset" xml:space="preserve">
     <value>Reset Password</value>
+  </data>
+  <data name="SignIn" xml:space="preserve">
+    <value>Sign In</value>
+  </data>
+  <data name="SInfoTable" xml:space="preserve">
+    <value>showing _START_ to _END_  of _TOTAL_ entries</value>
   </data>
   <data name="Username" xml:space="preserve">
     <value>Username</value>

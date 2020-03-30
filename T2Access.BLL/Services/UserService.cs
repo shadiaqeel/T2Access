@@ -111,14 +111,14 @@ namespace T2Access.BLL.Services
 
         }    
         
-        public UserModel GetById(Guid userId) {
+        public IUserModel GetById(Guid userId) {
 
             return userManager.GetById(userId).ToModel();
 
         }
 
 
-        public UserModel Login(LoginModel user)
+        public IUserModel Login(LoginModel user)
         {
 
          return userManager.Login(user).ToModel();

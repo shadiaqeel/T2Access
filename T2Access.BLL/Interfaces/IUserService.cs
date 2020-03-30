@@ -7,9 +7,9 @@ namespace T2Access.BLL.Services
     public interface IUserService
     {
         bool Create(UserSignUpModel user);
-        UserModel Login(LoginModel user);
+        IUserModel Login(LoginModel user);
         bool CheckUserName(string userName);
-        UserModel GetById(Guid userId);
+        IUserModel GetById(Guid userId);
         UserListResponse GetList(UserFilterModel user);
         bool Assign(UserGateModel userGate);
         bool Unassign(UserGateModel userGate);

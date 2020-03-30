@@ -128,6 +128,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Helper\DisplayEnumConverter.cs" />
     <Compile Include="Attributes\CustomAuthorizeAttribute.cs" />
     <Compile Include="Attributes\LogActionFilter.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -139,6 +140,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helper\AuthrizationFactory.cs" />
+    <Compile Include="Helper\FromValuesListConstraint .cs" />
+    <Compile Include="Attributes\LocalisationAttribute .cs" />
     <Compile Include="Helper\MenuHelper.cs" />
     <Compile Include="Helper\HtmlExtensions.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -227,14 +230,17 @@
     <Content Include="Assets\lib\toastr\css\toastr.min.css" />
     <Content Include="Assets\lib\toastr\js\toastr.js" />
     <Content Include="Assets\lib\toastr\js\toastr.min.js" />
-    <Content Include="Assets\User\img\av-expand.png" />
-    <Content Include="Assets\User\css\style-responsive.css" />
-    <Content Include="Assets\User\css\style.css" />
-    <Content Include="Assets\User\shadii.jpg" />
+    <Content Include="Assets\Admin\css\ar\style.css" />
+    <Content Include="Assets\Admin\css\ar\style-responsive.css" />
+    <Content Include="Assets\Admin\img\av-expand.png" />
+    <Content Include="Assets\Admin\css\en\style-responsive.css" />
+    <Content Include="Assets\Admin\css\en\style.css" />
+    <Content Include="Assets\Admin\js\ar\scripts.js" />
+    <Content Include="Assets\Admin\shadii.jpg" />
     <Content Include="Assets\fonts\Linearicons-Free-v1.0.0\icon-font.min.css" />
     <Content Include="Assets\fonts\Linearicons-Free-v1.0.0\WebFont\Linearicons-Free.svg" />
     <Content Include="Assets\fonts\montserrat\OFL.txt" />
-    <Content Include="Assets\common-scripts.js" />
+    <Content Include="Assets\Admin\js\en\scripts.js" />
     <Content Include="Assets\lib\gritter\css\jquery.gritter.css" />
     <Content Include="Assets\lib\gritter\css\jquery.gritter0.css" />
     <Content Include="Assets\lib\gritter\images\gritter-light.png" />
@@ -486,10 +492,8 @@
     <Content Include="Scripts\README.md" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
-    <Content Include="Views\User\xGetAll.cshtml" />
     <Content Include="Views\Gate\GetAll.cshtml" />
     <Content Include="Views\Gate\GetList.cshtml" />
-    <Content Include="Views\Gate\x_ListBody.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

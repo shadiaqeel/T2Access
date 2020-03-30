@@ -133,14 +133,14 @@ namespace T2Access.API.Controllers
 
         [HttpGet]
         [CustomAuthorize(Roles = "Admin,User")]
-        [ResponseType(typeof(UserModel))]
+        [ResponseType(typeof(IUserModel))]
         public HttpResponseMessage GetById(Guid id)
         {
             if (id == null)
               return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.FilterMiss);
             
 
-            UserModel user = userService.GetById(id);
+            IUserModel user = userService.GetById(id);
 
             if(user==null)
               return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.UserNotExist);

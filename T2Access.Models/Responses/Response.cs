@@ -21,10 +21,10 @@ namespace T2Access.Models
 
     }
 
-    public class GateListResponse : ListResponse<GateModel>
+    public class GateListResponse : ListResponse<IGateModel>
     { }
 
-    public class UserListResponse : ListResponse<UserModel>
+    public class UserListResponse : ListResponse<IUserModel>
     { }
 
 }

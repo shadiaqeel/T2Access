@@ -47,6 +47,12 @@ body, html {
 	font-family: Poppins-Regular, sans-serif;
 }
 
+[dir="rtl"]body, html {
+    height: 100%;
+    font-family: Poppins-Regular, sans-serif;
+    text-align:right;
+}
+
 /*---------------------------------------------*/
 a {
 	font-family: Poppins-Regular;

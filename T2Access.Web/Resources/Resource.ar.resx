@@ -144,11 +144,17 @@
   <data name="CreateUser" xml:space="preserve">
     <value>مستخدم جديد</value>
   </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>الصفحه الرئيسيه</value>
+  </data>
   <data name="Delete" xml:space="preserve">
     <value>حذف</value>
   </data>
   <data name="Edit" xml:space="preserve">
     <value>تحرير</value>
+  </data>
+  <data name="First" xml:space="preserve">
+    <value>الأول</value>
   </data>
   <data name="Gates" xml:space="preserve">
     <value>البوابات</value>
@@ -156,14 +162,32 @@
   <data name="GateTable" xml:space="preserve">
     <value>جدول الأبواب</value>
   </data>
+  <data name="Last" xml:space="preserve">
+    <value>الأخير</value>
+  </data>
+  <data name="lengthMenu" xml:space="preserve">
+    <value>عرض _MENU_  عناصر لكل صفحه</value>
+  </data>
   <data name="Logout" xml:space="preserve">
     <value>تسجيل الخروج</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>التالي</value>
   </data>
   <data name="Password" xml:space="preserve">
     <value>كلمة السر</value>
   </data>
+  <data name="Previous" xml:space="preserve">
+    <value>السابق</value>
+  </data>
   <data name="Reset" xml:space="preserve">
     <value>تغير كلمة السر</value>
+  </data>
+  <data name="SignIn" xml:space="preserve">
+    <value>تسجيل الدخول</value>
+  </data>
+  <data name="SInfoTable" xml:space="preserve">
+    <value>عرض _START_ الى _END_  من _TOTAL_ عنصر</value>
   </data>
   <data name="Username" xml:space="preserve">
     <value>اسم المستخدم</value>

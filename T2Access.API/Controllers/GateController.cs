@@ -113,7 +113,7 @@ namespace T2Access.API.Controllers
 
         [HttpGet]
         [CustomAuthorize(Roles = "Admin")]
-        [ResponseType(typeof(List<GateModel>))]
+        [ResponseType(typeof(List<IGateModel>))]
         public HttpResponseMessage GetCheckedListByUserId(Guid userId)
         {
             if (userId == null)

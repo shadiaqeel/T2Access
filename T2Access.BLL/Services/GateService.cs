@@ -24,7 +24,7 @@ namespace T2Access.BLL.Services
 
         }
 
-        public bool Edit(GateModel model)
+        public bool Edit(IGateModel model)
         {
             return gateManager.Update(model.ToEntity());
         }
@@ -66,7 +66,7 @@ namespace T2Access.BLL.Services
         }
 
 
-        public GateModel Login(LoginModel gateModel)
+        public IGateModel Login(LoginModel gateModel)
         {
 
             return gateManager.Login(gateModel).ToModel();

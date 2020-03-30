@@ -117,11 +117,26 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Active" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="Admin" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="Block" xml:space="preserve">
+    <value>Block</value>
+  </data>
+  <data name="blue" xml:space="preserve">
+    <value>blue</value>
+  </data>
   <data name="ConfirmPassword" xml:space="preserve">
     <value>Confirm Password</value>
   </data>
   <data name="FirstName" xml:space="preserve">
     <value>First Name</value>
+  </data>
+  <data name="green" xml:space="preserve">
+    <value>green</value>
   </data>
   <data name="LastName" xml:space="preserve">
     <value>Last Name</value>
@@ -143,6 +158,9 @@
   </data>
   <data name="Password" xml:space="preserve">
     <value>Password</value>
+  </data>
+  <data name="red" xml:space="preserve">
+    <value>red</value>
   </data>
   <data name="RequiredField" xml:space="preserve">
     <value>{0} required Field</value>

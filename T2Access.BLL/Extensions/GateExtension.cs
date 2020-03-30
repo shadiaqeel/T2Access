@@ -10,13 +10,14 @@ namespace T2Access.BLL.Extensions
     {
 
         #region Mapper
-        public static Gate ToEntity(this GateModel model)
+        public static Gate ToEntity(this IGateModel model)
         {
             return new Gate
             {
 
                 Id = model.Id,
                 UserName = model.UserName,
+                Password = model.Password,
                 NameAr = model.NameAr,
                 NameEn = model.NameEn,
                 Status = model.Status
@@ -24,7 +25,7 @@ namespace T2Access.BLL.Extensions
             };
         }
 
-        public static GateModel ToModel(this Gate gate)
+        public static IGateModel ToModel(this Gate gate)
         {
 
             return new GateModel
@@ -41,10 +42,10 @@ namespace T2Access.BLL.Extensions
         }
 
 
-        public static IList<GateModel> ToModel(this IList<Gate> gates)
+        public static IList<IGateModel> ToModel(this IList<Gate> gates)
         {
 
-            return gates.Select(c => c.ToModel()).ToList<GateModel>();
+            return gates.Select(c => c.ToModel()).ToList<IGateModel>();
 
         }
         #endregion

@@ -1,14 +1,16 @@
 ﻿@using T2Access.Web.Resources;
 @using T2Access.Web.Helper;
-@{
-    Culture = UICulture = "en";
 
-    System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture(Culture);
-    System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(Culture);
+@{
+
+
+    var dir = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.IsRightToLeft ? "rtl" : "ltr";
+
+
     }
 
 <!DOCTYPE html>
-<html lang="@Culture" dir="@(System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.IsRightToLeft ? "rtl" : "ltr")">
+<html lang="@this.ViewContext.RouteData.Values["lang"]" dir="@dir">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,8 +25,24 @@
     <!-- Custom styles for this template -------->
     @RenderSection("Styles", false)
 
-    @Styles.Render("~/Assets/User/css/style.css")
-    @Styles.Render("~/Assets/User/css/style-responsive.css")
+
+
+    @if (dir == "ltr")
+    {
+
+        @Styles.Render("~/Assets/Admin/css/en/style.css")
+        @Styles.Render("~/Assets/Admin/css/en/style-responsive.css")
+
+    }
+    else
+    {
+
+
+        @Styles.Render("~/Assets/Admin/css/ar/style.css")
+        @Styles.Render("~/Assets/Admin/css/ar/style-responsive.css")
+
+    }
+
     <!--========================================================================================================================================================================================== -->
 
 
@@ -36,24 +54,53 @@
     <section id="container">
         <!-- TOP BAR CONTENT & NOTIFICATIONS -->
         <!--header start-->
-        <header class="header black-bg">
+        <nav class=" navbar  header black-bg">
             <div class="sidebar-toggle-box">
                 <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
+                <!--logo start-->
+                <a href="@Url.Action("Index", "User")" class="logo "><b>t<span id="t">t</span><span>Ac</span>cess</b></a>
+                <!--logo end-->
             </div>
-            <!--logo start-->
-            <a href="@Url.Action("Index", "User")" class="logo "><b>t<span id="t">t</span><span>Ac</span>cess</b></a>
-            <!--logo end-->
-            <div class="nav notify-row" id="top_menu ">
 
-            </div>
+
+
             <div class="top-menu">
                 <ul class="nav pull-right top-menu">
+
+                    @{
+                        string currentLang = "en"; ;
+                        if (this.ViewContext.RouteData.Values["lang"] != null)
+                        {
+                            currentLang = this.ViewContext.RouteData.Values["lang"].ToString();
+                        }
+
+
+                        var targetPath = string.Format("/{0}/{1}{2}",
+                            ViewContext.RouteData.Values["controller"].ToString(),
+                            ViewContext.RouteData.Values["action"].ToString(),
+                            Request.Url.Query);
+                        var hostRoot = string.Format("{0}://{1}", Request.Url.Scheme, Request.Url.Authority);
+                        var targetUrlMask = string.Format("{0}/{{0}}/{1}", hostRoot, targetPath);
+
+                        <li class="dropdown special">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                @(currentLang)
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu lang-selector">
+                                @foreach (var lang in new string[] { "en", "ar" })
+                                {
+                                    <li><a href="@(string.Format(targetUrlMask, lang))">@lang</a></li>
+                                }
+                            </ul>
+                        </li>
+                    }
                     <li>
                         @Html.ActionLink(Resource.Logout, "LogOut", "Account", null, new { @class = "logout fa fa-sign-out btn" })
                     </li>
                 </ul>
             </div>
-        </header>
+        </nav>
         <!--header end-->
         <!--MAIN SIDEBAR MENU -->
         <!--sidebar start-->
@@ -67,7 +114,7 @@
                     <li class="mt">
                         <a class="@Html.IsSelected("User","index", "active")" href="@Url.Action("Index", "User")">
                             <i class="fa fa-dashboard"></i>
-                            <span>Dashboard</span>
+                            <span>@Resource.Dashboard</span>
                         </a>
                     </li>
                     <li class="sub-menu">
@@ -142,9 +189,17 @@
     @Scripts.Render("~/Assets/lib/jquery.sparkline.js")
     <!--Scripts for Page-->
     @RenderSection("Scripts", false)
-  
+
     <!--common script for all pages-->
-    @Scripts.Render("~/Assets/common-scripts.js")
+    @if (dir == "ltr")
+    {
+        @Scripts.Render("~/Assets/Admin/js/en/scripts.js")
+    }
+    else
+    {
+        @Scripts.Render("~/Assets/Admin/js/ar/scripts.js")
+
+    }
     @Scripts.Render("~/Assets/lib/gritter/js/jquery.gritter.js")
     @Scripts.Render("~/Assets/lib/toastr/js/toastr.min.js")
     <!--=================================================================================================-->
