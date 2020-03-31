@@ -46,6 +46,8 @@
   <ItemGroup>
     <Compile Include="BaseTypes\BaseModel.cs" />
     <Compile Include="BaseTypes\IBaseModel.cs" />
+    <Compile Include="Dtos\GateDto.cs" />
+    <Compile Include="Dtos\UserDto.cs" />
     <Compile Include="GateModels.cs" />
     <Compile Include="ResetPasswordModel .cs" />
     <Compile Include="Responses\Response.cs" />

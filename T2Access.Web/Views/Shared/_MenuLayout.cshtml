@@ -81,22 +81,22 @@
                             Request.Url.Query);
                         var hostRoot = string.Format("{0}://{1}", Request.Url.Scheme, Request.Url.Authority);
                         var targetUrlMask = string.Format("{0}/{{0}}/{1}", hostRoot, targetPath);
-
-                        <li class="dropdown special">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 @(currentLang)
-                                <span class="caret"></span>
                             </a>
-                            <ul class="dropdown-menu lang-selector">
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 @foreach (var lang in new string[] { "en", "ar" })
                                 {
-                                    <li><a href="@(string.Format(targetUrlMask, lang))">@lang</a></li>
+                                    <a class="dropdown-item" href="@(string.Format(targetUrlMask, lang))">@lang</a>
+
                                 }
-                            </ul>
+                            </div>
                         </li>
+
                     }
                     <li>
-                        @Html.ActionLink(Resource.Logout, "LogOut", "Account", null, new { @class = "logout fa fa-sign-out btn" })
+                        @Html.ActionLink($"   {Resource.Logout}", "LogOut", "Account", null, new { @class = "logout fa fa-sign-out btn" })
                     </li>
                 </ul>
             </div>

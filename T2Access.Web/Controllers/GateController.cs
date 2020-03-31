@@ -66,8 +66,9 @@ namespace T2Access.Web.Controllers
             var NameAr = Request["columns[1][search][value]"];
             var NameEn = Request["columns[2][search][value]"];
             var status = Request["columns[3][search][value]"];
+            var order = $"{sortColumnName} {sortDirection}";
 
-            var response = await httpService.GetAsync($"GetListWithFilter?UserName={userName}&NameAr={NameAr}&NameEn={NameEn}&Status={status}&PageSize={length}&Skip={start}", token: (string)Session["Token"]);
+            var response = await httpService.GetAsync($"GetListWithFilter?UserName={userName}&NameAr={NameAr}&NameEn={NameEn}&Status={status}&PageSize={length}&Skip={start}&Order={order}", token: (string)Session["Token"]);
 
 
             if (response.IsSuccessStatusCode)
@@ -84,9 +85,7 @@ namespace T2Access.Web.Controllers
                     int totalrowsafterfiltering = gates.ResponseList.Count;
 
 
-                    //sorting 
-                    if (!string.IsNullOrEmpty(sortColumnName))
-                        gates.ResponseList = gates.ResponseList.OrderBy($"{sortColumnName} {sortDirection}").ToList<GateViewModel>();
+
 
 
 
@@ -118,7 +117,7 @@ namespace T2Access.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(GateSignUpModel model)
+        public async Task<ActionResult> Create(SignUpGateModel model)
         {
             if (!ModelState.IsValid)
             {

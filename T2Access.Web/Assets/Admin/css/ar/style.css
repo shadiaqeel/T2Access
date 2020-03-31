@@ -419,7 +419,7 @@ ul.sidebar-menu li {
         color: #aeb2b7;
         text-decoration: none;
         display: block;
-        padding: 15px 0 15px 10px;
+        padding: 15px 10px 15px 10px;
         font-size: 12px;
         outline: none;
         -webkit-transition: all 0.3s ease;
@@ -3861,10 +3861,9 @@ table.table {
 
 
 
-
-
-
-
+.fa:before{
+padding:3px;
+}
 /* Copyrights */
 #copyrights {
     background: #222222;

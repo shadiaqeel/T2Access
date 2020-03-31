@@ -6,16 +6,16 @@ namespace T2Access.BLL.Services
 {
     public interface IUserService
     {
-        bool Create(UserSignUpModel user);
-        IUserModel Login(LoginModel user);
+        bool Create(SignUpUserModel user);
+        UserDto Login(LoginModel user);
         bool CheckUserName(string userName);
-        IUserModel GetById(Guid userId);
-        UserListResponse GetList(UserFilterModel user);
+        UserDto GetById(Guid userId);
+        UserListResponse GetList(FilterUserModel user);
         bool Assign(UserGateModel userGate);
         bool Unassign(UserGateModel userGate);
         bool Delete(Guid id);
 
-        bool Edit(UserUpdateModel model);
+        bool Edit(UpdateUserModel model);
         bool ResetPassword(ResetPasswordModel model);
 
     }

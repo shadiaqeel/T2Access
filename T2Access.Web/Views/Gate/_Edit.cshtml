@@ -1,6 +1,7 @@
 ﻿@model T2Access.Models.GateViewModel
 @using T2Access.Web.Resources
 
+@using T2Access.Web.Helper
 
 
 
@@ -54,7 +55,7 @@
             <div class="form-group  col-md-5">
                 @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-md-10" })
                 <div class="col-md-12">
-                    @Html.EnumDropDownListFor(model => model.Status, htmlAttributes: new { @class = "dropdown-toggle" })
+                    @Html.EnumDropDownListWithStringFor(model => model.Status, htmlAttributes: new { @class = "dropdown-toggle" })
                     @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -63,7 +64,7 @@
     <div class="modal-footer justify-content-lg-center">
 
         <div class="form-group">
-            <input type="submit" value=@Resource.Edit class="btn btn-primary " />
+            <input type="submit" value=@Resource.Update class="btn btn-primary " />
 
             <button type="button" class="btn btn-outline-dark" data-dismiss="modal">@Resource.Cancel</button>
         </div>

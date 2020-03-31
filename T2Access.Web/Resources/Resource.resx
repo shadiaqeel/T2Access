@@ -189,6 +189,9 @@
   <data name="SInfoTable" xml:space="preserve">
     <value>showing _START_ to _END_  of _TOTAL_ entries</value>
   </data>
+  <data name="Update" xml:space="preserve">
+    <value>Update</value>
+  </data>
   <data name="Username" xml:space="preserve">
     <value>Username</value>
   </data>

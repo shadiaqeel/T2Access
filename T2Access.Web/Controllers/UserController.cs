@@ -72,10 +72,10 @@ namespace T2Access.Web.Controllers
             var status = Request["columns[3][search][value]"];
 
 
-        
 
+            var order= $"{sortColumnName} {sortDirection}";
 
-            var response = await httpService.GetAsync($"GetListWithFilter?UserName={userName}&FirstName={firstName}&LastName={lastName}&Status={status}&Skip={start}&PageSize={length}", token: (string)Session["Token"]);
+            var response = await httpService.GetAsync($"GetListWithFilter?UserName={userName}&FirstName={firstName}&LastName={lastName}&Status={status}&Skip={start}&PageSize={length}&Order={order}", token: (string)Session["Token"]);
 
 
             if (response.IsSuccessStatusCode)
@@ -89,9 +89,7 @@ namespace T2Access.Web.Controllers
                     int totalrowsafterfiltering = users.ResponseList.Count;
 
 
-                    //sorting 
-                    if (!string.IsNullOrEmpty(sortColumnName))
-                        users.ResponseList = users.ResponseList.OrderBy($"{sortColumnName} {sortDirection}").ToList<UserViewModel>();
+
 
 
 
@@ -119,7 +117,7 @@ namespace T2Access.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(UserSignUpModel model)
+        public async Task<ActionResult> Create(SignUpUserModel model)
         {
             if (!ModelState.IsValid)
             {

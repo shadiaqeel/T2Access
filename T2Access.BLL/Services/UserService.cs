@@ -5,6 +5,8 @@ using T2Access.DAL.Helper;
 using T2Access.Models;
 using T2Access.BLL.Extensions;
 using System.Linq;
+using System.Linq.Dynamic;
+
 
 namespace T2Access.BLL.Services
 {
@@ -12,13 +14,12 @@ namespace T2Access.BLL.Services
     {
         private readonly IUserManager userManager = ManagerFactory.GetUserManager(Variables.DatabaseProvider);
         private readonly IUserGateManager userGateManager = ManagerFactory.GetUserGateManager(Variables.DatabaseProvider);
+        
 
 
 
-
-
-
-        public bool Create(UserSignUpModel model)
+        //==========================================================================
+        public bool Create(SignUpUserModel model)
         {
 
             Guid id = (userManager.Create(model.ToEntity())).Id;
@@ -42,8 +43,9 @@ namespace T2Access.BLL.Services
 
         }
 
+        //==========================================================================
 
-        public bool Edit(UserUpdateModel model)
+        public bool Edit(UpdateUserModel model)
         {
 
 
@@ -71,25 +73,30 @@ namespace T2Access.BLL.Services
 
         }
 
-
-        public UserListResponse GetList(UserFilterModel filter)
+        //==========================================================================
+        public UserListResponse GetList(FilterUserModel filter)
         {
 
             var userList =  userManager.GetWithFilter(filter.ToEntity());
 
             var _totalSize = userList.Count;
 
+            //sorting 
+            if (!string.IsNullOrEmpty(filter.Order))
+                userList = userList.OrderBy(filter.Order).ToList<User>();
+
+
             //paging
             if (filter.Skip != null && filter.PageSize != null)
                 userList = userList.Skip((int)filter.Skip).Take((int)filter.PageSize).ToList<User>();
 
-            return new UserListResponse () { ResponseList = userList.ToModel(), totalEntities = _totalSize };
+            return  new UserListResponse() { ResponseList = userList.ToDto(), totalEntities = _totalSize };
 
 
 
         }
 
-
+        //==========================================================================
 
         public bool Delete(Guid id)
         {
@@ -103,32 +110,36 @@ namespace T2Access.BLL.Services
             return false; 
         }
 
-
+        //==========================================================================
 
         public bool CheckUserName(string userName) {
 
             return userManager.GetByUserName(userName) == null ? true : false;
 
-        }    
-        
-        public IUserModel GetById(Guid userId) {
-
-            return userManager.GetById(userId).ToModel();
-
         }
 
+        //==========================================================================
 
-        public IUserModel Login(LoginModel user)
+        public UserDto GetById(Guid userId) {
+
+            return  userManager.GetById(userId).ToDto(); 
+
+        }
+        //==========================================================================
+
+        public UserDto Login(LoginModel model)
         {
 
-         return userManager.Login(user).ToModel();
+            return userManager.Login(model).ToDto();
 
         }
+        //==========================================================================
 
         public bool ResetPassword(ResetPasswordModel model)
         {
             return userManager.ResetPassword(model);
         }
+        //==========================================================================
 
 
         public bool Assign(UserGateModel userGate)
@@ -137,6 +148,7 @@ namespace T2Access.BLL.Services
             return userGateManager.Create(userGate.ToEntity()) == null ? false : true;
         }
 
+        //==========================================================================
 
 
         public bool Unassign(UserGateModel userGate)

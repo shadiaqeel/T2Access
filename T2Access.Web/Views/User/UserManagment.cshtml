@@ -26,7 +26,7 @@
     <div class="col-md-12">
         <div class="content-panel  ">
             <h4  style="display: inline;"> @Resource.UserTable </h4>
-            @Html.ActionLink($"{Resource.CreateUser}", "Create", "User", null, new { @class = "fa  fa-plus btn btn-lg  btn-success pull-away" })
+            @Html.ActionLink($"     {Resource.CreateUser}", "Create", "User", null, new { @class = "fa  fa-plus btn btn-lg  btn-success pull-away" })
             <br />
 
             @*DataTable Area*@
@@ -151,7 +151,7 @@
                     },
                     {
                         data: null, "orderable": false, autoWidth: true, render: function (type, data, row) {
-                            return `<a title="@Resource.Edit" class="btn btn- btn-primary btn-s fa fa-pencil"  href="/User/Edit/${row["Id"]}" ></a>
+                            return `<a title="@Resource.Edit" class="btn btn- btn-primary btn-s fa fa-pencil"  href="@Url.Action("Edit","User")/${row["Id"]}" ></a>
                                     <button title="@Resource.Delete" class="btn btn-danger btn-s  fa fa-trash-o btnDelete" data-toggle="modal" data-id="${row["Id"]}"  title="Delete User" ></button>
                                     <button title=" @Resource.Reset" class="btn btn-warning btn-s fa fa-key" data-toggle="modal" title="Edit password" onclick='ResetPasswordModal({Id:"${row["Id"]}",UserName:"${row["UserName"]}"})'></button> `;
                         }

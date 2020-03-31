@@ -21,7 +21,6 @@ $(document).ready(function () {
 
 
             });
-
         },
         deferRender: true,
         ordering: true,
@@ -52,14 +51,20 @@ $(document).ready(function () {
                 checkboxes: { selectRow: true },
 
             },
-            { data: "NameAr", name: "NameAr" },
-            { data: "NameEn", name: "NameEn" }
+            { data: "NameAr", name: "NameAr", autoWidth: true },
+            { data: "NameEn", name: "NameEn", autoWidth: true }
         ],
         select: {
             style: 'multi',
             selector: 'td:first-child'
 
-        }
+        },
+        preDrawCallback: function () {
+            debugger
+            $('div.dataTables_filter input').addClass("form-control form-control-sm");
+            debugger
+        },
+        
 
     });
 
@@ -67,7 +72,6 @@ $(document).ready(function () {
         $(this).toggleClass('selected');
     });
 
-    console.log(selectGateTable);
 
 });
 

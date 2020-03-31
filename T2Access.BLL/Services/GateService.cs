@@ -5,6 +5,8 @@ using T2Access.DAL.Helper;
 using T2Access.Models;
 using T2Access.BLL.Extensions;
 using System.Linq;
+using System.Linq.Dynamic;
+using T2Access.Models.Dtos;
 
 namespace T2Access.BLL.Services
 {
@@ -17,19 +19,20 @@ namespace T2Access.BLL.Services
         private IGateManager gateManager = ManagerFactory.GetGateManager(Variables.DatabaseProvider);
 
 
-        public bool Create(GateSignUpModel gateModel)
+        public bool Create(SignUpGateModel gateModel)
         {
 
             return gateManager.Create(gateModel.ToEntity()) == null ? false : true ;
 
         }
 
-        public bool Edit(IGateModel model)
+        //==================================================================================
+        public bool Edit(GateModel model)
         {
             return gateManager.Update(model.ToEntity());
         }
-
-        public GateListResponse GetListWithFilter(GateFilterModel filter)
+        //==================================================================================
+        public GateListResponse GetListWithFilter(FilterGateModel filter)
         {
 
 
@@ -38,7 +41,9 @@ namespace T2Access.BLL.Services
 
             var _totalSize = gateList.Count;
 
-
+            //sorting 
+            if (!string.IsNullOrEmpty(filter.Order))
+                gateList = gateList.OrderBy(filter.Order).ToList<Gate>();
 
             //paging
 
@@ -48,37 +53,39 @@ namespace T2Access.BLL.Services
 
 
 
-            return new GateListResponse() { ResponseList = gateList.ToModel(), totalEntities = _totalSize };
+
+            return new GateListResponse() { ResponseList = gateList.ToDto(), totalEntities = _totalSize } ;
 
         }
-
+        //==================================================================================
         public IList<CheckedGateModel> GetCheckedListByUserId(Guid userId)
         {
 
             return gateManager.GetCheckedByUserId(userId);
 
         }
-
+        //==================================================================================
         public bool CheckUserName(string userName)
         {
             return gateManager.GetByUserName(userName) == null ? true : false;
 
         }
+        //==================================================================================
 
-
-        public IGateModel Login(LoginModel gateModel)
+        public GateDto Login(LoginModel gate)
         {
 
-            return gateManager.Login(gateModel).ToModel();
+            return gateManager.Login(gate).ToDto();
+
 
 
         }
-
+        //==================================================================================
         public bool Delete(Guid id)
         {
             return gateManager.Delete(new Gate() { Id = id});
-        }  
-        
+        }
+        //==================================================================================
         public bool ResetPassword(ResetPasswordModel model)
         {
             return gateManager.ResetPassword(model);

@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Mvc.Html;
 using System.Web.Routing;
 
 namespace T2Access.Web.Helper
@@ -50,6 +51,13 @@ namespace T2Access.Web.Helper
             }
         }
 
-      
+
+        public static MvcHtmlString EnumDropDownListWithStringFor<TModel, TEnum>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TEnum>> expression, object htmlAttributes)
+        {
+            var selectListItem = Enum.GetNames(Nullable.GetUnderlyingType(typeof(TEnum))).Select(p => new SelectListItem() { Value = p, Text = p }).ToList();
+            return SelectExtensions.DropDownListFor(htmlHelper, expression, selectListItem, htmlAttributes);
+        }
+
+
     }
 }

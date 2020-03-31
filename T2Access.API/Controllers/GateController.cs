@@ -10,6 +10,7 @@ using T2Access.API.Helper;
 using T2Access.API.Resources;
 using T2Access.BLL.Services;
 using T2Access.Models;
+using T2Access.Models.Dtos;
 using T2Access.Security.Tokenization.Models;
 
 namespace T2Access.API.Controllers
@@ -65,7 +66,7 @@ namespace T2Access.API.Controllers
 
         [HttpPost]
         [ResponseType(typeof(string))]
-        public HttpResponseMessage SignUp(GateSignUpModel gate)
+        public HttpResponseMessage SignUp(SignUpGateModel gate)
         {
 
             //if (!ModelState.IsValid)
@@ -99,7 +100,7 @@ namespace T2Access.API.Controllers
         [HttpGet]
         [CustomAuthorize(Roles = "Admin")]
         [ResponseType(typeof(GateListResponse))]
-        public HttpResponseMessage GetListWithFilter([FromUri]GateFilterModel filter)
+        public HttpResponseMessage GetListWithFilter([FromUri]FilterGateModel filter)
         {
             if (filter == null)
             {
@@ -113,7 +114,7 @@ namespace T2Access.API.Controllers
 
         [HttpGet]
         [CustomAuthorize(Roles = "Admin")]
-        [ResponseType(typeof(List<IGateModel>))]
+        [ResponseType(typeof(List<GateDto>))]
         public HttpResponseMessage GetCheckedListByUserId(Guid userId)
         {
             if (userId == null)

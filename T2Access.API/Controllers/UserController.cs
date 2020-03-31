@@ -82,12 +82,8 @@ namespace T2Access.API.Controllers
 
         [HttpPost]
         [ResponseType(typeof(string))]
-        public HttpResponseMessage SignUp(UserSignUpModel user)
+        public HttpResponseMessage SignUp(SignUpUserModel user)
         {
-
-            //if (!ModelState.IsValid)
-            //    return Request.CreateResponse(HttpStatusCode.NotFound, ModelState);
-
 
 
 
@@ -100,18 +96,12 @@ namespace T2Access.API.Controllers
                 else
                 {
                     return Request.CreateResponse(HttpStatusCode.NotFound, Resource.SignupFailed);
-
                 }
             }
             else
             {
                 return Request.CreateResponse(HttpStatusCode.NotFound, Resource.UserExist);
-
-
             }
-
-
-
         }
 
 
@@ -120,7 +110,7 @@ namespace T2Access.API.Controllers
         [HttpGet]
         [CustomAuthorize(Roles = "Admin,User")]
         [ResponseType(typeof(UserListResponse))]
-        public HttpResponseMessage GetListWithFilter([FromUri]UserFilterModel filter)
+        public HttpResponseMessage GetListWithFilter([FromUri]FilterUserModel filter)
         {
             if (filter == null)
             {
@@ -131,16 +121,19 @@ namespace T2Access.API.Controllers
 
         }
 
+
+
+
         [HttpGet]
         [CustomAuthorize(Roles = "Admin,User")]
-        [ResponseType(typeof(IUserModel))]
+        [ResponseType(typeof(UserDto))]
         public HttpResponseMessage GetById(Guid id)
         {
             if (id == null)
               return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.FilterMiss);
             
 
-            IUserModel user = userService.GetById(id);
+            UserDto user = userService.GetById(id);
 
             if(user==null)
               return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.UserNotExist);
@@ -172,7 +165,7 @@ namespace T2Access.API.Controllers
         [HttpPut]
         [CustomAuthorize(Roles = "Admin,User")]
         [ResponseType(typeof(List<string>))]
-        public HttpResponseMessage Edit(Guid id, [FromBody] UserUpdateModel model)
+        public HttpResponseMessage Edit(Guid id, [FromBody] UpdateUserModel model)
         {
             model.Id = id;
             if (userService.Edit(model))

@@ -12,7 +12,42 @@ namespace T2Access.BLL.Extensions
     {
 
         #region mapper
-        public static User ToEntity(this IUserModel model)
+
+
+
+
+        public static User ToEntity(this SignUpUserModel user)
+        {
+            return new User
+            {
+                UserName = user.UserName,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Password = user.Password
+
+            };
+        
+        }
+
+
+        //public static User ToEntity(this UpdateUserModel user)
+        //{
+        //    return new User
+        //    {
+        //        Id = user.Id,
+        //        FirstName = user.FirstName,
+        //        LastName = user.LastName,
+        //        Status = user.Status
+
+        //    };
+
+        //}
+
+
+
+
+
+        public static User ToEntity(this UserModel model)
         {
             return new User {
 
@@ -25,10 +60,10 @@ namespace T2Access.BLL.Extensions
             };
         }
 
-        public static IUserModel ToModel(this User user)
+        public static UserDto ToDto(this User user)
         {
 
-            return new UserModel
+            return new UserDto
             {
 
                 Id = user.Id,
@@ -40,10 +75,10 @@ namespace T2Access.BLL.Extensions
             };
         }
 
-        public static IList<IUserModel> ToModel(this IList<User> user)
+        public static IList<UserDto> ToDto(this IList<User> user)
         {
 
-            return user.Select(c => c.ToModel()).ToList<IUserModel>();
+            return user.Select(c => c.ToDto()).ToList<UserDto>();
 
         }
         #endregion

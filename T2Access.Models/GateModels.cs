@@ -6,33 +6,10 @@ using T2Access.Models.Resources;
 namespace T2Access.Models
 {
 
-    public interface IGateModel 
-    {
-         Guid Id { get; set; }
+  
 
 
-        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.UserName))]
-         string UserName { get; set; }
-
-        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.Password))]
-         string Password { get; set; }
-
-
-        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.NameAr))]
-         string NameAr { get; set; }
-
-        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.NameEn))]
-         string NameEn { get; set; }
-
-        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.Status))]
-         int? Status { get; set; }
-
-
-    }
-
-
-
-    public class GateModel : BaseModel , IGateModel
+    public class GateModel : BaseModel 
     {
         public Guid Id { get; set; }
 
@@ -47,8 +24,8 @@ namespace T2Access.Models
         public string NameEn { get; set; }
 
         [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.Status))]
+
         public int? Status { get; set; }
-        public string Password { get ; set ; }
     }
 
     //=====================================================================================================
@@ -60,23 +37,19 @@ namespace T2Access.Models
     }
 
 
-    public class GateFilterModel : GateModel
+    public class FilterGateModel : GateModel
     {
         public int? PageSize { get; set; }
         public int? Skip { get; set; }
+        public string Order { get; set; }
     }
-
-
-
-
-
 
 
 
     //=====================================================================================================
 
 
-    public class GateSignUpModel : IGateModel, IAuthModel
+    public class SignUpGateModel
     {
 
         [Required(ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "RequiredField")]
@@ -116,8 +89,6 @@ namespace T2Access.Models
         [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.NameEn))]
 
          public string NameEn { get; set; }
-        public Guid Id { get; set; } = Guid.Empty;
-        public int? Status { get; set; } = 0;
     }
 
     //=====================================================================================================

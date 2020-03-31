@@ -7,32 +7,11 @@ using T2Access.Models.Resources;
 namespace T2Access.Models
 {
 
-    public interface IUserModel 
-    {
-         Guid Id { get; set; }
-
-        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.UserName))]
-         string UserName { get; set; }
-
-        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.Password))]
-        string password { get; set; }
-
-        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.FirstName))]
-         string FirstName { get; set; }
-
-        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.LastName))]
-         string LastName { get; set; }
-
-        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.Status))]
-         int? Status { get; set; }
-
-
-    }
 
 
 
 
-    public class UserModel : BaseModel , IUserModel
+    public class UserModel : BaseModel 
     {
         [Key]
         public Guid Id { get; set; }
@@ -52,10 +31,11 @@ namespace T2Access.Models
 
         [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.Status))]
         public int? Status { get; set; } = 0;
+
     }
     //=====================================================================================================
 
-    public class UserUpdateModel : UserModel
+    public class UpdateUserModel : UserModel
     {
         public string GateList { get; set; }
 
@@ -64,11 +44,12 @@ namespace T2Access.Models
     //=====================================================================================================
 
 
-    public class UserFilterModel : UserModel
+    public class FilterUserModel : UserModel
     {
 
         public int? PageSize { get; set; }
         public int? Skip { get; set; }
+        public string Order { get; set; }
 
     }
 
@@ -77,13 +58,13 @@ namespace T2Access.Models
 
 
 
-    public class UserSignUpModel : UserModel, IAuthModel
+    public class SignUpUserModel
     {
         [Required(ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "RequiredField")]
         [MaxLength(150, ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "LessThen")]
         [MinLength(8, ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "MoreThen")]
         [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.UserName))]
-        new public string UserName { get; set; }
+         public string UserName { get; set; }
 
         [Required(ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "RequiredField")]
         [MaxLength(150, ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "LessThen")]
@@ -109,13 +90,15 @@ namespace T2Access.Models
         [MaxLength(150, ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "LessThen")]
         [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.FirstName))]
 
-        new public string FirstName { get; set; }
+
+         public string FirstName { get; set; }
 
         [Required(ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "RequiredField")]
         [MaxLength(150, ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "LessThen")]
         [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.LastName))]
 
-        new public string LastName { get; set; }
+        public string LastName { get; set; }
+
 
         public string GateList { get; set; }
 

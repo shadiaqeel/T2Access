@@ -189,6 +189,9 @@
   <data name="SInfoTable" xml:space="preserve">
     <value>عرض _START_ الى _END_  من _TOTAL_ عنصر</value>
   </data>
+  <data name="Update" xml:space="preserve">
+    <value>تحديث</value>
+  </data>
   <data name="Username" xml:space="preserve">
     <value>اسم المستخدم</value>
   </data>

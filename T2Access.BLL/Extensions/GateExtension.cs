@@ -3,6 +3,7 @@ using System.Linq;
 
 using T2Access.DAL;
 using T2Access.Models;
+using T2Access.Models.Dtos;
 
 namespace T2Access.BLL.Extensions
 {
@@ -10,14 +11,35 @@ namespace T2Access.BLL.Extensions
     {
 
         #region Mapper
-        public static Gate ToEntity(this IGateModel model)
+
+
+
+        public static Gate ToEntity(this SignUpGateModel gate)
+        {
+            return new Gate
+            {
+                UserName = gate.UserName,
+                NameAr = gate.NameAr,
+                NameEn = gate.NameEn,
+                Password = gate.Password
+
+            };
+
+        }
+
+
+
+
+
+
+
+        public static Gate ToEntity(this GateModel model)
         {
             return new Gate
             {
 
                 Id = model.Id,
                 UserName = model.UserName,
-                Password = model.Password,
                 NameAr = model.NameAr,
                 NameEn = model.NameEn,
                 Status = model.Status
@@ -25,10 +47,12 @@ namespace T2Access.BLL.Extensions
             };
         }
 
-        public static IGateModel ToModel(this Gate gate)
+
+
+        public static GateDto ToDto(this Gate gate)
         {
 
-            return new GateModel
+            return new GateDto
             {
 
                 Id = gate.Id,
@@ -38,14 +62,15 @@ namespace T2Access.BLL.Extensions
                 Status = (int)gate.Status
 
             };
-
         }
 
 
-        public static IList<IGateModel> ToModel(this IList<Gate> gates)
+
+
+        public static IList<GateDto> ToDto(this IList<Gate> gates)
         {
 
-            return gates.Select(c => c.ToModel()).ToList<IGateModel>();
+            return gates.Select(c => c.ToDto()).ToList<GateDto>();
 
         }
         #endregion

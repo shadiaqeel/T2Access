@@ -19,7 +19,7 @@
     <div class="col-md-12">
         <div class="content-panel   ">
                 <h4  style="display: inline;">@Resource.GateTable</h4>
-                <button class=" fa  fa-plus btn btn-success pull-away " data-toggle="modal" onclick="createModal()"> @Resource.CreateGate</button>
+                <button class=" fa  fa-plus btn btn-success pull-away " data-toggle="modal" onclick="createModal()">    @Resource.CreateGate</button>
                 <br />
             <table class="table table-striped table-advance table-hover" id="DTable" width="100%">
                 @*Search Area*@
@@ -130,7 +130,7 @@
                         {
                             data: null, "orderable": false, render: function (type, data, row) {
 
-                                return `<button title="@Resource.Edit" class="btn btn-primary btn-s  fa fa-pencil" data-toggle="modal" onclick='editModal({Id:"${row["Id"]}",UserName:"${row["UserName"]}",NameAr:"${row["NameAr"]}",NameEn:"${row["NameEn"]}",Status:"${row["Status"]}"})'></button>
+                                return `<button title="@Resource.Edit" class="btn btn-primary btn-s  fa fa-pencil" data-toggle="modal" onclick='editModal({Id:"${row["Id"]}",UserName:"${row["UserName"]}",NameAr:"${row["NameAr"]}",NameEn:"${row["NameEn"]}",Status:"${row["Status"].split("_")[1]}"})'></button>
                                     <button title="@Resource.Delete" class="btn btn-danger btn-s  fa fa-trash-o btnDelete" data-toggle="modal" data-id="${row["Id"]}" title="Delete Gate"></button>
                                     <button title=" @Resource.Reset" class="btn btn-warning btn-s fa fa-key" data-toggle="modal" onclick='ResetPasswordModal({Id:"${row["Id"]}",UserName:"${row["UserName"]}"})'></button>
 `;
@@ -149,7 +149,14 @@
                         "infoEmpty": "No records available",
                         //"infoFiltered": "(filtered from _MAX_ total records)",
                         "sInfoFiltered": "",
-                        "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading....</span> '
+                        "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading....</span> ',
+                        "paginate": {
+                        "next": "@Resource.Next",
+                        "previous" :"@Resource.Previous",
+                        "first" :"@Resource.First",
+                        "last" :"@Resource.Last"
+
+                    }
                     }
                 });
             });
@@ -198,6 +205,7 @@
                     $("#UserName").val(data.UserName);
                     $("#NameAr").val(data.NameAr);
                     $("#NameEn").val(data.NameEn);
+                    debugger
                     $("#Status").val(data.Status);
 
                     $("#addEditModal").modal("show");
