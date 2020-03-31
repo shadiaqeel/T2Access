@@ -30,7 +30,7 @@ namespace T2Access.Models
 
         public bool Success { get; set; } = true;
 
-        public IList<string> Messages { get; set; } = new List<string>();
+        public string Message { get; set; } = string.Empty;
     }
 
 

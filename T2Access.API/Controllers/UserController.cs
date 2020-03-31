@@ -31,43 +31,41 @@ namespace T2Access.API.Controllers
             //    return Request.CreateResponse(HttpStatusCode.NotFound, ModelState);
 
 
-            var user = userService.Login(loginModel);
 
+            var response = userService.Login(loginModel);
+            var user = response.Data;
 
-            if (user != null)
+            if (response.Success)
             {
-                List<Claim> cliamList = new List<Claim>();
-                cliamList.Add(new Claim("UserId", user.Id.ToString()));
-                cliamList.Add(new Claim("Username", user.UserName));
-                cliamList.Add(new Claim("FirstName", user.FirstName));
-                cliamList.Add(new Claim("LastName", user.LastName));
+
+                    List<Claim> cliamList = new List<Claim>();
+                    cliamList.Add(new Claim("UserId", user.Id.ToString()));
+                    cliamList.Add(new Claim("Username", user.UserName));
+                    cliamList.Add(new Claim("FirstName", user.FirstName));
+                    cliamList.Add(new Claim("LastName", user.LastName));
 
 
 
-                if (Enum.IsDefined(typeof(UserStatus),user.Status))
-                    cliamList.Add(new Claim("Role",  $"{(UserStatus)user.Status},User"));
-                else
-                    cliamList.Add(new Claim("Role", $"{(UserStatus)0},User"));
+                    if (Enum.IsDefined(typeof(UserStatus), user.Status))
+                        cliamList.Add(new Claim("Role", $"{(UserStatus)user.Status},User"));
+                    else
+                        cliamList.Add(new Claim("Role", $"{(UserStatus)0},User"));
 
 
-                var token = AuthrizationFactory.GetAuthrization().GenerateToken(new JWTContainerModel()
-                {
+                    var token = AuthorizationFactory.GetAuthrization().GenerateToken(new JWTContainerModel()
+                    {
 
-                    ExpireMinutes = DateTime.Now.AddMinutes(15).Minute,
-                    Claims = cliamList.ToArray()
+                        ExpireMinutes = DateTime.Now.AddMinutes(15).Minute,
+                        Claims = cliamList.ToArray()
 
-                });
+                    });
 
+                    return Request.CreateResponse(HttpStatusCode.OK, new ServiceResponse<string>() { Data=token });
 
-                return Request.CreateResponse(HttpStatusCode.OK, token);
-
-            }
-            else
-            {
-                return Request.CreateResponse(HttpStatusCode.NotFound, Resource.UserNotExist);
 
             }
 
+            return Request.CreateResponse(HttpStatusCode.BadRequest, response);
 
         }
 
@@ -81,27 +79,21 @@ namespace T2Access.API.Controllers
         #region Admin Operations
 
         [HttpPost]
-        [ResponseType(typeof(string))]
+        [ResponseType(typeof(ServiceResponse<string>))]
         public HttpResponseMessage SignUp(SignUpUserModel user)
         {
 
-
-
-            if (userService.CheckUserName(user.UserName))
-            {
-                if (userService.Create(user))
+            var response = userService.Create(user);
+                if (response.Success)
                 {
-                    return Request.CreateResponse(HttpStatusCode.OK, Resource.SignupSuccess);
+                    return Request.CreateResponse(HttpStatusCode.OK,response);
                 }
                 else
                 {
-                    return Request.CreateResponse(HttpStatusCode.NotFound, Resource.SignupFailed);
+                    return Request.CreateResponse(HttpStatusCode.NotFound, response);
                 }
-            }
-            else
-            {
-                return Request.CreateResponse(HttpStatusCode.NotFound, Resource.UserExist);
-            }
+            
+
         }
 
 
@@ -109,14 +101,15 @@ namespace T2Access.API.Controllers
 
         [HttpGet]
         [CustomAuthorize(Roles = "Admin,User")]
-        [ResponseType(typeof(UserListResponse))]
+        [ResponseType(typeof(ServiceResponse<UserListResponse>))]
         public HttpResponseMessage GetListWithFilter([FromUri]FilterUserModel filter)
         {
             if (filter == null)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.FilterMiss);
+                return Request.CreateResponse(HttpStatusCode.BadRequest,new ServiceResponse<UserListResponse>() { Success = false, Message = Resource.FilterMiss });
             }
 
+ 
             return Request.CreateResponse(HttpStatusCode.OK, userService.GetList(filter));
 
         }
@@ -126,21 +119,21 @@ namespace T2Access.API.Controllers
 
         [HttpGet]
         [CustomAuthorize(Roles = "Admin,User")]
-        [ResponseType(typeof(UserDto))]
+        [ResponseType(typeof(ServiceResponse<UserDto>))]
         public HttpResponseMessage GetById(Guid id)
         {
             if (id == null)
-              return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.FilterMiss);
+              return Request.CreateResponse(HttpStatusCode.BadRequest, new ServiceResponse<UserDto>() { Success = false, Message = Resource.FilterMiss });
             
 
-            UserDto user = userService.GetById(id);
+            var  response = userService.GetById(id);
 
-            if(user==null)
-              return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.UserNotExist);
+            if(response.Success)
+                 return Request.CreateResponse(HttpStatusCode.OK, response);
+ 
+            else
+                return Request.CreateResponse(HttpStatusCode.NotFound, response);
 
-
-
-            return Request.CreateResponse(HttpStatusCode.OK, user);
 
         }
 
@@ -151,12 +144,13 @@ namespace T2Access.API.Controllers
         [ResponseType(typeof(string))]
         public HttpResponseMessage Delete(Guid id)
         {
-            if (userService.Delete(id))
+            var response = userService.Delete(id);
+            if (response.Success)
             {
-                return Request.CreateResponse(HttpStatusCode.OK, Resource.DeleteSuccess);
+                return Request.CreateResponse(HttpStatusCode.OK, response);
             }
 
-            return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.DeleteFailed);
+            return Request.CreateResponse(HttpStatusCode.BadRequest, response);
 
         }
 
@@ -164,16 +158,17 @@ namespace T2Access.API.Controllers
 
         [HttpPut]
         [CustomAuthorize(Roles = "Admin,User")]
-        [ResponseType(typeof(List<string>))]
+        [ResponseType(typeof(ServiceResponse<string>))]
         public HttpResponseMessage Edit(Guid id, [FromBody] UpdateUserModel model)
         {
             model.Id = id;
-            if (userService.Edit(model))
+            var response = userService.Edit(model);
+            if (response.Success)
             {
-                return Request.CreateResponse(HttpStatusCode.OK, Resource.EditSuccess);
+                return Request.CreateResponse(HttpStatusCode.OK, response);
             }
 
-            return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.EditFailed);
+            return Request.CreateResponse(HttpStatusCode.BadRequest, response);
 
         }
 
@@ -185,12 +180,14 @@ namespace T2Access.API.Controllers
         public HttpResponseMessage ResetPassword(Guid id, [FromBody] ResetPasswordModel model)
         {
             model.Id = id;
-            if (userService.ResetPassword(model))
+
+            var response = userService.ResetPassword(model);
+            if (response.Success)
             {
-                return Request.CreateResponse(HttpStatusCode.OK, Resource.EditSuccess);
+                return Request.CreateResponse(HttpStatusCode.OK, response);
             }
 
-            return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.EditFailed);
+            return Request.CreateResponse(HttpStatusCode.BadRequest, response);
 
         }
 
@@ -209,12 +206,13 @@ namespace T2Access.API.Controllers
         {
 
 
-            if (userService.Assign(userGate))
+             var response = userService.Assign(userGate);
+            if (response.Success)
             {
-                return Request.CreateResponse(HttpStatusCode.OK, Resource.AssignSuccess);
+                return Request.CreateResponse(HttpStatusCode.OK, response);
             }
-            else
-                return Request.CreateResponse(HttpStatusCode.NotFound, Resource.AssignFailed);
+
+            return Request.CreateResponse(HttpStatusCode.BadRequest, response);
         }
 
 
@@ -227,12 +225,13 @@ namespace T2Access.API.Controllers
         {
 
 
-            if (userService.Unassign(userGate))
+             var response = userService.Unassign(userGate);
+            if (response.Success)
             {
-                return Request.CreateResponse(HttpStatusCode.OK, Resource.UnassignSuccess);
+                return Request.CreateResponse(HttpStatusCode.OK, response);
             }
-            else
-                return Request.CreateResponse(HttpStatusCode.NotFound, Resource.UnassignFailed);
+
+            return Request.CreateResponse(HttpStatusCode.BadRequest, response);
         }
 
 

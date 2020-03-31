@@ -23,18 +23,19 @@ namespace T2Access.API.Controllers
 
 
         [HttpPost]
-        [ResponseType(typeof(string))]
+        [ResponseType(typeof(ServiceResponse<string>))]
         public HttpResponseMessage Login(LoginModel gate)
         {
             //if (!ModelState.IsValid)
             //    return Request.CreateResponse(HttpStatusCode.NotFound, ModelState);
 
 
-            var _gate = gateService.Login(gate);
+            var response = gateService.Login(gate);
 
-
-            if (_gate != null)
+            if (response.Success)
             {
+                var _gate = response.Data;
+
                 List<Claim> cliamList = new List<Claim>();
                 cliamList.Add(new Claim("GateId", _gate.Id.ToString()));
                 cliamList.Add(new Claim("UserName", _gate.UserName));
@@ -44,7 +45,7 @@ namespace T2Access.API.Controllers
 
 
 
-                var Token = AuthrizationFactory.GetAuthrization().GenerateToken(new JWTContainerModel()
+                var Token = AuthorizationFactory.GetAuthrization().GenerateToken(new JWTContainerModel()
                 {
 
                     ExpireMinutes = DateTime.Now.AddMinutes(15).Minute,
@@ -52,20 +53,20 @@ namespace T2Access.API.Controllers
 
                 });
 
-                return Request.CreateResponse(HttpStatusCode.OK, Token);
+                return Request.CreateResponse(HttpStatusCode.OK, new ServiceResponse<string>() { Data = Token });
             }
             else
-            {
-                return Request.CreateResponse(HttpStatusCode.NotFound, Resource.UserNotExist);
+            
+                return Request.CreateResponse(HttpStatusCode.NotFound, new ServiceResponse<string>() { Success = false, Message = Resource.UserNotExist });
 
-            }
+            
 
 
         }
 
 
         [HttpPost]
-        [ResponseType(typeof(string))]
+        [ResponseType(typeof(ServiceResponse<string>))]
         public HttpResponseMessage SignUp(SignUpGateModel gate)
         {
 
@@ -73,25 +74,18 @@ namespace T2Access.API.Controllers
             //    return Request.CreateResponse(HttpStatusCode.NotFound, ModelState);
 
 
+            var response = gateService.Create(gate);
 
-            if (gateService.CheckUserName(gate.UserName))
-            {
-                if (gateService.Create(gate))
+                if (response.Success)
                 {
-                    return Request.CreateResponse(HttpStatusCode.OK,  Resource.SignupSuccess);
+                    return Request.CreateResponse(HttpStatusCode.OK, response);
                 }
                 else
                 {
-                    return Request.CreateResponse(HttpStatusCode.NotFound, Resource.SignupFailed);
+                    return Request.CreateResponse(HttpStatusCode.NotFound, response);
 
                 }
-            }
-            else {
 
-                return Request.CreateResponse(HttpStatusCode.NotFound,Resource.UserExist);
-
-
-            }
 
 
         }
@@ -99,12 +93,12 @@ namespace T2Access.API.Controllers
 
         [HttpGet]
         [CustomAuthorize(Roles = "Admin")]
-        [ResponseType(typeof(GateListResponse))]
+        [ResponseType(typeof(ServiceResponse<GateListResponse>))]
         public HttpResponseMessage GetListWithFilter([FromUri]FilterGateModel filter)
         {
             if (filter == null)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.FilterMiss);
+                return Request.CreateResponse(HttpStatusCode.BadRequest, new ServiceResponse<string>(){ Success=false , Message = Resource.FilterMiss } );
 
             }
             return Request.CreateResponse(HttpStatusCode.OK, gateService.GetListWithFilter(filter));
@@ -114,12 +108,12 @@ namespace T2Access.API.Controllers
 
         [HttpGet]
         [CustomAuthorize(Roles = "Admin")]
-        [ResponseType(typeof(List<GateDto>))]
+        [ResponseType(typeof(ServiceResponse<List<GateDto>>))]
         public HttpResponseMessage GetCheckedListByUserId(Guid userId)
         {
             if (userId == null)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.FilterMiss);
+                return Request.CreateResponse(HttpStatusCode.BadRequest, new ServiceResponse<string>() { Success = false, Message = Resource.FilterMiss });
 
             }
             return Request.CreateResponse(HttpStatusCode.OK, gateService.GetCheckedListByUserId(userId));
@@ -129,47 +123,50 @@ namespace T2Access.API.Controllers
 
         [HttpDelete()]
         [CustomAuthorize(Roles = "Admin")]
-        [ResponseType(typeof(string))]
+        [ResponseType(typeof(ServiceResponse<string>))]
         public HttpResponseMessage Delete(Guid id)
         {
-            if (gateService.Delete(id))
+            var response = gateService.Delete(id);
+            if (response.Success)
             {
-                return Request.CreateResponse(HttpStatusCode.OK, Resource.DeleteSuccess);
+                return Request.CreateResponse(HttpStatusCode.OK, response);
             }
 
-            return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.DeleteFailed);
+            return Request.CreateResponse(HttpStatusCode.BadRequest, response );
 
         }
 
 
         [HttpPut]
         [CustomAuthorize(Roles = "Admin")]
-        [ResponseType(typeof(string))]
+        [ResponseType(typeof(ServiceResponse<string>))]
         public HttpResponseMessage Edit(Guid id, [FromBody] GateModel model)
         {
             model.Id = id;
-            if (gateService.Edit(model))
+            var response = gateService.Edit(model);
+            if (response.Success)
             {
-                return Request.CreateResponse(HttpStatusCode.OK, Resource.EditSuccess);
+                return Request.CreateResponse(HttpStatusCode.OK, response);
             }
 
-            return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.EditFailed);
+            return Request.CreateResponse(HttpStatusCode.BadRequest, response);
 
         }
 
 
         [HttpPut]
         [CustomAuthorize(Roles = "Admin")]
-        [ResponseType(typeof(string))]
+        [ResponseType(typeof(ServiceResponse<string>))]
         public HttpResponseMessage ResetPassword(Guid id, [FromBody] ResetPasswordModel model)
         {
             model.Id = id;
-            if (gateService.ResetPassword(model))
-            {
-                return Request.CreateResponse(HttpStatusCode.OK, Resource.EditSuccess);
-            }
+            var response = gateService.ResetPassword(model);
+                if (response.Success)
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, response);
+                }
 
-            return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.EditFailed);
+            return Request.CreateResponse(HttpStatusCode.BadRequest, response);
 
         }
 

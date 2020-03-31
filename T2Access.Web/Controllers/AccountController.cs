@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -18,7 +19,7 @@ namespace T2Access.Web.Controllers
         IHttpClientService httpService = new HttpClientService(new Uri(Variables.ServerBaseAddress));
 
 
-        // GET: Account
+        // GET: AccountC:\Users\dell\Source\Repos\T2Access\T2Access.Web\Controllers\AccountController.cs
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
@@ -39,13 +40,15 @@ namespace T2Access.Web.Controllers
 
             var response = await httpService.PostAsync("user/Login", model);
 
-            var result = await response.Content.ReadAsStringAsync();
-
 
             if (response.IsSuccessStatusCode)
             {
-                string token = await response.Content.ReadAsStringAsync();
-                token = token.Replace("\"", "");
+                 
+                var result = await response.Content.ReadAsAsync<ServiceResponse<string>>();
+
+
+                string token = result.Data.Replace("\"", "");
+
 
                 IAuthService authService = AuthrizationFactory.GetAuthrization();
 
@@ -126,8 +129,8 @@ namespace T2Access.Web.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                string token = await response.Content.ReadAsStringAsync();
-                token = token.Replace("\"", "");
+                var result= await response.Content.ReadAsAsync<IServiceResponce<string>>();
+                string token = result.Data.Replace("\"", "");
 
                 IAuthService authService = AuthrizationFactory.GetAuthrization();
 
@@ -154,21 +157,21 @@ namespace T2Access.Web.Controllers
 
 
 
-        // Regex to find only the language code part of the URL - language (aa) or locale (aa-AA) syntax
-        static readonly Regex removeLanguage = new Regex(@"/[a-z]{2}/|/[a-z]{2}-[a-zA-Z]{2}/", RegexOptions.Compiled);
+        //// Regex to find only the language code part of the URL - language (aa) or locale (aa-AA) syntax
+        //static readonly Regex removeLanguage = new Regex(@"/[a-z]{2}/|/[a-z]{2}-[a-zA-Z]{2}/", RegexOptions.Compiled);
 
-        [AllowAnonymous]
-        public ActionResult ChangeLanguage(string id)
-        {
-            if (!string.IsNullOrEmpty(id))
-            {
-                // Decode the return URL and remove any language selector from it
-                id = Server.UrlDecode(id);
-                id = removeLanguage.Replace(id, @"/");
-                return Redirect(id);
-            }
-            return Redirect(@"/");
-        }
+        //[AllowAnonymous]
+        //public ActionResult ChangeLanguage(string id)
+        //{
+        //    if (!string.IsNullOrEmpty(id))
+        //    {
+        //        // Decode the return URL and remove any language selector from it
+        //        id = Server.UrlDecode(id);
+        //        id = removeLanguage.Replace(id, @"/");
+        //        return Redirect(id);
+        //    }
+        //    return Redirect(@"/");
+        //}
 
 
     }

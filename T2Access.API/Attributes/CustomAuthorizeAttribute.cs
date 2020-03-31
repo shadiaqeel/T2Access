@@ -33,7 +33,7 @@ namespace T2Access.API.Attributes
 
             var token = actionContext.Request.Headers.Authorization.Parameter;
 
-            IAuthService authService = AuthrizationFactory.GetAuthrization();
+            IAuthService authService = AuthorizationFactory.GetAuthrization();
 
 
             var role = authService.GetTokenClaimValue(token, "Role");
