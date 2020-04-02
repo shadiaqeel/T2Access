@@ -9,7 +9,7 @@ using T2Access.Web.Attributes;
 namespace T2Access.Web.Controllers
 {
     [LogActionFilter]
-    [Localisation]
+    //[Localisation]
     public class WebController : Controller
     {
 

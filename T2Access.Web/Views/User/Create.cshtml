@@ -74,7 +74,7 @@
 
                 <div class="mt">
                     <div class="form-group form-panel  ">
-                        <h6>Gate List</h6>
+                        <h6>@Resource.Gates</h6>
                         <div class="centered">
                             @Html.HiddenFor(model => model.GateList)
                             @Html.Action("GetList", "Gate")
@@ -102,7 +102,15 @@
 @section Scripts
   {
 
-    <script>var ajaxUrl = "@Url.Action("GetFilterd", "Gate")";</script>
+    <script>
+
+
+        var ajaxUrl = "@Url.Action("GetFilterd", "Gate")";
+        //GatesList language
+        var SearchString = "@Resource.Search   ";
+        var zeroRecords = "@Resource.NotFound";
+               
+    </script>
     @Html.RegisteredScripts()
 
     <script>
@@ -119,7 +127,8 @@
             });
 
             form.GateList.value = selectedGuid.toString();
-            debugger
+
+
               return true;
 
         }

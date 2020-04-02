@@ -71,9 +71,9 @@ namespace T2Access.DAL
 
 
          
-        public IList<Gate> GetWithFilter(Gate filter)
+        public IEnumerable<Gate> GetWithFilter(Gate filter)
         {
-            List<Gate> gateList = new List<Gate>();
+            IList<Gate> gateList = new List<Gate>();
 
 
             DatabaseExecuter.MySqlExecuteQuery("SP_Gate_SelectWithFilter", delegate (MySqlCommand cmd)
@@ -105,11 +105,11 @@ namespace T2Access.DAL
                      });
 
 
-            return gateList;
+            return gateList.AsEnumerable<Gate>();
 
         }
 
-        public IList<CheckedGateModel> GetCheckedByUserId(Guid userId)
+        public IEnumerable<CheckedGateModel> GetCheckedByUserId(Guid userId)
         {
             IList<CheckedGateModel> checkedGateList = new List<CheckedGateModel>();
 
@@ -139,7 +139,7 @@ namespace T2Access.DAL
                 }
             });
 
-            return checkedGateList;
+            return checkedGateList.AsEnumerable<CheckedGateModel>();
         }
 
 

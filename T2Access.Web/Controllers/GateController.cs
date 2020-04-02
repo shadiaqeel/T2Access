@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Dynamic;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Newtonsoft.Json;
@@ -20,7 +21,7 @@ namespace T2Access.Web.Controllers
     {
 
 
-        IHttpClientService httpService = new HttpClientService(new Uri(Variables.ServerBaseAddress + "gate/"));
+        IHttpClientService httpService = new HttpClientService(new Uri(Variables.ServerBaseAddress + $"{Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName}/gate/"));
 
 
         // GET: Gate
@@ -82,7 +83,7 @@ namespace T2Access.Web.Controllers
 
 
 
-                    int totalrowsafterfiltering = gates.ResponseList.Count;
+                    int totalrowsafterfiltering = gates.ResponseList.Count();
 
 
 
@@ -130,7 +131,7 @@ namespace T2Access.Web.Controllers
 
             if (response.IsSuccessStatusCode)
 
-                return Json(new { success = true, message = result.Split('\"') });
+                return Json(new { success = true, message = result.Replace("\"", "") });
             else
             {
 
@@ -164,13 +165,13 @@ namespace T2Access.Web.Controllers
             if (response.IsSuccessStatusCode)
             {
 
-                return Json(new { success = true, message = result.Split('\"') }, JsonRequestBehavior.AllowGet) ;
+                return Json(new { success = true, message = result.Replace("\"", "") }, JsonRequestBehavior.AllowGet) ;
 
             }
             else
             {
 
-                return Json(new { success = false, message = result.Split('\"') }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, message = result.Replace("\"", "") }, JsonRequestBehavior.AllowGet);
 
             }
 
@@ -206,7 +207,7 @@ namespace T2Access.Web.Controllers
 
             if (response.IsSuccessStatusCode)
 
-                return Json(new { success = true, message = result.Split('\"') });
+                return Json(new { success = true, message = result.Replace("\"", "") });
             else
             {
 
@@ -313,7 +314,7 @@ namespace T2Access.Web.Controllers
                 string sortDirection = Request["order[0][dir]"];
 
 
-                int totalrows = filterdGates.ResponseList.Count;
+                int totalrows = filterdGates.ResponseList.Count();
 
                 if (!string.IsNullOrEmpty(searchValue))
                 {
@@ -323,7 +324,7 @@ namespace T2Access.Web.Controllers
                     ).ToList<GateViewModel>();
 
                 }
-                int totalrowsafterfiltering = filterdGates.ResponseList.Count;
+                int totalrowsafterfiltering = filterdGates.ResponseList.Count();
 
 
                 //sorting 

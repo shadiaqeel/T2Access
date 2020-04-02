@@ -67,10 +67,10 @@ namespace T2Access.BLL.Extensions
 
 
 
-        public static IList<GateDto> ToDto(this IList<Gate> gates)
+        public static IEnumerable<GateDto> ToDto(this IEnumerable<Gate> gates)
         {
 
-            return gates.Select(c => c.ToDto()).ToList<GateDto>();
+            return gates.Select(c => c.ToDto());
 
         }
         #endregion

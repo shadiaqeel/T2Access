@@ -208,10 +208,15 @@
                     setupToastr();
 
 
-                @if (!string.IsNullOrWhiteSpace(ViewBag.toastrMessage))
+                @if (!string.IsNullOrWhiteSpace(ViewBag.successToastrMessage))
                 {
-                    @: toastr.success("@ViewBag.toastrMessage", "Success");
-        }
+                    @: toastr.success("@ViewBag.successToastrMessage");
+                 }
+
+                @if (!string.IsNullOrWhiteSpace(ViewBag.errorToastrMessage))
+                {
+                    @: toastr.error("@ViewBag.errorToastrMessage");
+                 }
 
 
         });

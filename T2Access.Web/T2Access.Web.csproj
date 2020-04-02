@@ -128,6 +128,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Attributes\LocalizationHandler.cs" />
     <Compile Include="Helper\DisplayEnumConverter.cs" />
     <Compile Include="Attributes\CustomAuthorizeAttribute.cs" />
     <Compile Include="Attributes\LogActionFilter.cs" />
@@ -144,6 +145,7 @@
     <Compile Include="Attributes\LocalisationAttribute .cs" />
     <Compile Include="Helper\MenuHelper.cs" />
     <Compile Include="Helper\HtmlExtensions.cs" />
+    <Compile Include="Helper\MultiCultureMvcRouteHandler.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Resource.ar.Designer.cs">
@@ -236,7 +238,7 @@
     <Content Include="Assets\Admin\css\en\style-responsive.css" />
     <Content Include="Assets\Admin\css\en\style.css" />
     <Content Include="Assets\Admin\js\ar\scripts.js" />
-    <Content Include="Assets\Admin\shadii.jpg" />
+    <Content Include="Assets\Admin\shadi.jpg" />
     <Content Include="Assets\fonts\Linearicons-Free-v1.0.0\icon-font.min.css" />
     <Content Include="Assets\fonts\Linearicons-Free-v1.0.0\WebFont\Linearicons-Free.svg" />
     <Content Include="Assets\fonts\montserrat\OFL.txt" />
@@ -478,8 +480,7 @@
     <Content Include="Views\User\Edit.cshtml" />
     <Content Include="Views\Gate\_Create.cshtml" />
     <Content Include="Views\Gate\_Edit.cshtml" />
-    <Content Include="Views\Gate\_ResetPassword.cshtml" />
-    <Content Include="Views\User\_ResetPassword.cshtml" />
+    <Content Include="Views\Shared\_ResetPassword.cshtml" />
     <Content Include="Views\Shared\_ReLogin.cshtml" />
     <Content Include="Views\Shared\_AddEditModal.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
@@ -497,7 +498,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Web\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

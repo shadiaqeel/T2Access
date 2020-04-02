@@ -16,7 +16,8 @@ using T2Access.Security.Tokenization.Models;
 namespace T2Access.API.Controllers
 {
 
-    [Route("api/user/{action}")]
+    // [Route("api/user/{action}")]
+
     public class UserController : BaseController
     {
         IUserService userService = new UserService();
@@ -60,12 +61,12 @@ namespace T2Access.API.Controllers
 
                     });
 
-                    return Request.CreateResponse(HttpStatusCode.OK, new ServiceResponse<string>() { Data=token });
+                    return Request.CreateResponse(HttpStatusCode.OK, token );
 
 
             }
 
-            return Request.CreateResponse(HttpStatusCode.BadRequest, response);
+            return Request.CreateResponse(HttpStatusCode.BadRequest, response.ErrorMessage);
 
         }
 
@@ -79,20 +80,15 @@ namespace T2Access.API.Controllers
         #region Admin Operations
 
         [HttpPost]
-        [ResponseType(typeof(ServiceResponse<string>))]
+        [ResponseType(typeof(string))]
         public HttpResponseMessage SignUp(SignUpUserModel user)
         {
 
             var response = userService.Create(user);
-                if (response.Success)
-                {
-                    return Request.CreateResponse(HttpStatusCode.OK,response);
-                }
-                else
-                {
-                    return Request.CreateResponse(HttpStatusCode.NotFound, response);
-                }
-            
+            return (response.Success) ?
+                Request.CreateResponse(HttpStatusCode.OK, response.Data) :
+                Request.CreateResponse(HttpStatusCode.BadRequest, response.ErrorMessage);
+
 
         }
 
@@ -101,16 +97,18 @@ namespace T2Access.API.Controllers
 
         [HttpGet]
         [CustomAuthorize(Roles = "Admin,User")]
-        [ResponseType(typeof(ServiceResponse<UserListResponse>))]
+        [ResponseType(typeof(UserListResponse))]
         public HttpResponseMessage GetListWithFilter([FromUri]FilterUserModel filter)
         {
             if (filter == null)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest,new ServiceResponse<UserListResponse>() { Success = false, Message = Resource.FilterMiss });
+                return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.FilterMiss );
             }
 
- 
-            return Request.CreateResponse(HttpStatusCode.OK, userService.GetList(filter));
+            var response = userService.GetList(filter);
+            return (response.Success) ?
+                Request.CreateResponse(HttpStatusCode.OK, response.Data) :
+                Request.CreateResponse(HttpStatusCode.NotFound, response.ErrorMessage);
 
         }
 
@@ -119,20 +117,17 @@ namespace T2Access.API.Controllers
 
         [HttpGet]
         [CustomAuthorize(Roles = "Admin,User")]
-        [ResponseType(typeof(ServiceResponse<UserDto>))]
+        [ResponseType(typeof(UserDto))]
         public HttpResponseMessage GetById(Guid id)
         {
             if (id == null)
-              return Request.CreateResponse(HttpStatusCode.BadRequest, new ServiceResponse<UserDto>() { Success = false, Message = Resource.FilterMiss });
+              return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.FilterMiss);
             
 
             var  response = userService.GetById(id);
-
-            if(response.Success)
-                 return Request.CreateResponse(HttpStatusCode.OK, response);
- 
-            else
-                return Request.CreateResponse(HttpStatusCode.NotFound, response);
+            return (response.Success) ?
+                Request.CreateResponse(HttpStatusCode.OK, response.Data) :
+                Request.CreateResponse(HttpStatusCode.NotFound, response);
 
 
         }
@@ -145,12 +140,9 @@ namespace T2Access.API.Controllers
         public HttpResponseMessage Delete(Guid id)
         {
             var response = userService.Delete(id);
-            if (response.Success)
-            {
-                return Request.CreateResponse(HttpStatusCode.OK, response);
-            }
-
-            return Request.CreateResponse(HttpStatusCode.BadRequest, response);
+            return (response.Success) ?
+                Request.CreateResponse(HttpStatusCode.OK, response.Data) :
+                Request.CreateResponse(HttpStatusCode.BadRequest, response.ErrorMessage);
 
         }
 
@@ -158,17 +150,14 @@ namespace T2Access.API.Controllers
 
         [HttpPut]
         [CustomAuthorize(Roles = "Admin,User")]
-        [ResponseType(typeof(ServiceResponse<string>))]
+        [ResponseType(typeof(string))]
         public HttpResponseMessage Edit(Guid id, [FromBody] UpdateUserModel model)
         {
             model.Id = id;
             var response = userService.Edit(model);
-            if (response.Success)
-            {
-                return Request.CreateResponse(HttpStatusCode.OK, response);
-            }
-
-            return Request.CreateResponse(HttpStatusCode.BadRequest, response);
+            return (response.Success) ?
+                Request.CreateResponse(HttpStatusCode.OK, response.Data) :
+                Request.CreateResponse(HttpStatusCode.BadRequest, response.ErrorMessage);
 
         }
 
@@ -182,12 +171,9 @@ namespace T2Access.API.Controllers
             model.Id = id;
 
             var response = userService.ResetPassword(model);
-            if (response.Success)
-            {
-                return Request.CreateResponse(HttpStatusCode.OK, response);
-            }
-
-            return Request.CreateResponse(HttpStatusCode.BadRequest, response);
+            return (response.Success) ?
+                Request.CreateResponse(HttpStatusCode.OK, response.Data) :
+                Request.CreateResponse(HttpStatusCode.BadRequest, response.ErrorMessage);
 
         }
 
@@ -207,12 +193,9 @@ namespace T2Access.API.Controllers
 
 
              var response = userService.Assign(userGate);
-            if (response.Success)
-            {
-                return Request.CreateResponse(HttpStatusCode.OK, response);
-            }
-
-            return Request.CreateResponse(HttpStatusCode.BadRequest, response);
+            return (response.Success) ?
+                Request.CreateResponse(HttpStatusCode.OK, response.Data) :
+                Request.CreateResponse(HttpStatusCode.BadRequest, response.ErrorMessage);
         }
 
 
@@ -226,12 +209,9 @@ namespace T2Access.API.Controllers
 
 
              var response = userService.Unassign(userGate);
-            if (response.Success)
-            {
-                return Request.CreateResponse(HttpStatusCode.OK, response);
-            }
-
-            return Request.CreateResponse(HttpStatusCode.BadRequest, response);
+            return (response.Success) ?
+                Request.CreateResponse(HttpStatusCode.OK, response.Data) :
+                Request.CreateResponse(HttpStatusCode.BadRequest, response.ErrorMessage);
         }
 
 

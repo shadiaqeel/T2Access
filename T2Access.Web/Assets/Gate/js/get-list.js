@@ -17,7 +17,7 @@ $(document).ready(function () {
                     draw: result.draw,
                     data: result.data
                 });
-               // $("#tbodyPartial").html(result.view);
+                // $("#tbodyPartial").html(result.view);
 
 
             });
@@ -43,8 +43,8 @@ $(document).ready(function () {
         },
         columns: [
             {
-                data:null,
-                defaultContent:'',
+                data: null,
+                defaultContent: '',
                 orderable: false,
                 width: "1%",
                 className: 'select-checkbox',
@@ -60,10 +60,16 @@ $(document).ready(function () {
 
         },
         preDrawCallback: function () {
-            debugger
+
             $('div.dataTables_filter input').addClass("form-control form-control-sm");
-            debugger
+            $('div.dataTables_filter label').addClass("pull-away");
+
         },
+        language:
+        {
+            "search": SearchString,
+            "zeroRecords": zeroRecords,
+        }
         
 
     });

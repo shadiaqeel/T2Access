@@ -14,7 +14,7 @@ namespace T2Access.BLL.Services
         ServiceResponse<string> Create(SignUpGateModel gate);
         ServiceResponse<GateDto> Login(LoginModel gate);
         ServiceResponse<GateListResponse> GetListWithFilter(FilterGateModel filter);
-        ServiceResponse<IList<CheckedGateModel>> GetCheckedListByUserId(Guid userId);
+        ServiceResponse<IEnumerable<CheckedGateModel>> GetCheckedListByUserId(Guid userId);
         ServiceResponse<string> Delete(Guid id);
         ServiceResponse<string> Edit(GateModel model);
         ServiceResponse<string> ResetPassword(ResetPasswordModel model);

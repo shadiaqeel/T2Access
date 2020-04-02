@@ -40,9 +40,9 @@ $("#DTable").on('click', '.btnDelete', function () {
             success: function (result) {
                 if (result.success) {
                     table.row($(btn).parents('tr')).remove().draw(false);
-                    toastr.success(result.message, "Success")
+                    toastr.success(result.message)
                 } else {
-                    toastr.error(result.message, "Error")
+                    toastr.error(result.message)
                 }
             }
 
@@ -90,13 +90,14 @@ var createModal = function () {
 
 
 var ResetPasswordModal = function (data) {
-    debugger
+    
     $("#addEditModalContent").load(resetpasswordUrl, function () {
 
         $("#Id").val(data.Id);
         $("#UserName").val(data.UserName);
 
-
+        
+        $("#addEditModal .modal-dialog").removeClass("modal-lg");
         $("#addEditModal").modal("show");
 
         bindForm(this);
@@ -109,8 +110,7 @@ var ResetPasswordModal = function (data) {
 
 function bindForm(dialog) {
     var table = $('#DTable').DataTable();
-    
-    console.log(true);
+  
 
     $('form',dialog).submit(function () {
         var action = this.action;
@@ -120,29 +120,22 @@ function bindForm(dialog) {
             type: this.method,
             data: $(this).serialize(),
             success: function (result) {
-                console.log(result);
 
                 if (result.confirm) {
-                    console.log("confirm");
 
                     $('#addEditModal').modal('hide');
                     ConfirmAdmin(action,data);
                 }
                 else if (result.success) {
-                    console.log("success");
+                    
 
                     $('#addEditModal').modal('hide');
-
-                   // table.clear().destroy();
                     $("#DTable").DataTable().ajax.reload(null,false);
 
-                    //$('#tbodyPartial').load(TableUrl, function () {
-                    //   // $("#DTable").DataTable(dataTableConfig).draw(false);
-                    //});
+
 
                     toastr.success(result.message)
                 } else {
-                    console.log("else");
 
                     
                     $('#addEditModalContent').html(result);
@@ -182,14 +175,12 @@ function bindConfirm(dialog, returnUrl, dataForm) {
             success: function (result) {
                 if (result.success) {
                     $.post(returnUrl, dataForm).done(function (data) {
-
                         $('#confirmModal').modal('hide');
-                        //location.reload();
                     });
 
                 } else {
                     $('#confirmModalContent').html(result);
-                    bindConfirm(dialog, dataForm);
+                    bindConfirm(dialog, returnUrl, dataForm);
                 }
 
             }
@@ -204,7 +195,7 @@ function bindConfirm(dialog, returnUrl, dataForm) {
 
 
 
-
+//==============================================================================================
 
 
 

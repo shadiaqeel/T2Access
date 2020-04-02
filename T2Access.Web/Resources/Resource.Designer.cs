@@ -214,6 +214,15 @@ namespace T2Access.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The username and Password you’ve entered doesn’t match any account.
+        /// </summary>
+        public static string LoginFailed {
+            get {
+                return ResourceManager.GetString("LoginFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Logout.
         /// </summary>
         public static string Logout {
@@ -232,11 +241,56 @@ namespace T2Access.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No records available.
+        /// </summary>
+        public static string NoRecordAvailable {
+            get {
+                return ResourceManager.GetString("NoRecordAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No matching records found.
+        /// </summary>
+        public static string NoRecordMatch {
+            get {
+                return ResourceManager.GetString("NoRecordMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are not authorized to access this resource.
+        /// </summary>
+        public static string NotAuthorized {
+            get {
+                return ResourceManager.GetString("NotAuthorized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nothing found.
+        /// </summary>
+        public static string NotFound {
+            get {
+                return ResourceManager.GetString("NotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password.
         /// </summary>
         public static string Password {
             get {
                 return ResourceManager.GetString("Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password is wrong. Please contact administrator.
+        /// </summary>
+        public static string PasswordWrong {
+            get {
+                return ResourceManager.GetString("PasswordWrong", resourceCulture);
             }
         }
         
@@ -255,6 +309,15 @@ namespace T2Access.Web.Resources {
         public static string Reset {
             get {
                 return ResourceManager.GetString("Reset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search.
+        /// </summary>
+        public static string Search {
+            get {
+                return ResourceManager.GetString("Search", resourceCulture);
             }
         }
         

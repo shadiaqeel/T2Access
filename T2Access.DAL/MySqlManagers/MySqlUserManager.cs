@@ -89,9 +89,9 @@ namespace T2Access.DAL
 
 
 
-        public IList<User> GetWithFilter(User filter)
+        public IEnumerable<User> GetWithFilter(User filter)
         {
-            List<User> userList = new List<User>();
+            IList<User> userList = new List<User>();
 
 
             DatabaseExecuter.MySqlExecuteQuery("SP_User_SelectWithFilter", delegate (MySqlCommand cmd)
@@ -127,7 +127,7 @@ namespace T2Access.DAL
             });
 
 
-            return userList;
+            return userList.AsEnumerable<User>();
 
           
 

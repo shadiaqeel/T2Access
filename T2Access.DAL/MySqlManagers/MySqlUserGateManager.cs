@@ -28,12 +28,13 @@ namespace T2Access.DAL
             if (userGate == null || (userGate.UserId == Guid.Empty && userGate.GateId == Guid.Empty))
                 return false;
 
-            return DatabaseExecuter.MySqlExecuteNonQuery("SP_UserGate_Delete", delegate (MySqlCommand cmd)
+             DatabaseExecuter.MySqlExecuteNonQuery("SP_UserGate_Delete", delegate (MySqlCommand cmd)
            {
-               cmd.Parameters.AddWithValue("_userId", userGate.UserId );
-               cmd.Parameters.AddWithValue("_gateId", userGate.GateId );
+               cmd.Parameters.AddWithValue("_userId", userGate.UserId);
+               cmd.Parameters.AddWithValue("_gateId", userGate.GateId);
 
-           }) > 0 ? true : false;
+           });
+            return true;
         }
 
         public bool DeleteAllByUserId(Guid userId)

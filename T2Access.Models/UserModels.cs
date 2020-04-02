@@ -19,10 +19,6 @@ namespace T2Access.Models
         [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.UserName))]
         public string UserName { get; set; }
 
-        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.Password))]
-        public string password { get; set; }
-
-
         [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.FirstName))]
         public string FirstName { get; set; }
 

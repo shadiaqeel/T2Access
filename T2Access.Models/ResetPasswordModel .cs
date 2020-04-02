@@ -11,6 +11,8 @@ namespace T2Access.Models
 
         [Required(ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "RequiredField")]
         [MaxLength(150, ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "LessThen")]
+        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.UserName))]
+
         public string UserName { get; set; }
 
 

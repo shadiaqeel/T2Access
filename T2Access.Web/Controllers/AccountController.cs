@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using T2Access.Models;
@@ -8,6 +9,7 @@ using T2Access.Security.Tokenization.Services;
 using T2Access.Services.HttpClientService;
 using T2Access.Web.Helper;
 using T2Access.Web.Models;
+using T2Access.Web.Resources;
 
 namespace T2Access.Web.Controllers
 {
@@ -16,7 +18,7 @@ namespace T2Access.Web.Controllers
 
 
 
-        IHttpClientService httpService = new HttpClientService(new Uri(Variables.ServerBaseAddress));
+        IHttpClientService httpService = new HttpClientService(new Uri(Variables.ServerBaseAddress + $"{Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName}/User/"));
 
 
         // GET: AccountC:\Users\dell\Source\Repos\T2Access\T2Access.Web\Controllers\AccountController.cs
@@ -38,16 +40,16 @@ namespace T2Access.Web.Controllers
             }
 
 
-            var response = await httpService.PostAsync("user/Login", model);
+            var response = await httpService.PostAsync("Login", model);
 
 
             if (response.IsSuccessStatusCode)
             {
                  
-                var result = await response.Content.ReadAsAsync<ServiceResponse<string>>();
+                var result = await response.Content.ReadAsStringAsync();
 
 
-                string token = result.Data.Replace("\"", "");
+                string token = result.Replace("\"", "");
 
 
                 IAuthService authService = AuthrizationFactory.GetAuthrization();
@@ -61,7 +63,7 @@ namespace T2Access.Web.Controllers
                     Session["FirstName"] = authService.GetTokenClaimValue(token, "FirstName");
                     Session["LastName"] = authService.GetTokenClaimValue(token, "LastName");
                     Session["ConfirmedOperation"] = false;
-                    Session["UserImg"] = "/Assets/User/shadi.jpg";
+                    Session["UserImg"] = "/Assets/Admin/shadi.jpg";
                     Session["Culture"] = "ar";
 
                     if (!string.IsNullOrEmpty(returnUrl))
@@ -70,13 +72,13 @@ namespace T2Access.Web.Controllers
                     return RedirectToAction("index", "User");
                 }
                 ViewBag.ReturnUrl = returnUrl;
-                ModelState.AddModelError(string.Empty, "You are not authorized to access this resource");
+                ModelState.AddModelError(string.Empty, Resource.NotAuthorized);
                 return View();
             }
 
 
             ViewBag.ReturnUrl = returnUrl;
-            ModelState.AddModelError(string.Empty, "The username and Password you’ve entered doesn’t match any account");
+            ModelState.AddModelError(string.Empty, Resource.LoginFailed);
             return View();
 
 
@@ -84,11 +86,7 @@ namespace T2Access.Web.Controllers
         }
 
 
-        //[AllowAnonymous]
-        //public ActionResult Register()
-        //{
-        //    return View();
-        //}
+
 
 
         public ActionResult LogOut()
@@ -123,14 +121,14 @@ namespace T2Access.Web.Controllers
             }
 
 
-            var response = await httpService.PostAsync("user/Login", model);
+            var response = await httpService.PostAsync("Login", model);
 
 
 
             if (response.IsSuccessStatusCode)
             {
-                var result= await response.Content.ReadAsAsync<IServiceResponce<string>>();
-                string token = result.Data.Replace("\"", "");
+                var result= await response.Content.ReadAsStringAsync();
+                string token = result.Replace("\"", "");
 
                 IAuthService authService = AuthrizationFactory.GetAuthrization();
 
@@ -146,7 +144,7 @@ namespace T2Access.Web.Controllers
 
 
 
-            ModelState.AddModelError(string.Empty, "Password is wrong. Please contact administrator");
+            ModelState.AddModelError(string.Empty, Resource.PasswordWrong);
             return PartialView("_ReLogin",model);
 
 

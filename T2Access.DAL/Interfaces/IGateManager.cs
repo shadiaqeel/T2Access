@@ -6,8 +6,8 @@ namespace T2Access.DAL
 {
     public interface IGateManager :IRepository<Gate>
     {
-        IList<Gate> GetWithFilter(Gate gate);
-        IList<CheckedGateModel> GetCheckedByUserId(Guid userId);
+        IEnumerable<Gate> GetWithFilter(Gate gate);
+        IEnumerable<CheckedGateModel> GetCheckedByUserId(Guid userId);
         Gate GetByUserName(string username);
         Gate Login(IAuthModel gate);
         bool ResetPassword(IAuthModel model);

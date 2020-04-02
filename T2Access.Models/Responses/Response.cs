@@ -18,7 +18,7 @@ namespace T2Access.Models
 
          bool Success { get; set; } 
 
-         IList<string> Messages { get; set; } 
+         string ErrorMessage { get; set; } 
 
 
     }
@@ -30,7 +30,7 @@ namespace T2Access.Models
 
         public bool Success { get; set; } = true;
 
-        public string Message { get; set; } = string.Empty;
+        public string ErrorMessage { get; set; } = string.Empty;
     }
 
 
@@ -40,7 +40,7 @@ namespace T2Access.Models
 
     public class ListResponse<T> 
     {
-        public IList<T> ResponseList { get; set; }
+        public IEnumerable<T> ResponseList { get; set; }
         public int? totalEntities { get; set; }
 
     }

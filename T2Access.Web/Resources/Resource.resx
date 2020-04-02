@@ -168,20 +168,41 @@
   <data name="lengthMenu" xml:space="preserve">
     <value>Display _MENU_ records per page</value>
   </data>
+  <data name="LoginFailed" xml:space="preserve">
+    <value>The username and Password you’ve entered doesn’t match any account</value>
+  </data>
   <data name="Logout" xml:space="preserve">
     <value>Logout</value>
   </data>
   <data name="Next" xml:space="preserve">
     <value>next</value>
   </data>
+  <data name="NoRecordAvailable" xml:space="preserve">
+    <value>No records available</value>
+  </data>
+  <data name="NoRecordMatch" xml:space="preserve">
+    <value>No matching records found</value>
+  </data>
+  <data name="NotAuthorized" xml:space="preserve">
+    <value>You are not authorized to access this resource</value>
+  </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>Nothing found</value>
+  </data>
   <data name="Password" xml:space="preserve">
     <value>Password</value>
+  </data>
+  <data name="PasswordWrong" xml:space="preserve">
+    <value>Password is wrong. Please contact administrator</value>
   </data>
   <data name="Previous" xml:space="preserve">
     <value>previous</value>
   </data>
   <data name="Reset" xml:space="preserve">
     <value>Reset Password</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
   </data>
   <data name="SignIn" xml:space="preserve">
     <value>Sign In</value>

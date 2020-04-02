@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Linq.Dynamic;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+
 using Newtonsoft.Json;
+
 using T2Access.Models;
 using T2Access.Services.HttpClientService;
 using T2Access.Web.Attributes;
@@ -17,7 +17,7 @@ namespace T2Access.Web.Controllers
     [CustomAuthorize]
     public class UserController : WebController
     {
-        readonly IHttpClientService httpService = new HttpClientService(new Uri(Variables.ServerBaseAddress + "user/"));
+        readonly IHttpClientService httpService = new HttpClientService(new Uri(Variables.ServerBaseAddress + $"{Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName}/user/"));
 
 
 
@@ -44,8 +44,11 @@ namespace T2Access.Web.Controllers
 
         public ActionResult UserManagment()
         {
-            if (TempData["toastrMessage"] != null)
-                ViewBag.toastrMessage = TempData["toastrMessage"] as string;
+            if (TempData["successToastrMessage"] != null)
+                ViewBag.successToastrMessage = TempData["successToastrMessage"] as string;
+
+            if (TempData["errorToastrMessage"] != null)
+                ViewBag.errorToastrMessage = TempData["errorToastrMessage"] as string;
 
             return View();
         }
@@ -73,35 +76,32 @@ namespace T2Access.Web.Controllers
 
 
 
-            var order= $"{sortColumnName} {sortDirection}";
+            var order = $"{sortColumnName} {sortDirection}";
 
             var response = await httpService.GetAsync($"GetListWithFilter?UserName={userName}&FirstName={firstName}&LastName={lastName}&Status={status}&Skip={start}&PageSize={length}&Order={order}", token: (string)Session["Token"]);
 
 
             if (response.IsSuccessStatusCode)
             {
-                var result = await response.Content.ReadAsAsync<ServiceResponse<ListResponse<UserViewModel>>>();
+                var users = await response.Content.ReadAsAsync<ListResponse<UserViewModel>>();
 
-                if (result.Success)
-                {
-
-                    var users = result.Data;
 
                 if (Request.IsAjaxRequest())
-                    {
+                {
 
-                        int totalrowsafterfiltering = users.ResponseList.Count;
+                    int totalrowsafterfiltering = users.ResponseList.Count();
 
-                        return Json(new { data = JsonConvert.SerializeObject(users.ResponseList, new T2Access.Web.Helper.DisplayEnumConverter()), draw = Request["draw"], recordsTotal = users.totalEntities }, JsonRequestBehavior.AllowGet);
-                    }
-
-                    return PartialView(users);
+                    return Json(new { data = JsonConvert.SerializeObject(users.ResponseList, new T2Access.Web.Helper.DisplayEnumConverter()), draw = Request["draw"], recordsTotal = users.totalEntities }, JsonRequestBehavior.AllowGet);
                 }
 
-
-                ViewBag.toastrMessage = result.Message;
-                return PartialView(); 
+                return PartialView(users);
             }
+
+
+
+            var error = await response.Content.ReadAsStringAsync();
+
+            ViewBag.errorToastrMessage = error;
             return PartialView();
         }
 
@@ -130,13 +130,13 @@ namespace T2Access.Web.Controllers
 
 
             var response = await httpService.PostAsync(" Signup/", model, token: (string)Session["Token"]);
-            var result = await response.Content.ReadAsAsync<ServiceResponse<string>>();
+            var result = await response.Content.ReadAsStringAsync();
 
 
             if (response.IsSuccessStatusCode)
             {
 
-                TempData["toastrMessage"] = result.Data.Split('\"')[1];
+                TempData["successToastrMessage"] = result.Replace("\"","");
                 return RedirectToAction("UserManagment");
             }
             else
@@ -146,9 +146,9 @@ namespace T2Access.Web.Controllers
                 //var error = await response.Content.ReadAsStringAsync();
                 //ViewBag.ErrorMessage = error;
 
-                ViewBag.toastrMessage = result.Message;
+                ViewBag.errorToastrMessage = result.Replace("\"", "");
 
-                ModelState.AddModelError("UserName", result.Message);
+                ModelState.AddModelError("UserName", result.Replace("\"", ""));
 
 
                 return View(model);
@@ -167,18 +167,17 @@ namespace T2Access.Web.Controllers
         {
 
             var response = await httpService.GetAsync($"GetById/?id={id}", token: (string)Session["Token"]);
+            var result = await response.Content.ReadAsAsync<UserViewModel>();
+
             if (response.IsSuccessStatusCode)
             {
-                var result = await response.Content.ReadAsAsync<ServiceResponse<UserViewModel>>();
-                if(result.Success)
-                    return View(result.Data);
-
-                ViewBag.toastrMessage = result.Message;
-                return View();
+                    return View(result);
 
             }
 
-            return null;
+            ViewBag.errorToastrMessage = result;
+            return View();
+
         }
 
 
@@ -192,21 +191,20 @@ namespace T2Access.Web.Controllers
 
 
             var response = await httpService.PutAsync($"Edit?id={model.Id}", model, token: (string)Session["Token"]);
-            var result = await response.Content.ReadAsAsync<ServiceResponse<string>>();
+            var result = await response.Content.ReadAsStringAsync();
 
 
             if (response.IsSuccessStatusCode)
             {
-                TempData["toastrMessage"] = result.Data.Split('\"')[1];
+                TempData["successToastrMessage"] = result.Replace("\"", "");
 
                 return RedirectToAction("UserManagment");
             }
             else
             {
 
-                ViewBag.ErrorMessage = result.Message;
-
-                // ModelState.AddModelError("UserName", error);
+                ViewBag.ErrorMessage = result.Replace("\"", "");
+                ViewBag.errorToastrMessage = result.Replace("\"", "");
 
                 return View(model);
 
@@ -228,18 +226,18 @@ namespace T2Access.Web.Controllers
 
             var response = await httpService.DeleteAsync($"Delete?id={id}", (string)Session["Token"]);
 
-            var result = await response.Content.ReadAsAsync<ServiceResponse<string>>();
+            var result = await response.Content.ReadAsStringAsync();
 
             if (response.IsSuccessStatusCode)
             {
 
-                return Json(new { success = true, message = result.Data.Split('\"') }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = true, message = result.Replace("\"", "") }, JsonRequestBehavior.AllowGet);
 
             }
             else
             {
 
-                return Json(new { success = false, message = result.Data.Split('\"') }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, message = result.Replace("\"", "") }, JsonRequestBehavior.AllowGet);
 
             }
 
@@ -282,16 +280,18 @@ namespace T2Access.Web.Controllers
 
             var response = await httpService.PutAsync($"ResetPassword?id={model.Id}", model, token: (string)Session["Token"]);
 
-            
+
             if (response.IsSuccessStatusCode)
 
                 return Json(new { success = true });
+
             else
             {
 
 
-                var result = await response.Content.ReadAsAsync<ServiceResponse<string>>();
-                ViewBag.ErrorMessage = result.Message;
+                var result = await response.Content.ReadAsStringAsync();
+                ViewBag.ErrorMessage = result;
+                ViewBag.errorToastrMessage = result;
 
 
                 return PartialView("_ResetPassword", model);
@@ -301,7 +301,6 @@ namespace T2Access.Web.Controllers
 
         }
 
-        #endregion
 
 
 
@@ -312,14 +311,18 @@ namespace T2Access.Web.Controllers
         #endregion
 
 
+
+        #endregion
+
+
         #endregion
 
 
 
 
-        
 
 
-       
+
+
     }
 }

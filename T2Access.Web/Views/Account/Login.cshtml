@@ -11,7 +11,8 @@
 
 }
 
-
+<!DOCTYPE html>
+<html  lang="@this.ViewContext.RouteData.Values["lang"]" dir="@dir"">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -40,7 +41,7 @@
 
 
 </head>
-<body class=" body-login" lang="@this.ViewContext.RouteData.Values["lang"]" dir="@dir">
+<body class=" body-login">
 
 
 
@@ -59,7 +60,7 @@
 
 
 
-                    @Html.ValidationSummary(true, "", new { @class = "alert alert-danger text-left", @role = "alert", @style = "font-size: smaller;" })
+                    @Html.ValidationSummary(true, "", new { @class = "alert alert-danger col-md-12 ", @role = "alert", @style = "font-size: smaller;" })
 
 
 
@@ -68,7 +69,7 @@
                         @*<span class="label-input100">@Resource.Username : </span>*@
 
                         @Html.TextBoxFor(m => m.Username, new { @class = "input100", @placeholder = @Resource.Username })
-                        <i class="fa fa-user" style="position: absolute;left: 10px;top: 12px;color:#999;"></i>
+                        <i class="fa fa-user fa-login"></i>
                         <span class="focus-input100"></span>
 
                         @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
@@ -86,7 +87,7 @@
                         @*<span class="label-input100">@Resource.Password : </span>*@
                         @Html.PasswordFor(m => m.Password, new { @class = "input100", @placeholder = @Resource.Password })
                         <span class="focus-input100"></span>
-                        <i class="fa fa-lock" style="position: absolute;left: 10px;top: 12px;color:#999;"></i>
+                        <i class="fa fa-lock fa-login"></i>
 
                         @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
 
@@ -94,17 +95,17 @@
 
 
                     @*<div class="flex-sb-m w-full p-b-30">
-                        <div class="contact100-form-checkbox">
-                            @Html.CheckBoxFor(m => m.RememberMe, new { @class = "input-checkbox100" })
-                            @Html.LabelFor(m => m.RememberMe, new { @class = "label-checkbox100" })
-                        </div>
+                            <div class="contact100-form-checkbox">
+                                @Html.CheckBoxFor(m => m.RememberMe, new { @class = "input-checkbox100" })
+                                @Html.LabelFor(m => m.RememberMe, new { @class = "label-checkbox100" })
+                            </div>
 
-                        <div>
-                            <a href="#" class="txt1">
-                                Forgot Password?
-                            </a>
-                        </div>
-                    </div>*@
+                            <div>
+                                <a href="#" class="txt1">
+                                    Forgot Password?
+                                </a>
+                            </div>
+                        </div>*@
 
 
 
@@ -148,3 +149,4 @@
 
 
 </body>
+</html>

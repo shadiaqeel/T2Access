@@ -75,10 +75,10 @@ namespace T2Access.BLL.Extensions
             };
         }
 
-        public static IList<UserDto> ToDto(this IList<User> user)
+        public static IEnumerable<UserDto> ToDto(this IEnumerable<User> user)
         {
 
-            return user.Select(c => c.ToDto()).ToList<UserDto>();
+            return user.Select(c => c.ToDto());
 
         }
         #endregion
