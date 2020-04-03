@@ -10,9 +10,7 @@ namespace T2Access.Security.Tokenization.Services
         string GenerateToken(IAuthContainerModel model);
         IEnumerable<Claim> GetTokenClaims(string token);
         string GetTokenClaimValue(string token, string claimName);
-
         bool IsTokenValid(string token);
-
         ClaimsPrincipal GetPrincipal(string token);
 
 

@@ -68,21 +68,20 @@ namespace T2Access.Web.Controllers
             var status = Request["columns[3][search][value]"];
             var order = $"{sortColumnName} {sortDirection}";
 
-            var response = await httpService.GetAsync($"GetListWithFilter?UserName={userName}&NameAr={NameAr}&NameEn={NameEn}&Status={status}&PageSize={length}&Skip={start}&Order={order}", token: (string)Session["Token"]);
-
-
-            if (response.IsSuccessStatusCode)
+            using (var response = await httpService.GetAsync($"GetListWithFilter?UserName={userName}&NameAr={NameAr}&NameEn={NameEn}&Status={status}&PageSize={length}&Skip={start}&Order={order}", token: (string)Session["Token"]))
             {
-                var gates = await response.Content.ReadAsAsync<ListResponse<GateViewModel>>();
-
-                if (Request.IsAjaxRequest())
+                if (response.IsSuccessStatusCode)
                 {
+                    var gates = await response.Content.ReadAsAsync<ListResponse<GateViewModel>>();
+
+                    if (Request.IsAjaxRequest())
+                    {
 
 
 
 
 
-                    int totalrowsafterfiltering = gates.ResponseList.Count();
+                        int totalrowsafterfiltering = gates.ResponseList.Count();
 
 
 
@@ -91,10 +90,11 @@ namespace T2Access.Web.Controllers
 
 
 
-                    return Json(new { data = JsonConvert.SerializeObject(gates.ResponseList, new T2Access.Web.Helper.DisplayEnumConverter()), draw = Request["draw"], recordsTotal = gates.totalEntities }, JsonRequestBehavior.AllowGet);
+                        return Json(new { data = JsonConvert.SerializeObject(gates.ResponseList, new T2Access.Web.Helper.DisplayEnumConverter()), draw = Request["draw"], recordsTotal = gates.totalEntities }, JsonRequestBehavior.AllowGet);
+                    }
+
+                    return PartialView(gates);
                 }
-
-                return PartialView(gates);
             }
 
             return PartialView();
@@ -124,26 +124,28 @@ namespace T2Access.Web.Controllers
                 return PartialView("_Create");
             }
 
-            var response = await httpService.PostAsync("Signup/", model, token: (string)Session["Token"]);
-            var result = await response.Content.ReadAsStringAsync();
-
-
-            if (response.IsSuccessStatusCode)
+            using (var response = await httpService.PostAsync("Signup/", model, token: (string)Session["Token"]))
             {
-                return Json(new { success = true, message = result.Replace("\"", "") });
-            }
-            else
-            {
+                var result = await response.Content.ReadAsStringAsync();
 
 
-                var error = await response.Content.ReadAsStringAsync();
-                ViewBag.ErrorMessage = error;
+                if (response.IsSuccessStatusCode)
+                {
+                    return Json(new { success = true, message = result.Replace("\"", "") });
+                }
+                else
+                {
+
+
+                    var error = await response.Content.ReadAsStringAsync();
+                    ViewBag.ErrorMessage = error;
 
 
 
-                return PartialView("_Create", model);
+                    return PartialView("_Create", model);
 
 
+                }
             }
 
         }
@@ -158,21 +160,22 @@ namespace T2Access.Web.Controllers
 
 
 
-            var response = await httpService.DeleteAsync($"Delete?id={id}", (string)Session["Token"]);
-
-            var result = await response.Content.ReadAsStringAsync();
-
-            if (response.IsSuccessStatusCode)
+            using (var response = await httpService.DeleteAsync($"Delete?id={id}", (string)Session["Token"]))
             {
+                var result = await response.Content.ReadAsStringAsync();
 
-                return Json(new { success = true, message = result.Replace("\"", "") }, JsonRequestBehavior.AllowGet);
+                if (response.IsSuccessStatusCode)
+                {
 
-            }
-            else
-            {
+                    return Json(new { success = true, message = result.Replace("\"", "") }, JsonRequestBehavior.AllowGet);
 
-                return Json(new { success = false, message = result.Replace("\"", "") }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
 
+                    return Json(new { success = false, message = result.Replace("\"", "") }, JsonRequestBehavior.AllowGet);
+
+                }
             }
 
 
@@ -201,27 +204,29 @@ namespace T2Access.Web.Controllers
                 return PartialView("_Edit");
             }
             model.UserName = null;
-            var response = await httpService.PutAsync($"Edit?id={model.Id}", model, token: (string)Session["Token"]);
-            var result = await response.Content.ReadAsStringAsync();
-
-
-            if (response.IsSuccessStatusCode)
+            using (var response = await httpService.PutAsync($"Edit?id={model.Id}", model, token: (string)Session["Token"]))
             {
-                return Json(new { success = true, message = result.Replace("\"", "") });
-            }
-            else
-            {
+                var result = await response.Content.ReadAsStringAsync();
 
 
-                var error = await response.Content.ReadAsStringAsync();
-                ViewBag.ErrorMessage = error;
+                if (response.IsSuccessStatusCode)
+                {
+                    return Json(new { success = true, message = result.Replace("\"", "") });
+                }
+                else
+                {
 
-                // ModelState.AddModelError("UserName", error);
+
+                    var error = await response.Content.ReadAsStringAsync();
+                    ViewBag.ErrorMessage = error;
+
+                    // ModelState.AddModelError("UserName", error);
 
 
-                return PartialView("_Edit", model);
+                    return PartialView("_Edit", model);
 
 
+                }
             }
 
         }
@@ -256,25 +261,25 @@ namespace T2Access.Web.Controllers
             Session["ConfirmedOperation"] = false;
 
 
-            var response = await httpService.PutAsync($"ResetPassword?id={model.Id}", model, token: (string)Session["Token"]);
-
-
-            if (response.IsSuccessStatusCode)
+            using (var response = await httpService.PutAsync($"ResetPassword?id={model.Id}", model, token: (string)Session["Token"]))
             {
-                return Json(new { success = true });
-            }
-            else
-            {
+                if (response.IsSuccessStatusCode)
+                {
+                    return Json(new { success = true });
+                }
+                else
+                {
 
 
-                var error = await response.Content.ReadAsStringAsync();
-                ViewBag.ErrorMessage = error;
+                    var error = await response.Content.ReadAsStringAsync();
+                    ViewBag.ErrorMessage = error;
 
 
 
-                return PartialView("_ResetPassword", model);
+                    return PartialView("_ResetPassword", model);
 
 
+                }
             }
 
         }
@@ -300,46 +305,46 @@ namespace T2Access.Web.Controllers
 
         public async Task<ActionResult> GetFilterd()
         {
-            var response = await httpService.GetAsync($"GetListWithFilter?Status={0}", token: (string)Session["Token"]);
-
-
-            if (response.IsSuccessStatusCode && Request.IsAjaxRequest())
+            using (var response = await httpService.GetAsync($"GetListWithFilter?Status={0}", token: (string)Session["Token"]))
             {
-                var filterdGates = await response.Content.ReadAsAsync<ListResponse<GateViewModel>>();
-
-
-                //Server Side Parameter
-                int start = Convert.ToInt32(Request["start"]);
-                int length = Convert.ToInt32(Request["length"]);
-                string searchValue = Request["search[value]"];
-                string sortColumnName = Request[$"columns[{Request["order[0][column]"]}][name]"];
-                string sortDirection = Request["order[0][dir]"];
-
-
-                int totalrows = filterdGates.ResponseList.Count();
-
-                if (!string.IsNullOrEmpty(searchValue))
+                if (response.IsSuccessStatusCode && Request.IsAjaxRequest())
                 {
-                    filterdGates.ResponseList = filterdGates.ResponseList.Where(x => x.UserName.ToLower().Contains(searchValue.ToLower())
-                                    || x.NameAr.ToLower().Contains(searchValue.ToLower())
-                                    || x.NameEn.ToLower().Contains(searchValue.ToLower())
-                    ).ToList<GateViewModel>();
+                    var filterdGates = await response.Content.ReadAsAsync<ListResponse<GateViewModel>>();
 
+
+                    //Server Side Parameter
+                    int start = Convert.ToInt32(Request["start"]);
+                    int length = Convert.ToInt32(Request["length"]);
+                    string searchValue = Request["search[value]"];
+                    string sortColumnName = Request[$"columns[{Request["order[0][column]"]}][name]"];
+                    string sortDirection = Request["order[0][dir]"];
+
+
+                    int totalrows = filterdGates.ResponseList.Count();
+
+                    if (!string.IsNullOrEmpty(searchValue))
+                    {
+                        filterdGates.ResponseList = filterdGates.ResponseList.Where(x => x.UserName.ToLower().Contains(searchValue.ToLower())
+                                        || x.NameAr.ToLower().Contains(searchValue.ToLower())
+                                        || x.NameEn.ToLower().Contains(searchValue.ToLower())
+                        ).ToList<GateViewModel>();
+
+                    }
+                    int totalrowsafterfiltering = filterdGates.ResponseList.Count();
+
+
+                    //sorting 
+                    if (!string.IsNullOrEmpty(sortColumnName))
+                    {
+                        filterdGates.ResponseList = filterdGates.ResponseList.OrderBy($"{sortColumnName} {sortDirection}").ToList<GateViewModel>();
+                    }
+
+
+                    //view = RenderViewToString(ControllerContext, "_ListBody", filterdGates, true)
+
+
+                    return Json(new { data = filterdGates.ResponseList, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = filterdGates.totalEntities }, JsonRequestBehavior.AllowGet);
                 }
-                int totalrowsafterfiltering = filterdGates.ResponseList.Count();
-
-
-                //sorting 
-                if (!string.IsNullOrEmpty(sortColumnName))
-                {
-                    filterdGates.ResponseList = filterdGates.ResponseList.OrderBy($"{sortColumnName} {sortDirection}").ToList<GateViewModel>();
-                }
-
-
-                //view = RenderViewToString(ControllerContext, "_ListBody", filterdGates, true)
-
-
-                return Json(new { data = filterdGates.ResponseList, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = filterdGates.totalEntities }, JsonRequestBehavior.AllowGet);
             }
 
             return null;
@@ -348,43 +353,43 @@ namespace T2Access.Web.Controllers
 
         public async Task<ActionResult> GetCheckedByUserId(Guid userId)
         {
-            var response = await httpService.GetAsync($"GetCheckedListByUserId/?userId={userId}", token: (string)Session["Token"]);
-
-
-            if (response.IsSuccessStatusCode && Request.IsAjaxRequest())
+            using (var response = await httpService.GetAsync($"GetCheckedListByUserId/?userId={userId}", token: (string)Session["Token"]))
             {
-                var CheckedGates = await response.Content.ReadAsAsync<List<GateViewModel>>();
-
-                //Server Side Parameter
-                int start = Convert.ToInt32(Request["start"]);
-                int length = Convert.ToInt32(Request["length"]);
-                string searchValue = Request["search[value]"];
-                string sortColumnName = Request[$"columns[{Request["order[0][column]"]}][name]"];
-                string sortDirection = Request["order[0][dir]"];
-
-
-                int totalrows = CheckedGates.Count;
-
-                if (!string.IsNullOrEmpty(searchValue))
+                if (response.IsSuccessStatusCode && Request.IsAjaxRequest())
                 {
-                    CheckedGates = CheckedGates.Where(x => x.UserName.ToLower().Contains(searchValue.ToLower())
-                                    || x.NameAr.ToLower().Contains(searchValue.ToLower())
-                                    || x.NameEn.ToLower().Contains(searchValue.ToLower())
-                    ).ToList<GateViewModel>();
+                    var CheckedGates = await response.Content.ReadAsAsync<List<GateViewModel>>();
 
+                    //Server Side Parameter
+                    int start = Convert.ToInt32(Request["start"]);
+                    int length = Convert.ToInt32(Request["length"]);
+                    string searchValue = Request["search[value]"];
+                    string sortColumnName = Request[$"columns[{Request["order[0][column]"]}][name]"];
+                    string sortDirection = Request["order[0][dir]"];
+
+
+                    int totalrows = CheckedGates.Count;
+
+                    if (!string.IsNullOrEmpty(searchValue))
+                    {
+                        CheckedGates = CheckedGates.Where(x => x.UserName.ToLower().Contains(searchValue.ToLower())
+                                        || x.NameAr.ToLower().Contains(searchValue.ToLower())
+                                        || x.NameEn.ToLower().Contains(searchValue.ToLower())
+                        ).ToList<GateViewModel>();
+
+                    }
+                    int totalrowsafterfiltering = CheckedGates.Count;
+
+
+                    //sorting 
+                    if (!string.IsNullOrEmpty(sortColumnName))
+                    {
+                        CheckedGates = CheckedGates.OrderBy($"{sortColumnName} {sortDirection}").ToList<GateViewModel>();
+                    }
+
+
+                    // view = RenderViewToString(ControllerContext, "_ListBody", CheckedGates, true)
+                    return Json(new { data = CheckedGates, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
                 }
-                int totalrowsafterfiltering = CheckedGates.Count;
-
-
-                //sorting 
-                if (!string.IsNullOrEmpty(sortColumnName))
-                {
-                    CheckedGates = CheckedGates.OrderBy($"{sortColumnName} {sortDirection}").ToList<GateViewModel>();
-                }
-
-
-                // view = RenderViewToString(ControllerContext, "_ListBody", CheckedGates, true)
-                return Json(new { data = CheckedGates, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
             }
 
 

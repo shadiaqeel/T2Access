@@ -14,18 +14,14 @@ namespace T2Access.BLL.Extensions
 
 
 
-        public static Gate ToEntity(this SignUpGateModel gate)
+        public static Gate ToEntity(this SignUpGateModel gate) => new Gate
         {
-            return new Gate
-            {
-                UserName = gate.UserName,
-                NameAr = gate.NameAr,
-                NameEn = gate.NameEn,
-                Password = gate.Password
+            UserName = gate.UserName,
+            NameAr = gate.NameAr,
+            NameEn = gate.NameEn,
+            Password = gate.Password
 
-            };
-
-        }
+        };
 
 
 
@@ -33,46 +29,34 @@ namespace T2Access.BLL.Extensions
 
 
 
-        public static Gate ToEntity(this GateModel model)
-        {
-            return new Gate
-            {
-
-                Id = model.Id,
-                UserName = model.UserName,
-                NameAr = model.NameAr,
-                NameEn = model.NameEn,
-                Status = model.Status
-
-            };
-        }
-
-
-
-        public static GateDto ToDto(this Gate gate)
+        public static Gate ToEntity(this GateModel model) => new Gate
         {
 
-            return new GateDto
-            {
+            Id = model.Id,
+            UserName = model.UserName,
+            NameAr = model.NameAr,
+            NameEn = model.NameEn,
+            Status = model.Status
 
-                Id = gate.Id,
-                UserName = gate.UserName,
-                NameAr = gate.NameAr,
-                NameEn = gate.NameEn,
-                Status = (int)gate.Status
-
-            };
-        }
+        };
 
 
 
-
-        public static IEnumerable<GateDto> ToDto(this IEnumerable<Gate> gates)
+        public static GateDto ToDto(this Gate gate) => new GateDto
         {
 
-            return gates.Select(c => c.ToDto());
+            Id = gate.Id,
+            UserName = gate.UserName,
+            NameAr = gate.NameAr,
+            NameEn = gate.NameEn,
+            Status = (int)gate.Status
 
-        }
+        };
+
+
+
+
+        public static IEnumerable<GateDto> ToDto(this IEnumerable<Gate> gates) => gates.Select(c => c.ToDto());
         #endregion
     }
 }

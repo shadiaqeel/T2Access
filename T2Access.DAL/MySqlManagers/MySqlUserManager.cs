@@ -55,7 +55,7 @@ namespace T2Access.DAL
                 return false;
             }
 
-            return (DatabaseExecuter.MySqlExecuteNonQuery("SP_User_Update", delegate (MySqlCommand cmd)
+            return DatabaseExecuter.MySqlExecuteNonQuery("SP_User_Update", delegate (MySqlCommand cmd)
            {
                cmd.Parameters.AddWithValue("_id", user.Id);
 
@@ -67,7 +67,7 @@ namespace T2Access.DAL
 
                cmd.Parameters.AddWithValue("_status", user.Status != null ? user.Status : -1);
 
-           }) > 0 ? true : false);
+           }) > 0 ? true : false;
 
 
 
@@ -130,7 +130,7 @@ namespace T2Access.DAL
             });
 
 
-            return userList.AsEnumerable<User>();
+            return userList.AsEnumerable();
 
 
 
@@ -204,15 +204,6 @@ namespace T2Access.DAL
             });
 
 
-            if (user == null)
-            {
-                return null;
-            }
-
-
-            //user.GateList = userGateManager.GetByUserId(user.Id);
-
-
             return user;
 
 
@@ -253,14 +244,9 @@ namespace T2Access.DAL
 
 
 
-            if (user != null && passwordHasher.VerifyHashedPassword(user.Password, User.Password))
-            {
-                return new User() { Id = user.Id, UserName = user.UserName, FirstName = user.FirstName, LastName = user.LastName, Status = user.Status };
-            }
-            else
-            {
-                return null;
-            }
+            return user != null && passwordHasher.VerifyHashedPassword(user.Password, User.Password)
+                ? new User() { Id = user.Id, UserName = user.UserName, FirstName = user.FirstName, LastName = user.LastName, Status = user.Status }
+                : null;
         }
 
         public bool ResetPassword(IAuthModel model)

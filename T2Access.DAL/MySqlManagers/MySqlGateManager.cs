@@ -34,12 +34,9 @@ namespace T2Access.DAL
 
         public bool Update(Gate model)
         {
-            if (model.Id == null)
-            {
-                return false;
-            }
-
-            return DatabaseExecuter.MySqlExecuteNonQuery("SP_Gate_Update", delegate (MySqlCommand cmd)
+            return model.Id == null
+                ? false
+                : DatabaseExecuter.MySqlExecuteNonQuery("SP_Gate_Update", delegate (MySqlCommand cmd)
             {
                 cmd.Parameters.AddWithValue("_id", model.Id);
 
@@ -57,7 +54,7 @@ namespace T2Access.DAL
         public bool Delete(Gate gate)
         {
 
-            IUserGateManager userGateManager = ManagerFactory.GetUserGateManager(Variables.DatabaseProvider);
+            var userGateManager = ManagerFactory.GetUserGateManager(Variables.DatabaseProvider);
             userGateManager.Delete(new UserGate() { GateId = gate.Id });
 
 
@@ -123,9 +120,6 @@ namespace T2Access.DAL
             {
                 cmd.Parameters.AddWithValue("_userId", userId);
 
-
-
-
             }, delegate (MySqlDataReader reader)
             {
                 while (reader.Read())
@@ -144,7 +138,7 @@ namespace T2Access.DAL
                 }
             });
 
-            return checkedGateList.AsEnumerable<CheckedGateDto>();
+            return checkedGateList.AsEnumerable();
         }
 
 
@@ -218,14 +212,9 @@ namespace T2Access.DAL
             });
 
 
-            if (gate != null && passwordHasher.VerifyHashedPassword(gate.Password, Gate.Password))
-            {
-                return new Gate() { Id = gate.Id, UserName = gate.UserName, NameAr = gate.NameAr, NameEn = gate.NameEn, Status = gate.Status };
-            }
-            else
-            {
-                return null;
-            }
+            return gate != null && passwordHasher.VerifyHashedPassword(gate.Password, Gate.Password)
+                ? new Gate() { Id = gate.Id, UserName = gate.UserName, NameAr = gate.NameAr, NameEn = gate.NameEn, Status = gate.Status }
+                : null;
         }
 
         public bool ResetPassword(IAuthModel model)

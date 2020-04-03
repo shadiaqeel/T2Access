@@ -28,18 +28,18 @@ namespace T2Access.API.Controllers
         [ResponseType(typeof(string))]
         public HttpResponseMessage Login(LoginModel loginModel)
         {
-            //if (!ModelState.IsValid)
-            //    return Request.CreateResponse(HttpStatusCode.NotFound, ModelState);
-
-
 
             var response = userService.Login(loginModel);
             var user = response.Data;
 
-            if (response.Success)
+            if (!response.Success)
             {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, response.ErrorMessage);
+            }
 
-                List<Claim> cliamList = new List<Claim>
+
+
+            List<Claim> cliamList = new List<Claim>
                 { new Claim("UserId", user.Id.ToString()),
                     new Claim("Username", user.UserName),
                     new Claim("FirstName", user.FirstName),
@@ -48,29 +48,24 @@ namespace T2Access.API.Controllers
 
 
 
-                if (Enum.IsDefined(typeof(UserStatus), user.Status))
-                {
-                    cliamList.Add(new Claim("Role", $"{(UserStatus)user.Status},User"));
-                }
-                else
-                {
-                    cliamList.Add(new Claim("Role", $"{(UserStatus)0},User"));
-                }
-
-                var token = AuthorizationFactory.GetAuthrization().GenerateToken(new JWTContainerModel()
-                {
-
-                    ExpireMinutes = DateTime.Now.AddMinutes(15).Minute,
-                    Claims = cliamList.ToArray()
-
-                });
-
-                return Request.CreateResponse(HttpStatusCode.OK, token);
-
-
+            if (Enum.IsDefined(typeof(UserStatus), user.Status))
+            {
+                cliamList.Add(new Claim("Role", $"{(UserStatus)user.Status},User"));
+            }
+            else
+            {
+                cliamList.Add(new Claim("Role", $"{(UserStatus)0},User"));
             }
 
-            return Request.CreateResponse(HttpStatusCode.BadRequest, response.ErrorMessage);
+            var token = AuthorizationFactory.GetAuthrization().GenerateToken(new JWTContainerModel()
+            {
+
+                ExpireMinutes = DateTime.Now.AddMinutes(15).Minute,
+                Claims = cliamList.ToArray()
+
+            });
+
+            return Request.CreateResponse(HttpStatusCode.OK, token);
 
         }
 

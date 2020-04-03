@@ -35,7 +35,7 @@ namespace T2Access.Services.HttpClientService
                     httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 }
 
-                var httpResponse = httpClient.GetAsync(uri).Result;
+                var httpResponse = await httpClient.GetAsync(uri);
 
                 return httpResponse;
             }

@@ -25,7 +25,7 @@ namespace T2Access.BLL.Services
 
 
 
-            if (CheckUserName(model.UserName))
+            if (userManager.GetByUserName(model.UserName) != null)
             {
                 return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.UserExist };
             }
@@ -42,8 +42,7 @@ namespace T2Access.BLL.Services
                 return new ServiceResponse<string>() { Data = Resource.SignupSuccess };
             }
 
-            var gatelist = model.GateList.Split(',');
-            foreach (string gate in gatelist)
+            foreach (string gate in model.GateList.Split(','))
             {
                 if (Guid.TryParse(gate, out Guid gateId))
                 {
@@ -132,24 +131,15 @@ namespace T2Access.BLL.Services
 
         public ServiceResponse<string> Delete(Guid id)
         {
-            if (userGateManager.Delete(new UserGate() { UserId = id }))
+            if (userGateManager.Delete(new UserGate() { UserId = id }) && userManager.Delete(new User() { Id = id }))
             {
-                if (userManager.Delete(new User() { Id = id }))
-                {
-                    return new ServiceResponse<string>() { Data = Resource.DeleteSuccess };
-                }
+                return new ServiceResponse<string>() { Data = Resource.DeleteSuccess };
             }
 
             return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.DeleteFailed };
 
         }
 
-        //==========================================================================
-
-        private bool CheckUserName(string userName)
-        {
-            return userManager.GetByUserName(userName) != null ? true : false;
-        }
 
         //==========================================================================
 
@@ -157,9 +147,7 @@ namespace T2Access.BLL.Services
         {
             try
             {
-                var user = userManager.GetById(userId).ToDto();
-
-                return new ServiceResponse<UserDto>() { Data = user };
+                return new ServiceResponse<UserDto>() { Data = userManager.GetById(userId).ToDto() };
             }
             catch (Exception ex)
             {

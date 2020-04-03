@@ -24,14 +24,9 @@ namespace T2Access.API.Controllers
 
             var transaction = transactionService.GetByGateId(id);
 
-            if (transaction != null)
-            {
-                return Request.CreateResponse(HttpStatusCode.OK, transaction);
-            }
-            else
-            {
-                return Request.CreateResponse(HttpStatusCode.NotFound, Resource.TransactionNotExist);
-            }
+            return transaction != null
+                ? Request.CreateResponse(HttpStatusCode.OK, transaction)
+                : Request.CreateResponse(HttpStatusCode.NotFound, Resource.TransactionNotExist);
         }
 
 
@@ -42,15 +37,9 @@ namespace T2Access.API.Controllers
         public HttpResponseMessage Create(UserGateModel userGate)
         {
 
-
-            if (transactionService.Create(userGate))
-            {
-                return Request.CreateResponse(HttpStatusCode.OK, userGate);
-            }
-            else
-            {
-                return Request.CreateResponse(HttpStatusCode.NotFound, Resource.CreateTransactionFailed);
-            }
+            return transactionService.Create(userGate)
+                ? Request.CreateResponse(HttpStatusCode.OK, userGate)
+                : Request.CreateResponse(HttpStatusCode.NotFound, Resource.CreateTransactionFailed);
         }
 
 
@@ -60,14 +49,9 @@ namespace T2Access.API.Controllers
         [ResponseType(typeof(string))]
         public HttpResponseMessage UpdateStatus(decimal id)
         {
-            if (transactionService.UpdateStatus(id))
-            {
-                return Request.CreateResponse(HttpStatusCode.OK, Resource.StatusUpdateSuccess);
-            }
-            else
-            {
-                return Request.CreateResponse(HttpStatusCode.NotFound, Resource.StatusUpdateFail);
-            }
+            return transactionService.UpdateStatus(id)
+                ? Request.CreateResponse(HttpStatusCode.OK, Resource.StatusUpdateSuccess)
+                : Request.CreateResponse(HttpStatusCode.NotFound, Resource.StatusUpdateFail);
         }
 
 

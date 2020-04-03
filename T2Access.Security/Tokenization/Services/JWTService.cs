@@ -69,10 +69,10 @@ namespace T2Access.Security.Tokenization.Services
 
                 return new JwtSecurityTokenHandler().WriteToken(
                          new JwtSecurityToken(
-                             new JwtHeader(
+                             header: new JwtHeader(
                                  new SigningCredentials(
                                      GetSymmetricSecurityKey(), model.SecurityAlgorithm)),
-                             new JwtPayload(_issuer,
+                             payload: new JwtPayload(_issuer,
                                             _audienceId,
                                             model.Claims,
                                             DateTime.Now,
@@ -104,10 +104,8 @@ namespace T2Access.Security.Tokenization.Services
 
             IEnumerator<Claim> Claim = GetPrincipal(token).Claims.GetEnumerator();
 
-            while (Claim.MoveNext() && Claim.Current.Type != claimName)
-            {
-                ;
-            }
+            while (Claim.MoveNext() && Claim.Current.Type != claimName) ;
+      
 
             return Claim.Current.Value;
 
@@ -145,10 +143,9 @@ namespace T2Access.Security.Tokenization.Services
             try
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
-                var jwtToken = tokenHandler.ReadToken(token) as JwtSecurityToken;
 
 
-                if (jwtToken == null)
+                if (!(tokenHandler.ReadToken(token) is JwtSecurityToken jwtToken))
                 {
                     return null;
                 }

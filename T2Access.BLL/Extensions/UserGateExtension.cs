@@ -7,28 +7,21 @@ namespace T2Access.BLL.Extensions
     {
 
         #region mapper
-        public static UserGate ToEntity(this UserGateModel model)
-        {
-            return new UserGate
-            {
-
-                UserId = model.UserId,
-                GateId = model.GateId
-
-            };
-        }
-
-        public static UserGateModel ToModel(this UserGate userGate)
+        public static UserGate ToEntity(this UserGateModel model) => new UserGate
         {
 
-            return new UserGateModel
-            {
+            UserId = model.UserId,
+            GateId = model.GateId
 
-                UserId = userGate.UserId,
-                GateId = userGate.GateId
+        };
 
-            };
-        }
+        public static UserGateModel ToModel(this UserGate userGate) => new UserGateModel
+        {
+
+            UserId = userGate.UserId,
+            GateId = userGate.GateId
+
+        };
 
 
         #endregion

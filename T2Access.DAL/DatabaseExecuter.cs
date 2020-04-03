@@ -162,16 +162,9 @@ namespace T2Access.DAL
 
                     FillCmd(cmd);
 
-                    try
-                    {
-                        result = cmd.ExecuteNonQuery();
-                    }
-                    catch (Exception)
-                    {
 
+                     result = cmd.ExecuteNonQuery();
 
-                        result = -2;
-                    }
 
 
                 }

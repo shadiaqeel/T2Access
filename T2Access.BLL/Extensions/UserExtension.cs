@@ -14,18 +14,14 @@ namespace T2Access.BLL.Extensions
 
 
 
-        public static User ToEntity(this SignUpUserModel user)
+        public static User ToEntity(this SignUpUserModel user) => new User
         {
-            return new User
-            {
-                UserName = user.UserName,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Password = user.Password
+            UserName = user.UserName,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Password = user.Password
 
-            };
-
-        }
+        };
 
 
         //public static User ToEntity(this UpdateUserModel user)
@@ -45,41 +41,29 @@ namespace T2Access.BLL.Extensions
 
 
 
-        public static User ToEntity(this UserModel model)
-        {
-            return new User
-            {
-
-                Id = model.Id,
-                UserName = model.UserName,
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                Status = model.Status
-
-            };
-        }
-
-        public static UserDto ToDto(this User user)
+        public static User ToEntity(this UserModel model) => new User
         {
 
-            return new UserDto
-            {
+            Id = model.Id,
+            UserName = model.UserName,
+            FirstName = model.FirstName,
+            LastName = model.LastName,
+            Status = model.Status
 
-                Id = user.Id,
-                UserName = user.UserName,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Status = (int)user.Status
+        };
 
-            };
-        }
-
-        public static IEnumerable<UserDto> ToDto(this IEnumerable<User> user)
+        public static UserDto ToDto(this User user) => new UserDto
         {
 
-            return user.Select(c => c.ToDto());
+            Id = user.Id,
+            UserName = user.UserName,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Status = (int)user.Status
 
-        }
+        };
+
+        public static IEnumerable<UserDto> ToDto(this IEnumerable<User> user) => user.Select(c => c.ToDto());
         #endregion
     }
 }

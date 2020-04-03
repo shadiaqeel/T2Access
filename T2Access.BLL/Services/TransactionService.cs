@@ -18,14 +18,9 @@ namespace T2Access.BLL.Services
 
         public bool Create(UserGateModel userGate)
         {
-            if (ValidUserGate(userGate.ToEntity()))
-            {
-                return transactionManager.Create(new Transaction() { UserId = userGate.UserId, GateId = userGate.GateId }) == null ? false : true;
-            }
-            else
-            {
-                return false;
-            }
+            return ValidUserGate(userGate.ToEntity())
+                ? transactionManager.Create(new Transaction() { UserId = userGate.UserId, GateId = userGate.GateId }) == null ? false : true
+                : false;
         }
 
         public TransactionModel GetByGateId(Guid gateId)

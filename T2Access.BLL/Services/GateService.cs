@@ -28,12 +28,14 @@ namespace T2Access.BLL.Services
 
             try
             {
-                if (gateManager.Create(gateModel.ToEntity()) != null)
+                if (gateManager.GetByUserName(gateModel.UserName) == null)
                 {
-                    return new ServiceResponse<string>() { Data = Resource.SignupSuccess };
+                    return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.UserExist };
                 }
 
-                return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.SignupSuccess };
+                return gateManager.Create(gateModel.ToEntity()) != null
+                    ? new ServiceResponse<string>() { Data = Resource.SignupSuccess }
+                    : new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.SignupSuccess };
             }
             catch (Exception ex)
             {
@@ -50,12 +52,9 @@ namespace T2Access.BLL.Services
 
             try
             {
-                if (gateManager.Update(model.ToEntity()))
-                {
-                    return new ServiceResponse<string>() { Data = Resource.EditSuccess };
-                }
-
-                return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.EditFailed };
+                return gateManager.Update(model.ToEntity())
+                    ? new ServiceResponse<string>() { Data = Resource.EditSuccess }
+                    : new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.EditFailed };
             }
             catch (Exception ex)
             {
@@ -94,32 +93,18 @@ namespace T2Access.BLL.Services
 
         }
         //==================================================================================
-        public ServiceResponse<IEnumerable<CheckedGateDto>> GetCheckedListByUserId(Guid userId)
-        {
-
-
-            return new ServiceResponse<IEnumerable<CheckedGateDto>>() { Data = gateManager.GetCheckedByUserId(userId) };
-
-        }
+        public ServiceResponse<IEnumerable<CheckedGateDto>> GetCheckedListByUserId(Guid userId) => new ServiceResponse<IEnumerable<CheckedGateDto>>() { Data = gateManager.GetCheckedByUserId(userId) };
         //==================================================================================
 
-        public ServiceResponse<GateDto> Login(LoginModel gate)
-        {
-
-            return new ServiceResponse<GateDto>() { Data = gateManager.Login(gate).ToDto() };
-
-        }
+        public ServiceResponse<GateDto> Login(LoginModel gate) => new ServiceResponse<GateDto>() { Data = gateManager.Login(gate).ToDto() };
         //==================================================================================
         public ServiceResponse<string> Delete(Guid id)
         {
             try
             {
-                if (gateManager.Delete(new Gate() { Id = id }))
-                {
-                    return new ServiceResponse<string>() { Data = Resource.DeleteSuccess };
-                }
-
-                return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.DeleteFailed };
+                return gateManager.Delete(new Gate() { Id = id })
+                    ? new ServiceResponse<string>() { Data = Resource.DeleteSuccess }
+                    : new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.DeleteFailed };
             }
             catch (Exception ex)
             {
@@ -137,12 +122,9 @@ namespace T2Access.BLL.Services
         {
             try
             {
-                if (gateManager.ResetPassword(model))
-                {
-                    return new ServiceResponse<string>() { Data = Resource.EditSuccess };
-                }
-
-                return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.EditFailed };
+                return gateManager.ResetPassword(model)
+                    ? new ServiceResponse<string>() { Data = Resource.EditSuccess }
+                    : new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.EditFailed };
             }
             catch (Exception ex)
             {
@@ -153,14 +135,7 @@ namespace T2Access.BLL.Services
         }
         //==================================================================================
 
-        private bool CheckUserName(string userName)
-        {
 
-            return gateManager.GetByUserName(userName) == null ? true : false;
-
-
-
-        }
 
     }
 }

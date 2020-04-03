@@ -16,7 +16,6 @@ namespace T2Access.API.Attributes
     public class CustomAuthorizeAttribute : AuthorizeAttribute
     {
 
-        public string Roles { get; set; }
 
 
         public override void OnAuthorization(HttpActionContext actionContext)
@@ -40,12 +39,7 @@ namespace T2Access.API.Attributes
 
 
 
-            if (!authService.IsTokenValid(token) || !Roles.Intersect(role).Any())
-            {
-
-                actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized);
-            }
-            else
+            if (authService.IsTokenValid(token) && Roles.Intersect(role).Any())
             {
                 var userName = ((JWTService)authService).GetTokenClaimValue(token, "Username");
 
@@ -55,6 +49,11 @@ namespace T2Access.API.Attributes
                 Thread.CurrentPrincipal = principal;
                 actionContext.RequestContext.Principal = principal;
 
+            }
+            else
+            {
+
+                actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized);
             }
 
 

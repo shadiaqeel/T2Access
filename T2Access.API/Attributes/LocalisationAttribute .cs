@@ -32,18 +32,16 @@ namespace T2Access.API.Attributes
 
                 // load the culture info from the cookie
                 var cookie = actionContext.Request.Headers.GetCookies(CookieName).FirstOrDefault();
-                if (cookie != null)
+                if (cookie == null)
+                {
+                    // set the culture by the location if not specified
+                    culture = actionContext.Request.Headers.GetValues("UserLanguages").FirstOrDefault();
+                }
+                else
                 {
                     // set the culture by the cookie content
                     culture = cookie.Cookies[0].Value;
 
-                }
-                else
-                {
-                    // set the culture by the location if not specified
-
-
-                    culture = actionContext.Request.Headers.GetValues("UserLanguages").FirstOrDefault();
                 }
                 // set the lang value into route data
                 actionContext.RequestContext.RouteData.Values[LangParam] = culture;
@@ -54,24 +52,26 @@ namespace T2Access.API.Attributes
             actionContext.RequestContext.RouteData.Values[LangParam] = language;
 
             // Set the language - ignore specific culture for now
-            Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture(language);
+            Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture(language);
             Thread.CurrentThread.CurrentUICulture = CultureInfo.CreateSpecificCulture(language);
 
 
 
-            var res = continuation();
-            res.Wait();
+            using (var res = continuation())
+            {
+                res.Wait();
 
 
-            // save the locale into cookie (full locale)
+                // save the locale into cookie (full locale)
 
-            var _cookie = new CookieHeaderValue(CookieName, culture) { Expires = DateTime.Now.AddYears(1), Path = "/", HttpOnly = true };
+                var _cookie = new CookieHeaderValue(CookieName, culture) { Expires = DateTime.Now.AddYears(1), Path = "/", HttpOnly = true };
 
 
 
-            res.Result.Headers.AddCookies(new CookieHeaderValue[] { _cookie });
+                res.Result.Headers.AddCookies(new CookieHeaderValue[] { _cookie });
 
-            return res;
+                return res;
+            }
 
         }
 

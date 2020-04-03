@@ -7,8 +7,6 @@ namespace T2Access.Models
 {
 
 
-
-
     public class GateModel : BaseModel
     {
         public Guid Id { get; set; }

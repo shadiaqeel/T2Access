@@ -70,12 +70,9 @@ namespace T2Access.API.Controllers
         public HttpResponseMessage SignUp(SignUpGateModel gate)
         {
 
-            //if (!ModelState.IsValid)
-            //    return Request.CreateResponse(HttpStatusCode.NotFound, ModelState);
-
 
             var response = gateService.Create(gate);
-            return (response.Success) ?
+            return response.Success ?
                 Request.CreateResponse(HttpStatusCode.OK, response.Data) :
                 Request.CreateResponse(HttpStatusCode.NotFound, response.ErrorMessage);
 
@@ -97,13 +94,9 @@ namespace T2Access.API.Controllers
 
             var response = gateService.GetListWithFilter(filter);
 
-            if (response.Success)
-            {
-                return Request.CreateResponse(HttpStatusCode.OK, response.Data);
-            }
-
-            return Request.CreateResponse(HttpStatusCode.NotFound, response.ErrorMessage);
-
+            return response.Success
+                ? Request.CreateResponse(HttpStatusCode.OK, response.Data)
+                : Request.CreateResponse(HttpStatusCode.NotFound, response.ErrorMessage);
         }
 
 
