@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Security.Claims;
+
 using T2Access.Security.Tokenization.Models;
 
 namespace T2Access.Security.Tokenization.Services

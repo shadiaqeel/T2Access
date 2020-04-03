@@ -6,7 +6,7 @@ namespace T2Access
     {
 
 
-        internal static string ServerBaseAddress { get { return ConfigurationManager.AppSettings.Get("ServerBaseAddress"); } }
+        internal static string ServerBaseAddress => ConfigurationManager.AppSettings.Get("ServerBaseAddress");
 
     }
 }

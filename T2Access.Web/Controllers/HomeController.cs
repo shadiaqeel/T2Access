@@ -9,7 +9,9 @@ namespace T2Access.Web.Controllers
         public ActionResult Index()
         {
             if (string.IsNullOrEmpty((string)Session["Token"]))
+            {
                 return RedirectToAction("Login", "Account");
+            }
 
             return RedirectToAction("Index", "Admin");
 

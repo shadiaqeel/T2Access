@@ -86,7 +86,7 @@
                     <div class="form-group centered ">
                         <div>
                             <hr />
-                            <input type="submit" value=@Resource.Create class="btn btn-primary  btn-lg  col-md-2  " />
+                            <input type="submit" value=@Resource.Create class="btn btn-primary  btn-lg  col-md-1  " />
                             @Html.ActionLink(Resource.Back, "UserManagment", "User", null, new { @class = "btn btn-dark btn-lg col-md-1 " })
 
                         </div>
@@ -106,8 +106,10 @@
 
 
         var ajaxUrl = "@Url.Action("GetFilterd", "Gate")";
+
+
         //GatesList language
-        var SearchString = "@Resource.Search   ";
+        var search = "@Resource.Search   ";
         var zeroRecords = "@Resource.NotFound";
                
     </script>

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Web;
 using System.Web.Routing;
 
@@ -10,10 +8,10 @@ namespace T2Access.Web.Helper
     {
         public FromValuesListConstraint(params string[] values)
         {
-            this._values = values;
+            _values = values;
         }
 
-        private string[] _values;
+        private readonly string[] _values;
 
         public bool Match(HttpContextBase httpContext,
             Route route,

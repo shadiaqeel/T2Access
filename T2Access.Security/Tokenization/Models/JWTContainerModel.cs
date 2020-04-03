@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+
 using Microsoft.IdentityModel.Tokens;
 
 namespace T2Access.Security.Tokenization.Models

@@ -168,6 +168,7 @@
     <Content Include="Assets\Account\Login\images\icons\map-marker.png" />
     <Content Include="Assets\Account\Login\js\main.js" />
     <Content Include="Assets\Account\Login\js\map-custom.js" />
+    <Content Include="Assets\Admin\img\favicon.PNG" />
     <Content Include="Assets\Gate\js\get-list.js" />
     <Content Include="Assets\lib\advanced-datatable\css\demo_page.css" />
     <Content Include="Assets\lib\advanced-datatable\css\demo_table.css" />

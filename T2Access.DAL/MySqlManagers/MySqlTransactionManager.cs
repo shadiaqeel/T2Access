@@ -1,6 +1,6 @@
 ﻿using System;
+
 using MySql.Data.MySqlClient;
-using T2Access.Models;
 
 namespace T2Access.DAL
 {
@@ -13,7 +13,7 @@ namespace T2Access.DAL
             {
                 cmd.Parameters.AddWithValue("_userId", transaction.UserId);
                 cmd.Parameters.AddWithValue("_gateId", transaction.GateId);
-            }) > 0 ? transaction : null ;
+            }) > 0 ? transaction : null;
 
         }
 

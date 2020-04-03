@@ -15,7 +15,7 @@ namespace T2Access.Web.Attributes
         public string Users { get; set; }
         public string Roles { get; set; }
 
-        IAuthService authService = AuthrizationFactory.GetAuthrization();
+        private readonly IAuthService authService = AuthrizationFactory.GetAuthrization();
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
 
@@ -55,7 +55,7 @@ namespace T2Access.Web.Attributes
 
             var returnUrl = filterContext.HttpContext.Request.Url;
             //var returnUrl = filterContext.HttpContext.Request.Url;
-                filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary { { "action", "Login" }, { "controller", "Account" },{ "returnUrl", returnUrl } });
+            filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary { { "action", "Login" }, { "controller", "Account" }, { "returnUrl", returnUrl } });
 
 
         }

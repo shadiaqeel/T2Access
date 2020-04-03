@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+using T2Access.BLL.Extensions;
 using T2Access.DAL;
 using T2Access.DAL.Helper;
 using T2Access.Models;
-using T2Access.BLL.Extensions;
 
 
 namespace T2Access.BLL.Services
@@ -23,10 +20,12 @@ namespace T2Access.BLL.Services
         {
             if (ValidUserGate(userGate.ToEntity()))
             {
-                return transactionManager.Create(new Transaction() { UserId = userGate.UserId , GateId = userGate.GateId }) == null ? false : true;
+                return transactionManager.Create(new Transaction() { UserId = userGate.UserId, GateId = userGate.GateId }) == null ? false : true;
             }
             else
-            return false; 
+            {
+                return false;
+            }
         }
 
         public TransactionModel GetByGateId(Guid gateId)
@@ -44,7 +43,7 @@ namespace T2Access.BLL.Services
 
         public bool ValidUserGate(UserGate userGate)
         {
-             IUserGateManager userGateManager = ManagerFactory.GetUserGateManager(Variables.DatabaseProvider);
+            IUserGateManager userGateManager = ManagerFactory.GetUserGateManager(Variables.DatabaseProvider);
 
             return userGateManager.CheckIfExist(userGate);
         }

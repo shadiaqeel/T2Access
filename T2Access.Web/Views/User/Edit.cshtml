@@ -58,8 +58,8 @@
 
 
 
-        <div class="mt">
-            <div class="form-group form-panel  ">
+        <div class="mt-5">
+            <div class="form-group form-panel ">
                 <h6>@Resource.Gates</h6>
                 <div class="centered">
                     <div class="form-group">
@@ -78,7 +78,7 @@
             <div class="form-group centered ">
                 <div>
                     <hr />
-                    <input type="submit" value="@Resource.Update" class="btn btn-primary  btn-lg  col-md-2 " />
+                    <input type="submit" value="@Resource.Edit" class="btn btn-primary  btn-lg  col-md-1 " />
                     @Html.ActionLink(Resource.Back, "UserManagment", "User", null, new { @class = "btn btn-dark btn-lg  col-md-1" })
 
                 </div>
@@ -98,7 +98,15 @@
 
 @section Scripts
   {
-    <script>var ajaxUrl = "@Url.Action("GetCheckedByUserId","Gate", new { UserId = Model.Id })";</script>
+    <script>
+
+        var ajaxUrl = "@Url.Action("GetCheckedByUserId","Gate", new { UserId = Model.Id })";
+
+        //GatesList language
+        var search = "@Resource.Search   ";
+        var zeroRecords = "@Resource.NotFound";
+
+    </script>
 
     @Html.RegisteredScripts()
 

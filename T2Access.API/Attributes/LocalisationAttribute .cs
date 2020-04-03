@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 
@@ -21,7 +18,7 @@ namespace T2Access.API.Attributes
         // List of allowed languages in this app (to speed up check)
         private const string Cultures = "en ar";
 
-        public bool AllowMultiple { get { return true; } }
+        public bool AllowMultiple => true;
 
         public Task<HttpResponseMessage> ExecuteActionFilterAsync(HttpActionContext actionContext, CancellationToken cancellationToken, Func<Task<HttpResponseMessage>> continuation)
         {
@@ -45,7 +42,7 @@ namespace T2Access.API.Attributes
                 {
                     // set the culture by the location if not specified
 
-                    
+
                     culture = actionContext.Request.Headers.GetValues("UserLanguages").FirstOrDefault();
                 }
                 // set the lang value into route data
@@ -68,13 +65,13 @@ namespace T2Access.API.Attributes
 
             // save the locale into cookie (full locale)
 
-            var _cookie = new CookieHeaderValue(CookieName, culture) { Expires = DateTime.Now.AddYears(1)  , Path = "/", HttpOnly = true };
+            var _cookie = new CookieHeaderValue(CookieName, culture) { Expires = DateTime.Now.AddYears(1), Path = "/", HttpOnly = true };
 
 
 
             res.Result.Headers.AddCookies(new CookieHeaderValue[] { _cookie });
 
-            return  res;
+            return res;
 
         }
 

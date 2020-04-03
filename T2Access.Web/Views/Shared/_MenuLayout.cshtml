@@ -16,6 +16,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title</title>
 
+
+    <!--===============================================================================================-->
+    <link rel="icon" type="image/png" href="~/Assets/Admin/img/favicon.PNG" />
     <!--==========================================================================================================================================================================================
     <!-- Bootstrap core CSS -->
     @Styles.Render("~/Content/css")
@@ -75,10 +78,11 @@
                         }
 
 
-                        var targetPath = string.Format("/{0}/{1}{2}",
+                        var targetPath = string.Format("{0}/{1}{2}/{3}",
                             ViewContext.RouteData.Values["controller"].ToString(),
                             ViewContext.RouteData.Values["action"].ToString(),
-                            Request.Url.Query);
+                            Request.Url.Query,
+                            ViewContext.RouteData.Values["id"] ?? string.Empty);
                         var hostRoot = string.Format("{0}://{1}", Request.Url.Scheme, Request.Url.Authority);
                         var targetUrlMask = string.Format("{0}/{{0}}/{1}", hostRoot, targetPath);
                         <li class="nav-item dropdown">

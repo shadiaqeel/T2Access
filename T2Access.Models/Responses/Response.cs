@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+
 using T2Access.Models.Dtos;
 
 namespace T2Access.Models
@@ -14,11 +11,11 @@ namespace T2Access.Models
     public interface IServiceResponce<T>
     {
 
-         T Data { get; set; }
+        T Data { get; set; }
 
-         bool Success { get; set; } 
+        bool Success { get; set; }
 
-         string ErrorMessage { get; set; } 
+        string ErrorMessage { get; set; }
 
 
     }
@@ -26,7 +23,7 @@ namespace T2Access.Models
 
     public class ServiceResponse<T>
     {
-        public T Data { get; set; } 
+        public T Data { get; set; }
 
         public bool Success { get; set; } = true;
 
@@ -38,7 +35,7 @@ namespace T2Access.Models
 
     //==============================================================================
 
-    public class ListResponse<T> 
+    public class ListResponse<T>
     {
         public IEnumerable<T> ResponseList { get; set; }
         public int? totalEntities { get; set; }

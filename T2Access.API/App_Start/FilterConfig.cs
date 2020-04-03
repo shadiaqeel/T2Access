@@ -1,6 +1,4 @@
-﻿using System.Web;
-using System.Web.Mvc;
-using T2Access.API.Filters;
+﻿using System.Web.Mvc;
 
 namespace T2Access.API
 {

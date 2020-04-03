@@ -11,6 +11,7 @@ using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Description;
+
 using T2Access.API.Areas.HelpPage.ModelDescriptions;
 using T2Access.API.Areas.HelpPage.Models;
 
@@ -218,12 +219,11 @@ namespace T2Access.API.Areas.HelpPage
         /// </returns>
         public static HelpPageApiModel GetHelpPageApiModel(this HttpConfiguration config, string apiDescriptionId)
         {
-            object model;
             string modelId = ApiModelPrefix + apiDescriptionId;
-            if (!config.Properties.TryGetValue(modelId, out model))
+            if (!config.Properties.TryGetValue(modelId, out object model))
             {
                 Collection<ApiDescription> apiDescriptions = config.Services.GetApiExplorer().ApiDescriptions;
-                ApiDescription apiDescription = apiDescriptions.FirstOrDefault(api => String.Equals(api.GetFriendlyId(), apiDescriptionId, StringComparison.OrdinalIgnoreCase));
+                ApiDescription apiDescription = apiDescriptions.FirstOrDefault(api => string.Equals(api.GetFriendlyId(), apiDescriptionId, StringComparison.OrdinalIgnoreCase));
                 if (apiDescription != null)
                 {
                     model = GenerateApiModel(apiDescription, config);
@@ -404,7 +404,7 @@ namespace T2Access.API.Areas.HelpPage
             }
             catch (Exception e)
             {
-                apiModel.ErrorMessages.Add(String.Format(CultureInfo.CurrentCulture,
+                apiModel.ErrorMessages.Add(string.Format(CultureInfo.CurrentCulture,
                     "An exception has occurred while generating the sample. Exception message: {0}",
                     HelpPageSampleGenerator.UnwrapException(e).Message));
             }
@@ -445,9 +445,7 @@ namespace T2Access.API.Areas.HelpPage
             Collection<ApiDescription> apis = config.Services.GetApiExplorer().ApiDescriptions;
             foreach (ApiDescription api in apis)
             {
-                ApiParameterDescription parameterDescription;
-                Type parameterType;
-                if (TryGetResourceParameter(api, config, out parameterDescription, out parameterType))
+                if (TryGetResourceParameter(api, config, out ApiParameterDescription parameterDescription, out Type parameterType))
                 {
                     modelGenerator.GetOrCreateModelDescription(parameterType);
                 }

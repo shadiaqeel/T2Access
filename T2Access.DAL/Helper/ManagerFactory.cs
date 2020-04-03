@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace T2Access.DAL.Helper
 {
@@ -11,34 +7,37 @@ namespace T2Access.DAL.Helper
 
         public static IUserManager GetUserManager(string provider)
         {
-            if (String.IsNullOrEmpty(provider))
+            if (string.IsNullOrEmpty(provider))
+            {
                 provider = Variables.DatabaseProvider;
-
+            }
 
             switch (provider.ToUpper())
             {
 
                 case "MSSQL":
-                  //  return new UserManager();
+                //  return new UserManager();
                 case "MYSQL":
                     return new MySqlUserManager();
 
                 default:
                     throw new Exception("Provider is not supported ");
-            
+
             }
         }
 
         public static IGateManager GetGateManager(string provider)
         {
-            if (String.IsNullOrEmpty(provider))
+            if (string.IsNullOrEmpty(provider))
+            {
                 provider = Variables.DatabaseProvider;
+            }
 
             switch (provider.ToUpper())
             {
 
                 case "MSSQL":
-                   // return new GateManager();
+                // return new GateManager();
                 case "MYSQL":
                     return new MySqlGateManager();
 
@@ -50,15 +49,16 @@ namespace T2Access.DAL.Helper
 
         public static IUserGateManager GetUserGateManager(string provider)
         {
-            if (String.IsNullOrEmpty(provider))
+            if (string.IsNullOrEmpty(provider))
+            {
                 provider = Variables.DatabaseProvider;
-
+            }
 
             switch (provider.ToUpper())
             {
 
                 case "MSSQL":
-                  //  return new UserGateManager();
+                //  return new UserGateManager();
                 case "MYSQL":
                     return new MySqlUserGateManager();
 
@@ -71,15 +71,16 @@ namespace T2Access.DAL.Helper
         public static ITransactionManager GetTransactionManager(string provider)
         {
 
-            if (String.IsNullOrEmpty(provider))
+            if (string.IsNullOrEmpty(provider))
+            {
                 provider = Variables.DatabaseProvider;
-
+            }
 
             switch (provider.ToUpper())
             {
 
                 case "MSSQL":
-                  //  return new TransactionManager();
+                //  return new TransactionManager();
                 case "MYSQL":
                     return new MySqlTransactionManager();
 

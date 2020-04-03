@@ -20,7 +20,7 @@ namespace T2Access.API.Controllers
 
     public class UserController : BaseController
     {
-        IUserService userService = new UserService();
+        private readonly IUserService userService = new UserService();
 
 
 
@@ -39,29 +39,33 @@ namespace T2Access.API.Controllers
             if (response.Success)
             {
 
-                    List<Claim> cliamList = new List<Claim>();
-                    cliamList.Add(new Claim("UserId", user.Id.ToString()));
-                    cliamList.Add(new Claim("Username", user.UserName));
-                    cliamList.Add(new Claim("FirstName", user.FirstName));
-                    cliamList.Add(new Claim("LastName", user.LastName));
+                List<Claim> cliamList = new List<Claim>
+                { new Claim("UserId", user.Id.ToString()),
+                    new Claim("Username", user.UserName),
+                    new Claim("FirstName", user.FirstName),
+                    new Claim("LastName", user.LastName)
+                };
 
 
 
-                    if (Enum.IsDefined(typeof(UserStatus), user.Status))
-                        cliamList.Add(new Claim("Role", $"{(UserStatus)user.Status},User"));
-                    else
-                        cliamList.Add(new Claim("Role", $"{(UserStatus)0},User"));
+                if (Enum.IsDefined(typeof(UserStatus), user.Status))
+                {
+                    cliamList.Add(new Claim("Role", $"{(UserStatus)user.Status},User"));
+                }
+                else
+                {
+                    cliamList.Add(new Claim("Role", $"{(UserStatus)0},User"));
+                }
 
+                var token = AuthorizationFactory.GetAuthrization().GenerateToken(new JWTContainerModel()
+                {
 
-                    var token = AuthorizationFactory.GetAuthrization().GenerateToken(new JWTContainerModel()
-                    {
+                    ExpireMinutes = DateTime.Now.AddMinutes(15).Minute,
+                    Claims = cliamList.ToArray()
 
-                        ExpireMinutes = DateTime.Now.AddMinutes(15).Minute,
-                        Claims = cliamList.ToArray()
+                });
 
-                    });
-
-                    return Request.CreateResponse(HttpStatusCode.OK, token );
+                return Request.CreateResponse(HttpStatusCode.OK, token);
 
 
             }
@@ -102,7 +106,7 @@ namespace T2Access.API.Controllers
         {
             if (filter == null)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.FilterMiss );
+                return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.FilterMiss);
             }
 
             var response = userService.GetList(filter);
@@ -121,10 +125,11 @@ namespace T2Access.API.Controllers
         public HttpResponseMessage GetById(Guid id)
         {
             if (id == null)
-              return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.FilterMiss);
-            
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.FilterMiss);
+            }
 
-            var  response = userService.GetById(id);
+            var response = userService.GetById(id);
             return (response.Success) ?
                 Request.CreateResponse(HttpStatusCode.OK, response.Data) :
                 Request.CreateResponse(HttpStatusCode.NotFound, response);
@@ -192,7 +197,7 @@ namespace T2Access.API.Controllers
         {
 
 
-             var response = userService.Assign(userGate);
+            var response = userService.Assign(userGate);
             return (response.Success) ?
                 Request.CreateResponse(HttpStatusCode.OK, response.Data) :
                 Request.CreateResponse(HttpStatusCode.BadRequest, response.ErrorMessage);
@@ -208,7 +213,7 @@ namespace T2Access.API.Controllers
         {
 
 
-             var response = userService.Unassign(userGate);
+            var response = userService.Unassign(userGate);
             return (response.Success) ?
                 Request.CreateResponse(HttpStatusCode.OK, response.Data) :
                 Request.CreateResponse(HttpStatusCode.BadRequest, response.ErrorMessage);

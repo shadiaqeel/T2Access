@@ -6,10 +6,10 @@ using T2Access.Models.Resources;
 namespace T2Access.Models
 {
 
-  
 
 
-    public class GateModel : BaseModel 
+
+    public class GateModel : BaseModel
     {
         public Guid Id { get; set; }
 
@@ -30,11 +30,7 @@ namespace T2Access.Models
 
     //=====================================================================================================
 
-    public class CheckedGateModel : GateModel
-    {
-        public bool Checked { get; set; }
 
-    }
 
 
     public class FilterGateModel : GateModel
@@ -57,7 +53,7 @@ namespace T2Access.Models
         [MinLength(8, ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "MoreThen")]
         [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.UserName))]
 
-          public  string UserName { get; set; }
+        public string UserName { get; set; }
 
         [Required(ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "RequiredField")]
         [MaxLength(150, ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "LessThen")]
@@ -82,13 +78,13 @@ namespace T2Access.Models
         [MaxLength(150, ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "LessThen")]
         [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.NameAr))]
 
-         public string NameAr { get; set; }
+        public string NameAr { get; set; }
 
         [Required(ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "RequiredField")]
         [MaxLength(150, ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "LessThen")]
         [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.NameEn))]
 
-         public string NameEn { get; set; }
+        public string NameEn { get; set; }
     }
 
     //=====================================================================================================

@@ -14,9 +14,7 @@ namespace T2Access.API
             config.MapHttpAttributeRoutes();
 
 
-            //config.MessageHandlers.Add(new LocalizationHandler());
-            //constraints: new { url = new LowercaseRouteConstraint() },
-  
+
 
 
             config.Routes.MapHttpRoute(

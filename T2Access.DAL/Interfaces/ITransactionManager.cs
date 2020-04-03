@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using T2Access.Models;
 
 namespace T2Access.DAL
 {
     public interface ITransactionManager : IRepository<Transaction>
     {
-        Transaction GetByGateId(Guid gateId , int status);
+        Transaction GetByGateId(Guid gateId, int status);
         bool UpdateStatus(decimal id);
 
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+
 using MySql.Data.MySqlClient;
 
 namespace T2Access.DAL
@@ -73,8 +74,8 @@ namespace T2Access.DAL
                     FillCmd(cmd);
 
 
-                        result = cmd.ExecuteNonQuery();
-                    
+                    result = cmd.ExecuteNonQuery();
+
 
 
                 }
@@ -165,7 +166,7 @@ namespace T2Access.DAL
                     {
                         result = cmd.ExecuteNonQuery();
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
 
 

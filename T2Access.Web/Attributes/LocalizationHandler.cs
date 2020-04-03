@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
@@ -14,7 +13,7 @@ namespace T2Access.Web.Attributes
         protected override IHttpHandler GetHttpHandler(RequestContext requestContext)
         {
 
-            var language =(string) requestContext.RouteData.Values[LangParam];
+            var language = (string)requestContext.RouteData.Values[LangParam];
 
             if (language != null)
             {
@@ -22,8 +21,8 @@ namespace T2Access.Web.Attributes
                 Thread.CurrentThread.CurrentUICulture = CultureInfo.CreateSpecificCulture(language);
             }
 
-           return base.GetHttpHandler(requestContext);
-            
+            return base.GetHttpHandler(requestContext);
+
         }
     }
 }

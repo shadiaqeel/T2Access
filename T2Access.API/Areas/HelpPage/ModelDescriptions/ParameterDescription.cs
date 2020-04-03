@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace T2Access.API.Areas.HelpPage.ModelDescriptions

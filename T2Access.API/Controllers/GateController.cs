@@ -17,10 +17,10 @@ using T2Access.Security.Tokenization.Models;
 namespace T2Access.API.Controllers
 {
 
-  //  [Route("api/gate/{action}")]
+    //  [Route("api/gate/{action}")]
     public class GateController : BaseController
     {
-        IGateService gateService = new GateService();
+        private readonly IGateService gateService = new GateService();
 
 
         [HttpPost]
@@ -37,12 +37,14 @@ namespace T2Access.API.Controllers
             {
                 var _gate = response.Data;
 
-                List<Claim> cliamList = new List<Claim>();
-                cliamList.Add(new Claim("GateId", _gate.Id.ToString()));
-                cliamList.Add(new Claim("UserName", _gate.UserName));
-                cliamList.Add(new Claim("NameAr", _gate.NameAr));
-                cliamList.Add(new Claim("NameEn", _gate.NameEn));
-                cliamList.Add(new Claim("Role", "Gate"));
+                List<Claim> cliamList = new List<Claim>
+                {
+                    new Claim("GateId", _gate.Id.ToString()),
+                    new Claim("UserName", _gate.UserName),
+                    new Claim("NameAr", _gate.NameAr),
+                    new Claim("NameEn", _gate.NameEn),
+                    new Claim("Role", "Gate")
+                };
 
 
 
@@ -57,12 +59,9 @@ namespace T2Access.API.Controllers
                 return Request.CreateResponse(HttpStatusCode.OK, Token);
             }
             else
-
+            {
                 return Request.CreateResponse(HttpStatusCode.NotFound, Resource.UserNotExist);
-
-
-
-
+            }
         }
 
 
@@ -99,7 +98,10 @@ namespace T2Access.API.Controllers
             var response = gateService.GetListWithFilter(filter);
 
             if (response.Success)
+            {
                 return Request.CreateResponse(HttpStatusCode.OK, response.Data);
+            }
+
             return Request.CreateResponse(HttpStatusCode.NotFound, response.ErrorMessage);
 
         }
@@ -132,7 +134,7 @@ namespace T2Access.API.Controllers
         {
             var response = gateService.Delete(id);
             return (response.Success) ?
-                Request.CreateResponse(HttpStatusCode.OK, response.Data) : 
+                Request.CreateResponse(HttpStatusCode.OK, response.Data) :
                 Request.CreateResponse(HttpStatusCode.BadRequest, response.ErrorMessage);
 
         }

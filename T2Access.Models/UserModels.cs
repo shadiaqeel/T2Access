@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 using T2Access.Models.Resources;
@@ -11,7 +10,7 @@ namespace T2Access.Models
 
 
 
-    public class UserModel : BaseModel 
+    public class UserModel : BaseModel
     {
         [Key]
         public Guid Id { get; set; }
@@ -60,7 +59,7 @@ namespace T2Access.Models
         [MaxLength(150, ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "LessThen")]
         [MinLength(8, ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "MoreThen")]
         [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.UserName))]
-         public string UserName { get; set; }
+        public string UserName { get; set; }
 
         [Required(ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "RequiredField")]
         [MaxLength(150, ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "LessThen")]
@@ -87,7 +86,7 @@ namespace T2Access.Models
         [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.FirstName))]
 
 
-         public string FirstName { get; set; }
+        public string FirstName { get; set; }
 
         [Required(ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "RequiredField")]
         [MaxLength(150, ErrorMessageResourceType = typeof(ModelResource), ErrorMessageResourceName = "LessThen")]

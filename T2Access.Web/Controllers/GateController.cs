@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic;
-using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+
 using Newtonsoft.Json;
+
 using T2Access.Models;
 using T2Access.Services.HttpClientService;
 using T2Access.Web.Attributes;
@@ -15,13 +16,11 @@ using T2Access.Web.Attributes;
 namespace T2Access.Web.Controllers
 {
 
-  [CustomAuthorize]
+    [CustomAuthorize]
 
     public class GateController : WebController
     {
-
-
-        IHttpClientService httpService = new HttpClientService(new Uri(Variables.ServerBaseAddress + $"{Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName}/gate/"));
+        private readonly IHttpClientService httpService = new HttpClientService(new Uri(Variables.ServerBaseAddress + $"{Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName}/gate/"));
 
 
         // GET: Gate
@@ -44,7 +43,7 @@ namespace T2Access.Web.Controllers
         public ActionResult GateManagment()
         {
 
-                return View();
+            return View();
         }
 
 
@@ -74,11 +73,11 @@ namespace T2Access.Web.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                var gates = await response.Content.ReadAsAsync <ListResponse< GateViewModel>>();
+                var gates = await response.Content.ReadAsAsync<ListResponse<GateViewModel>>();
 
                 if (Request.IsAjaxRequest())
                 {
-                    
+
 
 
 
@@ -92,7 +91,7 @@ namespace T2Access.Web.Controllers
 
 
 
-                    return Json(new { data = JsonConvert.SerializeObject(gates.ResponseList, new T2Access.Web.Helper.DisplayEnumConverter()) , draw = Request["draw"], recordsTotal = gates.totalEntities  }, JsonRequestBehavior.AllowGet);
+                    return Json(new { data = JsonConvert.SerializeObject(gates.ResponseList, new T2Access.Web.Helper.DisplayEnumConverter()), draw = Request["draw"], recordsTotal = gates.totalEntities }, JsonRequestBehavior.AllowGet);
                 }
 
                 return PartialView(gates);
@@ -130,8 +129,9 @@ namespace T2Access.Web.Controllers
 
 
             if (response.IsSuccessStatusCode)
-
+            {
                 return Json(new { success = true, message = result.Replace("\"", "") });
+            }
             else
             {
 
@@ -165,7 +165,7 @@ namespace T2Access.Web.Controllers
             if (response.IsSuccessStatusCode)
             {
 
-                return Json(new { success = true, message = result.Replace("\"", "") }, JsonRequestBehavior.AllowGet) ;
+                return Json(new { success = true, message = result.Replace("\"", "") }, JsonRequestBehavior.AllowGet);
 
             }
             else
@@ -194,7 +194,7 @@ namespace T2Access.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit( GateViewModel model)
+        public async Task<ActionResult> Edit(GateViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -206,8 +206,9 @@ namespace T2Access.Web.Controllers
 
 
             if (response.IsSuccessStatusCode)
-
+            {
                 return Json(new { success = true, message = result.Replace("\"", "") });
+            }
             else
             {
 
@@ -215,7 +216,7 @@ namespace T2Access.Web.Controllers
                 var error = await response.Content.ReadAsStringAsync();
                 ViewBag.ErrorMessage = error;
 
-               // ModelState.AddModelError("UserName", error);
+                // ModelState.AddModelError("UserName", error);
 
 
                 return PartialView("_Edit", model);
@@ -259,8 +260,9 @@ namespace T2Access.Web.Controllers
 
 
             if (response.IsSuccessStatusCode)
-
+            {
                 return Json(new { success = true });
+            }
             else
             {
 
@@ -329,13 +331,15 @@ namespace T2Access.Web.Controllers
 
                 //sorting 
                 if (!string.IsNullOrEmpty(sortColumnName))
+                {
                     filterdGates.ResponseList = filterdGates.ResponseList.OrderBy($"{sortColumnName} {sortDirection}").ToList<GateViewModel>();
+                }
 
 
                 //view = RenderViewToString(ControllerContext, "_ListBody", filterdGates, true)
 
 
-                return Json(new {data = filterdGates.ResponseList, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = filterdGates.totalEntities }, JsonRequestBehavior.AllowGet);
+                return Json(new { data = filterdGates.ResponseList, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = filterdGates.totalEntities }, JsonRequestBehavior.AllowGet);
             }
 
             return null;
@@ -374,11 +378,13 @@ namespace T2Access.Web.Controllers
 
                 //sorting 
                 if (!string.IsNullOrEmpty(sortColumnName))
+                {
                     CheckedGates = CheckedGates.OrderBy($"{sortColumnName} {sortDirection}").ToList<GateViewModel>();
+                }
 
 
                 // view = RenderViewToString(ControllerContext, "_ListBody", CheckedGates, true)
-                return Json(new {data = CheckedGates, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
+                return Json(new { data = CheckedGates, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
             }
 
 

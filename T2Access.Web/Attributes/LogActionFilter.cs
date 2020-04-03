@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Web;
+﻿using System.Diagnostics;
 using System.Web.Mvc;
 using System.Web.Routing;
 
@@ -14,8 +7,7 @@ namespace T2Access.Web.Attributes
     public class LogActionFilter : ActionFilterAttribute
 
     {
-
-        Stopwatch sw = new Stopwatch();
+        private readonly Stopwatch sw = new Stopwatch();
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             sw.Start();
@@ -42,7 +34,7 @@ namespace T2Access.Web.Attributes
         {
             var controllerName = routeData.Values["controller"];
             var actionName = routeData.Values["action"];
-            var message = String.Format(" Logging  MVC !!!!!   controller:{0} action:{1}  Elapsed Milliseconds :{2} ", controllerName, actionName,Data);
+            var message = string.Format(" Logging  MVC !!!!!   controller:{0} action:{1}  Elapsed Milliseconds :{2} ", controllerName, actionName, Data);
 
             Debug.WriteLine(message);
         }

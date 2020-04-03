@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+
 using Microsoft.IdentityModel.Tokens;
+
 using T2Access.Security.Tokenization.Models;
 
 namespace T2Access.Security.Tokenization.Services
@@ -11,7 +13,7 @@ namespace T2Access.Security.Tokenization.Services
     {
         public string SecretKey { get; set; } = Constants.SECRET_KEY;
 
-        private string _issuer, _audienceId;
+        private readonly string _issuer, _audienceId;
         public JWTService()
         {
             _issuer = "T2";
@@ -58,7 +60,10 @@ namespace T2Access.Security.Tokenization.Services
         {
 
             if (model == null || model.Claims == null || model.Claims.Length == 0)
+            {
                 throw new ArgumentException("Arguments to  create  token are not valid");
+            }
+
             try
             {
 
@@ -85,7 +90,9 @@ namespace T2Access.Security.Tokenization.Services
         public IEnumerable<Claim> GetTokenClaims(string token)
         {
             if (string.IsNullOrEmpty(token))
+            {
                 throw new ArgumentException("Given token is null or empty   ");
+            }
 
             return GetPrincipal(token).Claims;
         }
@@ -97,8 +104,10 @@ namespace T2Access.Security.Tokenization.Services
 
             IEnumerator<Claim> Claim = GetPrincipal(token).Claims.GetEnumerator();
 
-            while (Claim.MoveNext() && Claim.Current.Type != claimName) ;
-
+            while (Claim.MoveNext() && Claim.Current.Type != claimName)
+            {
+                ;
+            }
 
             return Claim.Current.Value;
 
@@ -108,7 +117,9 @@ namespace T2Access.Security.Tokenization.Services
         {
 
             if (string.IsNullOrEmpty(token))
+            {
                 throw new ArgumentException("Given token is null or empty");
+            }
 
             try
             {
@@ -138,12 +149,11 @@ namespace T2Access.Security.Tokenization.Services
 
 
                 if (jwtToken == null)
+                {
                     return null;
+                }
 
-
-                SecurityToken validatedToken;
-
-                return tokenHandler.ValidateToken(token, GetTokenValidationParameters(), out validatedToken);
+                return tokenHandler.ValidateToken(token, GetTokenValidationParameters(), out SecurityToken validatedToken);
             }
 
 

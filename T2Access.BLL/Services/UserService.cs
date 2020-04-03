@@ -26,26 +26,29 @@ namespace T2Access.BLL.Services
 
 
             if (CheckUserName(model.UserName))
+            {
                 return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.UserExist };
-
-
+            }
 
             Guid id = (userManager.Create(model.ToEntity())).Id;
 
             if (id == Guid.Empty)
+            {
                 return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.SignupFailed };
-
+            }
 
             if (string.IsNullOrEmpty(model.GateList))
-                return new ServiceResponse<string>() { Data = Resource.SignupSuccess  };
+            {
+                return new ServiceResponse<string>() { Data = Resource.SignupSuccess };
+            }
 
-
-            Guid gateId;
             var gatelist = model.GateList.Split(',');
             foreach (string gate in gatelist)
             {
-                if (Guid.TryParse(gate, out gateId))
+                if (Guid.TryParse(gate, out Guid gateId))
+                {
                     userGateManager.Create(new UserGate() { UserId = id, GateId = gateId });
+                }
             }
 
             return new ServiceResponse<string>() { Data = Resource.SignupSuccess };
@@ -70,16 +73,19 @@ namespace T2Access.BLL.Services
 
 
             if (string.IsNullOrEmpty(model.GateList))
+            {
                 return new ServiceResponse<string>() { Data = Resource.EditSuccess };
+            }
 
 
             //Create new records
-            Guid gateId;
             var gatelist = model.GateList.Split(',');
             foreach (string gate in gatelist)
             {
-                if (Guid.TryParse(gate, out gateId))
+                if (Guid.TryParse(gate, out Guid gateId))
+                {
                     userGateManager.Create(new UserGate() { UserId = model.Id, GateId = gateId });
+                }
             }
 
 
@@ -105,12 +111,16 @@ namespace T2Access.BLL.Services
 
             //sorting 
             if (!string.IsNullOrEmpty(filter.Order))
+            {
                 userList = userList.OrderBy(filter.Order);
+            }
 
 
             //paging
             if (filter.Skip != null && filter.PageSize != null)
+            {
                 userList = userList.Skip((int)filter.Skip).Take((int)filter.PageSize);
+            }
 
             return new ServiceResponse<UserListResponse>() { Data = new UserListResponse() { ResponseList = userList.ToDto(), totalEntities = _totalSize } };
 
@@ -125,9 +135,9 @@ namespace T2Access.BLL.Services
             if (userGateManager.Delete(new UserGate() { UserId = id }))
             {
                 if (userManager.Delete(new User() { Id = id }))
+                {
                     return new ServiceResponse<string>() { Data = Resource.DeleteSuccess };
-
-
+                }
             }
 
             return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.DeleteFailed };
@@ -138,9 +148,7 @@ namespace T2Access.BLL.Services
 
         private bool CheckUserName(string userName)
         {
-
             return userManager.GetByUserName(userName) != null ? true : false;
-
         }
 
         //==========================================================================
@@ -180,7 +188,9 @@ namespace T2Access.BLL.Services
             try
             {
                 if (userManager.ResetPassword(model))
+                {
                     return new ServiceResponse<string>() { Data = Resource.EditSuccess };
+                }
 
                 return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.EditFailed };
             }
@@ -201,7 +211,9 @@ namespace T2Access.BLL.Services
             try
             {
                 if (userGateManager.Create(userGate.ToEntity()) != null)
+                {
                     return new ServiceResponse<string>() { Data = Resource.AssignSuccess };
+                }
 
                 return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.AssignFailed };
             }
@@ -223,7 +235,9 @@ namespace T2Access.BLL.Services
             try
             {
                 if (userGateManager.Delete(userGate.ToEntity()))
+                {
                     return new ServiceResponse<string>() { Data = Resource.UnassignSuccess };
+                }
 
                 return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.UnassignFailed };
             }

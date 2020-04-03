@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
+
 using T2Access.Models.Resources;
 namespace T2Access.Models
 {
@@ -9,16 +10,16 @@ namespace T2Access.Models
     public enum UserStatus
     {
 
-        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.Active),GroupName = "blue")]
+        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.Active), GroupName = "blue")]
         [EnumMember(Value = nameof(ModelResource.Active))]
 
         Active = 0,
 
-        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.Admin) , GroupName = "green")]
+        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.Admin), GroupName = "green")]
         [EnumMember(Value = nameof(ModelResource.Admin))]
         Admin = 1,
 
-        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.Block) , GroupName = "red")]
+        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.Block), GroupName = "red")]
         [EnumMember(Value = nameof(ModelResource.Block))]
         Block = 2
 

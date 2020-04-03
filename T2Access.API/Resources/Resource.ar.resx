@@ -133,10 +133,10 @@
     <value>نجحت عملية الحذف</value>
   </data>
   <data name="EditFailed" xml:space="preserve">
-    <value>عملية التحرير فشلت</value>
+    <value>عملية التعديل فشلت</value>
   </data>
   <data name="EditSuccess" xml:space="preserve">
-    <value>عملية التحرير نجحت</value>
+    <value>عملية التعديل نجحت</value>
   </data>
   <data name="FilterMiss" xml:space="preserve">
     <value>الفلتر مفقود </value>

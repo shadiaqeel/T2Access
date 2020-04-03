@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using MySql.Data.MySqlClient;
 
 using T2Access.DAL.Helper;
@@ -13,8 +14,8 @@ namespace T2Access.DAL
 
     public class MySqlUserManager : IUserManager
     {
-        private IPasswordHasher passwordHasher = new PasswordHasher();
-        IUserGateManager userGateManager = ManagerFactory.GetUserGateManager(Variables.DatabaseProvider);
+        private readonly IPasswordHasher passwordHasher = new PasswordHasher();
+        private readonly IUserGateManager userGateManager = ManagerFactory.GetUserGateManager(Variables.DatabaseProvider);
 
 
 
@@ -43,14 +44,16 @@ namespace T2Access.DAL
            });
 
             user.Id = id;
-                return user;
+            return user;
 
         }
 
         public bool Update(User user)
         {
             if (user.Id == null)
+            {
                 return false;
+            }
 
             return (DatabaseExecuter.MySqlExecuteNonQuery("SP_User_Update", delegate (MySqlCommand cmd)
            {
@@ -129,7 +132,7 @@ namespace T2Access.DAL
 
             return userList.AsEnumerable<User>();
 
-          
+
 
 
         }
@@ -202,7 +205,9 @@ namespace T2Access.DAL
 
 
             if (user == null)
+            {
                 return null;
+            }
 
 
             //user.GateList = userGateManager.GetByUserId(user.Id);
@@ -253,14 +258,17 @@ namespace T2Access.DAL
                 return new User() { Id = user.Id, UserName = user.UserName, FirstName = user.FirstName, LastName = user.LastName, Status = user.Status };
             }
             else
+            {
                 return null;
-
+            }
         }
 
         public bool ResetPassword(IAuthModel model)
         {
             if (model.Id == null)
+            {
                 return false;
+            }
 
             return DatabaseExecuter.MySqlExecuteNonQuery("SP_User_ResetPassword", delegate (MySqlCommand cmd)
             {

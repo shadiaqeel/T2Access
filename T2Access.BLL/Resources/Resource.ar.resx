@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AssignFailed" xml:space="preserve">
-    <value>عملية التعيين فشلت</value>
+    <value>فشلت عملية التعيين </value>
   </data>
   <data name="AssignSuccess" xml:space="preserve">
-    <value>عملية التعيين نجحت</value>
+    <value>نجحت عملية التعيين </value>
   </data>
   <data name="CreateTransactionFailed" xml:space="preserve">
     <value>فشلت عملية انشاء معامله  </value>
@@ -133,13 +133,13 @@
     <value>نجحت عملية الحذف</value>
   </data>
   <data name="EditFailed" xml:space="preserve">
-    <value>عملية التحرير فشلت</value>
+    <value>فشلت عملية التعديل </value>
   </data>
   <data name="EditSuccess" xml:space="preserve">
-    <value>عملية التحرير نجحت</value>
+    <value>نجحت عملية التعديل </value>
   </data>
   <data name="SignupFailed" xml:space="preserve">
-    <value>عملية التسجيل فشلت</value>
+    <value> فشلت عملية التسجيل </value>
   </data>
   <data name="SignupSuccess" xml:space="preserve">
     <value>عملية التسجيل نجحت</value>
@@ -154,10 +154,10 @@
     <value>المعامله غير موجوده</value>
   </data>
   <data name="UnassignFailed" xml:space="preserve">
-    <value>عملية الغاء التعيين فشلت</value>
+    <value>فشلت عملية الغاء التعيين </value>
   </data>
   <data name="UnassignSuccess" xml:space="preserve">
-    <value>عملية الغاء التعيين نجحت</value>
+    <value>نجحت عملية الغاء التعيين </value>
   </data>
   <data name="UserExist" xml:space="preserve">
     <value>عملية التسجيل فشلت , اسم المستخدم موجود </value>

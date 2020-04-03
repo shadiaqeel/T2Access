@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
@@ -49,8 +47,10 @@ namespace T2Access.Web.Attributes
             Thread.CurrentThread.CurrentUICulture = CultureInfo.CreateSpecificCulture(language);
 
             // save the locale into cookie (full locale)
-            HttpCookie _cookie = new HttpCookie(CookieName, culture);
-            _cookie.Expires = DateTime.Now.AddYears(1);
+            HttpCookie _cookie = new HttpCookie(CookieName, culture)
+            {
+                Expires = DateTime.Now.AddYears(1)
+            };
             filterContext.HttpContext.Response.SetCookie(_cookie);
 
             // Pass on to normal controller processing

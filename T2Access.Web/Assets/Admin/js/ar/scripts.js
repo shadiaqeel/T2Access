@@ -64,7 +64,7 @@ var setupToastr = function () {
         "debug": false,
         "newestOnTop": false,
         "progressBar": false,
-        "positionClass": "toast-bottom-right",
+        "positionClass": "toast-bottom-left",
         "preventDuplicates": false,
         "onclick": null,
         "showDuration": "300",

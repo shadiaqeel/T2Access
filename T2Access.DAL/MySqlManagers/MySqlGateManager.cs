@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using MySql.Data.MySqlClient;
+
 using T2Access.DAL.Helper;
 using T2Access.Models;
+using T2Access.Models.Dtos;
 using T2Access.Security;
 
 namespace T2Access.DAL
 {
     public class MySqlGateManager : IGateManager
     {
-        private IPasswordHasher passwordHasher = new PasswordHasher();
+        private readonly IPasswordHasher passwordHasher = new PasswordHasher();
 
 
 
@@ -32,7 +35,9 @@ namespace T2Access.DAL
         public bool Update(Gate model)
         {
             if (model.Id == null)
+            {
                 return false;
+            }
 
             return DatabaseExecuter.MySqlExecuteNonQuery("SP_Gate_Update", delegate (MySqlCommand cmd)
             {
@@ -62,7 +67,7 @@ namespace T2Access.DAL
 
             }) > 0 ? true : false;
 
-        } 
+        }
 
 
         #endregion
@@ -70,7 +75,7 @@ namespace T2Access.DAL
 
 
 
-         
+
         public IEnumerable<Gate> GetWithFilter(Gate filter)
         {
             IList<Gate> gateList = new List<Gate>();
@@ -109,9 +114,9 @@ namespace T2Access.DAL
 
         }
 
-        public IEnumerable<CheckedGateModel> GetCheckedByUserId(Guid userId)
+        public IEnumerable<CheckedGateDto> GetCheckedByUserId(Guid userId)
         {
-            IList<CheckedGateModel> checkedGateList = new List<CheckedGateModel>();
+            IList<CheckedGateDto> checkedGateList = new List<CheckedGateDto>();
 
 
             DatabaseExecuter.MySqlExecuteQuery("SP_Gate_SelectCheckedByUserId", delegate (MySqlCommand cmd)
@@ -126,7 +131,7 @@ namespace T2Access.DAL
                 while (reader.Read())
                 {
                     checkedGateList.Add(
-                               new CheckedGateModel()
+                               new CheckedGateDto()
                                {
                                    Checked = reader.GetBoolean(0),
                                    Id = reader.GetGuid(1),
@@ -139,7 +144,7 @@ namespace T2Access.DAL
                 }
             });
 
-            return checkedGateList.AsEnumerable<CheckedGateModel>();
+            return checkedGateList.AsEnumerable<CheckedGateDto>();
         }
 
 
@@ -218,17 +223,17 @@ namespace T2Access.DAL
                 return new Gate() { Id = gate.Id, UserName = gate.UserName, NameAr = gate.NameAr, NameEn = gate.NameEn, Status = gate.Status };
             }
             else
+            {
                 return null;
-
-
-
-
+            }
         }
 
         public bool ResetPassword(IAuthModel model)
         {
             if (model.Id == null)
+            {
                 return false;
+            }
 
             return DatabaseExecuter.MySqlExecuteNonQuery("SP_Gate_ResetPassword", delegate (MySqlCommand cmd)
             {

@@ -17,7 +17,7 @@ namespace T2Access.Web.Controllers
     [CustomAuthorize]
     public class UserController : WebController
     {
-        readonly IHttpClientService httpService = new HttpClientService(new Uri(Variables.ServerBaseAddress + $"{Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName}/user/"));
+        private readonly IHttpClientService httpService = new HttpClientService(new Uri(Variables.ServerBaseAddress + $"{Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName}/user/"));
 
 
 
@@ -45,10 +45,14 @@ namespace T2Access.Web.Controllers
         public ActionResult UserManagment()
         {
             if (TempData["successToastrMessage"] != null)
+            {
                 ViewBag.successToastrMessage = TempData["successToastrMessage"] as string;
+            }
 
             if (TempData["errorToastrMessage"] != null)
+            {
                 ViewBag.errorToastrMessage = TempData["errorToastrMessage"] as string;
+            }
 
             return View();
         }
@@ -136,7 +140,7 @@ namespace T2Access.Web.Controllers
             if (response.IsSuccessStatusCode)
             {
 
-                TempData["successToastrMessage"] = result.Replace("\"","");
+                TempData["successToastrMessage"] = result.Replace("\"", "");
                 return RedirectToAction("UserManagment");
             }
             else
@@ -171,7 +175,7 @@ namespace T2Access.Web.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                    return View(result);
+                return View(result);
 
             }
 
@@ -282,9 +286,9 @@ namespace T2Access.Web.Controllers
 
 
             if (response.IsSuccessStatusCode)
-
+            {
                 return Json(new { success = true });
-
+            }
             else
             {
 

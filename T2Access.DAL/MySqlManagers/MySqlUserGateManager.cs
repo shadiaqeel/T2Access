@@ -3,8 +3,6 @@ using System.Collections.Generic;
 
 using MySql.Data.MySqlClient;
 
-using T2Access.Models; 
-
 namespace T2Access.DAL
 {
     public class MySqlUserGateManager : IUserGateManager
@@ -26,9 +24,11 @@ namespace T2Access.DAL
         public bool Delete(UserGate userGate)
         {
             if (userGate == null || (userGate.UserId == Guid.Empty && userGate.GateId == Guid.Empty))
+            {
                 return false;
+            }
 
-             DatabaseExecuter.MySqlExecuteNonQuery("SP_UserGate_Delete", delegate (MySqlCommand cmd)
+            DatabaseExecuter.MySqlExecuteNonQuery("SP_UserGate_Delete", delegate (MySqlCommand cmd)
            {
                cmd.Parameters.AddWithValue("_userId", userGate.UserId);
                cmd.Parameters.AddWithValue("_gateId", userGate.GateId);

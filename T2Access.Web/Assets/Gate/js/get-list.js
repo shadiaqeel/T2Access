@@ -23,13 +23,14 @@ $(document).ready(function () {
             });
         },
         deferRender: true,
-        ordering: true,
+        "ordering": false,
         bFilter: true,
         bInfo: false,
         bAutoWidth: true,
         bSortable: true,
-        paging: false,
-        scrollY: "300px",
+        bPaginate: false,
+        sScrollY: "50vh",
+        sScrollX: "90%",
         scrollCollapse: true,
         multiSelect: false,
         aaSorting: false,
@@ -56,7 +57,7 @@ $(document).ready(function () {
         ],
         select: {
             style: 'multi',
-            selector: 'td:first-child'
+            selector: 'tds'
 
         },
         preDrawCallback: function () {
@@ -67,8 +68,8 @@ $(document).ready(function () {
         },
         language:
         {
-            "search": SearchString,
-            "zeroRecords": zeroRecords,
+            "search": search,
+            "zeroRecords": zeroRecords
         }
         
 

@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+
 using T2Access.Models.Resources;
 
 
@@ -21,7 +17,7 @@ namespace T2Access.Models
         Block = 1
     }
 
-    public class GateViewModel  
+    public class GateViewModel
     {
         public Guid Id { get; set; }
 

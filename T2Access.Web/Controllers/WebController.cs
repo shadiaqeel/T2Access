@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Web;
+﻿using System.IO;
 using System.Web.Mvc;
+
 using T2Access.Web.Attributes;
 
 namespace T2Access.Web.Controllers
@@ -22,12 +19,18 @@ namespace T2Access.Web.Controllers
             // first find the ViewEngine for this view
             ViewEngineResult viewEngineResult = null;
             if (partial)
+            {
                 viewEngineResult = ViewEngines.Engines.FindPartialView(context, viewPath);
+            }
             else
+            {
                 viewEngineResult = ViewEngines.Engines.FindView(context, viewPath, null);
+            }
 
             if (viewEngineResult == null)
+            {
                 throw new FileNotFoundException("View cannot be found.");
+            }
 
             // get the view and attach the model to view data
             var view = viewEngineResult.View;
