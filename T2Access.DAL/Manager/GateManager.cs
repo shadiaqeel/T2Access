@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
-
-using MySql.Data.MySqlClient;
 
 using T2Access.DAL.Helper;
 using T2Access.Models;
@@ -11,7 +10,7 @@ using T2Access.Security;
 
 namespace T2Access.DAL
 {
-    public class MySqlGateManager : IGateManager
+    public class GateManager : IGateManager
     {
         private readonly IPasswordHasher passwordHasher = new PasswordHasher();
 
@@ -21,7 +20,7 @@ namespace T2Access.DAL
         public Gate Create(Gate gate)
         {
 
-            return DatabaseExecuter.MySqlExecuteNonQuery("SP_Gate_Insert", delegate (MySqlCommand cmd)
+            return DatabaseExecuter.ExecuteNonQuery("SP_Gate_Insert", delegate (SqlCommand cmd)
             {
                 cmd.Parameters.AddWithValue("_username", gate.UserName);
                 cmd.Parameters.AddWithValue("_password", passwordHasher.HashPassword(gate.Password));
@@ -34,17 +33,17 @@ namespace T2Access.DAL
         {
             return model.Id == null
                 ? false
-                : DatabaseExecuter.MySqlExecuteNonQuery("SP_Gate_Update", delegate (MySqlCommand cmd)
+                : DatabaseExecuter.ExecuteNonQuery("SP_Gate_Update", delegate (SqlCommand cmd)
             {
                 cmd.Parameters.AddWithValue("_id", model.Id);
 
-                cmd.Parameters.AddWithValue("_username", model.UserName != null ? model.UserName : "");
+                cmd.Parameters.AddWithValue("_username", model.UserName);
 
-                cmd.Parameters.AddWithValue("_nameAr", model.NameAr != null ? model.NameAr : "");
+                cmd.Parameters.AddWithValue("_nameAr", model.NameAr);
 
-                cmd.Parameters.AddWithValue("_nameEn", model.NameEn != null ? model.NameEn : "");
+                cmd.Parameters.AddWithValue("_nameEn", model.NameEn);
 
-                cmd.Parameters.AddWithValue("_status", model.Status != null ? model.Status : -1);
+                cmd.Parameters.AddWithValue("_status", model.Status);
 
             }) > 0 ? true : false;
         }
@@ -56,7 +55,7 @@ namespace T2Access.DAL
             userGateManager.Delete(new UserGate() { GateId = gate.Id });
 
 
-            return DatabaseExecuter.MySqlExecuteNonQuery("SP_Gate_Delete", delegate (MySqlCommand cmd)
+            return DatabaseExecuter.ExecuteNonQuery("SP_Gate_Delete", delegate (SqlCommand cmd)
             {
                 cmd.Parameters.AddWithValue("_id", gate.Id);
 
@@ -67,8 +66,8 @@ namespace T2Access.DAL
 
         #endregion
 
-
         //==============================================================================
+
 
 
         public IEnumerable<Gate> GetWithFilter(Gate filter)
@@ -76,18 +75,18 @@ namespace T2Access.DAL
             IList<Gate> gateList = new List<Gate>();
 
 
-            DatabaseExecuter.MySqlExecuteQuery("SP_Gate_SelectWithFilter", delegate (MySqlCommand cmd)
+            DatabaseExecuter.ExecuteQuery("SP_Gate_SelectWithFilter", delegate (SqlCommand cmd)
                      {
-                         cmd.Parameters.AddWithValue("_username", filter.UserName != null ? filter.UserName : "");
+                         cmd.Parameters.AddWithValue("_username", filter.UserName);
 
-                         cmd.Parameters.AddWithValue("_nameAr", filter.NameAr != null ? filter.NameAr : "");
+                         cmd.Parameters.AddWithValue("_nameAr", filter.NameAr);
 
-                         cmd.Parameters.AddWithValue("_nameEn", filter.NameEn != null ? filter.NameEn : "");
+                         cmd.Parameters.AddWithValue("_nameEn", filter.NameEn);
 
-                         cmd.Parameters.AddWithValue("_status", filter.Status != null ? filter.Status : -1);
+                         cmd.Parameters.AddWithValue("_status", filter.Status);
 
 
-                     }, delegate (MySqlDataReader reader)
+                     }, delegate (SqlDataReader reader)
                      {
                          while (reader.Read())
                          {
@@ -114,11 +113,11 @@ namespace T2Access.DAL
             IList<CheckedGateDto> checkedGateList = new List<CheckedGateDto>();
 
 
-            DatabaseExecuter.MySqlExecuteQuery("SP_Gate_SelectCheckedByUserId", delegate (MySqlCommand cmd)
+            DatabaseExecuter.ExecuteQuery("SP_Gate_SelectCheckedByUserId", delegate (SqlCommand cmd)
             {
                 cmd.Parameters.AddWithValue("_userId", userId);
 
-            }, delegate (MySqlDataReader reader)
+            }, delegate (SqlDataReader reader)
             {
                 while (reader.Read())
                 {
@@ -143,12 +142,12 @@ namespace T2Access.DAL
         public Gate GetByUserName(string username)
         {
             Gate gate = null;
-            DatabaseExecuter.MySqlExecuteQuery("SP_Gate_SelectByUserName", delegate (MySqlCommand cmd)
+            DatabaseExecuter.ExecuteQuery("SP_Gate_SelectByUserName", delegate (SqlCommand cmd)
 
             {
-                cmd.Parameters.AddWithValue("_username", username != null ? username : "");
+                cmd.Parameters.AddWithValue("_username", username );
 
-            }, delegate (MySqlDataReader reader)
+            }, delegate (SqlDataReader reader)
 
             {
 
@@ -180,14 +179,14 @@ namespace T2Access.DAL
 
 
             Gate gate = null;
-            DatabaseExecuter.MySqlExecuteQuery("SP_Gate_Login", delegate (MySqlCommand cmd)
+            DatabaseExecuter.ExecuteQuery("SP_Gate_Login", delegate (SqlCommand cmd)
 
             {
 
-                cmd.Parameters.AddWithValue("_username", Gate != null ? Gate.UserName : "");
+                cmd.Parameters.AddWithValue("_username", Gate);
 
 
-            }, delegate (MySqlDataReader reader)
+            }, delegate (SqlDataReader reader)
 
             {
 
@@ -222,7 +221,7 @@ namespace T2Access.DAL
                 return false;
             }
 
-            return DatabaseExecuter.MySqlExecuteNonQuery("SP_Gate_ResetPassword", delegate (MySqlCommand cmd)
+            return DatabaseExecuter.ExecuteNonQuery("SP_Gate_ResetPassword", delegate (SqlCommand cmd)
             {
                 cmd.Parameters.AddWithValue("_id", model.Id);
 

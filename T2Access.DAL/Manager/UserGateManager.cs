@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 
-using MySql.Data.MySqlClient;
 
 namespace T2Access.DAL
 {
-    public class MySqlUserGateManager : IUserGateManager
+    public class UserGateManager : IUserGateManager
     {
         public UserGate Create(UserGate userGate)
         {
 
 
 
-            return DatabaseExecuter.MySqlExecuteNonQuery("SP_UserGate_Insert", delegate (MySqlCommand cmd)
+            return DatabaseExecuter.ExecuteNonQuery("SP_UserGate_Insert", delegate (SqlCommand cmd)
             {
                 cmd.Parameters.AddWithValue("_userId", userGate.UserId);
                 cmd.Parameters.AddWithValue("_gateId", userGate.GateId);
@@ -28,7 +28,7 @@ namespace T2Access.DAL
                 return false;
             }
 
-            DatabaseExecuter.MySqlExecuteNonQuery("SP_UserGate_Delete", delegate (MySqlCommand cmd)
+            DatabaseExecuter.ExecuteNonQuery("SP_UserGate_Delete", delegate (SqlCommand cmd)
            {
                cmd.Parameters.AddWithValue("_userId", userGate.UserId);
                cmd.Parameters.AddWithValue("_gateId", userGate.GateId);
@@ -40,7 +40,7 @@ namespace T2Access.DAL
         public bool DeleteAllByUserId(Guid userId)
         {
 
-            return DatabaseExecuter.MySqlExecuteNonQuery("SP_UserGate_DeleteAllByUserId", delegate (MySqlCommand cmd)
+            return DatabaseExecuter.ExecuteNonQuery("SP_UserGate_DeleteAllByUserId", delegate (SqlCommand cmd)
             {
                 cmd.Parameters.AddWithValue("_userId", userId);
 
@@ -56,12 +56,12 @@ namespace T2Access.DAL
 
 
 
-            DatabaseExecuter.MySqlExecuteQuery("SP_CheckIfValid", delegate (MySqlCommand cmd)
+            DatabaseExecuter.ExecuteQuery("SP_CheckIfValid", delegate (SqlCommand cmd)
            {
                cmd.Parameters.AddWithValue("_userId", userGate.UserId);
                cmd.Parameters.AddWithValue("_gateId", userGate.GateId);
 
-           }, delegate (MySqlDataReader reader)
+           }, delegate (SqlDataReader reader)
            {
 
                if (reader.Read())
@@ -94,11 +94,11 @@ namespace T2Access.DAL
             List<Guid> gateList = new List<Guid>();
 
 
-            DatabaseExecuter.MySqlExecuteQuery("SP_UserGate_GetByUserId", delegate (MySqlCommand cmd)
+            DatabaseExecuter.ExecuteQuery("SP_UserGate_GetByUserId", delegate (SqlCommand cmd)
            {
                cmd.Parameters.AddWithValue("_userId", userid);
 
-           }, delegate (MySqlDataReader reader)
+           }, delegate (SqlDataReader reader)
            {
 
                while (reader.Read())

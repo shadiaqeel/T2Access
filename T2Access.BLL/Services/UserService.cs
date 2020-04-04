@@ -20,6 +20,7 @@ namespace T2Access.BLL.Services
 
 
         //==========================================================================
+       
         public ServiceResponse<string> Create(SignUpUserModel model)
         {
 
@@ -54,8 +55,8 @@ namespace T2Access.BLL.Services
 
         }
 
-        //==========================================================================
-
+        
+        
         public ServiceResponse<string> Edit(UpdateUserModel model)
         {
 
@@ -92,7 +93,8 @@ namespace T2Access.BLL.Services
 
         }
 
-        //==========================================================================
+        
+        
         public ServiceResponse<UserListResponse> GetList(FilterUserModel filter)
         {
             IEnumerable<User> userList;
@@ -127,8 +129,8 @@ namespace T2Access.BLL.Services
 
         }
 
-        //==========================================================================
-
+        
+        
         public ServiceResponse<string> Delete(Guid id)
         {
             if (userGateManager.Delete(new UserGate() { UserId = id }) && userManager.Delete(new User() { Id = id }))
@@ -140,9 +142,8 @@ namespace T2Access.BLL.Services
 
         }
 
-
-        //==========================================================================
-
+        
+        
         public ServiceResponse<UserDto> GetById(Guid userId)
         {
             try
@@ -156,8 +157,9 @@ namespace T2Access.BLL.Services
             }
 
         }
-        //==========================================================================
 
+        
+        
         public ServiceResponse<UserDto> Login(LoginModel model)
         {
             var user = userManager.Login(model);
@@ -169,8 +171,10 @@ namespace T2Access.BLL.Services
 
 
         }
-        //==========================================================================
 
+
+        
+        
         public ServiceResponse<string> ResetPassword(ResetPasswordModel model)
         {
             try
@@ -189,9 +193,9 @@ namespace T2Access.BLL.Services
             }
 
         }
-        //==========================================================================
 
 
+        
         public ServiceResponse<string> Assign(UserGateModel userGate)
         {
 
@@ -214,9 +218,8 @@ namespace T2Access.BLL.Services
 
         }
 
-        //==========================================================================
 
-
+        
         public ServiceResponse<string> Unassign(UserGateModel userGate)
         {
 

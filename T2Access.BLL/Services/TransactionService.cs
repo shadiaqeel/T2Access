@@ -28,13 +28,10 @@ namespace T2Access.BLL.Services
             return transactionManager.GetByGateId(gateId, 0).ToModel();
         }
 
-
-
         public bool UpdateStatus(decimal id)
         {
             return transactionManager.UpdateStatus(id);
         }
-
 
         public bool ValidUserGate(UserGate userGate)
         {

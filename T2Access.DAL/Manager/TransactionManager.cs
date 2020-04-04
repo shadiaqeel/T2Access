@@ -1,15 +1,15 @@
 ﻿using System;
+using System.Data.SqlClient;
 
-using MySql.Data.MySqlClient;
 
 namespace T2Access.DAL
 {
-    public class MySqlTransactionManager : ITransactionManager
+    public class TransactionManager : ITransactionManager
     {
         public Transaction Create(Transaction transaction)
         {
 
-            return DatabaseExecuter.MySqlExecuteNonQuery("SP_Transaction_Insert", delegate (MySqlCommand cmd)
+            return DatabaseExecuter.ExecuteNonQuery("SP_Transaction_Insert", delegate (SqlCommand cmd)
             {
                 cmd.Parameters.AddWithValue("_userId", transaction.UserId);
                 cmd.Parameters.AddWithValue("_gateId", transaction.GateId);
@@ -23,13 +23,13 @@ namespace T2Access.DAL
             Transaction transaction = new Transaction();
 
 
-            DatabaseExecuter.MySqlExecuteQuery("SP_Transaction_GetByGateId", delegate (MySqlCommand cmd)
+            DatabaseExecuter.ExecuteQuery("SP_Transaction_GetByGateId", delegate (SqlCommand cmd)
              {
 
                  cmd.Parameters.AddWithValue("_gateId", gateId);
                  cmd.Parameters.AddWithValue("_status", status);
 
-             }, delegate (MySqlDataReader reader)
+             }, delegate (SqlDataReader reader)
              {
                  if (reader.Read())
                  {
@@ -55,7 +55,7 @@ namespace T2Access.DAL
 
 
 
-            return DatabaseExecuter.MySqlExecuteNonQuery("SP_Transaction_UpdateStatus", delegate (MySqlCommand cmd)
+            return DatabaseExecuter.ExecuteNonQuery("SP_Transaction_UpdateStatus", delegate (SqlCommand cmd)
             {
                 cmd.Parameters.AddWithValue("_Id", id);
             }) > 0 ? true : false;

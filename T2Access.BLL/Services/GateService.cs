@@ -12,20 +12,12 @@ using T2Access.Models.Dtos;
 
 namespace T2Access.BLL.Services
 {
-
-
-
     public class GateService : IGateService
     {
-
         private readonly IGateManager gateManager = ManagerFactory.GetGateManager(Variables.DatabaseProvider);
-
-
-
 
         public ServiceResponse<string> Create(SignUpGateModel gateModel)
         {
-
             try
             {
                 if (gateManager.GetByUserName(gateModel.UserName) == null)
@@ -39,17 +31,13 @@ namespace T2Access.BLL.Services
             }
             catch (Exception ex)
             {
-
                 return new ServiceResponse<string>() { Success = false, ErrorMessage = ex.Message };
             }
-
-
         }
 
         //==================================================================================
         public ServiceResponse<string> Edit(GateModel model)
         {
-
             try
             {
                 return gateManager.Update(model.ToEntity())
@@ -58,21 +46,17 @@ namespace T2Access.BLL.Services
             }
             catch (Exception ex)
             {
-
                 return new ServiceResponse<string>() { Success = false, ErrorMessage = ex.Message };
             }
         }
-        //==================================================================================
+
         public ServiceResponse<GateListResponse> GetListWithFilter(FilterGateModel filter)
         {
-
-
             var gateList = gateManager.GetWithFilter(filter.ToEntity());
-
 
             var _totalSize = gateList.Count();
 
-            //sorting 
+            //sorting
             if (!string.IsNullOrEmpty(filter.Order))
             {
                 gateList = gateList.OrderBy(filter.Order);
@@ -86,18 +70,12 @@ namespace T2Access.BLL.Services
             }
 
             return new ServiceResponse<GateListResponse>() { Data = new GateListResponse() { ResponseList = gateList.ToDto(), totalEntities = _totalSize } };
-
-
-
-
-
         }
-        //==================================================================================
+
         public ServiceResponse<IEnumerable<CheckedGateDto>> GetCheckedListByUserId(Guid userId) => new ServiceResponse<IEnumerable<CheckedGateDto>>() { Data = gateManager.GetCheckedByUserId(userId) };
-        //==================================================================================
 
         public ServiceResponse<GateDto> Login(LoginModel gate) => new ServiceResponse<GateDto>() { Data = gateManager.Login(gate).ToDto() };
-        //==================================================================================
+
         public ServiceResponse<string> Delete(Guid id)
         {
             try
@@ -108,16 +86,10 @@ namespace T2Access.BLL.Services
             }
             catch (Exception ex)
             {
-
                 return new ServiceResponse<string>() { Success = false, ErrorMessage = ex.Message };
             }
-
-
-
-
-
         }
-        //==================================================================================
+
         public ServiceResponse<string> ResetPassword(ResetPasswordModel model)
         {
             try
@@ -128,14 +100,8 @@ namespace T2Access.BLL.Services
             }
             catch (Exception ex)
             {
-
                 return new ServiceResponse<string>() { Success = false, ErrorMessage = ex.Message };
             }
-
         }
-        //==================================================================================
-
-
-
     }
 }

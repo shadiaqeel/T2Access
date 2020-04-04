@@ -53,7 +53,7 @@ window.Modernizr = (function( window, document, undefined ) {
 
     toString = {}.toString,
 
-    // TODO :: make the prefixes more granular
+    // TO=DO :: make the prefixes more granular
     /*>>prefixes*/
     // List of property values to set for css tests. See ticket #21
     prefixes = ' -webkit- -moz- -o- -ms- '.split(' '),
@@ -222,7 +222,7 @@ window.Modernizr = (function( window, document, undefined ) {
     })(),
     /*>>hasevent*/
 
-    // TODO :: Add flag for hasownprop ? didn't last time
+    // TO=DO :: Add flag for hasownprop ? didn't last time
 
     // hasOwnProperty shim by kangax needed for Safari 2.0 support
     _hasOwnProperty = ({}).hasOwnProperty, hasOwnProp;
@@ -342,7 +342,7 @@ window.Modernizr = (function( window, document, undefined ) {
     }
     /*>>testprop*/
 
-    // TODO :: add testDOMProps
+    // TO=DO :: add testDOMProps
     /**
      * testDOMProps is a generic DOM property test; if a browser supports
      *   a certain property, it won't return undefined for it.
@@ -939,7 +939,7 @@ window.Modernizr = (function( window, document, undefined ) {
 
 
     // Run through all tests and detect their support in the current UA.
-    // todo: hypothetically we could be doing an array of tests and use a basic loop here.
+    // TO=DO: hypothetically we could be doing an array of tests and use a basic loop here.
     for ( var feature in tests ) {
         if ( hasOwnProp(tests, feature) ) {
             // run the test, throw the return value into the Modernizr,

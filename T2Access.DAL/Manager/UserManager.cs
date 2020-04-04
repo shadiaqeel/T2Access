@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
-using MySql.Data.MySqlClient;
-
+using System.Data.SqlClient;
 using T2Access.DAL.Helper;
 using T2Access.Models;
 using T2Access.Security;
@@ -12,7 +10,7 @@ using T2Access.Security;
 namespace T2Access.DAL
 {
 
-    public class MySqlUserManager : IUserManager
+    public class UserManager : IUserManager
     {
         private readonly IPasswordHasher passwordHasher = new PasswordHasher();
         private readonly IUserGateManager userGateManager = ManagerFactory.GetUserGateManager(Variables.DatabaseProvider);
@@ -27,13 +25,13 @@ namespace T2Access.DAL
         {
             Guid id = Guid.Empty;
 
-            DatabaseExecuter.MySqlExecuteQuery("SP_User_Insert", delegate (MySqlCommand cmd)
+            DatabaseExecuter.ExecuteQuery("SP_User_Insert", delegate (SqlCommand cmd)
            {
                cmd.Parameters.AddWithValue("_username", user.UserName);
                cmd.Parameters.AddWithValue("_password", passwordHasher.HashPassword(user.Password));
                cmd.Parameters.AddWithValue("_firstname", user.FirstName);
                cmd.Parameters.AddWithValue("_lastname", user.LastName);
-           }, delegate (MySqlDataReader reader)
+           }, delegate (SqlDataReader reader)
            {
 
                if (reader.Read())
@@ -55,17 +53,17 @@ namespace T2Access.DAL
                 return false;
             }
 
-            return DatabaseExecuter.MySqlExecuteNonQuery("SP_User_Update", delegate (MySqlCommand cmd)
+            return DatabaseExecuter.ExecuteNonQuery("SP_User_Update", delegate (SqlCommand cmd)
            {
                cmd.Parameters.AddWithValue("_id", user.Id);
 
                cmd.Parameters.AddWithValue("_username", ""); // Can't update username /*user.UserName != null ? user.UserName : "" */ 
 
-               cmd.Parameters.AddWithValue("_firstname", user.FirstName != null ? user.FirstName : "");
+               cmd.Parameters.AddWithValue("_firstname", user.FirstName );
 
-               cmd.Parameters.AddWithValue("_lastname", user.LastName != null ? user.LastName : "");
+               cmd.Parameters.AddWithValue("_lastname", user.LastName);
 
-               cmd.Parameters.AddWithValue("_status", user.Status != null ? user.Status : -1);
+               cmd.Parameters.AddWithValue("_status", user.Status );
 
            }) > 0 ? true : false;
 
@@ -79,7 +77,7 @@ namespace T2Access.DAL
         public bool Delete(User user)
         {
 
-            return DatabaseExecuter.MySqlExecuteNonQuery("SP_User_Delete", delegate (MySqlCommand cmd)
+            return DatabaseExecuter.ExecuteNonQuery("SP_User_Delete", delegate (SqlCommand cmd)
             {
                 cmd.Parameters.AddWithValue("_id", user.Id);
 
@@ -89,7 +87,6 @@ namespace T2Access.DAL
 
         #endregion
 
-
         //==============================================================================
 
 
@@ -98,21 +95,21 @@ namespace T2Access.DAL
             IList<User> userList = new List<User>();
 
 
-            DatabaseExecuter.MySqlExecuteQuery("SP_User_SelectWithFilter", delegate (MySqlCommand cmd)
+            DatabaseExecuter.ExecuteQuery("SP_User_SelectWithFilter", delegate (SqlCommand cmd)
             {
 
                 //cmd.Parameters.AddWithValue("_id", filter.Id != null ? filter.Id : Guid.Empty);
 
-                cmd.Parameters.AddWithValue("_username", filter.UserName != null ? filter.UserName : "");
+                cmd.Parameters.AddWithValue("_username", filter.UserName);
 
-                cmd.Parameters.AddWithValue("_firstname", filter.FirstName != null ? filter.FirstName : "");
+                cmd.Parameters.AddWithValue("_firstname", filter.FirstName);
 
-                cmd.Parameters.AddWithValue("_lastname", filter.LastName != null ? filter.LastName : "");
+                cmd.Parameters.AddWithValue("_lastname", filter.LastName );
 
-                cmd.Parameters.AddWithValue("_status", filter.Status != null ? filter.Status : -1);
+                cmd.Parameters.AddWithValue("_status", filter.Status );
 
             },
-            delegate (MySqlDataReader reader)
+            delegate (SqlDataReader reader)
             {
 
                 while (reader.Read())
@@ -144,13 +141,13 @@ namespace T2Access.DAL
 
             User user = null;
 
-            DatabaseExecuter.MySqlExecuteQuery("SP_User_SelectByUserName", delegate (MySqlCommand cmd)
+            DatabaseExecuter.ExecuteQuery("SP_User_SelectByUserName", delegate (SqlCommand cmd)
             {
 
-                cmd.Parameters.AddWithValue("_username", userName != null ? userName : "");
+                cmd.Parameters.AddWithValue("_username", userName );
 
             },
-            delegate (MySqlDataReader reader)
+            delegate (SqlDataReader reader)
             {
 
                 if (reader.Read())
@@ -180,13 +177,13 @@ namespace T2Access.DAL
 
             User user = null;
 
-            DatabaseExecuter.MySqlExecuteQuery("SP_User_SelectById", delegate (MySqlCommand cmd)
+            DatabaseExecuter.ExecuteQuery("SP_User_SelectById", delegate (SqlCommand cmd)
             {
 
                 cmd.Parameters.AddWithValue("_id", usedId != null ? usedId : Guid.Empty);
 
             },
-            delegate (MySqlDataReader reader)
+            delegate (SqlDataReader reader)
             {
 
                 if (reader.Read())
@@ -216,13 +213,13 @@ namespace T2Access.DAL
 
             User user = null;
 
-            DatabaseExecuter.MySqlExecuteQuery("SP_User_Login", delegate (MySqlCommand cmd)
+            DatabaseExecuter.ExecuteQuery("SP_User_Login", delegate (SqlCommand cmd)
             {
 
-                cmd.Parameters.AddWithValue("_username", User != null ? User.UserName : "");
+                cmd.Parameters.AddWithValue("_username", User );
 
             },
-            delegate (MySqlDataReader reader)
+            delegate (SqlDataReader reader)
             {
 
                 if (reader.Read())
@@ -255,7 +252,7 @@ namespace T2Access.DAL
                 return false;
             }
 
-            return DatabaseExecuter.MySqlExecuteNonQuery("SP_User_ResetPassword", delegate (MySqlCommand cmd)
+            return DatabaseExecuter.ExecuteNonQuery("SP_User_ResetPassword", delegate (SqlCommand cmd)
             {
                 cmd.Parameters.AddWithValue("_id", model.Id);
 

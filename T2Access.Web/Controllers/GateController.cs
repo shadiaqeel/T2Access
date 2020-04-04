@@ -357,7 +357,7 @@ namespace T2Access.Web.Controllers
             {
                 if (response.IsSuccessStatusCode && Request.IsAjaxRequest())
                 {
-                    var CheckedGates = await response.Content.ReadAsAsync<List<GateViewModel>>();
+                    var CheckedGates = await response.Content.ReadAsAsync<List<GateViewModel>>(); 
 
                     //Server Side Parameter
                     int start = Convert.ToInt32(Request["start"]);
