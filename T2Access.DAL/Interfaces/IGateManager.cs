@@ -12,7 +12,7 @@ namespace T2Access.DAL
         IEnumerable<CheckedGateDto> GetCheckedByUserId(Guid userId);
         Gate GetByUserName(string username);
         Gate Login(IAuthModel gate);
-        bool ResetPassword(IAuthModel model);
+        void ResetPassword(IAuthModel model);
 
 
 

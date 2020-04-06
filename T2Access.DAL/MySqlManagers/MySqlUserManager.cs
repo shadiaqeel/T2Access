@@ -8,20 +8,16 @@ using T2Access.DAL.Helper;
 using T2Access.Models;
 using T2Access.Security;
 
-
 namespace T2Access.DAL
 {
-
     public class MySqlUserManager : IUserManager
     {
         private readonly IPasswordHasher passwordHasher = new PasswordHasher();
+
         private readonly IUserGateManager userGateManager = ManagerFactory.GetUserGateManager(Variables.DatabaseProvider);
 
+        //========================================================================================================
 
-
-
-
-        #region CRUD
 
         public User Create(User user)
         {
@@ -45,17 +41,16 @@ namespace T2Access.DAL
 
             user.Id = id;
             return user;
-
         }
 
-        public bool Update(User user)
+        public void Update(User user)
         {
             if (user.Id == null)
             {
-                return false;
+                throw new ArgumentNullException(nameof(user.Id));
             }
 
-            return DatabaseExecuter.MySqlExecuteNonQuery("SP_User_Update", delegate (MySqlCommand cmd)
+            DatabaseExecuter.MySqlExecuteNonQuery("SP_User_Update", delegate (MySqlCommand cmd)
            {
                cmd.Parameters.AddWithValue("_id", user.Id);
 
@@ -67,31 +62,21 @@ namespace T2Access.DAL
 
                cmd.Parameters.AddWithValue("_status", user.Status != null ? user.Status : -1);
 
-           }) > 0 ? true : false;
-
-
-
-
-
-
+           });
         }
 
-        public bool Delete(User user)
+        public void Delete(User user)
         {
 
-            return DatabaseExecuter.MySqlExecuteNonQuery("SP_User_Delete", delegate (MySqlCommand cmd)
+            DatabaseExecuter.MySqlExecuteNonQuery("SP_User_Delete", delegate (MySqlCommand cmd)
             {
                 cmd.Parameters.AddWithValue("_id", user.Id);
 
-            }) > 0 ? true : false;
-
+            });
         }
 
-        #endregion
 
-
-        //==============================================================================
-
+        //========================================================================================================
 
         public IEnumerable<User> GetWithFilter(User filter)
         {
@@ -132,12 +117,7 @@ namespace T2Access.DAL
 
 
             return userList.AsEnumerable();
-
-
-
-
         }
-
 
         public User GetByUserName(string userName)
         {
@@ -170,10 +150,7 @@ namespace T2Access.DAL
 
 
             return user;
-
-
         }
-
 
         public User GetById(Guid usedId)
         {
@@ -206,10 +183,7 @@ namespace T2Access.DAL
 
 
             return user;
-
-
         }
-
 
         public User Login(IAuthModel User)
         {
@@ -248,23 +222,21 @@ namespace T2Access.DAL
                 : null;
         }
 
-        public bool ResetPassword(IAuthModel model)
+        public void ResetPassword(IAuthModel model)
         {
             if (model.Id == null)
             {
-                return false;
+                throw new ArgumentNullException(nameof(model.Id));
             }
 
-            return DatabaseExecuter.MySqlExecuteNonQuery("SP_User_ResetPassword", delegate (MySqlCommand cmd)
+            DatabaseExecuter.MySqlExecuteNonQuery("SP_User_ResetPassword", delegate (MySqlCommand cmd)
             {
                 cmd.Parameters.AddWithValue("_id", model.Id);
 
                 cmd.Parameters.AddWithValue("_password", model.Password != null ? passwordHasher.HashPassword(model.Password) : "");
 
 
-            }) > 0 ? true : false;
+            });
         }
-
-
     }
 }

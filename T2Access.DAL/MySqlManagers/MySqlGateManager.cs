@@ -30,11 +30,14 @@ namespace T2Access.DAL
             }) > 0 ? gate : null;
         }
 
-        public bool Update(Gate model)
+        public void Update(Gate model)
         {
-            return model.Id == null
-                ? false
-                : DatabaseExecuter.MySqlExecuteNonQuery("SP_Gate_Update", delegate (MySqlCommand cmd)
+            if (model.Id == null)
+            {
+                throw new ArgumentNullException(nameof(model.Id));
+            }
+
+            DatabaseExecuter.MySqlExecuteNonQuery("SP_Gate_Update", delegate (MySqlCommand cmd)
             {
                 cmd.Parameters.AddWithValue("_id", model.Id);
 
@@ -46,21 +49,22 @@ namespace T2Access.DAL
 
                 cmd.Parameters.AddWithValue("_status", model.Status != null ? model.Status : -1);
 
-            }) > 0 ? true : false;
+            });
         }
 
-        public bool Delete(Gate gate)
+        public void Delete(Gate gate)
         {
 
             var userGateManager = ManagerFactory.GetUserGateManager(Variables.DatabaseProvider);
+            // Remove all corresponding recorders for the Gate in UserGate Table  
             userGateManager.Delete(new UserGate() { GateId = gate.Id });
 
 
-            return DatabaseExecuter.MySqlExecuteNonQuery("SP_Gate_Delete", delegate (MySqlCommand cmd)
+            DatabaseExecuter.MySqlExecuteNonQuery("SP_Gate_Delete", delegate (MySqlCommand cmd)
             {
                 cmd.Parameters.AddWithValue("_id", gate.Id);
 
-            }) > 0 ? true : false;
+            });
 
         }
 
@@ -215,21 +219,21 @@ namespace T2Access.DAL
                 : null;
         }
 
-        public bool ResetPassword(IAuthModel model)
+        public void ResetPassword(IAuthModel model)
         {
             if (model.Id == null)
             {
-                return false;
+                throw new ArgumentNullException(nameof(model.Id));
             }
 
-            return DatabaseExecuter.MySqlExecuteNonQuery("SP_Gate_ResetPassword", delegate (MySqlCommand cmd)
+            DatabaseExecuter.MySqlExecuteNonQuery("SP_Gate_ResetPassword", delegate (MySqlCommand cmd)
             {
                 cmd.Parameters.AddWithValue("_id", model.Id);
 
                 cmd.Parameters.AddWithValue("_password", model.Password != null ? passwordHasher.HashPassword(model.Password) : "");
 
 
-            }) > 0 ? true : false;
+            });
         }
 
     }

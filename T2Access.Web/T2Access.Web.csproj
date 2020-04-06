@@ -169,7 +169,6 @@
     <Content Include="Assets\Account\Login\js\main.js" />
     <Content Include="Assets\Account\Login\js\map-custom.js" />
     <Content Include="Assets\Admin\img\favicon.PNG" />
-    <Content Include="Assets\Gate\js\get-list.js" />
     <Content Include="Assets\lib\advanced-datatable\css\demo_page.css" />
     <Content Include="Assets\lib\advanced-datatable\css\demo_table.css" />
     <Content Include="Assets\lib\advanced-datatable\css\demo_table_jui.css" />
@@ -194,12 +193,17 @@
     <Content Include="Assets\lib\advanced-datatable\js\jquery.dataTables.js" />
     <Content Include="Assets\lib\advanced-datatable\js\jquery.dataTables.min.js" />
     <Content Include="Assets\lib\advanced-datatable\js\jquery.js" />
+    <Content Include="Assets\lib\datatable\css\jquery.dataTables.css" />
+    <Content Include="Assets\lib\datatable\css\scroller.dataTables.css" />
+    <Content Include="Assets\lib\datatable\js\dataTables.scroller.js" />
+    <Content Include="Assets\lib\datatable\js\jquery.dataTables.js" />
     <Content Include="Assets\lib\MDB\css\addons\datatables-select.min.css" />
     <Content Include="Assets\lib\MDB\css\addons\datatables.min.css" />
     <Content Include="Assets\lib\MDB\css\addons\directives.min.css" />
     <Content Include="Assets\lib\MDB\css\addons\flag.min.css" />
     <Content Include="Assets\lib\MDB\css\addons\jquery.zmd.hierarchical-display.min.css" />
     <Content Include="Assets\lib\MDB\css\addons\rating.min.css" />
+    <Content Include="Assets\lib\MDB\css\addons\scroller.dataTables.css" />
     <Content Include="Assets\lib\MDB\css\bootstrap.css" />
     <Content Include="Assets\lib\MDB\css\bootstrap.min.css" />
     <Content Include="Assets\lib\MDB\css\mdb.css" />
@@ -210,6 +214,7 @@
     <Content Include="Assets\lib\MDB\css\style.css" />
     <Content Include="Assets\lib\MDB\js\addons\datatables-select.min.js" />
     <Content Include="Assets\lib\MDB\js\addons\datatables.min.js" />
+    <Content Include="Assets\lib\MDB\js\addons\dataTables.scroller.js" />
     <Content Include="Assets\lib\MDB\js\addons\directives.min.js" />
     <Content Include="Assets\lib\MDB\js\addons\flag.min.js" />
     <Content Include="Assets\lib\MDB\js\addons\imagesloaded.pkgd.min.js" />

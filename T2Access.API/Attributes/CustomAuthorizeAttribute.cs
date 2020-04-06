@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Principal;
@@ -27,33 +28,42 @@ namespace T2Access.API.Attributes
             }
 
 
-
-
-
             var token = actionContext.Request.Headers.Authorization.Parameter;
 
-            IAuthService authService = AuthorizationFactory.GetAuthrization();
-
-
-            var role = authService.GetTokenClaimValue(token, "Role");
 
 
 
-            if (authService.IsTokenValid(token) && Roles.Intersect(role).Any())
+            IAuthService authService = AuthorizationFactory.GetAuthorization();
+
+
+
+            try
             {
-                var userName = ((JWTService)authService).GetTokenClaimValue(token, "Username");
+                var role = authService.GetTokenClaimValue(token, "Role");
+
+                if (authService.IsTokenValid(token) && Roles.Intersect(role).Any())
+                {
+                    var userName = ((JWTService)authService).GetTokenClaimValue(token, "Username");
 
 
-                IPrincipal principal = new GenericPrincipal(new GenericIdentity(userName), role.Split(','));
+                    IPrincipal principal = new GenericPrincipal(new GenericIdentity(userName), role.Split(','));
 
-                Thread.CurrentPrincipal = principal;
-                actionContext.RequestContext.Principal = principal;
+                    Thread.CurrentPrincipal = principal;
+                    actionContext.RequestContext.Principal = principal;
 
+                }
+                else
+                {
+
+                    actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized);
+                }
             }
-            else
+            catch (System.Exception e)
             {
 
+                Trace.WriteLine($" {e.GetType()}   :    {e.Message }  ");
                 actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized);
+
             }
 
 

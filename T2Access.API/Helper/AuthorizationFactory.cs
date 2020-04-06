@@ -5,7 +5,7 @@ namespace T2Access.API.Helper
     public static class AuthorizationFactory
     {
 
-        public static IAuthService GetAuthrization()
+        public static IAuthService GetAuthorization()
         {
             return new JWTService();
         }

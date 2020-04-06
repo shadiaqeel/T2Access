@@ -7,6 +7,6 @@ namespace T2Access.DAL
     {
         bool CheckIfExist(UserGate userGate);
         List<Guid> GetByUserId(Guid userid);
-        bool DeleteAllByUserId(Guid userId);
+        void DeleteAllByUserId(Guid userId);
     }
 }

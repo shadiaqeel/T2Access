@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Data.SqlClient;
+using System.Linq;
+
 using T2Access.DAL.Helper;
 using T2Access.Models;
 using T2Access.Security;
@@ -46,46 +47,42 @@ namespace T2Access.DAL
 
         }
 
-        public bool Update(User user)
+        public void Update(User user)
         {
             if (user.Id == null)
             {
-                return false;
+                throw new ArgumentNullException(nameof(user.Id));
             }
 
-            return DatabaseExecuter.ExecuteNonQuery("SP_User_Update", delegate (SqlCommand cmd)
+            DatabaseExecuter.ExecuteNonQuery("SP_User_Update", delegate (SqlCommand cmd)
            {
                cmd.Parameters.AddWithValue("_id", user.Id);
 
                cmd.Parameters.AddWithValue("_username", ""); // Can't update username /*user.UserName != null ? user.UserName : "" */ 
 
-               cmd.Parameters.AddWithValue("_firstname", user.FirstName );
+               cmd.Parameters.AddWithValue("_firstname", user.FirstName);
 
                cmd.Parameters.AddWithValue("_lastname", user.LastName);
 
-               cmd.Parameters.AddWithValue("_status", user.Status );
+               cmd.Parameters.AddWithValue("_status", user.Status);
 
-           }) > 0 ? true : false;
-
-
-
-
-
+           });
 
         }
 
-        public bool Delete(User user)
+        public void Delete(User user)
         {
 
-            return DatabaseExecuter.ExecuteNonQuery("SP_User_Delete", delegate (SqlCommand cmd)
+            DatabaseExecuter.ExecuteNonQuery("SP_User_Delete", delegate (SqlCommand cmd)
             {
                 cmd.Parameters.AddWithValue("_id", user.Id);
 
-            }) > 0 ? true : false;
+            });
 
         }
 
         #endregion
+
 
         //==============================================================================
 
@@ -104,9 +101,9 @@ namespace T2Access.DAL
 
                 cmd.Parameters.AddWithValue("_firstname", filter.FirstName);
 
-                cmd.Parameters.AddWithValue("_lastname", filter.LastName );
+                cmd.Parameters.AddWithValue("_lastname", filter.LastName);
 
-                cmd.Parameters.AddWithValue("_status", filter.Status );
+                cmd.Parameters.AddWithValue("_status", filter.Status);
 
             },
             delegate (SqlDataReader reader)
@@ -144,7 +141,7 @@ namespace T2Access.DAL
             DatabaseExecuter.ExecuteQuery("SP_User_SelectByUserName", delegate (SqlCommand cmd)
             {
 
-                cmd.Parameters.AddWithValue("_username", userName );
+                cmd.Parameters.AddWithValue("_username", userName);
 
             },
             delegate (SqlDataReader reader)
@@ -180,7 +177,7 @@ namespace T2Access.DAL
             DatabaseExecuter.ExecuteQuery("SP_User_SelectById", delegate (SqlCommand cmd)
             {
 
-                cmd.Parameters.AddWithValue("_id", usedId != null ? usedId : Guid.Empty);
+                cmd.Parameters.AddWithValue("_id", usedId);
 
             },
             delegate (SqlDataReader reader)
@@ -216,7 +213,7 @@ namespace T2Access.DAL
             DatabaseExecuter.ExecuteQuery("SP_User_Login", delegate (SqlCommand cmd)
             {
 
-                cmd.Parameters.AddWithValue("_username", User );
+                cmd.Parameters.AddWithValue("_username", User.UserName);
 
             },
             delegate (SqlDataReader reader)
@@ -245,21 +242,21 @@ namespace T2Access.DAL
                 : null;
         }
 
-        public bool ResetPassword(IAuthModel model)
+        public void ResetPassword(IAuthModel model)
         {
             if (model.Id == null)
             {
-                return false;
+                throw new ArgumentNullException(nameof(model.Id));
             }
 
-            return DatabaseExecuter.ExecuteNonQuery("SP_User_ResetPassword", delegate (SqlCommand cmd)
+            DatabaseExecuter.ExecuteNonQuery("SP_User_ResetPassword", delegate (SqlCommand cmd)
             {
                 cmd.Parameters.AddWithValue("_id", model.Id);
 
                 cmd.Parameters.AddWithValue("_password", model.Password != null ? passwordHasher.HashPassword(model.Password) : "");
 
 
-            }) > 0 ? true : false;
+            });
         }
 
 

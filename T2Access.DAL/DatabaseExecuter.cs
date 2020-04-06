@@ -163,7 +163,7 @@ namespace T2Access.DAL
                     FillCmd(cmd);
 
 
-                     result = cmd.ExecuteNonQuery();
+                    result = cmd.ExecuteNonQuery();
 
 
 
@@ -173,6 +173,11 @@ namespace T2Access.DAL
 
             }
 
+            ////if (result == 0) throw new Exception("No rows affected");
+            if (result == 0)
+            {
+                System.Diagnostics.Trace.WriteLine($"{nameof(ExecuteNonQuery)} : No rows affected");
+            }
 
             return result;
 

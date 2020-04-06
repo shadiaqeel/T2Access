@@ -64,6 +64,7 @@
                 <div class="centered">
                     <div class="form-group">
                         @Html.HiddenFor(model => model.GateList)
+                        @Html.HiddenFor(model => model.UnselecedGateList)
                         @Html.Action("GetList", "Gate")
 
                         @*@Html.Action("GetCheckedByUserId", "Gate", new { UserId = Model.Id })*@
@@ -78,8 +79,8 @@
             <div class="form-group centered ">
                 <div>
                     <hr />
-                    <input type="submit" value="@Resource.Edit" class="btn btn-primary  btn-lg  col-md-1 " />
-                    @Html.ActionLink(Resource.Back, "UserManagment", "User", null, new { @class = "btn btn-dark btn-lg  col-md-1" })
+                    <input type="submit" value="@Resource.Edit" class="btn btn-primary  btn-lg   " />
+                    @Html.ActionLink(Resource.Back, "UserManagment", "User", null, new { @class = "btn btn-dark btn-lg  " })
 
                 </div>
             </div>
@@ -100,30 +101,168 @@
   {
     <script>
 
-        var ajaxUrl = "@Url.Action("GetCheckedByUserId","Gate", new { UserId = Model.Id })";
 
-        //GatesList language
-        var search = "@Resource.Search   ";
-        var zeroRecords = "@Resource.NotFound";
+
+        var selectedGuid = [],
+            unselectedGuid = [];
 
     </script>
 
     @Html.RegisteredScripts()
 
-    <script>
+<script>
+
+
+
+        var selectGateTable;
+
+
+        $(document).ready(function () {
+
+
+
+            $("#GTable").DataTable({
+                serverSide: true,
+                bPaginate: true,
+                iDisplayLength: 12,
+                "pageLength": 10,
+                ajax: function (data, callback, settings) {
+
+                    // data.length = 10;
+                    $.get("@Url.Action("GetCheckedByUserId","Gate", new { UserId = Model.Id })", data, function (result) {
+
+
+                        callback({
+                            draw: result.draw,
+                            data: result.data,
+                            recordsTotal: result.recordsTotal,
+                            recordsFiltered: result.recordsFiltered
+                        });
+                        // $("#tbodyPartial").html(result.view);
+
+                    });
+
+                },
+                // stateSave: true,
+                deferRender: true,
+                ordering: false,
+                bFilter: true,
+                bInfo: true,
+                bAutoWidth: true,
+                bSortable: true,
+                scrollY: "30vh",
+                sScrollX: "90%",
+                scrollCollapse: true,
+                //multiSelect: false,
+                aaSorting: false,
+                //sDom: 'frtiS',
+                scroller: {
+                    loadingIndicator: true
+                },
+                createdRow: function (row, data, dataIndex) {
+
+                    $(row).attr("id", data["Id"]);
+                    $(row).attr("dChecked", data["Checked"]);
+
+
+                    if ($.inArray(data.Id, selectedGuid) == -1) {
+                        if (data["Checked"] && $.inArray(data.Id, unselectedGuid) == -1) {
+                            selectedGuid.push(data["Id"]);
+                            $(row).addClass('selected');
+                        }
+                    }
+                    else
+                        $(row).addClass('selected');
+                },
+
+                columns: [
+                    {
+                        data: null,
+                        defaultContent: '',
+                        orderable: false,
+                        width: "1%",
+                        className: 'select-checkbox',
+                        checkboxes: { selectRow: true },
+
+                    },
+                    { data: "NameAr", name: "NameAr", autoWidth: true },
+                    { data: "NameEn", name: "NameEn", autoWidth: true }
+                ],
+                //select: {
+                //    style: 'multi',
+                //    selector: 'td'
+
+                //},
+                preDrawCallback: function () {
+
+                    $('div.dataTables_filter input').addClass("form-control form-control-sm");
+                    $('div.dataTables_filter').addClass("pull-away");
+
+                },
+                language:
+                {
+                    "search": "@Resource.Search   ",
+                    "sZeroRecords":  "@Resource.NotFound",
+                    sLoadingRecords: "Loading...",
+                    info: "@Resource.SInfoTable"
+
+                }
+
+
+            });
+
+
+            $('#GTable tbody').on('click', 'tr', function () {
+
+                var id = this.id;
+                var dChecked = $(this).attr("dChecked") == "true";
+                var index = $.inArray(id, selectedGuid);
+                var uIndex = $.inArray(id, unselectedGuid);
+
+
+
+
+                if (index === -1) {
+                    selectedGuid.push(id);
+
+                    if (uIndex !== -1) {
+                        console.log("unselectedGuid: pop");
+                        unselectedGuid.splice(uIndex, 1);
+                    }
+
+                } else {
+                    selectedGuid.splice(index, 1);
+                    if (dChecked) {
+                        console.log("unselectedGuid: push");
+                        unselectedGuid.push(id);
+                    }
+                }
+
+                $(this).toggleClass('selected');
+            });
+
+
+
+        });
+
+
+
+
+
         var EditUser = function (form) {
 
-            var table = $("#GTable").DataTable();
-            var rowsel = table.rows('.selected').indexes();
-            var selectedGuid = [];
+            //var table = $("#GTable").DataTable();
+            //var rowsel = table.rows('.selected').indexes();
+            //var selectedGuid = [];
 
-            $.each(rowsel, function (index, rowId) {
-                selectedGuid.push(table.rows(rowId).data()[0]["Id"]);
-                //selectedGuid.push(table.rows(rowId).nodes().to$().find("input[type='hidden']").attr("value"));
-            });
+            //$.each(rowsel, function (index, rowId) {
+            //    selectedGuid.push(table.rows(rowId).data()[0]["Id"]);
+            //    //selectedGuid.push(table.rows(rowId).nodes().to$().find("input[type='hidden']").attr("value"));
+            //});
 
             debugger
             form.GateList.value = selectedGuid.toString();
+            form.UnselecedGateList.value = unselectedGuid.toString();
 
             return true;
 
@@ -131,7 +270,7 @@
 
 
 
-    </script>
+</script>
 
 }
 

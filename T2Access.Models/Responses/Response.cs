@@ -38,7 +38,7 @@ namespace T2Access.Models
     public class ListResponse<T>
     {
         public IEnumerable<T> ResponseList { get; set; }
-        public int? totalEntities { get; set; }
+        public int? TotalEntities { get; set; }
 
     }
 

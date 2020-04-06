@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Dynamic;
 
@@ -20,7 +21,7 @@ namespace T2Access.BLL.Services
         {
             try
             {
-                if (gateManager.GetByUserName(gateModel.UserName) == null)
+                if (gateManager.GetByUserName(gateModel.UserName) != null)
                 {
                     return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.UserExist };
                 }
@@ -35,19 +36,21 @@ namespace T2Access.BLL.Services
             }
         }
 
-        //==================================================================================
+        //==========================================================================================================
         public ServiceResponse<string> Edit(GateModel model)
         {
             try
             {
-                return gateManager.Update(model.ToEntity())
-                    ? new ServiceResponse<string>() { Data = Resource.EditSuccess }
-                    : new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.EditFailed };
+                gateManager.Update(model.ToEntity());
+
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                return new ServiceResponse<string>() { Success = false, ErrorMessage = ex.Message };
+                Trace.WriteLine($" {e.GetType()}   :    {e.Message }  ");
+                return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.EditFailed };
             }
+            return new ServiceResponse<string>() { Data = Resource.EditSuccess };
+
         }
 
         public ServiceResponse<GateListResponse> GetListWithFilter(FilterGateModel filter)
@@ -69,24 +72,31 @@ namespace T2Access.BLL.Services
                 gateList = gateList.Skip((int)filter.Skip).Take((int)filter.PageSize);
             }
 
-            return new ServiceResponse<GateListResponse>() { Data = new GateListResponse() { ResponseList = gateList.ToDto(), totalEntities = _totalSize } };
+            return new ServiceResponse<GateListResponse>() { Data = new GateListResponse() { ResponseList = gateList.ToDto(), TotalEntities = _totalSize } };
         }
 
-        public ServiceResponse<IEnumerable<CheckedGateDto>> GetCheckedListByUserId(Guid userId) => new ServiceResponse<IEnumerable<CheckedGateDto>>() { Data = gateManager.GetCheckedByUserId(userId) };
+        public ServiceResponse<IEnumerable<CheckedGateDto>> GetCheckedListByUserId(Guid userId)
+        {
+            return new ServiceResponse<IEnumerable<CheckedGateDto>>() { Data = gateManager.GetCheckedByUserId(userId) };
+        }
 
-        public ServiceResponse<GateDto> Login(LoginModel gate) => new ServiceResponse<GateDto>() { Data = gateManager.Login(gate).ToDto() };
+        public ServiceResponse<GateDto> Login(LoginModel gate)
+        {
+            return new ServiceResponse<GateDto>() { Data = gateManager.Login(gate).ToDto() };
+        }
 
         public ServiceResponse<string> Delete(Guid id)
         {
             try
             {
-                return gateManager.Delete(new Gate() { Id = id })
-                    ? new ServiceResponse<string>() { Data = Resource.DeleteSuccess }
-                    : new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.DeleteFailed };
+                gateManager.Delete(new Gate() { Id = id });
+                return new ServiceResponse<string>() { Data = Resource.DeleteSuccess };
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                return new ServiceResponse<string>() { Success = false, ErrorMessage = ex.Message };
+                Trace.WriteLine($" {e.GetType()}   :    {e.Message }  ");
+
+                return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.DeleteFailed };
             }
         }
 
@@ -94,14 +104,17 @@ namespace T2Access.BLL.Services
         {
             try
             {
-                return gateManager.ResetPassword(model)
-                    ? new ServiceResponse<string>() { Data = Resource.EditSuccess }
-                    : new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.EditFailed };
+                gateManager.ResetPassword(model);
+                return new ServiceResponse<string>() { Data = Resource.EditSuccess };
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                return new ServiceResponse<string>() { Success = false, ErrorMessage = ex.Message };
+                Trace.WriteLine($" {e.GetType()}   :    {e.Message }  ");
+
+                return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.EditFailed };
+
             }
         }
     }
+
 }

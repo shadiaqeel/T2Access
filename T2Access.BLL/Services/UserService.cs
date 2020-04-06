@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Dynamic;
 
@@ -20,7 +21,7 @@ namespace T2Access.BLL.Services
 
 
         //==========================================================================
-       
+
         public ServiceResponse<string> Create(SignUpUserModel model)
         {
 
@@ -55,46 +56,53 @@ namespace T2Access.BLL.Services
 
         }
 
-        
-        
+
+
         public ServiceResponse<string> Edit(UpdateUserModel model)
         {
 
 
-            if (!userManager.Update(model.ToEntity()))
+            try
             {
+                userManager.Update(model.ToEntity());
 
-                return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.EditFailed };
+                //Clear previous records
+                var deletedGateList = model.UnselecedGateList.Split(',');
+                foreach (string gate in deletedGateList)
+                {
+                    if (Guid.TryParse(gate, out Guid gateId))
+                        userGateManager.Delete(new UserGate() { UserId = model.Id , GateId = gateId });
+                }
 
-            }
 
-            //Clear previous records
-            userGateManager.Delete(new UserGate() { UserId = model.Id });
+                if (string.IsNullOrEmpty(model.GateList))
+                {
+                    return new ServiceResponse<string>() { Data = Resource.EditSuccess };
+                }
 
 
-            if (string.IsNullOrEmpty(model.GateList))
-            {
+                //Create new records
+                var gatelist = model.GateList.Split(',');
+                foreach (string gate in gatelist)
+                {
+                    if (Guid.TryParse(gate, out Guid gateId))
+                        userGateManager.Create(new UserGate() { UserId = model.Id, GateId = gateId });
+                    
+                }
+
                 return new ServiceResponse<string>() { Data = Resource.EditSuccess };
             }
-
-
-            //Create new records
-            var gatelist = model.GateList.Split(',');
-            foreach (string gate in gatelist)
+            catch (Exception e)
             {
-                if (Guid.TryParse(gate, out Guid gateId))
-                {
-                    userGateManager.Create(new UserGate() { UserId = model.Id, GateId = gateId });
-                }
+                Trace.WriteLine($" {e.GetType()}   :    {e.Message }  ");
+
+                return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.EditFailed };
             }
-
-
-            return new ServiceResponse<string>() { Data = Resource.EditSuccess };
 
         }
 
-        
-        
+
+
         public ServiceResponse<UserListResponse> GetList(FilterUserModel filter)
         {
             IEnumerable<User> userList;
@@ -102,9 +110,11 @@ namespace T2Access.BLL.Services
             {
                 userList = userManager.GetWithFilter(filter.ToEntity());
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                return new ServiceResponse<UserListResponse>() { ErrorMessage = ex.Message };
+                Trace.WriteLine($" {e.GetType()}   :    {e.Message }  ");
+
+                return new ServiceResponse<UserListResponse>() { ErrorMessage = e.Message };
 
             }
 
@@ -123,43 +133,55 @@ namespace T2Access.BLL.Services
                 userList = userList.Skip((int)filter.Skip).Take((int)filter.PageSize);
             }
 
-            return new ServiceResponse<UserListResponse>() { Data = new UserListResponse() { ResponseList = userList.ToDto(), totalEntities = _totalSize } };
+            return new ServiceResponse<UserListResponse>() { Data = new UserListResponse() { ResponseList = userList.ToDto(), TotalEntities = _totalSize } };
 
 
 
         }
 
-        
-        
+
+
         public ServiceResponse<string> Delete(Guid id)
         {
-            if (userGateManager.Delete(new UserGate() { UserId = id }) && userManager.Delete(new User() { Id = id }))
+
+            try
             {
+                userGateManager.Delete(new UserGate() { UserId = id });
+
+                // remove all corresponding recorders for the User in UserGate Table
+                userManager.Delete(new User() { Id = id });
+
                 return new ServiceResponse<string>() { Data = Resource.DeleteSuccess };
             }
+            catch (Exception e)
+            {
+                Trace.WriteLine($" {e.GetType()}   :    {e.Message }  ");
 
-            return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.DeleteFailed };
+                return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.DeleteFailed };
+            }
 
         }
 
-        
-        
+
+
         public ServiceResponse<UserDto> GetById(Guid userId)
         {
             try
             {
                 return new ServiceResponse<UserDto>() { Data = userManager.GetById(userId).ToDto() };
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                return new ServiceResponse<UserDto>() { Success = false, ErrorMessage = ex.Message };
+                Trace.WriteLine($" {e.GetType()}   :    {e.Message }  ");
+
+                return new ServiceResponse<UserDto>() { Success = false, ErrorMessage = e.Message };
 
             }
 
         }
 
-        
-        
+
+
         public ServiceResponse<UserDto> Login(LoginModel model)
         {
             var user = userManager.Login(model);
@@ -173,29 +195,29 @@ namespace T2Access.BLL.Services
         }
 
 
-        
-        
+
+
         public ServiceResponse<string> ResetPassword(ResetPasswordModel model)
         {
             try
             {
-                if (userManager.ResetPassword(model))
-                {
-                    return new ServiceResponse<string>() { Data = Resource.EditSuccess };
-                }
+                userManager.ResetPassword(model);
+
+                return new ServiceResponse<string>() { Data = Resource.EditSuccess };
+
+
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine($" {e.GetType()}   :    {e.Message }  ");
 
                 return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.EditFailed };
-            }
-            catch (Exception ex)
-            {
-
-                return new ServiceResponse<string>() { Success = false, ErrorMessage = ex.Message };
             }
 
         }
 
 
-        
+
         public ServiceResponse<string> Assign(UserGateModel userGate)
         {
 
@@ -209,9 +231,11 @@ namespace T2Access.BLL.Services
 
                 return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.AssignFailed };
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                return new ServiceResponse<string>() { Success = false, ErrorMessage = ex.Message };
+                Trace.WriteLine($" {e.GetType()}   :    {e.Message }  ");
+
+                return new ServiceResponse<string>() { Success = false, ErrorMessage = e.Message };
 
             }
 
@@ -219,22 +243,22 @@ namespace T2Access.BLL.Services
         }
 
 
-        
+
         public ServiceResponse<string> Unassign(UserGateModel userGate)
         {
 
             try
             {
-                if (userGateManager.Delete(userGate.ToEntity()))
-                {
-                    return new ServiceResponse<string>() { Data = Resource.UnassignSuccess };
-                }
+                userGateManager.Delete(userGate.ToEntity());
+
+                return new ServiceResponse<string>() { Data = Resource.UnassignSuccess };
+
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine($" {e.GetType()}   :    {e.Message }  ");
 
                 return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.UnassignFailed };
-            }
-            catch (Exception ex)
-            {
-                return new ServiceResponse<string>() { Success = false, ErrorMessage = ex.Message };
 
             }
 

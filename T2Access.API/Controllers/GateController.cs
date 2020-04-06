@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
@@ -27,10 +28,7 @@ namespace T2Access.API.Controllers
         [ResponseType(typeof(string))]
         public HttpResponseMessage Login(LoginModel gate)
         {
-            //if (!ModelState.IsValid)
-            //    return Request.CreateResponse(HttpStatusCode.NotFound, ModelState);
-
-
+            
             var response = gateService.Login(gate);
 
             if (response.Success)
@@ -46,15 +44,24 @@ namespace T2Access.API.Controllers
                     new Claim("Role", "Gate")
                 };
 
+                string Token;
 
-
-                var Token = AuthorizationFactory.GetAuthrization().GenerateToken(new JWTContainerModel()
+                try
                 {
+                    Token = AuthorizationFactory.GetAuthorization().GenerateToken(new JWTContainerModel()
+                    {
 
-                    ExpireMinutes = DateTime.Now.AddMinutes(15).Minute,
-                    Claims = cliamList.ToArray()
+                        ExpireMinutes = DateTime.Now.AddMinutes(15).Minute,
+                        Claims = cliamList.ToArray()
 
-                });
+                    });
+                }
+                catch (Exception e)
+                {
+                    Trace.WriteLine($" {e.GetType()}   :    {e.Message }  ");
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.NotAuthorized);
+
+                }
 
                 return Request.CreateResponse(HttpStatusCode.OK, Token);
             }
@@ -63,6 +70,10 @@ namespace T2Access.API.Controllers
                 return Request.CreateResponse(HttpStatusCode.NotFound, Resource.UserNotExist);
             }
         }
+
+
+
+        //========================================================================= Admin Region
 
 
         [HttpPost]

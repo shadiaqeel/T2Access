@@ -17,7 +17,6 @@ namespace T2Access.Web.Controllers
         private readonly IHttpClientService httpService = new HttpClientService(new Uri(Variables.ServerBaseAddress + $"{Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName}/User/"));
 
 
-        // GET: AccountC:\Users\dell\Source\Repos\T2Access\T2Access.Web\Controllers\AccountController.cs
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
@@ -84,9 +83,6 @@ namespace T2Access.Web.Controllers
         }
 
 
-
-
-
         public ActionResult LogOut()
         {
             Session.Clear();
@@ -95,17 +91,13 @@ namespace T2Access.Web.Controllers
         }
 
 
-
-
+        // ====================================== Relogin =============================================
 
         public ActionResult ReLogin()
         {
 
             return PartialView("_ReLogin");
         }
-
-
-
 
 
         [HttpPost]

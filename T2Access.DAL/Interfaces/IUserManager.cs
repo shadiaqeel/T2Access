@@ -14,7 +14,7 @@ namespace T2Access.DAL
         User GetById(Guid usedId);
 
         User Login(IAuthModel user);
-        bool ResetPassword(IAuthModel user);
+        void ResetPassword(IAuthModel user);
 
 
     }

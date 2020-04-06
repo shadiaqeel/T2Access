@@ -33,6 +33,7 @@ namespace T2Access.Models
     public class UpdateUserModel : UserModel
     {
         public string GateList { get; set; }
+        public string UnselecedGateList { get; set; }
 
     }
 

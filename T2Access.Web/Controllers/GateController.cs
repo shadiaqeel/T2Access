@@ -24,29 +24,13 @@ namespace T2Access.Web.Controllers
 
 
         // GET: Gate
-        public ActionResult Index()
-        {
-            return View();
-        }
-
-
-
-
-
-        #region Admin
-
-        #region Accounts Managment
-
-        #region Gate Managment
-
+        public ActionResult Index => View();
 
         public ActionResult GateManagment()
         {
 
             return View();
         }
-
-
 
         public async Task<ActionResult> GetAll()
         {
@@ -90,7 +74,7 @@ namespace T2Access.Web.Controllers
 
 
 
-                        return Json(new { data = JsonConvert.SerializeObject(gates.ResponseList, new T2Access.Web.Helper.DisplayEnumConverter()), draw = Request["draw"], recordsTotal = gates.totalEntities }, JsonRequestBehavior.AllowGet);
+                        return Json(new { data = JsonConvert.SerializeObject(gates.ResponseList, new T2Access.Web.Helper.DisplayEnumConverter()), draw = Request["draw"], recordsTotal = gates.TotalEntities }, JsonRequestBehavior.AllowGet);
                     }
 
                     return PartialView(gates);
@@ -101,10 +85,9 @@ namespace T2Access.Web.Controllers
         }
 
 
+        // ====================================== Create Gate =============================================
 
-
-
-        #region Create Gate Account
+        #region Create
         public ActionResult Create()
         {
 
@@ -112,8 +95,6 @@ namespace T2Access.Web.Controllers
 
 
         }
-
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -151,9 +132,8 @@ namespace T2Access.Web.Controllers
         }
         #endregion
 
+        // ====================================== Delete Gate =============================================
 
-
-        #region Delete
         public async Task<ActionResult> Delete(Guid id)
         {
 
@@ -182,17 +162,15 @@ namespace T2Access.Web.Controllers
 
 
         }
-        #endregion
 
+        // ====================================== Edit Gate =============================================
 
         #region Edit
-
         public ActionResult Edit()
         {
 
             return PartialView("_Edit");
         }
-
 
 
         [HttpPost]
@@ -230,19 +208,18 @@ namespace T2Access.Web.Controllers
             }
 
         }
-
         #endregion
 
 
-        #region Reset Password
+        // ====================================== Reset Password =============================================
 
+
+        #region Reset Password
         public ActionResult ResetPassword()
         {
 
             return PartialView("_ResetPassword");
         }
-
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -283,15 +260,11 @@ namespace T2Access.Web.Controllers
             }
 
         }
-
         #endregion
 
-        #endregion
-        #endregion
+        // ====================================== Get List Gate =============================================
 
-
-
-
+        #region Get List
         public ActionResult GetList()
         {
 
@@ -300,25 +273,24 @@ namespace T2Access.Web.Controllers
         }
 
 
-
-
-
         public async Task<ActionResult> GetFilterd()
         {
-            using (var response = await httpService.GetAsync($"GetListWithFilter?Status={0}", token: (string)Session["Token"]))
+                    int start = Convert.ToInt32(Request["start"]);
+                    int length = Convert.ToInt32(Request["length"]);
+
+            // TODO : ServerSide  
+            //&PageSize={length}&Skip={start}
+
+            using (var response = await httpService.GetAsync($"GetListWithFilter?Status={0}&PageSize={length}&Skip={start}", token: (string)Session["Token"]))
             {
                 if (response.IsSuccessStatusCode && Request.IsAjaxRequest())
                 {
                     var filterdGates = await response.Content.ReadAsAsync<ListResponse<GateViewModel>>();
-
-
+                   
                     //Server Side Parameter
-                    int start = Convert.ToInt32(Request["start"]);
-                    int length = Convert.ToInt32(Request["length"]);
                     string searchValue = Request["search[value]"];
                     string sortColumnName = Request[$"columns[{Request["order[0][column]"]}][name]"];
                     string sortDirection = Request["order[0][dir]"];
-
 
                     int totalrows = filterdGates.ResponseList.Count();
 
@@ -343,7 +315,7 @@ namespace T2Access.Web.Controllers
                     //view = RenderViewToString(ControllerContext, "_ListBody", filterdGates, true)
 
 
-                    return Json(new { data = filterdGates.ResponseList, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = filterdGates.totalEntities }, JsonRequestBehavior.AllowGet);
+                    return Json(new { data = filterdGates.ResponseList, draw = Request["draw"], recordsTotal = filterdGates.TotalEntities, recordsFiltered = filterdGates.TotalEntities }, JsonRequestBehavior.AllowGet);
                 }
             }
 
@@ -357,7 +329,7 @@ namespace T2Access.Web.Controllers
             {
                 if (response.IsSuccessStatusCode && Request.IsAjaxRequest())
                 {
-                    var CheckedGates = await response.Content.ReadAsAsync<List<GateViewModel>>(); 
+                    var CheckedGates = await response.Content.ReadAsAsync<List<GateViewModel>>();
 
                     //Server Side Parameter
                     int start = Convert.ToInt32(Request["start"]);
@@ -395,12 +367,12 @@ namespace T2Access.Web.Controllers
 
             return null;
         }
-
-
-
-
-
         #endregion
+
+
+
+
+
 
 
     }

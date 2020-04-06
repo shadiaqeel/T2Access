@@ -21,11 +21,16 @@ namespace T2Access.DAL
 
         }
 
-        public bool Delete(UserGate userGate)
+        public void Delete(UserGate userGate)
         {
-            if (userGate == null || (userGate.UserId == Guid.Empty && userGate.GateId == Guid.Empty))
+            if (userGate == null)
             {
-                return false;
+                throw new ArgumentNullException(nameof(userGate));
+            }
+
+            if (userGate.UserId == Guid.Empty && userGate.GateId == Guid.Empty)
+            {
+                throw new ArgumentNullException(nameof(userGate));
             }
 
             DatabaseExecuter.MySqlExecuteNonQuery("SP_UserGate_Delete", delegate (MySqlCommand cmd)
@@ -34,17 +39,23 @@ namespace T2Access.DAL
                cmd.Parameters.AddWithValue("_gateId", userGate.GateId);
 
            });
-            return true;
         }
 
-        public bool DeleteAllByUserId(Guid userId)
+        public void Update(UserGate editmodel)
+        {
+            throw new NotImplementedException();
+        }
+
+        //========================================================================================
+
+        public void DeleteAllByUserId(Guid userId)
         {
 
-            return DatabaseExecuter.MySqlExecuteNonQuery("SP_UserGate_DeleteAllByUserId", delegate (MySqlCommand cmd)
+            DatabaseExecuter.MySqlExecuteNonQuery("SP_UserGate_DeleteAllByUserId", delegate (MySqlCommand cmd)
             {
                 cmd.Parameters.AddWithValue("_userId", userId);
 
-            }) > 0 ? true : false;
+            });
 
         }
 
@@ -112,10 +123,6 @@ namespace T2Access.DAL
             return gateList;
         }
 
-        public bool Update(UserGate editmodel)
-        {
-            throw new NotImplementedException();
-        }
     }
 
 

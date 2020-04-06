@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 using T2Access.BLL.Extensions;
 using T2Access.DAL;
@@ -30,7 +31,19 @@ namespace T2Access.BLL.Services
 
         public bool UpdateStatus(decimal id)
         {
-            return transactionManager.UpdateStatus(id);
+            try
+            {
+                transactionManager.UpdateStatus(id);
+
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine($" {e.GetType()}   :    {e.Message }  ");
+
+                return false;
+            }
+
+            return true;
         }
 
         public bool ValidUserGate(UserGate userGate)

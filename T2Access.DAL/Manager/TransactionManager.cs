@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Data.SqlClient;
 
+using System.Data.SqlClient;
 
 namespace T2Access.DAL
 {
@@ -50,23 +50,21 @@ namespace T2Access.DAL
             return transaction;
         }
 
-        public bool UpdateStatus(decimal id)
+        public void UpdateStatus(decimal id)
         {
 
-
-
-            return DatabaseExecuter.ExecuteNonQuery("SP_Transaction_UpdateStatus", delegate (SqlCommand cmd)
+            DatabaseExecuter.ExecuteNonQuery("SP_Transaction_UpdateStatus", delegate (SqlCommand cmd)
             {
                 cmd.Parameters.AddWithValue("_Id", id);
-            }) > 0 ? true : false;
+            });
         }
 
-        public bool Update(Transaction editmodel)
+        public void Update(Transaction editmodel)
         {
             throw new NotImplementedException();
         }
 
-        public bool Delete(Transaction entity)
+        public void Delete(Transaction entity)
         {
             throw new NotImplementedException();
         }

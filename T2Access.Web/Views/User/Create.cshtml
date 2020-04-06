@@ -86,8 +86,8 @@
                     <div class="form-group centered ">
                         <div>
                             <hr />
-                            <input type="submit" value=@Resource.Create class="btn btn-primary  btn-lg  col-md-1  " />
-                            @Html.ActionLink(Resource.Back, "UserManagment", "User", null, new { @class = "btn btn-dark btn-lg col-md-1 " })
+                            <input type="submit" value=@Resource.Create class="btn btn-primary  btn-lg    " />
+                            @Html.ActionLink(Resource.Back, "UserManagment", "User", null, new { @class = "btn btn-dark btn-lg  " })
 
                         </div>
                     </div>
@@ -102,42 +102,155 @@
 @section Scripts
   {
 
-    <script>
 
-
-        var ajaxUrl = "@Url.Action("GetFilterd", "Gate")";
-
-
-        //GatesList language
-        var search = "@Resource.Search   ";
-        var zeroRecords = "@Resource.NotFound";
-               
-    </script>
     @Html.RegisteredScripts()
 
-    <script>
-        var CreateUser = function (form) {
-            
-            //var form = $("form",this);
-            var table = $("#GTable").DataTable();
-            var rowsel = table.rows('.selected').indexes();
-            var rowsell = table.column(0).checkboxes.selected();
-            var selectedGuid = [];
+<script>
 
-            $.each(rowsel, function (index, rowId) {
-                selectedGuid.push(table.rows(rowId).nodes().to$().find("input[type='hidden']").attr("value"));
+    var selectedGuid = [];
+
+
+        $(document).ready(function () {
+
+
+             $("#GTable").DataTable({
+                serverSide: true,
+                bPaginate: true,
+                iDisplayLength: 12,
+                "pageLength": 10,
+                ajax: function (data, callback, settings) {
+
+                    // data.length = 10;
+                    $.get("@Url.Action("GetFilterd", "Gate")", data, function (result) {
+
+
+                        callback({
+                            draw: result.draw,
+                            data: result.data,
+                            recordsTotal: result.recordsTotal,
+                            recordsFiltered: result.recordsFiltered
+                        });
+                        // $("#tbodyPartial").html(result.view);
+
+                    });
+
+                },
+                // stateSave: true,
+                deferRender: true,
+                ordering: false,
+                bFilter: true,
+                bInfo: true,
+                bAutoWidth: true,
+                bSortable: true,
+                scrollY: "30vh",
+                sScrollX: "90%",
+                scrollCollapse: true,
+                //multiSelect: false,
+                aaSorting: false,
+                //sDom: 'frtiS',
+                scroller: {
+                    loadingIndicator: true
+                },
+                createdRow: function (row, data, dataIndex) {
+
+                    $(row).attr("id", data["Id"]);
+
+                    if (data["Checked"]) {
+                        // $(row).addClass('selected');
+                        if ($.inArray(data.Id, selectedGuid) == -1) {
+                            selectedGuid.push(data["Id"]);
+                        }
+
+                    }
+                },
+                rowCallback: function (row, data) {
+                    if ($.inArray(data.Id, selectedGuid) !== -1) {
+                        $(row).addClass('selected');
+                    }
+                }
+                ,
+                columns: [
+                    {
+                        data: null,
+                        defaultContent: '',
+                        orderable: false,
+                        width: "1%",
+                        className: 'select-checkbox',
+                        checkboxes: { selectRow: true },
+
+                    },
+                    { data: "NameAr", name: "NameAr", autoWidth: true },
+                    { data: "NameEn", name: "NameEn", autoWidth: true }
+                ],
+                //select: {
+                //    style: 'multi',
+                //    selector: 'td'
+
+                //},
+                preDrawCallback: function () {
+
+                    $('div.dataTables_filter input').addClass("form-control form-control-sm");
+                    $('div.dataTables_filter').addClass("pull-away");
+
+                },
+                language:
+                {
+                    "search": "@Resource.Search   ",
+                    "sZeroRecords": "@Resource.NotFound",
+                    sLoadingRecords: "Loading...",
+                    info: "@Resource.SInfoTable"
+
+                }
+
+
             });
 
-            form.GateList.value = selectedGuid.toString();
+
+            $('#GTable tbody').on('click', 'tr', function () {
+
+                var id = this.id;
+                var index = $.inArray(id, selectedGuid);
+
+                if (index === -1) {
+                    selectedGuid.push(id);
+                } else {
+
+                    selectedGuid.splice(index, 1);
+                }
+
+                $(this).toggleClass('selected');
+            });
 
 
-              return true;
 
-        }
 
-       
 
-        </script>
+        });
+
+
+
+
+    var CreateUser = function (form) {
+
+        //var form = $("form",this);
+        //var table = $("#GTable").DataTable();
+        //var rowsel = table.rows('.selected').indexes();
+        //var rowsell = table.column(0).checkboxes.selected();
+        //var selectedGuid = [];
+        //$.each(rowsel, function (index, rowId) {
+        //    selectedGuid.push(table.rows(rowId).nodes().to$().find("input[type='hidden']").attr("value"));
+        //});
+
+
+        form.GateList.value = selectedGuid.toString();
+        debugger
+        return true;
+
+    }
+
+
+
+</script>
 
 
 

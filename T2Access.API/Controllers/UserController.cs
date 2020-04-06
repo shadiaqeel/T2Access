@@ -57,7 +57,7 @@ namespace T2Access.API.Controllers
                 cliamList.Add(new Claim("Role", $"{(UserStatus)0},User"));
             }
 
-            var token = AuthorizationFactory.GetAuthrization().GenerateToken(new JWTContainerModel()
+            var token = AuthorizationFactory.GetAuthorization().GenerateToken(new JWTContainerModel()
             {
 
                 ExpireMinutes = DateTime.Now.AddMinutes(15).Minute,
@@ -176,11 +176,6 @@ namespace T2Access.API.Controllers
                 Request.CreateResponse(HttpStatusCode.BadRequest, response.ErrorMessage);
 
         }
-
-
-
-
-
 
 
 

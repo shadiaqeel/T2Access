@@ -104,8 +104,10 @@ namespace T2Access.Security.Tokenization.Services
 
             IEnumerator<Claim> Claim = GetPrincipal(token).Claims.GetEnumerator();
 
-            while (Claim.MoveNext() && Claim.Current.Type != claimName) ;
-      
+            while (Claim.MoveNext() && Claim.Current.Type != claimName)
+            {
+                ;
+            }
 
             return Claim.Current.Value;
 
@@ -140,24 +142,20 @@ namespace T2Access.Security.Tokenization.Services
         public ClaimsPrincipal GetPrincipal(string token)
         {
 
-            try
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+
+            if (!(tokenHandler.ReadToken(token) is JwtSecurityToken jwtToken))
             {
-                var tokenHandler = new JwtSecurityTokenHandler();
-
-
-                if (!(tokenHandler.ReadToken(token) is JwtSecurityToken jwtToken))
-                {
-                    return null;
-                }
-
-                return tokenHandler.ValidateToken(token, GetTokenValidationParameters(), out SecurityToken validatedToken);
+                return null;
             }
 
+            return tokenHandler.ValidateToken(token, GetTokenValidationParameters(), out SecurityToken validatedToken);
 
-            catch (Exception e)
-            {
-                throw e;
-            }
+
+
+
 
         }
 

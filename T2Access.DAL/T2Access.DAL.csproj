@@ -57,12 +57,12 @@
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="DatabaseExecuter.cs" />
     <Compile Include="Manager\GateManager.cs" />
-    <Compile Include="MySqlManagers\MySqlGateManager.cs" />
     <Compile Include="Manager\TransactionManager.cs" />
-    <Compile Include="MySqlManagers\MySqlTransactionManager.cs" />
     <Compile Include="Manager\UserGateManager.cs" />
-    <Compile Include="MySqlManagers\MySqlUserGateManager.cs" />
     <Compile Include="Manager\UserManager.cs" />
+    <Compile Include="MySqlManagers\MySqlGateManager.cs" />
+    <Compile Include="MySqlManagers\MySqlTransactionManager.cs" />
+    <Compile Include="MySqlManagers\MySqlUserGateManager.cs" />
     <Compile Include="MySqlManagers\MySqlUserManager.cs" />
     <Compile Include="Interfaces\IGateManager.cs" />
     <Compile Include="Interfaces\ITransactionManager.cs" />

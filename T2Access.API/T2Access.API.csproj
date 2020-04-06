@@ -156,6 +156,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Attributes\CustomAuthorizeAttribute.cs" />
+    <Compile Include="Filters\FromValuesListConstraint .cs" />
     <Compile Include="Attributes\LocalisationAttribute .cs" />
     <Compile Include="Filters\LocalizationHandler.cs" />
     <Compile Include="Attributes\LowercaseRouteConstraint .cs" />

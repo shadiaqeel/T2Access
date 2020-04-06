@@ -14,14 +14,17 @@ namespace T2Access.BLL.Extensions
 
 
 
-        public static User ToEntity(this SignUpUserModel user) => new User
+        public static User ToEntity(this SignUpUserModel user)
         {
-            UserName = user.UserName,
-            FirstName = user.FirstName,
-            LastName = user.LastName,
-            Password = user.Password
+            return new User
+            {
+                UserName = user.UserName,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Password = user.Password
 
-        };
+            };
+        }
 
 
         //public static User ToEntity(this UpdateUserModel user)
@@ -41,29 +44,38 @@ namespace T2Access.BLL.Extensions
 
 
 
-        public static User ToEntity(this UserModel model) => new User
+        public static User ToEntity(this UserModel model)
         {
+            return new User
+            {
 
-            Id = model.Id,
-            UserName = model.UserName,
-            FirstName = model.FirstName,
-            LastName = model.LastName,
-            Status = model.Status
+                Id = model.Id,
+                UserName = model.UserName,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Status = model.Status
 
-        };
+            };
+        }
 
-        public static UserDto ToDto(this User user) => new UserDto
+        public static UserDto ToDto(this User user)
         {
+            return new UserDto
+            {
 
-            Id = user.Id,
-            UserName = user.UserName,
-            FirstName = user.FirstName,
-            LastName = user.LastName,
-            Status = (int)user.Status
+                Id = user.Id,
+                UserName = user.UserName,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Status = (int)user.Status
 
-        };
+            };
+        }
 
-        public static IEnumerable<UserDto> ToDto(this IEnumerable<User> user) => user.Select(c => c.ToDto());
+        public static IEnumerable<UserDto> ToDto(this IEnumerable<User> user)
+        {
+            return user.Select(c => c.ToDto());
+        }
         #endregion
     }
 }

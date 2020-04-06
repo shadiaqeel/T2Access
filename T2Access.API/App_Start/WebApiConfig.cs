@@ -14,17 +14,12 @@ namespace T2Access.API
             config.MapHttpAttributeRoutes();
 
 
-
-
-
             config.Routes.MapHttpRoute(
                  name: "WebApi",
                  routeTemplate: "api/{lang}/{controller}/{action}/{id}",
                  defaults: new { lang = "en", controller = "Home", action = "Index", id = RouteParameter.Optional },
-                constraints: null,
+                constraints: new { lang = new FromValuesListConstraint("en", "ar") },
                 handler: new LocalizationHandler(GlobalConfiguration.Configuration)
-
-
 
             );
 
