@@ -127,7 +127,7 @@
     <value>Create transaction failed</value>
   </data>
   <data name="DeleteFailed" xml:space="preserve">
-    <value>Deletion process Failed</value>
+    <value>Deletion process failed</value>
   </data>
   <data name="DeleteSuccess" xml:space="preserve">
     <value>Deleted successfully</value>
@@ -137,6 +137,9 @@
   </data>
   <data name="EditSuccess" xml:space="preserve">
     <value>Edited successfully</value>
+  </data>
+  <data name="OperationFailed" xml:space="preserve">
+    <value>Operation failed</value>
   </data>
   <data name="SignupFailed" xml:space="preserve">
     <value>Signup failed</value>

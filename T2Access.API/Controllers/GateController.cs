@@ -28,7 +28,7 @@ namespace T2Access.API.Controllers
         [ResponseType(typeof(string))]
         public HttpResponseMessage Login(LoginModel gate)
         {
-            
+
             var response = gateService.Login(gate);
 
             if (response.Success)
@@ -113,17 +113,17 @@ namespace T2Access.API.Controllers
 
         [HttpGet]
         [CustomAuthorize(Roles = "Admin")]
-        [ResponseType(typeof(ServiceResponse<List<GateDto>>))]
-        public HttpResponseMessage GetCheckedListByUserId(Guid userId)
+        [ResponseType(typeof(ServiceResponse<ListResponse<CheckedGateDto>>))]
+        public HttpResponseMessage GetCheckedListByUserId([FromUri]FilterUserModel filter)
         {
-            if (userId == null)
+            if (filter == null)
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.FilterMiss);
 
             }
 
 
-            var response = gateService.GetCheckedListByUserId(userId);
+            var response = gateService.GetCheckedListByUserId(filter);
             return response.Success ?
                 Request.CreateResponse(HttpStatusCode.OK, response.Data) :
                 Request.CreateResponse(HttpStatusCode.NotFound, response.ErrorMessage);

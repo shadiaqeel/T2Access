@@ -55,30 +55,90 @@ namespace T2Access.BLL.Services
 
         public ServiceResponse<GateListResponse> GetListWithFilter(FilterGateModel filter)
         {
-            var gateList = gateManager.GetWithFilter(filter.ToEntity());
 
-            var _totalSize = gateList.Count();
+            IEnumerable<Gate> AddedGateList;
+
+            try
+            {
+                AddedGateList = gateManager.GetWithFilter(filter.ToEntity());
+
+            }
+            catch (Exception e)
+            {
+
+                Trace.WriteLine($" {e.GetType()}   :    {e.Message }  ");
+                return new ServiceResponse<GateListResponse>() { Success = false, ErrorMessage = Resource.OperationFailed };
+            }
+
+            var _totalSize = AddedGateList.Count();
 
             //sorting
             if (!string.IsNullOrEmpty(filter.Order))
             {
-                gateList = gateList.OrderBy(filter.Order);
+                AddedGateList = AddedGateList.OrderBy(filter.Order);
             }
 
             //paging
 
             if (filter.Skip != null && filter.PageSize != null)
             {
-                gateList = gateList.Skip((int)filter.Skip).Take((int)filter.PageSize);
+                AddedGateList = AddedGateList.Skip((int)filter.Skip).Take((int)filter.PageSize);
             }
 
-            return new ServiceResponse<GateListResponse>() { Data = new GateListResponse() { ResponseList = gateList.ToDto(), TotalEntities = _totalSize } };
+            return new ServiceResponse<GateListResponse>() { Data = new GateListResponse() { ResponseList = AddedGateList.ToDto(), TotalEntities = _totalSize } };
         }
 
-        public ServiceResponse<IEnumerable<CheckedGateDto>> GetCheckedListByUserId(Guid userId)
+
+
+        public ServiceResponse<ListResponse<CheckedGateDto>> GetCheckedListByUserId(FilterUserModel filter)
         {
-            return new ServiceResponse<IEnumerable<CheckedGateDto>>() { Data = gateManager.GetCheckedByUserId(userId) };
+
+            IEnumerable<CheckedGateDto> AddedGateList;
+            ListResponse<CheckedGateDto> response = new ListResponse<CheckedGateDto>();
+
+            try
+            {
+                AddedGateList = gateManager.GetCheckedByUserId(filter.Id);
+                response.TotalEntities = AddedGateList.Count();
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine($" {e.GetType()}   :    {e.Message }  ");
+                return new ServiceResponse<ListResponse<CheckedGateDto>>() { Success = false, ErrorMessage = Resource.OperationFailed };
+            }
+
+            //search
+            if (!string.IsNullOrEmpty(filter.SearchValue))
+            {
+                filter.SearchValue = filter.SearchValue.ToLower();
+
+                AddedGateList = AddedGateList.Where(x => x.NameAr.ToLower().Contains(filter.SearchValue)
+                                || x.NameEn.ToLower().Contains(filter.SearchValue)
+                );
+
+            }
+
+
+            //sorting
+            if (!string.IsNullOrEmpty(filter.Order))
+            {
+                AddedGateList = AddedGateList.OrderBy(filter.Order);
+            }
+
+            //paging
+
+            if (filter.Skip != null && filter.PageSize != null)
+            {
+                AddedGateList = AddedGateList.Skip((int)filter.Skip).Take((int)filter.PageSize);
+            }
+
+            response.ResponseList = AddedGateList;
+
+            return new ServiceResponse<ListResponse<CheckedGateDto>>() { Data = response };
         }
+
+
+
 
         public ServiceResponse<GateDto> Login(LoginModel gate)
         {

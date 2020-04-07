@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic;
 using System.Net.Http;
@@ -10,6 +9,7 @@ using System.Web.Mvc;
 using Newtonsoft.Json;
 
 using T2Access.Models;
+using T2Access.Models.Dtos;
 using T2Access.Services.HttpClientService;
 using T2Access.Web.Attributes;
 
@@ -61,16 +61,7 @@ namespace T2Access.Web.Controllers
                     if (Request.IsAjaxRequest())
                     {
 
-
-
-
-
                         int totalrowsafterfiltering = gates.ResponseList.Count();
-
-
-
-
-
 
 
 
@@ -273,12 +264,12 @@ namespace T2Access.Web.Controllers
         }
 
 
-        public async Task<ActionResult> GetFilterd()
+        public async Task<ActionResult> GetFiltered()
         {
-                    int start = Convert.ToInt32(Request["start"]);
-                    int length = Convert.ToInt32(Request["length"]);
+            int start = Convert.ToInt32(Request["start"]);
+            int length = Convert.ToInt32(Request["length"]);
 
-            // TODO : ServerSide  
+            // TODO : ServerSide in GetFiltered method
             //&PageSize={length}&Skip={start}
 
             using (var response = await httpService.GetAsync($"GetListWithFilter?Status={0}&PageSize={length}&Skip={start}", token: (string)Session["Token"]))
@@ -286,7 +277,7 @@ namespace T2Access.Web.Controllers
                 if (response.IsSuccessStatusCode && Request.IsAjaxRequest())
                 {
                     var filterdGates = await response.Content.ReadAsAsync<ListResponse<GateViewModel>>();
-                   
+
                     //Server Side Parameter
                     string searchValue = Request["search[value]"];
                     string sortColumnName = Request[$"columns[{Request["order[0][column]"]}][name]"];
@@ -325,42 +316,52 @@ namespace T2Access.Web.Controllers
 
         public async Task<ActionResult> GetCheckedByUserId(Guid userId)
         {
-            using (var response = await httpService.GetAsync($"GetCheckedListByUserId/?userId={userId}", token: (string)Session["Token"]))
+            //Server Side Parameter
+            int start = Convert.ToInt32(Request["start"]);
+            int length = Convert.ToInt32(Request["length"]);
+            string searchValue = Request["search[value]"];
+            string sortColumnName = Request[$"columns[{Request["order[0][column]"]}][name]"];
+            string sortDirection = Request["order[0][dir]"];
+
+            var order = $"{sortColumnName} {sortDirection}";
+
+            using (var response = await httpService.GetAsync($"GetCheckedListByUserId?Id={userId}&Skip={start}&PageSize={length}&SearchValue={searchValue}", token: (string)Session["Token"]))
             {
                 if (response.IsSuccessStatusCode && Request.IsAjaxRequest())
                 {
-                    var CheckedGates = await response.Content.ReadAsAsync<List<GateViewModel>>();
+                    var CheckedGates = await response.Content.ReadAsAsync<ListResponse<CheckedGateDto>>();
 
-                    //Server Side Parameter
-                    int start = Convert.ToInt32(Request["start"]);
-                    int length = Convert.ToInt32(Request["length"]);
-                    string searchValue = Request["search[value]"];
-                    string sortColumnName = Request[$"columns[{Request["order[0][column]"]}][name]"];
-                    string sortDirection = Request["order[0][dir]"];
+                    #region Removed 
+                    // int totalrows = CheckedGates.Count;
+
+                    //if (!string.IsNullOrEmpty(searchValue))
+                    //{
+                    //    CheckedGates = CheckedGates.Where(x => x.UserName.ToLower().Contains(searchValue.ToLower())
+                    //                    || x.NameAr.ToLower().Contains(searchValue.ToLower())
+                    //                    || x.NameEn.ToLower().Contains(searchValue.ToLower())
+                    //    ).ToList<GateViewModel>();
+
+                    //}
+
+                    // int totalrowsafterfiltering = CheckedGates.Count;
 
 
-                    int totalrows = CheckedGates.Count;
+                    // //sorting 
+                    //if (!string.IsNullOrEmpty(sortColumnName))
+                    //{
+                    //    CheckedGates = CheckedGates.OrderBy($"{sortColumnName} {sortDirection}").ToList<GateViewModel>();
+                    //}
 
-                    if (!string.IsNullOrEmpty(searchValue))
+
+                    // view = RenderViewToString(ControllerContext, "_ListBody", CheckedGates, true) 
+                    #endregion
+
+                    if (string.IsNullOrEmpty(searchValue))
                     {
-                        CheckedGates = CheckedGates.Where(x => x.UserName.ToLower().Contains(searchValue.ToLower())
-                                        || x.NameAr.ToLower().Contains(searchValue.ToLower())
-                                        || x.NameEn.ToLower().Contains(searchValue.ToLower())
-                        ).ToList<GateViewModel>();
-
-                    }
-                    int totalrowsafterfiltering = CheckedGates.Count;
-
-
-                    //sorting 
-                    if (!string.IsNullOrEmpty(sortColumnName))
-                    {
-                        CheckedGates = CheckedGates.OrderBy($"{sortColumnName} {sortDirection}").ToList<GateViewModel>();
+                        return Json(new { data = CheckedGates.ResponseList, draw = Request["draw"], recordsTotal = CheckedGates.TotalEntities }, JsonRequestBehavior.AllowGet);
                     }
 
-
-                    // view = RenderViewToString(ControllerContext, "_ListBody", CheckedGates, true)
-                    return Json(new { data = CheckedGates, draw = Request["draw"], recordsTotal = totalrows, recordsFiltered = totalrowsafterfiltering }, JsonRequestBehavior.AllowGet);
+                    return Json(new { data = CheckedGates.ResponseList, draw = Request["draw"], recordsTotal = CheckedGates.ResponseList.Count() }, JsonRequestBehavior.AllowGet);
                 }
             }
 

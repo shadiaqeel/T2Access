@@ -39,12 +39,12 @@ namespace T2Access.BLL.Services
                 return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.SignupFailed };
             }
 
-            if (string.IsNullOrEmpty(model.GateList))
+            if (string.IsNullOrEmpty(model.AddedGateList))
             {
                 return new ServiceResponse<string>() { Data = Resource.SignupSuccess };
             }
 
-            foreach (string gate in model.GateList.Split(','))
+            foreach (string gate in model.AddedGateList.Split(','))
             {
                 if (Guid.TryParse(gate, out Guid gateId))
                 {
@@ -67,27 +67,32 @@ namespace T2Access.BLL.Services
                 userManager.Update(model.ToEntity());
 
                 //Clear previous records
-                var deletedGateList = model.UnselecedGateList.Split(',');
-                foreach (string gate in deletedGateList)
+                var deletedGateList = model.RemovedGateList?.Split(',');
+                if (deletedGateList != null)
                 {
-                    if (Guid.TryParse(gate, out Guid gateId))
-                        userGateManager.Delete(new UserGate() { UserId = model.Id , GateId = gateId });
+                    foreach (string gate in deletedGateList)
+                    {
+                        if (Guid.TryParse(gate, out Guid gateId))
+                        {
+                            userGateManager.Delete(new UserGate() { UserId = model.Id, GateId = gateId });
+                        }
+                    }
                 }
 
-
-                if (string.IsNullOrEmpty(model.GateList))
+                if (string.IsNullOrEmpty(model.AddedGateList))
                 {
                     return new ServiceResponse<string>() { Data = Resource.EditSuccess };
                 }
 
 
                 //Create new records
-                var gatelist = model.GateList.Split(',');
-                foreach (string gate in gatelist)
+                var AddedGateList = model.AddedGateList.Split(',');
+                foreach (string gate in AddedGateList)
                 {
                     if (Guid.TryParse(gate, out Guid gateId))
+                    {
                         userGateManager.Create(new UserGate() { UserId = model.Id, GateId = gateId });
-                    
+                    }
                 }
 
                 return new ServiceResponse<string>() { Data = Resource.EditSuccess };

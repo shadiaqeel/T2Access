@@ -76,7 +76,7 @@
                     <div class="form-group form-panel  ">
                         <h6>@Resource.Gates</h6>
                         <div class="centered">
-                            @Html.HiddenFor(model => model.GateList)
+                            @Html.HiddenFor(model => model.AddedGateList)
                             @Html.Action("GetList", "Gate")
                         </div>
                     </div>
@@ -121,7 +121,7 @@
                 ajax: function (data, callback, settings) {
 
                     // data.length = 10;
-                    $.get("@Url.Action("GetFilterd", "Gate")", data, function (result) {
+                    $.get("@Url.Action("GetFiltered", "Gate")", data, function (result) {
 
 
                         callback({
@@ -135,14 +135,14 @@
                     });
 
                 },
-                // stateSave: true,
+                stateSave: true,
                 deferRender: true,
                 ordering: false,
                 bFilter: true,
                 bInfo: true,
                 bAutoWidth: true,
                 bSortable: true,
-                scrollY: "30vh",
+                scrollY: "50vh",
                 sScrollX: "90%",
                 scrollCollapse: true,
                 //multiSelect: false,
@@ -151,19 +151,8 @@
                 scroller: {
                     loadingIndicator: true
                 },
-                createdRow: function (row, data, dataIndex) {
-
-                    $(row).attr("id", data["Id"]);
-
-                    if (data["Checked"]) {
-                        // $(row).addClass('selected');
-                        if ($.inArray(data.Id, selectedGuid) == -1) {
-                            selectedGuid.push(data["Id"]);
-                        }
-
-                    }
-                },
-                rowCallback: function (row, data) {
+                 rowCallback: function (row, data) {
+                     $(row).attr("id", data["Id"]);
                     if ($.inArray(data.Id, selectedGuid) !== -1) {
                         $(row).addClass('selected');
                     }
@@ -242,7 +231,7 @@
         //});
 
 
-        form.GateList.value = selectedGuid.toString();
+        form.AddedGateList.value = selectedGuid.toString();
         debugger
         return true;
 

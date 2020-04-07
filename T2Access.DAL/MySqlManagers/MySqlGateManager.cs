@@ -77,7 +77,7 @@ namespace T2Access.DAL
 
         public IEnumerable<Gate> GetWithFilter(Gate filter)
         {
-            IList<Gate> gateList = new List<Gate>();
+            IList<Gate> AddedGateList = new List<Gate>();
 
 
             DatabaseExecuter.MySqlExecuteQuery("SP_Gate_SelectWithFilter", delegate (MySqlCommand cmd)
@@ -95,7 +95,7 @@ namespace T2Access.DAL
                      {
                          while (reader.Read())
                          {
-                             gateList.Add(
+                             AddedGateList.Add(
                                         new Gate()
                                         {
                                             Id = reader.GetGuid(0),
@@ -109,7 +109,7 @@ namespace T2Access.DAL
                      });
 
 
-            return gateList.AsEnumerable<Gate>();
+            return AddedGateList.AsEnumerable<Gate>();
 
         }
 

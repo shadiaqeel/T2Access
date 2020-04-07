@@ -88,7 +88,7 @@ namespace T2Access.BLL.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Deletion process Failed.
+        ///   Looks up a localized string similar to Deletion process failed.
         /// </summary>
         public static string DeleteFailed {
             get {
@@ -120,6 +120,15 @@ namespace T2Access.BLL.Resources {
         public static string EditSuccess {
             get {
                 return ResourceManager.GetString("EditSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Operation failed.
+        /// </summary>
+        public static string OperationFailed {
+            get {
+                return ResourceManager.GetString("OperationFailed", resourceCulture);
             }
         }
         

@@ -17,7 +17,9 @@ namespace T2Access.Web.Controllers
     {
         private readonly IHttpClientService httpService = new HttpClientService(new Uri(Variables.ServerBaseAddress + $"{Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName}/user/"));
 
-        // GET: User
+
+
+
         public ActionResult Index()
         {
             return View();
@@ -81,6 +83,7 @@ namespace T2Access.Web.Controllers
 
 
         // ====================================== Create User =============================================
+        #region Create
         public ActionResult Create()
         {
             return View();
@@ -116,11 +119,12 @@ namespace T2Access.Web.Controllers
                     return View(model);
                 }
             }
-        }
-
+        } 
+        #endregion
 
         // ====================================== Edit User =============================================
 
+        #region Edit
         public async Task<ActionResult> Edit(Guid id)
         {
             using (var response = await httpService.GetAsync($"GetById/?id={id}", token: (string)Session["Token"]))
@@ -136,7 +140,7 @@ namespace T2Access.Web.Controllers
             }
             return View();
         }
-
+          
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(UserViewModel model)
@@ -161,7 +165,8 @@ namespace T2Access.Web.Controllers
                     return View(model);
                 }
             }
-        }
+        } 
+        #endregion
 
         // ====================================== Delete User =============================================
 
@@ -181,8 +186,9 @@ namespace T2Access.Web.Controllers
             }
         }
 
-        // ====================================== Reset Password =============================================
+        // ====================================== Reset User Password =============================================
 
+        #region Reset Password 
         public ActionResult ResetPassword()
         {
             return PartialView("_ResetPassword");
@@ -218,7 +224,8 @@ namespace T2Access.Web.Controllers
                     return PartialView("_ResetPassword", model);
                 }
             }
-        }
+        } 
+        #endregion
 
 
     }

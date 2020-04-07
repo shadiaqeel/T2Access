@@ -9,8 +9,6 @@
 
 
 
-
-
 @using (Html.BeginForm("Edit", "User", FormMethod.Post, new { onsubmit = " return EditUser(this)" }))
 {
     @Html.AntiForgeryToken()
@@ -58,19 +56,21 @@
 
 
 
+        <!-- #region GateList -->
+
         <div class="mt-5">
             <div class="form-group form-panel ">
                 <h6>@Resource.Gates</h6>
                 <div class="centered">
                     <div class="form-group">
-                        @Html.HiddenFor(model => model.GateList)
-                        @Html.HiddenFor(model => model.UnselecedGateList)
+                        @Html.HiddenFor(model => model.AddedGateList)
+                        @Html.HiddenFor(model => model.RemovedGateList)
                         @Html.Action("GetList", "Gate")
-
-                        @*@Html.Action("GetCheckedByUserId", "Gate", new { UserId = Model.Id })*@
                     </div>
                 </div>
             </div>
+
+            <!-- #endregion -->
 
 
 
@@ -79,7 +79,7 @@
             <div class="form-group centered ">
                 <div>
                     <hr />
-                    <input type="submit" value="@Resource.Edit" class="btn btn-primary  btn-lg   " />
+                    <input type="submit" value="@Resource.Edit" class="btn btn-primary  btn-lg " />
                     @Html.ActionLink(Resource.Back, "UserManagment", "User", null, new { @class = "btn btn-dark btn-lg  " })
 
                 </div>
@@ -119,8 +119,7 @@
 
         $(document).ready(function () {
 
-
-
+            //  -- scroller datatable --
             $("#GTable").DataTable({
                 serverSide: true,
                 bPaginate: true,
@@ -136,21 +135,21 @@
                             draw: result.draw,
                             data: result.data,
                             recordsTotal: result.recordsTotal,
-                            recordsFiltered: result.recordsFiltered
+                            recordsFiltered: result.recordsTotal
                         });
                         // $("#tbodyPartial").html(result.view);
 
                     });
 
                 },
-                // stateSave: true,
+                stateSave: true,
                 deferRender: true,
                 ordering: false,
                 bFilter: true,
                 bInfo: true,
                 bAutoWidth: true,
                 bSortable: true,
-                scrollY: "30vh",
+                scrollY: "50vh",
                 sScrollX: "90%",
                 scrollCollapse: true,
                 //multiSelect: false,
@@ -167,14 +166,13 @@
 
                     if ($.inArray(data.Id, selectedGuid) == -1) {
                         if (data["Checked"] && $.inArray(data.Id, unselectedGuid) == -1) {
-                            selectedGuid.push(data["Id"]);
+                            //selectedGuid.push(data["Id"]);
                             $(row).addClass('selected');
                         }
                     }
                     else
                         $(row).addClass('selected');
                 },
-
                 columns: [
                     {
                         data: null,
@@ -188,11 +186,6 @@
                     { data: "NameAr", name: "NameAr", autoWidth: true },
                     { data: "NameEn", name: "NameEn", autoWidth: true }
                 ],
-                //select: {
-                //    style: 'multi',
-                //    selector: 'td'
-
-                //},
                 preDrawCallback: function () {
 
                     $('div.dataTables_filter input').addClass("form-control form-control-sm");
@@ -212,31 +205,27 @@
             });
 
 
+
+            //  Un/select  CheckBoxes  
             $('#GTable tbody').on('click', 'tr', function () {
 
                 var id = this.id;
                 var dChecked = $(this).attr("dChecked") == "true";
                 var index = $.inArray(id, selectedGuid);
-                var uIndex = $.inArray(id, unselectedGuid);
+                
 
+                if ($(this).hasClass('selected')) {
 
-
-
-                if (index === -1) {
-                    selectedGuid.push(id);
-
-                    if (uIndex !== -1) {
-                        console.log("unselectedGuid: pop");
-                        unselectedGuid.splice(uIndex, 1);
-                    }
-
-                } else {
-                    selectedGuid.splice(index, 1);
-                    if (dChecked) {
-                        console.log("unselectedGuid: push");
-                        unselectedGuid.push(id);
-                    }
+                    if (dChecked) {unselectedGuid.push(id); }
+                    else {selectedGuid.splice(index, 1);}
                 }
+                else
+                {
+                    if (!dChecked && index === -1) { selectedGuid.push(id); }
+                    else { unselectedGuid.splice($.inArray(id, unselectedGuid), 1);}
+                }
+
+                
 
                 $(this).toggleClass('selected');
             });
@@ -248,21 +237,11 @@
 
 
 
-
+        //  Edit sumbit function 
         var EditUser = function (form) {
 
-            //var table = $("#GTable").DataTable();
-            //var rowsel = table.rows('.selected').indexes();
-            //var selectedGuid = [];
-
-            //$.each(rowsel, function (index, rowId) {
-            //    selectedGuid.push(table.rows(rowId).data()[0]["Id"]);
-            //    //selectedGuid.push(table.rows(rowId).nodes().to$().find("input[type='hidden']").attr("value"));
-            //});
-
-            debugger
-            form.GateList.value = selectedGuid.toString();
-            form.UnselecedGateList.value = unselectedGuid.toString();
+            form.AddedGateList.value = selectedGuid.toString();
+            form.RemovedGateList.value = unselectedGuid.toString();
 
             return true;
 

@@ -32,8 +32,8 @@ namespace T2Access.Models
 
     public class UpdateUserModel : UserModel
     {
-        public string GateList { get; set; }
-        public string UnselecedGateList { get; set; }
+        public string AddedGateList { get; set; }
+        public string RemovedGateList { get; set; }
 
     }
 
@@ -46,6 +46,7 @@ namespace T2Access.Models
         public int? PageSize { get; set; }
         public int? Skip { get; set; }
         public string Order { get; set; }
+        public string SearchValue { get; set; }
 
     }
 
@@ -96,7 +97,7 @@ namespace T2Access.Models
         public string LastName { get; set; }
 
 
-        public string GateList { get; set; }
+        public string AddedGateList { get; set; }
 
 
     }

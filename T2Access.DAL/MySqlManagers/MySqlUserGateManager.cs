@@ -102,7 +102,7 @@ namespace T2Access.DAL
         public List<Guid> GetByUserId(Guid userid)
         {
 
-            List<Guid> gateList = new List<Guid>();
+            List<Guid> AddedGateList = new List<Guid>();
 
 
             DatabaseExecuter.MySqlExecuteQuery("SP_UserGate_GetByUserId", delegate (MySqlCommand cmd)
@@ -115,12 +115,12 @@ namespace T2Access.DAL
                while (reader.Read())
                {
 
-                   gateList.Add(reader.GetGuid(0));
+                   AddedGateList.Add(reader.GetGuid(0));
 
                }
            });
 
-            return gateList;
+            return AddedGateList;
         }
 
     }

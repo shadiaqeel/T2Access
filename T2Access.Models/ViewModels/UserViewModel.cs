@@ -43,8 +43,8 @@ namespace T2Access.Models
 
         public UserStatus? Status { get; set; } = 0;
 
-        public string GateList { get; set; }
-        public string UnselecedGateList { get; set; }
+        public string AddedGateList { get; set; }
+        public string RemovedGateList { get; set; }
 
 
 

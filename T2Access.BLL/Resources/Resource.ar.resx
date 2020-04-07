@@ -138,6 +138,9 @@
   <data name="EditSuccess" xml:space="preserve">
     <value>نجحت عملية التعديل </value>
   </data>
+  <data name="OperationFailed" xml:space="preserve">
+    <value>فشلت العمليه</value>
+  </data>
   <data name="SignupFailed" xml:space="preserve">
     <value> فشلت عملية التسجيل </value>
   </data>
