@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 using T2Access.BLL.Extensions;
 using T2Access.DAL;
@@ -17,23 +18,23 @@ namespace T2Access.BLL.Services
 
 
 
-        public bool Create(UserGateModel userGate)
+        public async Task<bool> CreateAsync(UserGateModel userGate)
         {
-            return ValidUserGate(userGate.ToEntity())
-                ? transactionManager.Create(new Transaction() { UserId = userGate.UserId, GateId = userGate.GateId }) == null ? false : true
+            return await ValidUserGateAsync(userGate.ToEntity())
+                ? await transactionManager.CreateAsync(new Transaction() { UserId = userGate.UserId, GateId = userGate.GateId }) == null ? false : true
                 : false;
         }
 
-        public TransactionModel GetByGateId(Guid gateId)
+        public async Task<TransactionModel> GetByGateIdAsync(Guid gateId)
         {
-            return transactionManager.GetByGateId(gateId, 0).ToModel();
+            return (await transactionManager.GetByGateIdAsync(gateId, 0)).ToModel();
         }
 
-        public bool UpdateStatus(decimal id)
+        public async Task<bool> UpdateStatusAsync(decimal id)
         {
             try
             {
-                transactionManager.UpdateStatus(id);
+                await transactionManager.UpdateStatusAsync(id);
 
             }
             catch (Exception e)
@@ -46,11 +47,11 @@ namespace T2Access.BLL.Services
             return true;
         }
 
-        public bool ValidUserGate(UserGate userGate)
+        private async Task<bool> ValidUserGateAsync(UserGate userGate)
         {
             IUserGateManager userGateManager = ManagerFactory.GetUserGateManager(Variables.DatabaseProvider);
 
-            return userGateManager.CheckIfExist(userGate);
+            return await userGateManager.CheckIfExistAsync(userGate);
         }
     }
 }

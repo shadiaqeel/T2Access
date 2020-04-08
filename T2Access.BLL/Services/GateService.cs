@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Dynamic;
+using System.Threading.Tasks;
 
 using T2Access.BLL.Extensions;
 using T2Access.BLL.Resources;
@@ -17,16 +18,16 @@ namespace T2Access.BLL.Services
     {
         private readonly IGateManager gateManager = ManagerFactory.GetGateManager(Variables.DatabaseProvider);
 
-        public ServiceResponse<string> Create(SignUpGateModel gateModel)
+        public async Task<ServiceResponse<string>> CreateAsync(SignUpGateModel gateModel)
         {
             try
             {
-                if (gateManager.GetByUserName(gateModel.UserName) != null)
+                if (await gateManager.GetByUserNameAsync(gateModel.UserName) != null)
                 {
                     return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.UserExist };
                 }
 
-                return gateManager.Create(gateModel.ToEntity()) != null
+                return gateManager.CreateAsync(gateModel.ToEntity()) != null
                     ? new ServiceResponse<string>() { Data = Resource.SignupSuccess }
                     : new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.SignupSuccess };
             }
@@ -37,11 +38,11 @@ namespace T2Access.BLL.Services
         }
 
         //==========================================================================================================
-        public ServiceResponse<string> Edit(GateModel model)
+        public async Task<ServiceResponse<string>> EditAsync(GateModel model)
         {
             try
             {
-                gateManager.Update(model.ToEntity());
+                await gateManager.UpdateAsync(model.ToEntity());
 
             }
             catch (Exception e)
@@ -53,14 +54,14 @@ namespace T2Access.BLL.Services
 
         }
 
-        public ServiceResponse<GateListResponse> GetListWithFilter(FilterGateModel filter)
+        public async Task<ServiceResponse<GateListResponse>> GetListWithFilterAsync(FilterGateModel filter)
         {
 
             IEnumerable<Gate> AddedGateList;
 
             try
             {
-                AddedGateList = gateManager.GetWithFilter(filter.ToEntity());
+                AddedGateList = await gateManager.GetWithFilterAsync(filter.ToEntity());
 
             }
             catch (Exception e)
@@ -88,9 +89,7 @@ namespace T2Access.BLL.Services
             return new ServiceResponse<GateListResponse>() { Data = new GateListResponse() { ResponseList = AddedGateList.ToDto(), TotalEntities = _totalSize } };
         }
 
-
-
-        public ServiceResponse<ListResponse<CheckedGateDto>> GetCheckedListByUserId(FilterUserModel filter)
+        public async Task<ServiceResponse<ListResponse<CheckedGateDto>>> GetCheckedListByUserIdAsync(FilterUserModel filter)
         {
 
             IEnumerable<CheckedGateDto> AddedGateList;
@@ -98,7 +97,7 @@ namespace T2Access.BLL.Services
 
             try
             {
-                AddedGateList = gateManager.GetCheckedByUserId(filter.Id);
+                AddedGateList = await gateManager.GetCheckedByUserIdAsync(filter.Id);
                 response.TotalEntities = AddedGateList.Count();
             }
             catch (Exception e)
@@ -137,19 +136,16 @@ namespace T2Access.BLL.Services
             return new ServiceResponse<ListResponse<CheckedGateDto>>() { Data = response };
         }
 
-
-
-
-        public ServiceResponse<GateDto> Login(LoginModel gate)
+        public async Task<ServiceResponse<GateDto>> LoginAsync(LoginModel gate)
         {
-            return new ServiceResponse<GateDto>() { Data = gateManager.Login(gate).ToDto() };
+            return new ServiceResponse<GateDto>() { Data = (await gateManager.LoginAsync(gate)).ToDto() };
         }
 
-        public ServiceResponse<string> Delete(Guid id)
+        public async Task<ServiceResponse<string>> DeleteAsync(Guid id)
         {
             try
             {
-                gateManager.Delete(new Gate() { Id = id });
+                await gateManager.DeleteAsync(new Gate() { Id = id });
                 return new ServiceResponse<string>() { Data = Resource.DeleteSuccess };
             }
             catch (Exception e)
@@ -160,11 +156,11 @@ namespace T2Access.BLL.Services
             }
         }
 
-        public ServiceResponse<string> ResetPassword(ResetPasswordModel model)
+        public async Task<ServiceResponse<string>> ResetPasswordAsync(ResetPasswordModel model)
         {
             try
             {
-                gateManager.ResetPassword(model);
+                await gateManager.ResetPasswordAsync(model);
                 return new ServiceResponse<string>() { Data = Resource.EditSuccess };
             }
             catch (Exception e)

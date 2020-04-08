@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Dynamic;
+using System.Threading.Tasks;
 
 using T2Access.BLL.Extensions;
 using T2Access.BLL.Resources;
@@ -22,17 +23,17 @@ namespace T2Access.BLL.Services
 
         //==========================================================================
 
-        public ServiceResponse<string> Create(SignUpUserModel model)
+        public async Task<ServiceResponse<string>> CreateAsync(SignUpUserModel model)
         {
 
 
 
-            if (userManager.GetByUserName(model.UserName) != null)
+            if (userManager.GetByUserNameAsync(model.UserName) != null)
             {
                 return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.UserExist };
             }
 
-            Guid id = (userManager.Create(model.ToEntity())).Id;
+            Guid id = (await userManager.CreateAsync(model.ToEntity())).Id;
 
             if (id == Guid.Empty)
             {
@@ -48,7 +49,7 @@ namespace T2Access.BLL.Services
             {
                 if (Guid.TryParse(gate, out Guid gateId))
                 {
-                    userGateManager.Create(new UserGate() { UserId = id, GateId = gateId });
+                    await userGateManager.CreateAsync(new UserGate() { UserId = id, GateId = gateId });
                 }
             }
 
@@ -58,13 +59,13 @@ namespace T2Access.BLL.Services
 
 
 
-        public ServiceResponse<string> Edit(UpdateUserModel model)
+        public async Task<ServiceResponse<string>> EditAsync(UpdateUserModel model)
         {
 
 
             try
             {
-                userManager.Update(model.ToEntity());
+                await userManager.UpdateAsync(model.ToEntity());
 
                 //Clear previous records
                 var deletedGateList = model.RemovedGateList?.Split(',');
@@ -74,7 +75,7 @@ namespace T2Access.BLL.Services
                     {
                         if (Guid.TryParse(gate, out Guid gateId))
                         {
-                            userGateManager.Delete(new UserGate() { UserId = model.Id, GateId = gateId });
+                            await userGateManager.DeleteAsync(new UserGate() { UserId = model.Id, GateId = gateId });
                         }
                     }
                 }
@@ -91,7 +92,7 @@ namespace T2Access.BLL.Services
                 {
                     if (Guid.TryParse(gate, out Guid gateId))
                     {
-                        userGateManager.Create(new UserGate() { UserId = model.Id, GateId = gateId });
+                        await userGateManager.CreateAsync(new UserGate() { UserId = model.Id, GateId = gateId });
                     }
                 }
 
@@ -108,12 +109,12 @@ namespace T2Access.BLL.Services
 
 
 
-        public ServiceResponse<UserListResponse> GetList(FilterUserModel filter)
+        public async Task<ServiceResponse<UserListResponse>> GetListAsync(FilterUserModel filter)
         {
             IEnumerable<User> userList;
             try
             {
-                userList = userManager.GetWithFilter(filter.ToEntity());
+                userList = await userManager.GetWithFilterAsync(filter.ToEntity());
             }
             catch (Exception e)
             {
@@ -146,15 +147,15 @@ namespace T2Access.BLL.Services
 
 
 
-        public ServiceResponse<string> Delete(Guid id)
+        public async Task<ServiceResponse<string>> DeleteAsync(Guid id)
         {
 
             try
             {
-                userGateManager.Delete(new UserGate() { UserId = id });
+                await userGateManager.DeleteAsync(new UserGate() { UserId = id });
 
                 // remove all corresponding recorders for the User in UserGate Table
-                userManager.Delete(new User() { Id = id });
+                await userManager.DeleteAsync(new User() { Id = id });
 
                 return new ServiceResponse<string>() { Data = Resource.DeleteSuccess };
             }
@@ -169,11 +170,11 @@ namespace T2Access.BLL.Services
 
 
 
-        public ServiceResponse<UserDto> GetById(Guid userId)
+        public async Task<ServiceResponse<UserDto>> GetByIdAsync(Guid userId)
         {
             try
             {
-                return new ServiceResponse<UserDto>() { Data = userManager.GetById(userId).ToDto() };
+                return new ServiceResponse<UserDto>() { Data = (await userManager.GetByIdAsync(userId)).ToDto() };
             }
             catch (Exception e)
             {
@@ -187,10 +188,20 @@ namespace T2Access.BLL.Services
 
 
 
-        public ServiceResponse<UserDto> Login(LoginModel model)
+        public async Task<ServiceResponse<UserDto>> LoginAsync(LoginModel model)
         {
-            var user = userManager.Login(model);
+            User user;
+            try
+            {
+                 user = await userManager.LoginAsync(model);
 
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine($" {e.GetType()}   :    {e.Message }  ");
+                return new ServiceResponse<UserDto>() { Success = false, ErrorMessage = Resource.OperationFailed };
+
+            }
             return user != null ?
                   new ServiceResponse<UserDto>() { Data = user.ToDto() } :
                   new ServiceResponse<UserDto>() { Success = false, ErrorMessage = Resource.UserNotExist };
@@ -202,11 +213,11 @@ namespace T2Access.BLL.Services
 
 
 
-        public ServiceResponse<string> ResetPassword(ResetPasswordModel model)
+        public async Task<ServiceResponse<string>> ResetPasswordAsync(ResetPasswordModel model)
         {
             try
             {
-                userManager.ResetPassword(model);
+                await userManager.ResetPasswordAsync(model);
 
                 return new ServiceResponse<string>() { Data = Resource.EditSuccess };
 
@@ -223,13 +234,13 @@ namespace T2Access.BLL.Services
 
 
 
-        public ServiceResponse<string> Assign(UserGateModel userGate)
+        public async Task<ServiceResponse<string>> AssignAsync(UserGateModel userGate)
         {
 
 
             try
             {
-                if (userGateManager.Create(userGate.ToEntity()) != null)
+                if (await userGateManager.CreateAsync(userGate.ToEntity()) != null)
                 {
                     return new ServiceResponse<string>() { Data = Resource.AssignSuccess };
                 }
@@ -249,12 +260,12 @@ namespace T2Access.BLL.Services
 
 
 
-        public ServiceResponse<string> Unassign(UserGateModel userGate)
+        public async Task<ServiceResponse<string>> UnassignAsync(UserGateModel userGate)
         {
 
             try
             {
-                userGateManager.Delete(userGate.ToEntity());
+                await userGateManager.DeleteAsync(userGate.ToEntity());
 
                 return new ServiceResponse<string>() { Data = Resource.UnassignSuccess };
 

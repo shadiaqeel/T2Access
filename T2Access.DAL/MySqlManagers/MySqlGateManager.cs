@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 using MySql.Data.MySqlClient;
 
@@ -18,10 +19,10 @@ namespace T2Access.DAL
 
 
         #region CRUD
-        public Gate Create(Gate gate)
+        public async Task<Gate> CreateAsync(Gate gate)
         {
 
-            return DatabaseExecuter.MySqlExecuteNonQuery("SP_Gate_Insert", delegate (MySqlCommand cmd)
+            return await DatabaseExecuter.MySqlExecuteNonQueryAsync("SP_Gate_Insert", delegate (MySqlCommand cmd)
             {
                 cmd.Parameters.AddWithValue("_username", gate.UserName);
                 cmd.Parameters.AddWithValue("_password", passwordHasher.HashPassword(gate.Password));
@@ -30,41 +31,41 @@ namespace T2Access.DAL
             }) > 0 ? gate : null;
         }
 
-        public void Update(Gate model)
+        public async Task UpdateAsync(Gate model)
         {
             if (model.Id == null)
             {
                 throw new ArgumentNullException(nameof(model.Id));
             }
 
-            DatabaseExecuter.MySqlExecuteNonQuery("SP_Gate_Update", delegate (MySqlCommand cmd)
-            {
-                cmd.Parameters.AddWithValue("_id", model.Id);
+            await DatabaseExecuter.MySqlExecuteNonQueryAsync("SP_Gate_Update", delegate (MySqlCommand cmd)
+             {
+                 cmd.Parameters.AddWithValue("_id", model.Id);
 
-                cmd.Parameters.AddWithValue("_username", model.UserName != null ? model.UserName : "");
+                 cmd.Parameters.AddWithValue("_username", model.UserName != null ? model.UserName : "");
 
-                cmd.Parameters.AddWithValue("_nameAr", model.NameAr != null ? model.NameAr : "");
+                 cmd.Parameters.AddWithValue("_nameAr", model.NameAr != null ? model.NameAr : "");
 
-                cmd.Parameters.AddWithValue("_nameEn", model.NameEn != null ? model.NameEn : "");
+                 cmd.Parameters.AddWithValue("_nameEn", model.NameEn != null ? model.NameEn : "");
 
-                cmd.Parameters.AddWithValue("_status", model.Status != null ? model.Status : -1);
+                 cmd.Parameters.AddWithValue("_status", model.Status != null ? model.Status : -1);
 
-            });
+             });
         }
 
-        public void Delete(Gate gate)
+        public async Task DeleteAsync(Gate gate)
         {
 
             var userGateManager = ManagerFactory.GetUserGateManager(Variables.DatabaseProvider);
             // Remove all corresponding recorders for the Gate in UserGate Table  
-            userGateManager.Delete(new UserGate() { GateId = gate.Id });
+            userGateManager.DeleteAsync(new UserGate() { GateId = gate.Id });
 
 
-            DatabaseExecuter.MySqlExecuteNonQuery("SP_Gate_Delete", delegate (MySqlCommand cmd)
-            {
-                cmd.Parameters.AddWithValue("_id", gate.Id);
+            await DatabaseExecuter.MySqlExecuteNonQueryAsync("SP_Gate_Delete", delegate (MySqlCommand cmd)
+             {
+                 cmd.Parameters.AddWithValue("_id", gate.Id);
 
-            });
+             });
 
         }
 
@@ -75,103 +76,103 @@ namespace T2Access.DAL
         //==============================================================================
 
 
-        public IEnumerable<Gate> GetWithFilter(Gate filter)
+        public async Task<IEnumerable<Gate>> GetWithFilterAsync(Gate filter)
         {
             IList<Gate> AddedGateList = new List<Gate>();
 
 
-            DatabaseExecuter.MySqlExecuteQuery("SP_Gate_SelectWithFilter", delegate (MySqlCommand cmd)
-                     {
-                         cmd.Parameters.AddWithValue("_username", filter.UserName != null ? filter.UserName : "");
+            await DatabaseExecuter.MySqlExecuteQueryAsync("SP_Gate_SelectWithFilter", delegate (MySqlCommand cmd)
+                      {
+                          cmd.Parameters.AddWithValue("_username", filter.UserName != null ? filter.UserName : "");
 
-                         cmd.Parameters.AddWithValue("_nameAr", filter.NameAr != null ? filter.NameAr : "");
+                          cmd.Parameters.AddWithValue("_nameAr", filter.NameAr != null ? filter.NameAr : "");
 
-                         cmd.Parameters.AddWithValue("_nameEn", filter.NameEn != null ? filter.NameEn : "");
+                          cmd.Parameters.AddWithValue("_nameEn", filter.NameEn != null ? filter.NameEn : "");
 
-                         cmd.Parameters.AddWithValue("_status", filter.Status != null ? filter.Status : -1);
+                          cmd.Parameters.AddWithValue("_status", filter.Status != null ? filter.Status : -1);
 
 
-                     }, delegate (MySqlDataReader reader)
-                     {
-                         while (reader.Read())
-                         {
-                             AddedGateList.Add(
-                                        new Gate()
-                                        {
-                                            Id = reader.GetGuid(0),
-                                            UserName = reader.GetString(1),
-                                            NameAr = reader.GetString(2),
-                                            NameEn = reader.GetString(3),
-                                            Status = reader.GetInt32(4)
-                                        }
-                                         );
-                         }
-                     });
+                      }, delegate (MySqlDataReader reader)
+                      {
+                          while (reader.Read())
+                          {
+                              AddedGateList.Add(
+                                         new Gate()
+                                         {
+                                             Id = reader.GetGuid(0),
+                                             UserName = reader.GetString(1),
+                                             NameAr = reader.GetString(2),
+                                             NameEn = reader.GetString(3),
+                                             Status = reader.GetInt32(4)
+                                         }
+                                          );
+                          }
+                      });
 
 
             return AddedGateList.AsEnumerable<Gate>();
 
         }
 
-        public IEnumerable<CheckedGateDto> GetCheckedByUserId(Guid userId)
+        public async Task<IEnumerable<CheckedGateDto>> GetCheckedByUserIdAsync(Guid userId)
         {
             IList<CheckedGateDto> checkedGateList = new List<CheckedGateDto>();
 
 
-            DatabaseExecuter.MySqlExecuteQuery("SP_Gate_SelectCheckedByUserId", delegate (MySqlCommand cmd)
-            {
-                cmd.Parameters.AddWithValue("_userId", userId);
+            await DatabaseExecuter.MySqlExecuteQueryAsync("SP_Gate_SelectCheckedByUserId", delegate (MySqlCommand cmd)
+             {
+                 cmd.Parameters.AddWithValue("_userId", userId);
 
-            }, delegate (MySqlDataReader reader)
-            {
-                while (reader.Read())
-                {
-                    checkedGateList.Add(
-                               new CheckedGateDto()
-                               {
-                                   Checked = reader.GetBoolean(0),
-                                   Id = reader.GetGuid(1),
-                                   UserName = reader.GetString(2),
-                                   NameAr = reader.GetString(3),
-                                   NameEn = reader.GetString(4),
-                                   Status = reader.GetInt32(5)
-                               }
-                                );
-                }
-            });
+             }, delegate (MySqlDataReader reader)
+             {
+                 while (reader.Read())
+                 {
+                     checkedGateList.Add(
+                                new CheckedGateDto()
+                                {
+                                    Checked = reader.GetBoolean(0),
+                                    Id = reader.GetGuid(1),
+                                    UserName = reader.GetString(2),
+                                    NameAr = reader.GetString(3),
+                                    NameEn = reader.GetString(4),
+                                    Status = reader.GetInt32(5)
+                                }
+                                 );
+                 }
+             });
 
             return checkedGateList.AsEnumerable();
         }
 
 
-        public Gate GetByUserName(string username)
+        public async Task<Gate> GetByUserNameAsync(string username)
         {
             Gate gate = null;
-            DatabaseExecuter.MySqlExecuteQuery("SP_Gate_SelectByUserName", delegate (MySqlCommand cmd)
+            await DatabaseExecuter.MySqlExecuteQueryAsync("SP_Gate_SelectByUserName", delegate (MySqlCommand cmd)
 
-            {
-                cmd.Parameters.AddWithValue("_username", username != null ? username : "");
+             {
+                 cmd.Parameters.AddWithValue("_username", username != null ? username : "");
 
-            }, delegate (MySqlDataReader reader)
+             }, delegate (MySqlDataReader reader)
 
-            {
+             {
 
 
-                if (reader.Read())
-                {
+                 if (reader.Read())
+                 {
 
-                    gate = new Gate()
-                    {
-                        Id = reader.GetGuid(0),
-                        UserName = reader.GetString(1),
-                        NameAr = reader.GetString(2),
-                        NameEn = reader.GetString(3),
-                        Status = reader.GetInt32(4)
-                    };
+                     gate = new Gate()
+                     {
+                         Id = reader.GetGuid(0),
+                         UserName = reader.GetString(1),
+                         NameAr = reader.GetString(2),
+                         NameEn = reader.GetString(3),
+                         Status = reader.GetInt32(4)
+                     };
 
-                }
+                 }
 
-            });
+             });
 
             return gate;
 
@@ -179,39 +180,39 @@ namespace T2Access.DAL
 
         }
 
-        public Gate Login(IAuthModel Gate)
+        public async Task<Gate> LoginAsync(IAuthModel Gate)
         {
 
 
             Gate gate = null;
-            DatabaseExecuter.MySqlExecuteQuery("SP_Gate_Login", delegate (MySqlCommand cmd)
+            await DatabaseExecuter.MySqlExecuteQueryAsync("SP_Gate_Login", delegate (MySqlCommand cmd)
 
-            {
+             {
 
-                cmd.Parameters.AddWithValue("_username", Gate != null ? Gate.UserName : "");
-
-
-            }, delegate (MySqlDataReader reader)
-
-            {
+                 cmd.Parameters.AddWithValue("_username", Gate != null ? Gate.UserName : "");
 
 
-                if (reader.Read())
-                {
+             }, delegate (MySqlDataReader reader)
 
-                    gate = new Gate()
-                    {
-                        Id = reader.GetGuid(0),
-                        UserName = reader.GetString(1),
-                        Password = reader.GetString(2),
-                        NameAr = reader.GetString(3),
-                        NameEn = reader.GetString(4),
-                        Status = reader.GetInt32(5)
-                    };
+             {
 
-                }
 
-            });
+                 if (reader.Read())
+                 {
+
+                     gate = new Gate()
+                     {
+                         Id = reader.GetGuid(0),
+                         UserName = reader.GetString(1),
+                         Password = reader.GetString(2),
+                         NameAr = reader.GetString(3),
+                         NameEn = reader.GetString(4),
+                         Status = reader.GetInt32(5)
+                     };
+
+                 }
+
+             });
 
 
             return gate != null && passwordHasher.VerifyHashedPassword(gate.Password, Gate.Password)
@@ -219,21 +220,21 @@ namespace T2Access.DAL
                 : null;
         }
 
-        public void ResetPassword(IAuthModel model)
+        public async Task ResetPasswordAsync(IAuthModel model)
         {
             if (model.Id == null)
             {
                 throw new ArgumentNullException(nameof(model.Id));
             }
 
-            DatabaseExecuter.MySqlExecuteNonQuery("SP_Gate_ResetPassword", delegate (MySqlCommand cmd)
-            {
-                cmd.Parameters.AddWithValue("_id", model.Id);
+            await DatabaseExecuter.MySqlExecuteNonQueryAsync("SP_Gate_ResetPassword", delegate (MySqlCommand cmd)
+             {
+                 cmd.Parameters.AddWithValue("_id", model.Id);
 
-                cmd.Parameters.AddWithValue("_password", model.Password != null ? passwordHasher.HashPassword(model.Password) : "");
+                 cmd.Parameters.AddWithValue("_password", model.Password != null ? passwordHasher.HashPassword(model.Password) : "");
 
 
-            });
+             });
         }
 
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 
@@ -22,7 +23,7 @@ namespace T2Access.API.Controllers
         public HttpResponseMessage GetByGateId(Guid id)
         {
 
-            var transaction = transactionService.GetByGateId(id);
+            var transaction = transactionService.GetByGateIdAsync(id);
 
             return transaction != null
                 ? Request.CreateResponse(HttpStatusCode.OK, transaction)
@@ -34,10 +35,10 @@ namespace T2Access.API.Controllers
         [HttpPost]
         [CustomAuthorize(Roles = "User")]
         [ResponseType(typeof(UserGateModel))]
-        public HttpResponseMessage Create(UserGateModel userGate)
+        public async Task<HttpResponseMessage> Create(UserGateModel userGate)
         {
 
-            return transactionService.Create(userGate)
+            return await transactionService.CreateAsync(userGate)
                 ? Request.CreateResponse(HttpStatusCode.OK, userGate)
                 : Request.CreateResponse(HttpStatusCode.NotFound, Resource.CreateTransactionFailed);
         }
@@ -47,9 +48,9 @@ namespace T2Access.API.Controllers
         [HttpPut]
         [CustomAuthorize(Roles = "Gate")]
         [ResponseType(typeof(string))]
-        public HttpResponseMessage UpdateStatus(decimal id)
+        public async Task<HttpResponseMessage> UpdateStatus(decimal id)
         {
-            return transactionService.UpdateStatus(id)
+            return await transactionService.UpdateStatusAsync(id)
                 ? Request.CreateResponse(HttpStatusCode.OK, Resource.StatusUpdateSuccess)
                 : Request.CreateResponse(HttpStatusCode.NotFound, Resource.StatusUpdateFail);
         }

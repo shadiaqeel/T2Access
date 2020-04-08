@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using T2Access.Models;
 
@@ -9,12 +10,12 @@ namespace T2Access.DAL
 {
     public interface IUserManager : IRepository<User>
     {
-        IEnumerable<User> GetWithFilter(User filter);
-        User GetByUserName(string userName);
-        User GetById(Guid usedId);
+        Task<IEnumerable<User>> GetWithFilterAsync(User filter);
+        Task<User> GetByUserNameAsync(string userName);
+        Task<User> GetByIdAsync(Guid usedId);
 
-        User Login(IAuthModel user);
-        void ResetPassword(IAuthModel user);
+        Task<User> LoginAsync(IAuthModel user);
+        Task ResetPasswordAsync(IAuthModel user);
 
 
     }

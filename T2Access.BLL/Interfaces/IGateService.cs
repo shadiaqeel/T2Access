@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 using T2Access.Models;
 using T2Access.Models.Dtos;
@@ -8,13 +9,13 @@ namespace T2Access.BLL.Services
     public interface IGateService
     {
 
-        ServiceResponse<string> Create(SignUpGateModel gate);
-        ServiceResponse<GateDto> Login(LoginModel gate);
-        ServiceResponse<GateListResponse> GetListWithFilter(FilterGateModel filter);
-        ServiceResponse<ListResponse<CheckedGateDto>> GetCheckedListByUserId(FilterUserModel filter);
-        ServiceResponse<string> Delete(Guid id);
-        ServiceResponse<string> Edit(GateModel model);
-        ServiceResponse<string> ResetPassword(ResetPasswordModel model);
+        Task<ServiceResponse<string>> CreateAsync(SignUpGateModel gate);
+        Task<ServiceResponse<GateDto>> LoginAsync(LoginModel gate);
+        Task<ServiceResponse<GateListResponse>> GetListWithFilterAsync(FilterGateModel filter);
+        Task<ServiceResponse<ListResponse<CheckedGateDto>>> GetCheckedListByUserIdAsync(FilterUserModel filter);
+        Task<ServiceResponse<string>> DeleteAsync(Guid id);
+        Task<ServiceResponse<string>> EditAsync(GateModel model);
+        Task<ServiceResponse<string>> ResetPasswordAsync(ResetPasswordModel model);
 
     }
 }

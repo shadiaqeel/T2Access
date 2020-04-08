@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace T2Access.DAL
 {
     public interface ITransactionManager : IRepository<Transaction>
     {
-        Transaction GetByGateId(Guid gateId, int status);
-        void UpdateStatus(decimal id);
+        Task<Transaction> GetByGateIdAsync(Guid gateId, int status);
+        Task UpdateStatusAsync(decimal id);
 
 
 

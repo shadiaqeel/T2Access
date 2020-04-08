@@ -1,13 +1,20 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
-
+using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
+using System.Threading;
 
 namespace T2Access.DAL
 {
     public static class DatabaseExecuter
     {
+
+
+
+
+
+
 
 
         public static void ExecuteQuery(string storedProcedure, Action<SqlCommand> FillCmd, Action<SqlDataReader> FillReader)
@@ -21,7 +28,7 @@ namespace T2Access.DAL
             {
 
                 connection.Open();
-              
+
 
                 using (SqlCommand cmd = new SqlCommand(storedProcedure, connection))
                 {
@@ -50,9 +57,6 @@ namespace T2Access.DAL
 
 
         }
-
-
-
 
         public static int ExecuteNonQuery(string storedProcedure, Action<SqlCommand> FillCmd)
         {
@@ -90,7 +94,83 @@ namespace T2Access.DAL
 
         }
 
+        public static void ExecuteQueryAsync(string storedProcedure, Action<SqlCommand> FillCmd, Action<SqlDataReader> FillReader)
+        {
 
+
+
+
+
+            using (SqlConnection connection = new SqlConnection(Variables.ConnectionString))
+            {
+
+                connection.Open();
+
+
+                using (SqlCommand cmd = new SqlCommand(storedProcedure, connection))
+                {
+
+
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.Clear();
+
+
+                    FillCmd(cmd);
+
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+
+                    FillReader(reader);
+
+
+
+
+                }
+
+                connection.Close();
+
+            }
+
+
+        }
+
+
+        public static int ExecuteNonQueryAsync(string storedProcedure, Action<SqlCommand> FillCmd)
+        {
+
+            int result = 0;
+
+            using (SqlConnection connection = new SqlConnection(Variables.ConnectionString))
+            {
+
+                connection.Open();
+
+                using (SqlCommand cmd = new SqlCommand(storedProcedure, connection))
+                {
+
+
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Clear();
+
+
+                    FillCmd(cmd);
+
+
+                    result = cmd.ExecuteNonQuery();
+
+
+
+                }
+
+                connection.Close();
+
+            }
+
+
+            return result;
+
+        }
 
 
 
@@ -113,7 +193,7 @@ namespace T2Access.DAL
                 connection.Open();
                 using (MySqlCommand cmd = new MySqlCommand(storedProcedure, connection))
                 {
-                    
+
                     cmd.CommandType = CommandType.StoredProcedure;
 
                     cmd.Parameters.Clear();
@@ -133,8 +213,6 @@ namespace T2Access.DAL
 
 
         }
-
-
 
         public static int MySqlExecuteNonQuery(string storedProcedure, Action<MySqlCommand> FillCmd)
         {
@@ -157,7 +235,7 @@ namespace T2Access.DAL
                     FillCmd(cmd);
 
 
-                    result =  cmd.ExecuteNonQuery();
+                    result = cmd.ExecuteNonQuery();
 
 
 
@@ -176,6 +254,105 @@ namespace T2Access.DAL
 
             return result;
 
+        }
+
+
+        public static async Task MySqlExecuteQueryAsync(string storedProcedure, Action<MySqlCommand> FillCmd, Action<MySqlDataReader> FillReader)
+        {
+
+
+            using (MySqlConnection connection = new MySqlConnection(Variables.MYSQLConnectionString))
+            {
+                connection.Open();
+                using (MySqlCommand cmd = new MySqlCommand(storedProcedure, connection))
+                {
+
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.Clear();
+
+
+                    FillCmd(cmd);
+
+                    using (MySqlDataReader reader = await cmd.MySqlExecuteReaderAsync())
+                    {
+                        FillReader(reader);
+                        reader.Close();
+                    }
+
+                }
+
+                connection.Close();
+
+            }
+
+
+        }
+
+        public static async Task<int> MySqlExecuteNonQueryAsync(string storedProcedure, Action<MySqlCommand> FillCmd)
+        {
+
+            int result = 0;
+
+            using (MySqlConnection connection = new MySqlConnection(Variables.MYSQLConnectionString))
+            {
+
+                connection.Open();
+
+                using (MySqlCommand cmd = new MySqlCommand(storedProcedure, connection))
+                {
+
+
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Clear();
+
+
+                    FillCmd(cmd);
+
+
+                    result = await cmd.ExecuteNonQueryAsync();
+
+
+                }
+
+                connection.Close();
+
+            }
+
+            ////if (result == 0) throw new Exception("No rows affected");
+            if (result == 0)
+            {
+                System.Diagnostics.Trace.WriteLine($"{nameof(MySqlExecuteNonQueryAsync)} : No rows affected");
+            }
+
+            return result;
+
+        }
+
+
+
+
+
+
+        // MySqlCommand Extension 
+
+        private static Task<MySqlDataReader> MySqlExecuteReaderAsync(this MySqlCommand cmd)
+        {
+            CancellationToken cancellationToken = CancellationToken.None;
+            TaskCompletionSource<MySqlDataReader> taskCompletionSource = new TaskCompletionSource<MySqlDataReader>();
+            if (cancellationToken == CancellationToken.None || !cancellationToken.IsCancellationRequested)
+                try
+                {
+                    MySqlDataReader reader = cmd.ExecuteReader();
+                    taskCompletionSource.SetResult(reader);
+                }
+                catch (Exception exception)
+                {
+                    taskCompletionSource.SetException(exception);
+                }
+            else
+                taskCompletionSource.SetCanceled();
+            return taskCompletionSource.Task;
         }
 
     }

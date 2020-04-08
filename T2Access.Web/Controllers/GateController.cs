@@ -120,8 +120,10 @@ namespace T2Access.Web.Controllers
         // ====================================== Edit Gate =============================================
 
         #region Edit
-        public ActionResult Edit() => PartialView("_Edit");
-
+        public ActionResult Edit()
+        {
+            return PartialView("_Edit");
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -198,7 +200,10 @@ namespace T2Access.Web.Controllers
         // ====================================== Get List Gate =============================================
 
         #region Get List
-        public ActionResult GetList() => PartialView();
+        public ActionResult GetList()
+        {
+            return PartialView();
+        }
 
         public async Task<ActionResult> GetFiltered()
         {

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace T2Access.DAL
 {
     public interface IUserGateManager : IRepository<UserGate>
     {
-        bool CheckIfExist(UserGate userGate);
-        List<Guid> GetByUserId(Guid userid);
-        void DeleteAllByUserId(Guid userId);
+        Task<bool> CheckIfExistAsync(UserGate userGate);
+        Task<List<Guid>> GetByUserIdAsync(Guid userid);
+        Task DeleteAllByUserIdAsync(Guid userId);
     }
 }

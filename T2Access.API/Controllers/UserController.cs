@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 
@@ -26,10 +27,10 @@ namespace T2Access.API.Controllers
 
         [HttpPost]
         [ResponseType(typeof(string))]
-        public HttpResponseMessage Login(LoginModel loginModel)
+        public async Task<HttpResponseMessage> Login(LoginModel loginModel)
         {
 
-            var response = userService.Login(loginModel);
+            var response = await userService.LoginAsync(loginModel);
             var user = response.Data;
 
             if (!response.Success)
@@ -80,10 +81,10 @@ namespace T2Access.API.Controllers
 
         [HttpPost]
         [ResponseType(typeof(string))]
-        public HttpResponseMessage SignUp(SignUpUserModel user)
+        public async Task<HttpResponseMessage> SignUp(SignUpUserModel user)
         {
 
-            var response = userService.Create(user);
+            var response = await userService.CreateAsync(user);
             return (response.Success) ?
                 Request.CreateResponse(HttpStatusCode.OK, response.Data) :
                 Request.CreateResponse(HttpStatusCode.BadRequest, response.ErrorMessage);
@@ -97,14 +98,14 @@ namespace T2Access.API.Controllers
         [HttpGet]
         [CustomAuthorize(Roles = "Admin,User")]
         [ResponseType(typeof(UserListResponse))]
-        public HttpResponseMessage GetListWithFilter([FromUri]FilterUserModel filter)
+        public async Task<HttpResponseMessage> GetListWithFilter([FromUri]FilterUserModel filter)
         {
             if (filter == null)
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.FilterMiss);
             }
 
-            var response = userService.GetList(filter);
+            var response = await userService.GetListAsync(filter);
             return (response.Success) ?
                 Request.CreateResponse(HttpStatusCode.OK, response.Data) :
                 Request.CreateResponse(HttpStatusCode.NotFound, response.ErrorMessage);
@@ -117,14 +118,14 @@ namespace T2Access.API.Controllers
         [HttpGet]
         [CustomAuthorize(Roles = "Admin,User")]
         [ResponseType(typeof(UserDto))]
-        public HttpResponseMessage GetById(Guid id)
+        public async Task<HttpResponseMessage> GetById(Guid id)
         {
             if (id == null)
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.FilterMiss);
             }
 
-            var response = userService.GetById(id);
+            var response = await userService.GetByIdAsync(id);
             return (response.Success) ?
                 Request.CreateResponse(HttpStatusCode.OK, response.Data) :
                 Request.CreateResponse(HttpStatusCode.NotFound, response);
@@ -137,9 +138,9 @@ namespace T2Access.API.Controllers
         [HttpDelete]
         [CustomAuthorize(Roles = "Admin,User")]
         [ResponseType(typeof(string))]
-        public HttpResponseMessage Delete(Guid id)
+        public async Task<HttpResponseMessage> Delete(Guid id)
         {
-            var response = userService.Delete(id);
+            var response = await userService.DeleteAsync(id);
             return (response.Success) ?
                 Request.CreateResponse(HttpStatusCode.OK, response.Data) :
                 Request.CreateResponse(HttpStatusCode.BadRequest, response.ErrorMessage);
@@ -151,10 +152,10 @@ namespace T2Access.API.Controllers
         [HttpPut]
         [CustomAuthorize(Roles = "Admin,User")]
         [ResponseType(typeof(string))]
-        public HttpResponseMessage Edit(Guid id, [FromBody] UpdateUserModel model)
+        public async Task<HttpResponseMessage> Edit(Guid id, [FromBody] UpdateUserModel model)
         {
             model.Id = id;
-            var response = userService.Edit(model);
+            var response = await userService.EditAsync(model);
             return (response.Success) ?
                 Request.CreateResponse(HttpStatusCode.OK, response.Data) :
                 Request.CreateResponse(HttpStatusCode.BadRequest, response.ErrorMessage);
@@ -166,11 +167,11 @@ namespace T2Access.API.Controllers
         [HttpPut]
         [CustomAuthorize(Roles = "Admin,User")]
         [ResponseType(typeof(List<string>))]
-        public HttpResponseMessage ResetPassword(Guid id, [FromBody] ResetPasswordModel model)
+        public async Task<HttpResponseMessage> ResetPassword(Guid id, [FromBody] ResetPasswordModel model)
         {
             model.Id = id;
 
-            var response = userService.ResetPassword(model);
+            var response = await userService.ResetPasswordAsync(model);
             return (response.Success) ?
                 Request.CreateResponse(HttpStatusCode.OK, response.Data) :
                 Request.CreateResponse(HttpStatusCode.BadRequest, response.ErrorMessage);
@@ -183,11 +184,11 @@ namespace T2Access.API.Controllers
         [HttpPost]
         [CustomAuthorize(Roles = "Admin")]
         [ResponseType(typeof(string))]
-        public HttpResponseMessage AssignToGate(UserGateModel userGate)
+        public async Task<HttpResponseMessage> AssignToGate(UserGateModel userGate)
         {
 
 
-            var response = userService.Assign(userGate);
+            var response = await userService.AssignAsync(userGate);
             return (response.Success) ?
                 Request.CreateResponse(HttpStatusCode.OK, response.Data) :
                 Request.CreateResponse(HttpStatusCode.BadRequest, response.ErrorMessage);
@@ -199,11 +200,11 @@ namespace T2Access.API.Controllers
         [HttpPost]
         [CustomAuthorize(Roles = "Admin")]
         [ResponseType(typeof(string))]
-        public HttpResponseMessage UnassignToGate(UserGateModel userGate)
+        public async Task<HttpResponseMessage> UnassignToGate(UserGateModel userGate)
         {
 
 
-            var response = userService.Unassign(userGate);
+            var response = await userService.UnassignAsync(userGate);
             return (response.Success) ?
                 Request.CreateResponse(HttpStatusCode.OK, response.Data) :
                 Request.CreateResponse(HttpStatusCode.BadRequest, response.ErrorMessage);

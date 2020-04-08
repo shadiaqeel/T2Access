@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using MySql.Data.MySqlClient;
 
@@ -7,12 +8,12 @@ namespace T2Access.DAL
 {
     public class MySqlUserGateManager : IUserGateManager
     {
-        public UserGate Create(UserGate userGate)
+        public async Task<UserGate> CreateAsync(UserGate userGate)
         {
 
 
 
-            return DatabaseExecuter.MySqlExecuteNonQuery("SP_UserGate_Insert", delegate (MySqlCommand cmd)
+            return await DatabaseExecuter.MySqlExecuteNonQueryAsync("SP_UserGate_Insert", delegate (MySqlCommand cmd)
             {
                 cmd.Parameters.AddWithValue("_userId", userGate.UserId);
                 cmd.Parameters.AddWithValue("_gateId", userGate.GateId);
@@ -21,7 +22,7 @@ namespace T2Access.DAL
 
         }
 
-        public void Delete(UserGate userGate)
+        public async Task DeleteAsync(UserGate userGate)
         {
             if (userGate == null)
             {
@@ -33,33 +34,33 @@ namespace T2Access.DAL
                 throw new ArgumentNullException(nameof(userGate));
             }
 
-            DatabaseExecuter.MySqlExecuteNonQuery("SP_UserGate_Delete", delegate (MySqlCommand cmd)
-           {
-               cmd.Parameters.AddWithValue("_userId", userGate.UserId);
-               cmd.Parameters.AddWithValue("_gateId", userGate.GateId);
+            await DatabaseExecuter.MySqlExecuteNonQueryAsync("SP_UserGate_Delete", delegate (MySqlCommand cmd)
+            {
+                cmd.Parameters.AddWithValue("_userId", userGate.UserId);
+                cmd.Parameters.AddWithValue("_gateId", userGate.GateId);
 
-           });
+            });
         }
 
-        public void Update(UserGate editmodel)
+        public Task UpdateAsync(UserGate editmodel)
         {
             throw new NotImplementedException();
         }
 
         //========================================================================================
 
-        public void DeleteAllByUserId(Guid userId)
+        public async Task DeleteAllByUserIdAsync(Guid userId)
         {
 
-            DatabaseExecuter.MySqlExecuteNonQuery("SP_UserGate_DeleteAllByUserId", delegate (MySqlCommand cmd)
-            {
-                cmd.Parameters.AddWithValue("_userId", userId);
+            await DatabaseExecuter.MySqlExecuteNonQueryAsync("SP_UserGate_DeleteAllByUserId", delegate (MySqlCommand cmd)
+             {
+                 cmd.Parameters.AddWithValue("_userId", userId);
 
-            });
+             });
 
         }
 
-        public bool CheckIfExist(UserGate userGate)
+        public async Task<bool> CheckIfExistAsync(UserGate userGate)
         {
             UserGate _userGate = null;
             int userStatus = 255;
@@ -67,31 +68,31 @@ namespace T2Access.DAL
 
 
 
-            DatabaseExecuter.MySqlExecuteQuery("SP_CheckIfValid", delegate (MySqlCommand cmd)
-           {
-               cmd.Parameters.AddWithValue("_userId", userGate.UserId);
-               cmd.Parameters.AddWithValue("_gateId", userGate.GateId);
+            await DatabaseExecuter.MySqlExecuteQueryAsync("SP_CheckIfValid", delegate (MySqlCommand cmd)
+            {
+                cmd.Parameters.AddWithValue("_userId", userGate.UserId);
+                cmd.Parameters.AddWithValue("_gateId", userGate.GateId);
 
-           }, delegate (MySqlDataReader reader)
-           {
+            }, delegate (MySqlDataReader reader)
+            {
 
-               if (reader.Read())
-               {
+                if (reader.Read())
+                {
 
-                   _userGate = new UserGate()
-                   {
-                       UserId = reader.GetGuid(0),
-                       GateId = reader.GetGuid(1)
+                    _userGate = new UserGate()
+                    {
+                        UserId = reader.GetGuid(0),
+                        GateId = reader.GetGuid(1)
 
-                   };
+                    };
 
-                   userStatus = reader.GetInt32(2);
-                   gateStatus = reader.GetInt32(3);
+                    userStatus = reader.GetInt32(2);
+                    gateStatus = reader.GetInt32(3);
 
 
 
-               }
-           });
+                }
+            });
 
 
             return (_userGate != null && userStatus == 0 && gateStatus == 0);
@@ -99,26 +100,26 @@ namespace T2Access.DAL
 
         }
 
-        public List<Guid> GetByUserId(Guid userid)
+        public async Task<List<Guid>> GetByUserIdAsync(Guid userid)
         {
 
             List<Guid> AddedGateList = new List<Guid>();
 
 
-            DatabaseExecuter.MySqlExecuteQuery("SP_UserGate_GetByUserId", delegate (MySqlCommand cmd)
-           {
-               cmd.Parameters.AddWithValue("_userId", userid);
+            await DatabaseExecuter.MySqlExecuteQueryAsync("SP_UserGate_GetByUserId", delegate (MySqlCommand cmd)
+            {
+                cmd.Parameters.AddWithValue("_userId", userid);
 
-           }, delegate (MySqlDataReader reader)
-           {
+            }, delegate (MySqlDataReader reader)
+            {
 
-               while (reader.Read())
-               {
+                while (reader.Read())
+                {
 
-                   AddedGateList.Add(reader.GetGuid(0));
+                    AddedGateList.Add(reader.GetGuid(0));
 
-               }
-           });
+                }
+            });
 
             return AddedGateList;
         }

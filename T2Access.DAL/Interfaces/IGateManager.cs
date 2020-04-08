@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using T2Access.Models;
 using T2Access.Models.Dtos;
@@ -8,11 +9,11 @@ namespace T2Access.DAL
 {
     public interface IGateManager : IRepository<Gate>
     {
-        IEnumerable<Gate> GetWithFilter(Gate gate);
-        IEnumerable<CheckedGateDto> GetCheckedByUserId(Guid userId);
-        Gate GetByUserName(string username);
-        Gate Login(IAuthModel gate);
-        void ResetPassword(IAuthModel model);
+        Task<IEnumerable<Gate>> GetWithFilterAsync(Gate gate);
+        Task<IEnumerable<CheckedGateDto>> GetCheckedByUserIdAsync(Guid userId);
+        Task<Gate> GetByUserNameAsync(string username);
+        Task<Gate> LoginAsync(IAuthModel gate);
+        Task ResetPasswordAsync(IAuthModel model);
 
 
 

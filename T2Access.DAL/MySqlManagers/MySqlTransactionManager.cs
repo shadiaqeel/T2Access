@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 using MySql.Data.MySqlClient;
 
@@ -6,10 +7,10 @@ namespace T2Access.DAL
 {
     public class MySqlTransactionManager : ITransactionManager
     {
-        public Transaction Create(Transaction transaction)
+        public async Task<Transaction> CreateAsync(Transaction transaction)
         {
 
-            return DatabaseExecuter.MySqlExecuteNonQuery("SP_Transaction_Insert", delegate (MySqlCommand cmd)
+            return await DatabaseExecuter.MySqlExecuteNonQueryAsync("SP_Transaction_Insert", delegate (MySqlCommand cmd)
             {
                 cmd.Parameters.AddWithValue("_userId", transaction.UserId);
                 cmd.Parameters.AddWithValue("_gateId", transaction.GateId);
@@ -17,58 +18,58 @@ namespace T2Access.DAL
 
         }
 
-        public void Update(Transaction editmodel)
+        public Task UpdateAsync(Transaction editmodel)
         {
             throw new NotImplementedException();
         }
 
-        public void Delete(Transaction entity)
+        public Task DeleteAsync(Transaction entity)
         {
             throw new NotImplementedException();
         }
 
         //===========================================================================
 
-        public Transaction GetByGateId(Guid gateId, int status)
+        public async Task<Transaction> GetByGateIdAsync(Guid gateId, int status)
         {
 
             Transaction transaction = new Transaction();
 
 
-            DatabaseExecuter.MySqlExecuteQuery("SP_Transaction_GetByGateId", delegate (MySqlCommand cmd)
-            {
+            await DatabaseExecuter.MySqlExecuteQueryAsync("SP_Transaction_GetByGateId", delegate (MySqlCommand cmd)
+             {
 
-                cmd.Parameters.AddWithValue("_gateId", gateId);
-                cmd.Parameters.AddWithValue("_status", status);
+                 cmd.Parameters.AddWithValue("_gateId", gateId);
+                 cmd.Parameters.AddWithValue("_status", status);
 
-            }, delegate (MySqlDataReader reader)
-            {
-                if (reader.Read())
-                {
+             }, delegate (MySqlDataReader reader)
+             {
+                 if (reader.Read())
+                 {
 
-                    transaction = new Transaction()
-                    {
-                        Id = reader.GetDecimal(0),
-                        UserId = reader.GetGuid(1),
-                        GateId = reader.GetGuid(2),
-                        Status = reader.GetInt32(3),
-                        StatusDate = reader.GetDateTime(4)
-                    };
+                     transaction = new Transaction()
+                     {
+                         Id = reader.GetDecimal(0),
+                         UserId = reader.GetGuid(1),
+                         GateId = reader.GetGuid(2),
+                         Status = reader.GetInt32(3),
+                         StatusDate = reader.GetDateTime(4)
+                     };
 
-                }
-            });
+                 }
+             });
 
 
             return transaction;
         }
 
-        public void UpdateStatus(decimal id)
+        public async Task UpdateStatusAsync(decimal id)
         {
 
-            DatabaseExecuter.MySqlExecuteNonQuery("SP_Transaction_UpdateStatus", delegate (MySqlCommand cmd)
-            {
-                cmd.Parameters.AddWithValue("_Id", id);
-            });
+            await DatabaseExecuter.MySqlExecuteNonQueryAsync("SP_Transaction_UpdateStatus", delegate (MySqlCommand cmd)
+             {
+                 cmd.Parameters.AddWithValue("_Id", id);
+             });
         }
 
     }

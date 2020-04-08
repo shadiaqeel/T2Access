@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 
@@ -26,10 +27,10 @@ namespace T2Access.API.Controllers
 
         [HttpPost]
         [ResponseType(typeof(string))]
-        public HttpResponseMessage Login(LoginModel gate)
+        public async Task<HttpResponseMessage> Login(LoginModel gate)
         {
 
-            var response = gateService.Login(gate);
+            var response = await gateService.LoginAsync(gate);
 
             if (response.Success)
             {
@@ -78,11 +79,11 @@ namespace T2Access.API.Controllers
 
         [HttpPost]
         [ResponseType(typeof(string))]
-        public HttpResponseMessage SignUp(SignUpGateModel gate)
+        public async Task<HttpResponseMessage> SignUp(SignUpGateModel gate)
         {
 
 
-            var response = gateService.Create(gate);
+            var response = await gateService.CreateAsync(gate);
             return response.Success ?
                 Request.CreateResponse(HttpStatusCode.OK, response.Data) :
                 Request.CreateResponse(HttpStatusCode.NotFound, response.ErrorMessage);
@@ -95,7 +96,7 @@ namespace T2Access.API.Controllers
         [HttpGet]
         [CustomAuthorize(Roles = "Admin")]
         [ResponseType(typeof(GateListResponse))]
-        public HttpResponseMessage GetListWithFilter([FromUri]FilterGateModel filter)
+        public async Task<HttpResponseMessage> GetListWithFilter([FromUri]FilterGateModel filter)
         {
             if (filter == null)
             {
@@ -103,7 +104,7 @@ namespace T2Access.API.Controllers
 
             }
 
-            var response = gateService.GetListWithFilter(filter);
+            var response = await gateService.GetListWithFilterAsync(filter);
 
             return response.Success
                 ? Request.CreateResponse(HttpStatusCode.OK, response.Data)
@@ -114,7 +115,7 @@ namespace T2Access.API.Controllers
         [HttpGet]
         [CustomAuthorize(Roles = "Admin")]
         [ResponseType(typeof(ServiceResponse<ListResponse<CheckedGateDto>>))]
-        public HttpResponseMessage GetCheckedListByUserId([FromUri]FilterUserModel filter)
+        public async Task<HttpResponseMessage> GetCheckedListByUserId([FromUri]FilterUserModel filter)
         {
             if (filter == null)
             {
@@ -123,7 +124,7 @@ namespace T2Access.API.Controllers
             }
 
 
-            var response = gateService.GetCheckedListByUserId(filter);
+            var response = await gateService.GetCheckedListByUserIdAsync(filter);
             return response.Success ?
                 Request.CreateResponse(HttpStatusCode.OK, response.Data) :
                 Request.CreateResponse(HttpStatusCode.NotFound, response.ErrorMessage);
@@ -134,9 +135,9 @@ namespace T2Access.API.Controllers
         [HttpDelete()]
         [CustomAuthorize(Roles = "Admin")]
         [ResponseType(typeof(string))]
-        public HttpResponseMessage Delete(Guid id)
+        public async Task<HttpResponseMessage> Delete(Guid id)
         {
-            var response = gateService.Delete(id);
+            var response = await gateService.DeleteAsync(id);
             return (response.Success) ?
                 Request.CreateResponse(HttpStatusCode.OK, response.Data) :
                 Request.CreateResponse(HttpStatusCode.BadRequest, response.ErrorMessage);
@@ -147,10 +148,10 @@ namespace T2Access.API.Controllers
         [HttpPut]
         [CustomAuthorize(Roles = "Admin")]
         [ResponseType(typeof(string))]
-        public HttpResponseMessage Edit(Guid id, [FromBody] GateModel model)
+        public async Task<HttpResponseMessage> Edit(Guid id, [FromBody] GateModel model)
         {
             model.Id = id;
-            var response = gateService.Edit(model);
+            var response = await gateService.EditAsync(model);
             return (response.Success) ?
                 Request.CreateResponse(HttpStatusCode.OK, response.Data) :
                 Request.CreateResponse(HttpStatusCode.BadRequest, response.ErrorMessage);
@@ -161,10 +162,10 @@ namespace T2Access.API.Controllers
         [HttpPut]
         [CustomAuthorize(Roles = "Admin")]
         [ResponseType(typeof(string))]
-        public HttpResponseMessage ResetPassword(Guid id, [FromBody] ResetPasswordModel model)
+        public async Task<HttpResponseMessage> ResetPassword(Guid id, [FromBody] ResetPasswordModel model)
         {
             model.Id = id;
-            var response = gateService.ResetPassword(model);
+            var response = await gateService.ResetPasswordAsync(model);
 
             return (response.Success) ?
                 Request.CreateResponse(HttpStatusCode.OK, response.Data) :

@@ -16,8 +16,10 @@ namespace T2Access.Services.HttpClientService
         public static Uri BaseUri { get; protected set; }
 
 
-        public HttpClientService(Uri baseUri) => BaseUri = baseUri;
-
+        public HttpClientService(Uri baseUri)
+        {
+            BaseUri = baseUri;
+        }
 
         public async Task<HttpResponseMessage> GetAsync(string uri, string accept = "application/json", string token = null)
         {

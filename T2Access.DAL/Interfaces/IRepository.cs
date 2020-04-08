@@ -1,13 +1,15 @@
-﻿namespace T2Access.DAL
+﻿using System.Threading.Tasks;
+
+namespace T2Access.DAL
 {
     public interface IRepository<T>
 
     {
-        T Create(T entity);
+        Task<T> CreateAsync(T entity);
 
-        void Update(T entity);
+        Task UpdateAsync(T entity);
 
-        void Delete(T entity);
+        Task DeleteAsync(T entity);
 
 
 
