@@ -94,7 +94,7 @@ namespace T2Access.BLL.Services
         {
 
             IEnumerable<CheckedGateDto> AddedGateList;
-            ListResponse<CheckedGateDto> response = new ListResponse<CheckedGateDto>();
+            var response = new ListResponse<CheckedGateDto>();
 
             try
             {

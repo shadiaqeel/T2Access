@@ -8,7 +8,7 @@ namespace T2Access.API.Helper
 {
     public class MultiCultureRouteHandler : MvcRouteHandler
     {
-        public IHttpHandler GetHttpHandler(RequestContext requestContext)
+        protected override IHttpHandler GetHttpHandler(RequestContext requestContext)
         {
             var culture = requestContext.RouteData.Values["lang"].ToString();
             var ci = new CultureInfo(culture);

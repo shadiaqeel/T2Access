@@ -39,7 +39,7 @@ namespace T2Access.API.Controllers
 
 
 
-            List<Claim> cliamList = new List<Claim>
+            var cliamList = new List<Claim>
                 { new Claim("UserId", user.Id.ToString()),
                     new Claim("Username", user.UserName),
                     new Claim("FirstName", user.FirstName),

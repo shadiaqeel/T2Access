@@ -30,12 +30,18 @@ namespace T2Access.Models
         public string ErrorMessage { get; set; } = string.Empty;
     }
 
+    public interface IListResponse<T>
+    {
+        IEnumerable<T> ResponseList { get; set; }
+        int? TotalEntities { get; set; }
+    }
+
 
 
 
     //==============================================================================
 
-    public class ListResponse<T>
+    public class ListResponse<T> : IListResponse<T>
     {
         public IEnumerable<T> ResponseList { get; set; }
         public int? TotalEntities { get; set; }

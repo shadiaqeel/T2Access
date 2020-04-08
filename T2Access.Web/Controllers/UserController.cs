@@ -119,7 +119,7 @@ namespace T2Access.Web.Controllers
                     return View(model);
                 }
             }
-        } 
+        }
         #endregion
 
         // ====================================== Edit User =============================================
@@ -140,7 +140,7 @@ namespace T2Access.Web.Controllers
             }
             return View();
         }
-          
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(UserViewModel model)
@@ -165,24 +165,20 @@ namespace T2Access.Web.Controllers
                     return View(model);
                 }
             }
-        } 
+        }
         #endregion
 
         // ====================================== Delete User =============================================
 
         public async Task<ActionResult> Delete(Guid id)
         {
-            var response = await httpService.DeleteAsync($"Delete?id={id}", (string)Session["Token"]);
-
-            var result = await response.Content.ReadAsStringAsync();
-
-            if (response.IsSuccessStatusCode)
+            using (var response = await httpService.DeleteAsync($"Delete?id={id}", (string)Session["Token"]))
             {
-                return Json(new { success = true, message = result.Replace("\"", "") }, JsonRequestBehavior.AllowGet);
-            }
-            else
-            {
-                return Json(new { success = false, message = result.Replace("\"", "") }, JsonRequestBehavior.AllowGet);
+                var result = await response.Content.ReadAsStringAsync();
+
+                return response.IsSuccessStatusCode
+                    ? Json(new { success = true, message = result.Replace("\"", "") }, JsonRequestBehavior.AllowGet)
+                    : Json(new { success = false, message = result.Replace("\"", "") }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -224,7 +220,8 @@ namespace T2Access.Web.Controllers
                     return PartialView("_ResetPassword", model);
                 }
             }
-        } 
+
+        }
         #endregion
 
 

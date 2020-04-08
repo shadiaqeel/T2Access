@@ -21,6 +21,7 @@ namespace T2Access.DAL
             {
 
                 connection.Open();
+              
 
                 using (SqlCommand cmd = new SqlCommand(storedProcedure, connection))
                 {
@@ -109,13 +110,10 @@ namespace T2Access.DAL
 
             using (MySqlConnection connection = new MySqlConnection(Variables.MYSQLConnectionString))
             {
-
                 connection.Open();
-
                 using (MySqlCommand cmd = new MySqlCommand(storedProcedure, connection))
                 {
-
-
+                    
                     cmd.CommandType = CommandType.StoredProcedure;
 
                     cmd.Parameters.Clear();
@@ -127,10 +125,6 @@ namespace T2Access.DAL
 
 
                     FillReader(reader);
-
-
-
-
                 }
 
                 connection.Close();
@@ -163,7 +157,8 @@ namespace T2Access.DAL
                     FillCmd(cmd);
 
 
-                    result = cmd.ExecuteNonQuery();
+                    result =  cmd.ExecuteNonQuery();
+
 
 
 

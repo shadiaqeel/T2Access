@@ -28,7 +28,6 @@ namespace T2Access.Web.Controllers
 
         public ActionResult GateManagment()
         {
-
             return View();
         }
 
@@ -36,12 +35,11 @@ namespace T2Access.Web.Controllers
         {
 
             //Server Side Parameter
-            var draw = Convert.ToInt32(Request["draw"]);
             var start = Convert.ToInt32(Request["start"]);
             var length = Convert.ToInt32(Request["length"]);
             var sortColumnName = Request[$"columns[{Request["order[0][column]"]}][name]"];
             var sortDirection = Request["order[0][dir]"];
-            //var searchValue = Request["search[value]"];
+            ////var searchValue = Request["search[value]"];
 
 
 
@@ -58,17 +56,9 @@ namespace T2Access.Web.Controllers
                 {
                     var gates = await response.Content.ReadAsAsync<ListResponse<GateViewModel>>();
 
-                    if (Request.IsAjaxRequest())
-                    {
-
-                        int totalrowsafterfiltering = gates.ResponseList.Count();
-
-
-
-                        return Json(new { data = JsonConvert.SerializeObject(gates.ResponseList, new T2Access.Web.Helper.DisplayEnumConverter()), draw = Request["draw"], recordsTotal = gates.TotalEntities }, JsonRequestBehavior.AllowGet);
-                    }
-
-                    return PartialView(gates);
+                    return Request.IsAjaxRequest()
+                        ? Json(new { data = JsonConvert.SerializeObject(gates.ResponseList, new T2Access.Web.Helper.DisplayEnumConverter()), draw = Request["draw"], recordsTotal = gates.TotalEntities }, JsonRequestBehavior.AllowGet)
+                        : (ActionResult)PartialView(gates);
                 }
             }
 
@@ -81,10 +71,7 @@ namespace T2Access.Web.Controllers
         #region Create
         public ActionResult Create()
         {
-
             return PartialView("_Create");
-
-
         }
 
         [HttpPost]
@@ -98,25 +85,17 @@ namespace T2Access.Web.Controllers
 
             using (var response = await httpService.PostAsync("Signup/", model, token: (string)Session["Token"]))
             {
-                var result = await response.Content.ReadAsStringAsync();
-
-
                 if (response.IsSuccessStatusCode)
                 {
+                    var result = await response.Content.ReadAsStringAsync();
                     return Json(new { success = true, message = result.Replace("\"", "") });
                 }
                 else
                 {
 
-
-                    var error = await response.Content.ReadAsStringAsync();
-                    ViewBag.ErrorMessage = error;
-
-
+                    ViewBag.ErrorMessage = await response.Content.ReadAsStringAsync();
 
                     return PartialView("_Create", model);
-
-
                 }
             }
 
@@ -128,40 +107,20 @@ namespace T2Access.Web.Controllers
         public async Task<ActionResult> Delete(Guid id)
         {
 
-
-
-
             using (var response = await httpService.DeleteAsync($"Delete?id={id}", (string)Session["Token"]))
             {
-                var result = await response.Content.ReadAsStringAsync();
 
-                if (response.IsSuccessStatusCode)
-                {
-
-                    return Json(new { success = true, message = result.Replace("\"", "") }, JsonRequestBehavior.AllowGet);
-
-                }
-                else
-                {
-
-                    return Json(new { success = false, message = result.Replace("\"", "") }, JsonRequestBehavior.AllowGet);
-
-                }
+                return response.IsSuccessStatusCode
+                    ? Json(new { success = true, message = (await response.Content.ReadAsStringAsync()).Replace("\"", "") }, JsonRequestBehavior.AllowGet)
+                    : Json(new { success = false, message = (await response.Content.ReadAsStringAsync()).Replace("\"", "") }, JsonRequestBehavior.AllowGet);
             }
-
-
-
 
         }
 
         // ====================================== Edit Gate =============================================
 
         #region Edit
-        public ActionResult Edit()
-        {
-
-            return PartialView("_Edit");
-        }
+        public ActionResult Edit() => PartialView("_Edit");
 
 
         [HttpPost]
@@ -175,26 +134,18 @@ namespace T2Access.Web.Controllers
             model.UserName = null;
             using (var response = await httpService.PutAsync($"Edit?id={model.Id}", model, token: (string)Session["Token"]))
             {
-                var result = await response.Content.ReadAsStringAsync();
 
 
                 if (response.IsSuccessStatusCode)
                 {
-                    return Json(new { success = true, message = result.Replace("\"", "") });
+                    return Json(new { success = true, message = (await response.Content.ReadAsStringAsync()).Replace("\"", "") });
                 }
                 else
                 {
 
-
-                    var error = await response.Content.ReadAsStringAsync();
-                    ViewBag.ErrorMessage = error;
-
-                    // ModelState.AddModelError("UserName", error);
-
+                    ViewBag.ErrorMessage = await response.Content.ReadAsStringAsync();
 
                     return PartialView("_Edit", model);
-
-
                 }
             }
 
@@ -208,7 +159,6 @@ namespace T2Access.Web.Controllers
         #region Reset Password
         public ActionResult ResetPassword()
         {
-
             return PartialView("_ResetPassword");
         }
 
@@ -237,16 +187,8 @@ namespace T2Access.Web.Controllers
                 }
                 else
                 {
-
-
-                    var error = await response.Content.ReadAsStringAsync();
-                    ViewBag.ErrorMessage = error;
-
-
-
+                    ViewBag.ErrorMessage = await response.Content.ReadAsStringAsync();
                     return PartialView("_ResetPassword", model);
-
-
                 }
             }
 
@@ -256,13 +198,7 @@ namespace T2Access.Web.Controllers
         // ====================================== Get List Gate =============================================
 
         #region Get List
-        public ActionResult GetList()
-        {
-
-            return PartialView();
-
-        }
-
+        public ActionResult GetList() => PartialView();
 
         public async Task<ActionResult> GetFiltered()
         {
@@ -283,7 +219,7 @@ namespace T2Access.Web.Controllers
                     string sortColumnName = Request[$"columns[{Request["order[0][column]"]}][name]"];
                     string sortDirection = Request["order[0][dir]"];
 
-                    int totalrows = filterdGates.ResponseList.Count();
+                    var totalrows = filterdGates.ResponseList.Count();
 
                     if (!string.IsNullOrEmpty(searchValue))
                     {
@@ -293,7 +229,7 @@ namespace T2Access.Web.Controllers
                         ).ToList<GateViewModel>();
 
                     }
-                    int totalrowsafterfiltering = filterdGates.ResponseList.Count();
+                    var totalrowsafterfiltering = filterdGates.ResponseList.Count();
 
 
                     //sorting 
@@ -317,13 +253,10 @@ namespace T2Access.Web.Controllers
         public async Task<ActionResult> GetCheckedByUserId(Guid userId)
         {
             //Server Side Parameter
-            int start = Convert.ToInt32(Request["start"]);
-            int length = Convert.ToInt32(Request["length"]);
-            string searchValue = Request["search[value]"];
-            string sortColumnName = Request[$"columns[{Request["order[0][column]"]}][name]"];
-            string sortDirection = Request["order[0][dir]"];
+            var start = Convert.ToInt32(Request["start"]);
+            var length = Convert.ToInt32(Request["length"]);
+            var searchValue = Request["search[value]"];
 
-            var order = $"{sortColumnName} {sortDirection}";
 
             using (var response = await httpService.GetAsync($"GetCheckedListByUserId?Id={userId}&Skip={start}&PageSize={length}&SearchValue={searchValue}", token: (string)Session["Token"]))
             {
@@ -356,12 +289,9 @@ namespace T2Access.Web.Controllers
                     // view = RenderViewToString(ControllerContext, "_ListBody", CheckedGates, true) 
                     #endregion
 
-                    if (string.IsNullOrEmpty(searchValue))
-                    {
-                        return Json(new { data = CheckedGates.ResponseList, draw = Request["draw"], recordsTotal = CheckedGates.TotalEntities }, JsonRequestBehavior.AllowGet);
-                    }
-
-                    return Json(new { data = CheckedGates.ResponseList, draw = Request["draw"], recordsTotal = CheckedGates.ResponseList.Count() }, JsonRequestBehavior.AllowGet);
+                    return string.IsNullOrEmpty(searchValue)
+                        ? Json(new { data = CheckedGates.ResponseList, draw = Request["draw"], recordsTotal = CheckedGates.TotalEntities }, JsonRequestBehavior.AllowGet)
+                        : Json(new { data = CheckedGates.ResponseList, draw = Request["draw"], recordsTotal = CheckedGates.ResponseList.Count() }, JsonRequestBehavior.AllowGet);
                 }
             }
 

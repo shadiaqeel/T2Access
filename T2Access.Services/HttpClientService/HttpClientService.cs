@@ -16,15 +16,12 @@ namespace T2Access.Services.HttpClientService
         public static Uri BaseUri { get; protected set; }
 
 
-        public HttpClientService(Uri baseUri)
-        {
-            BaseUri = baseUri;
-        }
+        public HttpClientService(Uri baseUri) => BaseUri = baseUri;
 
 
         public async Task<HttpResponseMessage> GetAsync(string uri, string accept = "application/json", string token = null)
         {
-            using (HttpClient httpClient = new HttpClient())
+            using (var httpClient = new HttpClient())
             {
                 httpClient.BaseAddress = BaseUri;
 
@@ -47,7 +44,7 @@ namespace T2Access.Services.HttpClientService
 
         public async Task<HttpResponseMessage> PostAsync(string uri, object Model, string accept = "application/json", string token = null)
         {
-            using (HttpClient httpClient = new HttpClient())
+            using (var httpClient = new HttpClient())
             {
                 httpClient.BaseAddress = BaseUri;
                 httpClient.DefaultRequestHeaders.Clear();
@@ -69,7 +66,7 @@ namespace T2Access.Services.HttpClientService
 
         public async Task<HttpResponseMessage> PutAsync(string uri, object Model, string accept = "application/json", string token = null)
         {
-            using (HttpClient httpClient = new HttpClient())
+            using (var httpClient = new HttpClient())
             {
                 httpClient.BaseAddress = BaseUri;
                 httpClient.DefaultRequestHeaders.Clear();
@@ -90,7 +87,7 @@ namespace T2Access.Services.HttpClientService
 
         public async Task<HttpResponseMessage> DeleteAsync(string uri, string token = null)
         {
-            using (HttpClient httpClient = new HttpClient())
+            using (var httpClient = new HttpClient())
             {
                 httpClient.BaseAddress = BaseUri;
                 if (token != null)

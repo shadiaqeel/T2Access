@@ -12,8 +12,6 @@ namespace T2Access.Web.Attributes
 
     public class CustomAuthorizeAttribute : AuthorizeAttribute
     {
-        public string Users { get; set; }
-        public string Roles { get; set; }
 
         private readonly IAuthService authService = AuthrizationFactory.GetAuthrization();
         protected override bool AuthorizeCore(HttpContextBase httpContext)
