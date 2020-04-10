@@ -5,16 +5,14 @@
 
 
 
-
 body {
     color: #797979;
     background: #eaeaea;
-    font-family: 'Ruda', cursive;
+    font-family: /*'Ruda',*/ cursive;
     padding: 0px !important;
     margin: 0px !important;
     margin-bottom: 50px;
     font-size: 13px;
-
 }
 
 

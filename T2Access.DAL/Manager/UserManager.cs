@@ -11,7 +11,7 @@ using T2Access.Security;
 
 namespace T2Access.DAL
 {
-    public class MySqlUserManager : IUserManager
+    public class UserManager : IUserManager
     {
         private readonly IPasswordHasher passwordHasher = new PasswordHasher();
 
@@ -57,11 +57,11 @@ namespace T2Access.DAL
 
                 cmd.Parameters.AddWithValue("_username", ""); // Can't update username /*user.UserName != null ? user.UserName : "" */ 
 
-                cmd.Parameters.AddWithValue("_firstname", user.FirstName ?? "");
+                cmd.Parameters.AddWithValue("_firstname", user.FirstName);
 
-                cmd.Parameters.AddWithValue("_lastname", user.LastName ?? "");
+                cmd.Parameters.AddWithValue("_lastname", user.LastName);
 
-                cmd.Parameters.AddWithValue("_status", user.Status != null ? user.Status : -1);
+                cmd.Parameters.AddWithValue("_status", user.Status );
 
             });
         }
@@ -89,13 +89,13 @@ namespace T2Access.DAL
 
                  //cmd.Parameters.AddWithValue("_id", filter.Id != null ? filter.Id : Guid.Empty);
 
-                 cmd.Parameters.AddWithValue("_username", filter.UserName ?? "");
+                 cmd.Parameters.AddWithValue("_username", filter.UserName );
 
-                 cmd.Parameters.AddWithValue("_firstname", filter.FirstName ?? "");
+                 cmd.Parameters.AddWithValue("_firstname", filter.FirstName );
 
-                 cmd.Parameters.AddWithValue("_lastname", filter.LastName ?? "");
+                 cmd.Parameters.AddWithValue("_lastname", filter.LastName );
 
-                 cmd.Parameters.AddWithValue("_status", filter.Status != null ? filter.Status : -1);
+                 cmd.Parameters.AddWithValue("_status", filter.Status);
 
              },
             delegate (MySqlDataReader reader)
@@ -128,7 +128,7 @@ namespace T2Access.DAL
             await DatabaseExecuter.MySqlExecuteQueryAsync("SP_User_SelectByUserName", delegate (MySqlCommand cmd)
              {
 
-                 cmd.Parameters.AddWithValue("_username", userName ?? "");
+                 cmd.Parameters.AddWithValue("_username", userName );
 
              },
             delegate (MySqlDataReader reader)
@@ -161,7 +161,7 @@ namespace T2Access.DAL
             await DatabaseExecuter.MySqlExecuteQueryAsync("SP_User_SelectById", delegate (MySqlCommand cmd)
              {
 
-                 cmd.Parameters.AddWithValue("_id", usedId != null ? usedId : Guid.Empty);
+                 cmd.Parameters.AddWithValue("_id", usedId );
 
              },
             delegate (MySqlDataReader reader)
@@ -194,7 +194,7 @@ namespace T2Access.DAL
             await DatabaseExecuter.MySqlExecuteQueryAsync("SP_User_Login", delegate (MySqlCommand cmd)
              {
 
-                 cmd.Parameters.AddWithValue("_username", user.UserName ?? "");
+                 cmd.Parameters.AddWithValue("_username", user.UserName);
 
              },
             delegate (MySqlDataReader reader)

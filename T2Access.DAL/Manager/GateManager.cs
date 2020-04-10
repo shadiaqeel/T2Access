@@ -12,7 +12,7 @@ using T2Access.Security;
 
 namespace T2Access.DAL
 {
-    public class MySqlGateManager : IGateManager
+    public class GateManager : IGateManager
     {
         private readonly IPasswordHasher passwordHasher = new PasswordHasher();
 
@@ -42,13 +42,13 @@ namespace T2Access.DAL
              {
                  cmd.Parameters.AddWithValue("_id", model.Id);
 
-                 cmd.Parameters.AddWithValue("_username", model.UserName ?? "");
+                 cmd.Parameters.AddWithValue("_username", model.UserName);
 
-                 cmd.Parameters.AddWithValue("_nameAr", model.NameAr ?? "");
+                 cmd.Parameters.AddWithValue("_nameAr", model.NameAr);
 
-                 cmd.Parameters.AddWithValue("_nameEn", model.NameEn ?? "");
+                 cmd.Parameters.AddWithValue("_nameEn", model.NameEn );
 
-                 cmd.Parameters.AddWithValue("_status", model.Status != null ? model.Status : -1);
+                 cmd.Parameters.AddWithValue("_status", model.Status );
 
              });
         }
@@ -83,13 +83,13 @@ namespace T2Access.DAL
 
             await DatabaseExecuter.MySqlExecuteQueryAsync("SP_Gate_SelectWithFilter", delegate (MySqlCommand cmd)
                       {
-                          cmd.Parameters.AddWithValue("_username", filter.UserName ?? "");
+                          cmd.Parameters.AddWithValue("_username", filter.UserName );
 
-                          cmd.Parameters.AddWithValue("_nameAr", filter.NameAr ?? "");
+                          cmd.Parameters.AddWithValue("_nameAr", filter.NameAr);
 
-                          cmd.Parameters.AddWithValue("_nameEn", filter.NameEn ?? "");
+                          cmd.Parameters.AddWithValue("_nameEn", filter.NameEn);
 
-                          cmd.Parameters.AddWithValue("_status", filter.Status != null ? filter.Status : -1);
+                          cmd.Parameters.AddWithValue("_status", filter.Status);
 
 
                       }, delegate (MySqlDataReader reader)
@@ -151,7 +151,7 @@ namespace T2Access.DAL
             await DatabaseExecuter.MySqlExecuteQueryAsync("SP_Gate_SelectByUserName", delegate (MySqlCommand cmd)
 
              {
-                 cmd.Parameters.AddWithValue("_username", username ?? "");
+                 cmd.Parameters.AddWithValue("_username", username);
 
              }, delegate (MySqlDataReader reader)
 
@@ -187,38 +187,39 @@ namespace T2Access.DAL
             Gate _gate = null;
             await DatabaseExecuter.MySqlExecuteQueryAsync("SP_Gate_Login", delegate (MySqlCommand cmd)
 
-             {
+            {
 
-                 cmd.Parameters.AddWithValue("_username", gate.UserName ?? "");
-
-
-             }, delegate (MySqlDataReader reader)
-
-             {
+                cmd.Parameters.AddWithValue("_username", gate.UserName ?? "");
 
 
-                 if (reader.Read())
-                 {
+            }, delegate (MySqlDataReader reader)
 
-                     _gate = new Gate()
-                     {
-                         Id = reader.GetGuid(0),
-                         UserName = reader.GetString(1),
-                         Password = reader.GetString(2),
-                         NameAr = reader.GetString(3),
-                         NameEn = reader.GetString(4),
-                         Status = reader.GetInt32(5)
-                     };
+            {
 
-                 }
 
-             });
+                if (reader.Read())
+                {
+
+                    _gate = new Gate()
+                    {
+                        Id = reader.GetGuid(0),
+                        UserName = reader.GetString(1),
+                        Password = reader.GetString(2),
+                        NameAr = reader.GetString(3),
+                        NameEn = reader.GetString(4),
+                        Status = reader.GetInt32(5)
+                    };
+
+                }
+
+            });
 
 
             return _gate != null && passwordHasher.VerifyHashedPassword(_gate.Password, gate.Password)
                 ? new Gate() { Id = _gate.Id, UserName = _gate.UserName, NameAr = _gate.NameAr, NameEn = _gate.NameEn, Status = _gate.Status }
                 : null;
         }
+
 
         public async Task ResetPasswordAsync(IAuthModel model)
         {

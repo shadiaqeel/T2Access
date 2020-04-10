@@ -94,7 +94,10 @@ namespace T2Access.DAL
 
         }
 
-        public static void ExecuteQueryAsync(string storedProcedure, Action<SqlCommand> FillCmd, Action<SqlDataReader> FillReader)
+
+        // Async methods :
+
+        public static async Task ExecuteQueryAsync(string storedProcedure, Action<SqlCommand> FillCmd, Action<SqlDataReader> FillReader)
         {
 
 
@@ -118,7 +121,7 @@ namespace T2Access.DAL
 
                     FillCmd(cmd);
 
-                    SqlDataReader reader = cmd.ExecuteReader();
+                    SqlDataReader reader = await cmd.ExecuteReaderAsync();
 
 
                     FillReader(reader);
@@ -135,8 +138,7 @@ namespace T2Access.DAL
 
         }
 
-
-        public static int ExecuteNonQueryAsync(string storedProcedure, Action<SqlCommand> FillCmd)
+        public static async Task<int> ExecuteNonQueryAsync(string storedProcedure, Action<SqlCommand> FillCmd)
         {
 
             int result = 0;
@@ -157,7 +159,7 @@ namespace T2Access.DAL
                     FillCmd(cmd);
 
 
-                    result = cmd.ExecuteNonQuery();
+                    result = await cmd.ExecuteNonQueryAsync();
 
 
 
@@ -257,6 +259,9 @@ namespace T2Access.DAL
         }
 
 
+
+        // Async methods : 
+
         public static async Task MySqlExecuteQueryAsync(string storedProcedure, Action<MySqlCommand> FillCmd, Action<MySqlDataReader> FillReader)
         {
 
@@ -331,14 +336,10 @@ namespace T2Access.DAL
 
 
 
-
-
-
         // MySqlCommand Extension 
 
-        private static Task<MySqlDataReader> MySqlExecuteReaderAsync(this MySqlCommand cmd)
+        private static Task<MySqlDataReader> MySqlExecuteReaderAsync(this MySqlCommand cmd , CancellationToken cancellationToken = new CancellationToken())
         {
-            CancellationToken cancellationToken = CancellationToken.None;
             TaskCompletionSource<MySqlDataReader> taskCompletionSource = new TaskCompletionSource<MySqlDataReader>();
             if (cancellationToken == CancellationToken.None || !cancellationToken.IsCancellationRequested)
                 try
