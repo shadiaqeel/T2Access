@@ -112,6 +112,7 @@
 
         $(document).ready(function () {
 
+            selectedGuid = $('#AddedGateList')[0].value?.split(',') || [];
 
              $("#GTable").DataTable({
                 serverSide: true,

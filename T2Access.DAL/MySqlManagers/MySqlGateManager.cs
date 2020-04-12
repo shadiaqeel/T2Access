@@ -28,7 +28,9 @@ namespace T2Access.DAL
                 cmd.Parameters.AddWithValue("_password", passwordHasher.HashPassword(gate.Password));
                 cmd.Parameters.AddWithValue("_nameAr", gate.NameAr);
                 cmd.Parameters.AddWithValue("_nameEn", gate.NameEn);
-            }) > 0 ? gate : null;
+            }) > 0 ? gate : throw new Exception();
+
+
         }
 
         public async Task UpdateAsync(Gate model)

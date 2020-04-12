@@ -109,12 +109,11 @@ namespace T2Access.Web.Controllers
                 }
                 else
                 {
-                    ////var error = await response.Content.ReadAsStringAsync();
-                    ////ViewBag.ErrorMessage = error;
+                    var error = result.Replace("\"", "").Split(',');
+                    ViewBag.errorToastrMessage = error[0];
+                    ViewBag.ErrorMessage = error[1] ?? null;
 
-                    ViewBag.errorToastrMessage = result.Replace("\"", "");
-
-                    ModelState.AddModelError("UserName", result.Replace("\"", ""));
+                    /// ModelState.AddModelError("UserName", result.Replace("\"", ""));
 
                     return View(model);
                 }

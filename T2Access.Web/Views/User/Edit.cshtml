@@ -119,6 +119,11 @@
 
         $(document).ready(function () {
 
+
+            selectedGuid = $('#AddedGateList')[0].value?.split(',') || [];
+            unselectedGuid = $('#RemovedGateList')[0].value?.split(',') || [];
+
+
             //  -- scroller datatable --
             $("#GTable").DataTable({
                 serverSide: true,

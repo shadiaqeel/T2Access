@@ -85,15 +85,16 @@ namespace T2Access.Web.Controllers
 
             using (var response = await httpService.PostAsync("Signup/", model, token: (string)Session["Token"]))
             {
+                var result = await response.Content.ReadAsStringAsync();
+
                 if (response.IsSuccessStatusCode)
                 {
-                    var result = await response.Content.ReadAsStringAsync();
                     return Json(new { success = true, message = result.Replace("\"", "") });
                 }
                 else
                 {
 
-                    ViewBag.ErrorMessage = await response.Content.ReadAsStringAsync();
+                    ViewBag.ErrorMessage = result.Replace("\"", "");
 
                     return PartialView("_Create", model);
                 }

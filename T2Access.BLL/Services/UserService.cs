@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Dynamic;
 using System.Threading.Tasks;
-
 using T2Access.BLL.Extensions;
 using T2Access.BLL.Resources;
 using T2Access.DAL;
@@ -19,41 +20,66 @@ namespace T2Access.BLL.Services
         private readonly IUserGateManager userGateManager = ManagerFactory.GetUserGateManager(Variables.DatabaseProvider);
 
 
-
-
         //==========================================================================
 
         public async Task<ServiceResponse<string>> CreateAsync(SignUpUserModel model)
         {
+            #region Removed
+            //// Check user if exist 
+            //if (await userManager.GetByUserNameAsync(model.UserName) != null)
+            //{
+            //    return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.UserExist };
+            //} 
+            #endregion
 
-
-
-            if (userManager.GetByUserNameAsync(model.UserName) != null)
+            try
             {
-                return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.UserExist };
+             
+
+                // Create  new user  
+                Guid id = (await userManager.CreateAsync(model.ToEntity())).Id;
+                if (id == Guid.Empty)
+                {
+                    return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.SignupFailed };
+                }
+
+                // Check if there attached gates list  
+                if (string.IsNullOrEmpty(model.AddedGateList))
+                {
+                    return new ServiceResponse<string>() { Data = Resource.SignupSuccess };
+                }
+
+                // assign gate for new user
+                foreach (string gate in model.AddedGateList.Split(','))
+                {
+                    if (Guid.TryParse(gate, out Guid gateId))
+                    {
+                        await userGateManager.CreateAsync(new UserGate() { UserId = id, GateId = gateId });
+                    }
+                }
+
+                return new ServiceResponse<string>() { Data = Resource.SignupSuccess };
+
             }
-
-            Guid id = (await userManager.CreateAsync(model.ToEntity())).Id;
-
-            if (id == Guid.Empty)
+            catch (MySql.Data.MySqlClient.MySqlException error)
             {
+                Trace.WriteLine($"(MySqlException)  {error.GetType()}   :    {error}  ");
+
+                switch (error.Number)
+                {
+                    case 1062:
+                        return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.UserExist };
+                    default:
+                        return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.SignupFailed };
+                }
+
+            }
+            catch (Exception error)
+            {
+                Trace.WriteLine($"(Exception) {error.GetType()}   :    {error}  ");
                 return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.SignupFailed };
             }
 
-            if (string.IsNullOrEmpty(model.AddedGateList))
-            {
-                return new ServiceResponse<string>() { Data = Resource.SignupSuccess };
-            }
-
-            foreach (string gate in model.AddedGateList.Split(','))
-            {
-                if (Guid.TryParse(gate, out Guid gateId))
-                {
-                    await userGateManager.CreateAsync(new UserGate() { UserId = id, GateId = gateId });
-                }
-            }
-
-            return new ServiceResponse<string>() { Data = Resource.SignupSuccess };
 
         }
 
@@ -62,48 +88,44 @@ namespace T2Access.BLL.Services
         public async Task<ServiceResponse<string>> EditAsync(UpdateUserModel model)
         {
 
-
             try
             {
                 await userManager.UpdateAsync(model.ToEntity());
 
-                //Clear previous records
-                var deletedGateList = model.RemovedGateList?.Split(',');
-                if (deletedGateList != null)
+                //Delete records
+                if (!string.IsNullOrEmpty(model.RemovedGateList))
                 {
-                    foreach (string gate in deletedGateList)
+                    foreach (string gate in model.RemovedGateList.Split(','))
                     {
                         if (Guid.TryParse(gate, out Guid gateId))
                         {
-                            await userGateManager.DeleteAsync(new UserGate() { UserId = model.Id, GateId = gateId });
+                            /*await*/ userGateManager.DeleteAsync(new UserGate() { UserId = model.Id, GateId = gateId });
                         }
                     }
                 }
 
-                if (string.IsNullOrEmpty(model.AddedGateList))
+                //Add records
+                if (!string.IsNullOrEmpty(model.AddedGateList))
                 {
-                    return new ServiceResponse<string>() { Data = Resource.EditSuccess };
-                }
-
-
-                //Create new records
-                var AddedGateList = model.AddedGateList.Split(',');
-                foreach (string gate in AddedGateList)
-                {
-                    if (Guid.TryParse(gate, out Guid gateId))
+                    foreach (string gate in model.AddedGateList.Split(','))
                     {
-                        await userGateManager.CreateAsync(new UserGate() { UserId = model.Id, GateId = gateId });
+                        if (Guid.TryParse(gate, out Guid gateId))
+                        {
+                            /*await*/ userGateManager.CreateAsync(new UserGate() { UserId = model.Id, GateId = gateId });
+                        }
                     }
                 }
 
-                return new ServiceResponse<string>() { Data = Resource.EditSuccess };
             }
-            catch (Exception e)
+            catch (Exception error)
             {
-                Trace.WriteLine($" {e.GetType()}   :    {e.Message }  ");
+                Trace.WriteLine($" {error.GetType()}   :    {error.Message }  ");
 
                 return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.EditFailed };
             }
+
+            return new ServiceResponse<string>() { Data = Resource.EditSuccess };
+
 
         }
 
@@ -116,11 +138,11 @@ namespace T2Access.BLL.Services
             {
                 userList = await userManager.GetWithFilterAsync(filter.ToEntity());
             }
-            catch (Exception e)
+            catch (Exception error)
             {
-                Trace.WriteLine($" {e.GetType()}   :    {e.Message }  ");
+                Trace.WriteLine($" {error.GetType()}   :    {error.Message }  ");
 
-                return new ServiceResponse<UserListResponse>() { ErrorMessage = e.Message };
+                return new ServiceResponse<UserListResponse>() { Success= false , ErrorMessage = error.Message };
 
             }
 
@@ -141,8 +163,6 @@ namespace T2Access.BLL.Services
 
             return new ServiceResponse<UserListResponse>() { Data = new UserListResponse() { ResponseList = userList.ToDto(), TotalEntities = _totalSize } };
 
-
-
         }
 
 
@@ -152,19 +172,21 @@ namespace T2Access.BLL.Services
 
             try
             {
+                // remove all corresponding recorders for the User in UserGate Table
                 await userGateManager.DeleteAsync(new UserGate() { UserId = id });
 
-                // remove all corresponding recorders for the User in UserGate Table
                 await userManager.DeleteAsync(new User() { Id = id });
 
-                return new ServiceResponse<string>() { Data = Resource.DeleteSuccess };
             }
-            catch (Exception e)
+            catch (Exception error)
             {
-                Trace.WriteLine($" {e.GetType()}   :    {e.Message }  ");
+                Trace.WriteLine($" {error.GetType()}   :    {error.Message }  ");
 
                 return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.DeleteFailed };
             }
+
+            return new ServiceResponse<string>() { Data = Resource.DeleteSuccess };
+
 
         }
 
@@ -176,11 +198,11 @@ namespace T2Access.BLL.Services
             {
                 return new ServiceResponse<UserDto>() { Data = (await userManager.GetByIdAsync(userId)).ToDto() };
             }
-            catch (Exception e)
+            catch (Exception error)
             {
-                Trace.WriteLine($" {e.GetType()}   :    {e.Message }  ");
+                Trace.WriteLine($" {error.GetType()}   :    {error.Message }  ");
 
-                return new ServiceResponse<UserDto>() { Success = false, ErrorMessage = e.Message };
+                return new ServiceResponse<UserDto>() { Success = false, ErrorMessage = error.Message };
 
             }
 
@@ -196,20 +218,20 @@ namespace T2Access.BLL.Services
                  user = await userManager.LoginAsync(model);
 
             }
-            catch (Exception e)
+            catch (Exception error)
             {
-                Trace.WriteLine($" {e.GetType()}   :    {e.Message }  ");
+                Trace.WriteLine($" {error.GetType()}   :    {error.Message }  ");
                 return new ServiceResponse<UserDto>() { Success = false, ErrorMessage = Resource.OperationFailed };
 
             }
-            return user != null ?
-                  new ServiceResponse<UserDto>() { Data = user.ToDto() } :
-                  new ServiceResponse<UserDto>() { Success = false, ErrorMessage = Resource.UserNotExist };
+            
+            return user == null ?
+                  new ServiceResponse<UserDto>() { Success = false, ErrorMessage = Resource.UserNotExist } :
+                  new ServiceResponse<UserDto>() { Data = user.ToDto() };
 
 
 
         }
-
 
 
 
@@ -219,16 +241,16 @@ namespace T2Access.BLL.Services
             {
                 await userManager.ResetPasswordAsync(model);
 
-                return new ServiceResponse<string>() { Data = Resource.EditSuccess };
-
-
             }
-            catch (Exception e)
+            catch (Exception error)
             {
-                Trace.WriteLine($" {e.GetType()}   :    {e.Message }  ");
+                Trace.WriteLine($" {error.GetType()}   :    {error.Message }  ");
 
                 return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.EditFailed };
             }
+
+            return new ServiceResponse<string>() { Data = Resource.EditSuccess };
+
 
         }
 
@@ -247,11 +269,11 @@ namespace T2Access.BLL.Services
 
                 return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.AssignFailed };
             }
-            catch (Exception e)
+            catch (Exception error)
             {
-                Trace.WriteLine($" {e.GetType()}   :    {e.Message }  ");
+                Trace.WriteLine($" {error.GetType()}   :    {error.Message }  ");
 
-                return new ServiceResponse<string>() { Success = false, ErrorMessage = e.Message };
+                return new ServiceResponse<string>() { Success = false, ErrorMessage = error.Message };
 
             }
 
@@ -270,9 +292,9 @@ namespace T2Access.BLL.Services
                 return new ServiceResponse<string>() { Data = Resource.UnassignSuccess };
 
             }
-            catch (Exception e)
+            catch (Exception error)
             {
-                Trace.WriteLine($" {e.GetType()}   :    {e.Message }  ");
+                Trace.WriteLine($" {error.GetType()}   :    {error.Message }  ");
 
                 return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.UnassignFailed };
 

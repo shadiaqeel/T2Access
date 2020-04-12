@@ -20,21 +20,42 @@ namespace T2Access.BLL.Services
 
         public async Task<ServiceResponse<string>> CreateAsync(SignUpGateModel gateModel)
         {
+            #region removed 
+            //if (await gateManager.GetByUserNameAsync(gateModel.UserName) != null)
+            //{
+            //    return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.UserExist };
+            //} 
+            #endregion
+         
             try
             {
-                if (await gateManager.GetByUserNameAsync(gateModel.UserName) != null)
+
+                await gateManager.CreateAsync(gateModel.ToEntity());
+
+            }
+            catch (MySql.Data.MySqlClient.MySqlException error)
+            {
+                Trace.WriteLine($"(MySqlException)  {error.GetType()}   :    {error}");
+
+                switch (error.Number)
                 {
-                    return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.UserExist };
+                    case 1062:
+                        return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.UserExist };
+                    default:
+                        return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.SignupFailed };
                 }
 
-                return gateManager.CreateAsync(gateModel.ToEntity()) != null
-                    ? new ServiceResponse<string>() { Data = Resource.SignupSuccess }
-                    : new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.SignupSuccess };
             }
-            catch (Exception ex)
+            catch (Exception error)
             {
-                return new ServiceResponse<string>() { Success = false, ErrorMessage = ex.Message };
+                Trace.WriteLine($" {error.GetType()}   :    {error.Message }  ");
+
+                return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.SignupFailed };
             }
+
+           return  new ServiceResponse<string>() { Data = Resource.SignupSuccess };
+
+
         }
 
         //==========================================================================================================
@@ -45,11 +66,12 @@ namespace T2Access.BLL.Services
                 await gateManager.UpdateAsync(model.ToEntity());
 
             }
-            catch (Exception e)
+            catch (Exception error)
             {
-                Trace.WriteLine($" {e.GetType()}   :    {e.Message }  ");
+                Trace.WriteLine($" {error.GetType()}   :    {error.Message }  ");
                 return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.EditFailed };
             }
+
             return new ServiceResponse<string>() { Data = Resource.EditSuccess };
 
         }
@@ -64,10 +86,10 @@ namespace T2Access.BLL.Services
                 AddedGateList = await gateManager.GetWithFilterAsync(filter.ToEntity());
 
             }
-            catch (Exception e)
+            catch (Exception error)
             {
 
-                Trace.WriteLine($" {e.GetType()}   :    {e.Message }  ");
+                Trace.WriteLine($" {error.GetType()}   :    {error.Message }  ");
                 return new ServiceResponse<GateListResponse>() { Success = false, ErrorMessage = Resource.OperationFailed };
             }
 
@@ -98,13 +120,14 @@ namespace T2Access.BLL.Services
             try
             {
                 AddedGateList = await gateManager.GetCheckedByUserIdAsync(filter.Id);
-                response.TotalEntities = AddedGateList.Count();
             }
-            catch (Exception e)
+            catch (Exception error)
             {
-                Trace.WriteLine($" {e.GetType()}   :    {e.Message }  ");
+                Trace.WriteLine($" {error.GetType()}   :    {error.Message }  ");
                 return new ServiceResponse<ListResponse<CheckedGateDto>>() { Success = false, ErrorMessage = Resource.OperationFailed };
             }
+
+            response.TotalEntities = AddedGateList.Count();
 
             //search
             if (!string.IsNullOrEmpty(filter.SearchValue))
@@ -146,14 +169,17 @@ namespace T2Access.BLL.Services
             try
             {
                 await gateManager.DeleteAsync(new Gate() { Id = id });
-                return new ServiceResponse<string>() { Data = Resource.DeleteSuccess };
+
             }
-            catch (Exception e)
+            catch (Exception error)
             {
-                Trace.WriteLine($" {e.GetType()}   :    {e.Message }  ");
+                Trace.WriteLine($" {error.GetType()}   :    {error.Message }  ");
 
                 return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.DeleteFailed };
             }
+            return new ServiceResponse<string>() { Data = Resource.DeleteSuccess };
+
+
         }
 
         public async Task<ServiceResponse<string>> ResetPasswordAsync(ResetPasswordModel model)
@@ -163,10 +189,9 @@ namespace T2Access.BLL.Services
                 await gateManager.ResetPasswordAsync(model);
                 return new ServiceResponse<string>() { Data = Resource.EditSuccess };
             }
-            catch (Exception e)
+            catch (Exception error)
             {
-                Trace.WriteLine($" {e.GetType()}   :    {e.Message }  ");
-
+                Trace.WriteLine($" {error.GetType()}   :    {error.Message }  ");
                 return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.EditFailed };
 
             }
