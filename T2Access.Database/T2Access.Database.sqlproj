@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>T2Access.Database</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{df0e74a5-4bca-4ffd-84e7-8594b0ac10c3}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>T2Access.Database</RootNamespace>
+    <AssemblyName>T2Access.Database</AssemblyName>
+    <ModelCollation>1025,CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <DefaultCollation>Arabic_CI_AS</DefaultCollation>
+    <DefaultFilegroup>PRIMARY</DefaultFilegroup>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Tables\" />
+    <Folder Include="dbo\Stored Procedures\" />
+    <Folder Include="Security\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\Tables\usergate_1.sql" />
+    <Build Include="dbo\Tables\transaction_1.sql" />
+    <Build Include="dbo\Tables\gate_1.sql" />
+    <Build Include="dbo\Tables\user_1.sql" />
+    <Build Include="dbo\Stored Procedures\SP_User_Insert_1.sql" />
+    <Build Include="dbo\Stored Procedures\SP_Gate_Update.sql" />
+    <Build Include="dbo\Stored Procedures\SP_CheckIfValid_1.sql" />
+    <Build Include="dbo\Stored Procedures\SP_Gate_Delete_1.sql" />
+    <Build Include="dbo\Stored Procedures\SP_Gate_Insert_1.sql">
+      <AnsiNulls>Off</AnsiNulls>
+      <QuotedIdentifier>Off</QuotedIdentifier>
+    </Build>
+    <Build Include="dbo\Stored Procedures\SP_Gate_Login_1.sql" />
+    <Build Include="dbo\Stored Procedures\SP_Gate_ResetPassword_1.sql" />
+    <Build Include="dbo\Stored Procedures\SP_Gate_SelectByUserName_1.sql" />
+    <Build Include="dbo\Stored Procedures\SP_Gate_SelectCheckedByUserId_1.sql" />
+    <Build Include="dbo\Stored Procedures\SP_Gate_SelectStatusById_1.sql" />
+    <Build Include="dbo\Stored Procedures\SP_Gate_SelectWithFilter_1.sql" />
+    <Build Include="dbo\Stored Procedures\SP_Transaction_GetByGateId_1.sql" />
+    <Build Include="dbo\Stored Procedures\SP_Transaction_Insert_1.sql" />
+    <Build Include="dbo\Stored Procedures\SP_Transaction_UpdateStatus_1.sql" />
+    <Build Include="dbo\Stored Procedures\SP_User_Delete_1.sql" />
+    <Build Include="dbo\Stored Procedures\SP_User_Login_1.sql" />
+    <Build Include="dbo\Stored Procedures\SP_User_ResetPassword_1.sql" />
+    <Build Include="dbo\Stored Procedures\SP_User_SelectById_1.sql" />
+    <Build Include="dbo\Stored Procedures\SP_User_SelectByUserName_1.sql" />
+    <Build Include="dbo\Stored Procedures\SP_User_SelectStatusById_1.sql" />
+    <Build Include="dbo\Stored Procedures\SP_User_SelectWithFilter_1.sql" />
+    <Build Include="dbo\Stored Procedures\SP_User_Update_1.sql" />
+    <Build Include="dbo\Stored Procedures\SP_UserGate_Delete_1.sql" />
+    <Build Include="dbo\Stored Procedures\SP_UserGate_DeleteAllByUserId_1.sql" />
+    <Build Include="dbo\Stored Procedures\SP_UserGate_Get_1.sql" />
+    <Build Include="dbo\Stored Procedures\SP_UserGate_GetByUserId_1.sql" />
+    <Build Include="dbo\Stored Procedures\SP_UserGate_Insert_1.sql" />
+    <Build Include="Security\m2ss_1.sql" />
+  </ItemGroup>
+</Project>

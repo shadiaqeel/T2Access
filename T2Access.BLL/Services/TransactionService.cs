@@ -14,9 +14,9 @@ namespace T2Access.BLL.Services
 
     public class TransactionService : ITransactionService
     {
-        private readonly ITransactionManager transactionManager = ManagerFactory.GetTransactionManager(Variables.DatabaseProvider);
+        private readonly ITransactionManager transactionManager = ManagerFactory.GetTransactionManager();
 
-       
+
         //==========================================================================
 
         public async Task<bool> CreateAsync(UserGateModel userGate)

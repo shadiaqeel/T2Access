@@ -1,0 +1,45 @@
+﻿/*
+*   SSMA informational messages:
+*   M2SS0003: The following SQL clause was ignored during conversion:
+*   DEFINER = `shadi`@`localhost`.
+*/
+
+CREATE PROCEDURE [dbo].[SP_Gate_SelectCheckedByUserId]  
+   @UserId uniqueidentifier
+AS 
+   BEGIN
+
+      SET  XACT_ABORT  ON
+
+      SET  NOCOUNT  ON
+
+    
+
+      SELECT 
+         CASE 
+            WHEN (ug.UserId IS NOT NULL) THEN 1
+            ELSE 0
+         END, 
+         g.Id, 
+         g.Username, 
+         g.NameAr, 
+         g.NameEn, 
+         g.Status
+      FROM 
+         dbo.gate  AS g 
+            LEFT JOIN 
+            (
+               SELECT GateId, UserId
+               FROM dbo.usergate
+               WHERE UserId = @UserId
+            )  AS ug 
+            ON ug.GateId = g.Id
+         ORDER BY g.CreatedDate
+      
+
+
+
+   END
+GO
+EXECUTE sp_addextendedproperty @name = N'MS_SSMA_SOURCE', @value = N't2access.SP_Gate_SelectCheckedByUserId', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'PROCEDURE', @level1name = N'SP_Gate_SelectCheckedByUserId';
+

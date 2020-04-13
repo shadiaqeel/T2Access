@@ -1,11 +1,9 @@
 ﻿using System.IO;
 using System.Web.Mvc;
 
-using T2Access.Web.Attributes;
-
 namespace T2Access.Web.Controllers
 {
-    [LogActionFilter]
+    //[LogActionFilter]
     //[Localisation]
     public class WebController : Controller
     {

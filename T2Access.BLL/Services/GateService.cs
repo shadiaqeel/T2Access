@@ -16,7 +16,7 @@ namespace T2Access.BLL.Services
 {
     public class GateService : IGateService
     {
-        private readonly IGateManager gateManager = ManagerFactory.GetGateManager(Variables.DatabaseProvider);
+        private readonly IGateManager gateManager = ManagerFactory.GetGateManager();
 
         public async Task<ServiceResponse<string>> CreateAsync(SignUpGateModel gateModel)
         {
@@ -26,7 +26,7 @@ namespace T2Access.BLL.Services
             //    return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.UserExist };
             //} 
             #endregion
-         
+
             try
             {
 
@@ -46,14 +46,29 @@ namespace T2Access.BLL.Services
                 }
 
             }
+            catch (System.Data.SqlClient.SqlException error)
+            {
+                Trace.WriteLine($"(MySqlException)  {error.GetType()}   :    {error}");
+
+                switch (error.Number)
+                {
+                    case 2627:
+                        return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.UserExist };
+                    default:
+                        return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.SignupFailed };
+                }
+
+            }
             catch (Exception error)
             {
                 Trace.WriteLine($" {error.GetType()}   :    {error.Message }  ");
 
                 return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.SignupFailed };
+                throw error;
+
             }
 
-           return  new ServiceResponse<string>() { Data = Resource.SignupSuccess };
+            return new ServiceResponse<string>() { Data = Resource.SignupSuccess };
 
 
         }

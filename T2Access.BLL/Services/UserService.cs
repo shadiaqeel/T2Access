@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Common;
-using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Dynamic;
 using System.Threading.Tasks;
+
 using T2Access.BLL.Extensions;
 using T2Access.BLL.Resources;
 using T2Access.DAL;
@@ -16,8 +15,8 @@ namespace T2Access.BLL.Services
 {
     public class UserService : IUserService
     {
-        private readonly IUserManager userManager = ManagerFactory.GetUserManager(Variables.DatabaseProvider);
-        private readonly IUserGateManager userGateManager = ManagerFactory.GetUserGateManager(Variables.DatabaseProvider);
+        private readonly IUserManager userManager = ManagerFactory.GetUserManager();
+        private readonly IUserGateManager userGateManager = ManagerFactory.GetUserGateManager();
 
 
         //==========================================================================
@@ -34,7 +33,7 @@ namespace T2Access.BLL.Services
 
             try
             {
-             
+
 
                 // Create  new user  
                 Guid id = (await userManager.CreateAsync(model.ToEntity())).Id;
@@ -74,6 +73,19 @@ namespace T2Access.BLL.Services
                 }
 
             }
+            catch (System.Data.SqlClient.SqlException error)
+            {
+                Trace.WriteLine($"(SqlException)  {error.GetType()}   :    {error}  ");
+
+                switch (error.Number)
+                {
+                    case 2627:
+                        return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.UserExist };
+                    default:
+                        return new ServiceResponse<string>() { Success = false, ErrorMessage = Resource.SignupFailed };
+                }
+
+            }
             catch (Exception error)
             {
                 Trace.WriteLine($"(Exception) {error.GetType()}   :    {error}  ");
@@ -99,7 +111,8 @@ namespace T2Access.BLL.Services
                     {
                         if (Guid.TryParse(gate, out Guid gateId))
                         {
-                            /*await*/ userGateManager.DeleteAsync(new UserGate() { UserId = model.Id, GateId = gateId });
+                            /*await*/
+                            userGateManager.DeleteAsync(new UserGate() { UserId = model.Id, GateId = gateId });
                         }
                     }
                 }
@@ -111,11 +124,13 @@ namespace T2Access.BLL.Services
                     {
                         if (Guid.TryParse(gate, out Guid gateId))
                         {
-                            /*await*/ userGateManager.CreateAsync(new UserGate() { UserId = model.Id, GateId = gateId });
+                            /*await*/
+                            userGateManager.CreateAsync(new UserGate() { UserId = model.Id, GateId = gateId });
                         }
                     }
                 }
 
+                Task.WaitAll();
             }
             catch (Exception error)
             {
@@ -142,7 +157,7 @@ namespace T2Access.BLL.Services
             {
                 Trace.WriteLine($" {error.GetType()}   :    {error.Message }  ");
 
-                return new ServiceResponse<UserListResponse>() { Success= false , ErrorMessage = error.Message };
+                return new ServiceResponse<UserListResponse>() { Success = false, ErrorMessage = error.Message };
 
             }
 
@@ -215,7 +230,7 @@ namespace T2Access.BLL.Services
             User user;
             try
             {
-                 user = await userManager.LoginAsync(model);
+                user = await userManager.LoginAsync(model);
 
             }
             catch (Exception error)
@@ -224,7 +239,7 @@ namespace T2Access.BLL.Services
                 return new ServiceResponse<UserDto>() { Success = false, ErrorMessage = Resource.OperationFailed };
 
             }
-            
+
             return user == null ?
                   new ServiceResponse<UserDto>() { Success = false, ErrorMessage = Resource.UserNotExist } :
                   new ServiceResponse<UserDto>() { Data = user.ToDto() };

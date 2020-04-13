@@ -94,7 +94,7 @@ namespace T2Access.Web.Controllers
                 else
                 {
 
-                    ViewBag.ErrorMessage = result.Replace("\"", "");
+                    ViewBag.ErrorMessage = result.Replace("\"", "") ?? null;
 
                     return PartialView("_Create", model);
                 }
