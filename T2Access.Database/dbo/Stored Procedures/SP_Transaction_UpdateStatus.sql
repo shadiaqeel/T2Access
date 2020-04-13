@@ -1,17 +1,8 @@
-﻿/*
-*   SSMA informational messages:
-*   M2SS0003: The following SQL clause was ignored during conversion:
-*   DEFINER = `root`@`localhost`.
-*/
-
+﻿
 CREATE PROCEDURE [dbo].[SP_Transaction_UpdateStatus]  
    @Id numeric(18, 0)
 AS 
    BEGIN
-
-      SET  XACT_ABORT  ON
-
-      SET  NOCOUNT  ON
 
       UPDATE dbo.[transaction]
          SET 

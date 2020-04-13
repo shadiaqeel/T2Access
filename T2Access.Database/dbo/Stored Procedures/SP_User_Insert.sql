@@ -1,34 +1,25 @@
 ﻿
-
-
-Create PROCEDURE [dbo].[SP_User_Insert]  
+CREATE PROCEDURE [dbo].[SP_User_Insert]  
 @Username nvarchar(255),
 @Password nvarchar(255),
 @Firstname nvarchar(255),
 @Lastname varchar(255)
 AS	
+
+    DECLARE @Id  uniqueidentifier 
+	SET @Id = NEWID();
    BEGIN
 
-      SET  XACT_ABORT  ON
 
-      SET  NOCOUNT  ON
-
-    DECLARE @Id  uniqueidentifier = newid();  
-
-      INSERT dbo.gate(
-         dbo.gate.Id, 
-         dbo.gate.Username, 
-         dbo.gate.Password, 
-         dbo.gate.NameAr, 
-         dbo.gate.NameEn)
+      INSERT dbo.[User]( Id, Username,  Password, Firstname,Lastname)
+		 OUTPUT INSERTED.Id 
          VALUES (
-            @Id, 
+            NEWID(), 
             @Username, 
             @Password, 
             @Firstname, 
-            @Lastname);
+            @Lastname)
+			;
 
-		SELECT @Id;
- 
 
    END

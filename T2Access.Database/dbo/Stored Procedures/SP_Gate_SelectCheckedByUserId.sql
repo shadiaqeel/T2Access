@@ -1,25 +1,15 @@
-﻿/*
-*   SSMA informational messages:
-*   M2SS0003: The following SQL clause was ignored during conversion:
-*   DEFINER = `shadi`@`localhost`.
-*/
+﻿
 
 CREATE PROCEDURE [dbo].[SP_Gate_SelectCheckedByUserId]  
    @UserId uniqueidentifier
 AS 
    BEGIN
 
-      SET  XACT_ABORT  ON
 
-      SET  NOCOUNT  ON
 
-    
 
       SELECT 
-         CASE 
-            WHEN (ug.UserId IS NOT NULL) THEN 1
-            ELSE 0
-         END, 
+		 IIF (ug.UserId IS NOT NULL , CAST(1 AS BIT) , CAST(0 AS BIT)), 
          g.Id, 
          g.Username, 
          g.NameAr, 

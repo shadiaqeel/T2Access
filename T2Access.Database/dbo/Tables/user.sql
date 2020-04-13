@@ -7,6 +7,9 @@
     [CreatedDate] DATETIME         CONSTRAINT [DF__user__CreatedDat__6A30C649] DEFAULT (getdate()) NOT NULL,
     [Status]      INT              CONSTRAINT [DF__user__Status__6B24EA82] DEFAULT ((0)) NOT NULL,
     CONSTRAINT [PK_user_Id] PRIMARY KEY CLUSTERED ([Id] ASC),
+    UNIQUE NONCLUSTERED ([Id] ASC),
+    UNIQUE NONCLUSTERED ([Username] ASC),
+    UNIQUE NONCLUSTERED ([Username] ASC),
     CONSTRAINT [user$Id_UNIQUE] UNIQUE NONCLUSTERED ([Id] ASC),
     CONSTRAINT [user$Username_UNIQUE] UNIQUE NONCLUSTERED ([Username] ASC)
 );

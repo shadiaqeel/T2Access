@@ -1,19 +1,10 @@
-﻿/*
-*   SSMA informational messages:
-*   M2SS0003: The following SQL clause was ignored during conversion:
-*   DEFINER = `root`@`localhost`.
-*/
+﻿
 
 CREATE PROCEDURE [dbo].[SP_User_ResetPassword]  
    @Id uniqueidentifier,
    @Password nvarchar(255)
 AS 
    BEGIN
-
-      SET  XACT_ABORT  ON
-
-      SET  NOCOUNT  ON
-
 
       UPDATE [User]
          SET 

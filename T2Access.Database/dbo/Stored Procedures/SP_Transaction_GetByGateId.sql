@@ -1,18 +1,10 @@
-﻿/*
-*   SSMA informational messages:
-*   M2SS0003: The following SQL clause was ignored during conversion:
-*   DEFINER = `root`@`localhost`.
-*/
-
+﻿
 CREATE PROCEDURE [dbo].[SP_Transaction_GetByGateId]  
    @GateId uniqueidentifier,
    @Status int
 AS 
    BEGIN
 
-      SET  XACT_ABORT  ON
-
-      SET  NOCOUNT  ON
 
       SELECT TOP (1) 
          Id, 
