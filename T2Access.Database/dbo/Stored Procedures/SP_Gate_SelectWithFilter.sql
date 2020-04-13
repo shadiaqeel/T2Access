@@ -1,9 +1,4 @@
-﻿/*
-*   SSMA informational messages:
-*   M2SS0003: The following SQL clause was ignored during conversion:
-*   DEFINER = `root`@`localhost`.
-*/
-
+﻿
 CREATE PROCEDURE dbo.SP_Gate_SelectWithFilter  
    @Username nvarchar(255),
    @NameAr nvarchar(255),
@@ -12,9 +7,6 @@ CREATE PROCEDURE dbo.SP_Gate_SelectWithFilter
 AS 
    BEGIN
 
-      SET  XACT_ABORT  ON
-
-      SET  NOCOUNT  ON
 
       SELECT 
          g.Id, 

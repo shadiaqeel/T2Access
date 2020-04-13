@@ -6,7 +6,7 @@
     <Name>T2Access.Database</Name>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
-    <ProjectGuid>{df0e74a5-4bca-4ffd-84e7-8594b0ac10c3}</ProjectGuid>
+    <ProjectGuid>{37130324-f99b-4524-b806-c5529ca5a56b}</ProjectGuid>
     <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
@@ -62,42 +62,43 @@
     <Folder Include="dbo\Tables\" />
     <Folder Include="dbo\Stored Procedures\" />
     <Folder Include="Security\" />
+    <Folder Include="Snapshots" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="dbo\Tables\usergate_1.sql" />
-    <Build Include="dbo\Tables\transaction_1.sql" />
-    <Build Include="dbo\Tables\gate_1.sql" />
-    <Build Include="dbo\Tables\user_1.sql" />
-    <Build Include="dbo\Stored Procedures\SP_User_Insert_1.sql" />
+    <Build Include="dbo\Tables\usergate.sql" />
+    <Build Include="dbo\Tables\transaction.sql" />
+    <Build Include="dbo\Tables\gate.sql" />
+    <Build Include="dbo\Tables\user.sql" />
+    <Build Include="dbo\Stored Procedures\SP_User_Insert.sql" />
     <Build Include="dbo\Stored Procedures\SP_Gate_Update.sql" />
-    <Build Include="dbo\Stored Procedures\SP_CheckIfValid_1.sql" />
-    <Build Include="dbo\Stored Procedures\SP_Gate_Delete_1.sql" />
-    <Build Include="dbo\Stored Procedures\SP_Gate_Insert_1.sql">
+    <Build Include="dbo\Stored Procedures\SP_CheckIfValid.sql" />
+    <Build Include="dbo\Stored Procedures\SP_Gate_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\SP_Gate_Insert.sql">
       <AnsiNulls>Off</AnsiNulls>
       <QuotedIdentifier>Off</QuotedIdentifier>
     </Build>
-    <Build Include="dbo\Stored Procedures\SP_Gate_Login_1.sql" />
-    <Build Include="dbo\Stored Procedures\SP_Gate_ResetPassword_1.sql" />
-    <Build Include="dbo\Stored Procedures\SP_Gate_SelectByUserName_1.sql" />
-    <Build Include="dbo\Stored Procedures\SP_Gate_SelectCheckedByUserId_1.sql" />
-    <Build Include="dbo\Stored Procedures\SP_Gate_SelectStatusById_1.sql" />
-    <Build Include="dbo\Stored Procedures\SP_Gate_SelectWithFilter_1.sql" />
-    <Build Include="dbo\Stored Procedures\SP_Transaction_GetByGateId_1.sql" />
-    <Build Include="dbo\Stored Procedures\SP_Transaction_Insert_1.sql" />
-    <Build Include="dbo\Stored Procedures\SP_Transaction_UpdateStatus_1.sql" />
-    <Build Include="dbo\Stored Procedures\SP_User_Delete_1.sql" />
-    <Build Include="dbo\Stored Procedures\SP_User_Login_1.sql" />
-    <Build Include="dbo\Stored Procedures\SP_User_ResetPassword_1.sql" />
-    <Build Include="dbo\Stored Procedures\SP_User_SelectById_1.sql" />
-    <Build Include="dbo\Stored Procedures\SP_User_SelectByUserName_1.sql" />
-    <Build Include="dbo\Stored Procedures\SP_User_SelectStatusById_1.sql" />
-    <Build Include="dbo\Stored Procedures\SP_User_SelectWithFilter_1.sql" />
-    <Build Include="dbo\Stored Procedures\SP_User_Update_1.sql" />
-    <Build Include="dbo\Stored Procedures\SP_UserGate_Delete_1.sql" />
-    <Build Include="dbo\Stored Procedures\SP_UserGate_DeleteAllByUserId_1.sql" />
-    <Build Include="dbo\Stored Procedures\SP_UserGate_Get_1.sql" />
-    <Build Include="dbo\Stored Procedures\SP_UserGate_GetByUserId_1.sql" />
-    <Build Include="dbo\Stored Procedures\SP_UserGate_Insert_1.sql" />
-    <Build Include="Security\m2ss_1.sql" />
+    <Build Include="dbo\Stored Procedures\SP_Gate_Login.sql" />
+    <Build Include="dbo\Stored Procedures\SP_Gate_ResetPassword.sql" />
+    <Build Include="dbo\Stored Procedures\SP_Gate_SelectByUserName.sql" />
+    <Build Include="dbo\Stored Procedures\SP_Gate_SelectCheckedByUserId.sql" />
+    <Build Include="dbo\Stored Procedures\SP_Gate_SelectStatusById.sql" />
+    <Build Include="dbo\Stored Procedures\SP_Gate_SelectWithFilter.sql" />
+    <Build Include="dbo\Stored Procedures\SP_Transaction_GetByGateId.sql" />
+    <Build Include="dbo\Stored Procedures\SP_Transaction_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\SP_Transaction_UpdateStatus.sql" />
+    <Build Include="dbo\Stored Procedures\SP_User_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\SP_User_Login.sql" />
+    <Build Include="dbo\Stored Procedures\SP_User_ResetPassword.sql" />
+    <Build Include="dbo\Stored Procedures\SP_User_SelectById.sql" />
+    <Build Include="dbo\Stored Procedures\SP_User_SelectByUserName.sql" />
+    <Build Include="dbo\Stored Procedures\SP_User_SelectStatusById.sql" />
+    <Build Include="dbo\Stored Procedures\SP_User_SelectWithFilter.sql" />
+    <Build Include="dbo\Stored Procedures\SP_User_Update.sql" />
+    <Build Include="dbo\Stored Procedures\SP_UserGate_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\SP_UserGate_DeleteAllByUserId.sql" />
+    <Build Include="dbo\Stored Procedures\SP_UserGate_Get.sql" />
+    <Build Include="dbo\Stored Procedures\SP_UserGate_GetByUserId.sql" />
+    <Build Include="dbo\Stored Procedures\SP_UserGate_Insert.sql" />
+    <Build Include="Security\m2ss.sql" />
   </ItemGroup>
 </Project>

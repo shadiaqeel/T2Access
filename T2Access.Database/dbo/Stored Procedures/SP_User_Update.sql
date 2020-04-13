@@ -1,31 +1,19 @@
-﻿/*
-*   SSMA informational messages:
-*   M2SS0003: The following SQL clause was ignored during conversion:
-*   DEFINER = `root`@`localhost`.
-*/
-
+﻿
 CREATE PROCEDURE [dbo].[SP_User_Update]  
    @Id uniqueidentifier,
-   @Username nvarchar(255),
    @Firstname nvarchar(255),
    @Lastname nvarchar(255),
    @Status int
 AS 
    BEGIN
 
-      SET  XACT_ABORT  ON
 
-      SET  NOCOUNT  ON
 
 
 
       UPDATE [User]
          SET 
-            Username = 
-               CASE 
-                  WHEN @Username <> '' THEN @Username
-                  ELSE [User].Username
-               END, 
+
             Firstname = 
                CASE 
                   WHEN @Firstname <> '' THEN @Firstname

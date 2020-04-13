@@ -1,17 +1,10 @@
-﻿/*
-*   SSMA informational messages:
-*   M2SS0003: The following SQL clause was ignored during conversion:
-*   DEFINER = `shadi`@`localhost`.
-*/
+﻿
 
 CREATE PROCEDURE [dbo].[SP_Gate_Delete]  
    @Id uniqueidentifier
 AS 
    BEGIN
 
-      SET  XACT_ABORT  ON
-
-      SET  NOCOUNT  ON
 
       DELETE 
       FROM dbo.gate

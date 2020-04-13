@@ -1,19 +1,8 @@
-﻿/*
-*   SSMA informational messages:
-*   M2SS0003: The following SQL clause was ignored during conversion:
-*   DEFINER = `root`@`localhost`.
-*/
-
+﻿
 CREATE PROCEDURE [dbo].[SP_User_SelectStatusById]  
    @Id uniqueidentifier = Null
 AS 
    BEGIN
-
-      SET  XACT_ABORT  ON
-
-      SET  NOCOUNT  ON
-
-
 
       SELECT Status
       FROM [User]
