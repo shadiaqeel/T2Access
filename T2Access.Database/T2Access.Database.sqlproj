@@ -101,4 +101,7 @@
     <Build Include="dbo\Stored Procedures\SP_UserGate_Insert.sql" />
     <Build Include="Security\m2ss.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Snapshots\T2Access.Database_20200414_17-13-49.dacpac" />
+  </ItemGroup>
 </Project>

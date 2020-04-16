@@ -1,9 +1,9 @@
 ﻿CREATE TABLE [dbo].[user] (
     [Id]          UNIQUEIDENTIFIER NOT NULL,
-    [Username]    NVARCHAR (255)   NOT NULL,
-    [Password]    NVARCHAR (255)   NOT NULL,
-    [Firstname]   NVARCHAR (255)   NOT NULL,
-    [Lastname]    NVARCHAR (255)   NOT NULL,
+    [Username]    VARCHAR(255)   NOT NULL,
+    [Password]    VARCHAR(255)   NOT NULL,
+    [Firstname]   NVARCHAR(255)   NOT NULL,
+    [Lastname]    NVARCHAR(255)   NOT NULL,
     [CreatedDate] DATETIME         CONSTRAINT [DF__user__CreatedDat__6A30C649] DEFAULT (getdate()) NOT NULL,
     [Status]      INT              CONSTRAINT [DF__user__Status__6B24EA82] DEFAULT ((0)) NOT NULL,
     CONSTRAINT [PK_user_Id] PRIMARY KEY CLUSTERED ([Id] ASC),
