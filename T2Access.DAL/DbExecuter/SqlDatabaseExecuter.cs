@@ -8,7 +8,16 @@ namespace T2Access.DAL.DbExecuter
 {
     internal class SqlDatabaseExecuter : IDatabaseExecuter
     {
+        private readonly string connectionString;
 
+        public SqlDatabaseExecuter(string connectionString)
+        {
+            this.connectionString = connectionString;
+        }
+
+        public SqlDatabaseExecuter()
+        {
+        }
 
         public void ExecuteQuery(string storedProcedure, Action<DbCommand> FillCmd, Action<DbDataReader> FillReader)
         {
@@ -17,7 +26,7 @@ namespace T2Access.DAL.DbExecuter
 
 
 
-            using (SqlConnection connection = new SqlConnection(Variables.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
 
                 connection.Open();
@@ -56,7 +65,7 @@ namespace T2Access.DAL.DbExecuter
 
             int result = 0;
 
-            using (SqlConnection connection = new SqlConnection(Variables.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
 
                 connection.Open();
@@ -95,7 +104,7 @@ namespace T2Access.DAL.DbExecuter
 
 
 
-            using (SqlConnection connection = new SqlConnection(Variables.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
 
                 await connection.OpenAsync();
@@ -142,7 +151,7 @@ namespace T2Access.DAL.DbExecuter
 
             int result = 0;
 
-            using (SqlConnection connection = new SqlConnection(Variables.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
 
                 await connection.OpenAsync();

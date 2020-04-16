@@ -15,11 +15,20 @@ namespace T2Access.BLL.Services
 {
     public class UserService : IUserService
     {
-        private readonly IUserManager userManager = ManagerFactory.GetUserManager();
-        private readonly IUserGateManager userGateManager = ManagerFactory.GetUserGateManager();
+        private readonly IUserManager userManager;
+        private readonly IUserGateManager userGateManager ;
+
+        public UserService(IUserManager userManager = null   , IUserGateManager userGateManager = null  )
+        {
+            this.userManager = userManager ?? ManagerFactory.GetUserManager();
+            this.userGateManager = userGateManager ?? ManagerFactory.GetUserGateManager() ;
+        }
+
 
 
         //==========================================================================
+
+
 
         public async Task<ServiceResponse<string>> CreateAsync(SignUpUserModel model)
         {

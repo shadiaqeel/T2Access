@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Microsoft.Extensions.Options;
 using T2Access.DAL.Helper;
 using T2Access.Models;
 using T2Access.Models.Dtos;
+using T2Access.DAL.Options;
 using T2Access.Security;
 
 namespace T2Access.DAL
@@ -14,10 +15,24 @@ namespace T2Access.DAL
     public class GateManager : IGateManager
     {
         private readonly IPasswordHasher passwordHasher = new PasswordHasher();
-        private readonly IDatabaseExecuter databaseExecuter = DbExecuterFactory.GetExecuter();
+        private readonly IDatabaseExecuter databaseExecuter;
+
+
         //========================================================================================================
 
+        #region Constructors
+        public GateManager()
+        {
+            databaseExecuter = DbExecuterFactory.GetExecuter();
+        }
+        public GateManager(IOptionsMonitor<DALOptions> options)
+        {
+            databaseExecuter = DbExecuterFactory.GetExecuter(options);
+        }
 
+        #endregion
+
+        //========================================================================================================
 
         #region CRUD
         public async Task<Gate> CreateAsync(Gate gate)

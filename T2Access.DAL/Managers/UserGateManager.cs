@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Threading.Tasks;
-
+using Microsoft.Extensions.Options;
 using T2Access.DAL.Helper;
+using T2Access.DAL.Options;
 
 namespace T2Access.DAL
 {
@@ -11,7 +12,20 @@ namespace T2Access.DAL
     {
 
 
-        private readonly IDatabaseExecuter databaseExecuter = DbExecuterFactory.GetExecuter();
+        private readonly IDatabaseExecuter databaseExecuter ;
+
+        //=====================================================================================
+
+        #region Constructors
+        public UserGateManager()
+        {
+            databaseExecuter = DbExecuterFactory.GetExecuter();
+        }
+        public UserGateManager(IOptionsMonitor<DALOptions> options)
+        {
+            databaseExecuter = DbExecuterFactory.GetExecuter(options);
+        } 
+        #endregion
         //========================================================================================================
 
 

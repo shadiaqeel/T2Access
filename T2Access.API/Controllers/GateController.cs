@@ -5,29 +5,35 @@ using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Web.Http;
-using System.Web.Http.Description;
-
-using T2Access.API.Attributes;
-using T2Access.API.Helper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using T2Access.API.Resources;
 using T2Access.BLL.Services;
 using T2Access.Models;
 using T2Access.Models.Dtos;
 using T2Access.Security.Tokenization.Models;
+using T2Access.Security.Tokenization.Services;
 
 namespace T2Access.API.Controllers
 {
 
     //  [Route("api/gate/{action}")]
-    public class GateController : BaseController
+    public class GateController : ApiBaseController
     {
-        private readonly IGateService gateService = new GateService();
+        private readonly IGateService gateService ;
+        private readonly IAuthService authService;
 
+
+        public GateController(IGateService gateService = null)
+        {
+            this.gateService = gateService ?? new GateService();
+            this.authService = authService ?? throw new ArgumentNullException(nameof(authService));
+
+        }
 
         [HttpPost]
-        [ResponseType(typeof(string))]
-        public async Task<HttpResponseMessage> Login(LoginModel gate)
+        [Produces(typeof(string))]
+        public async Task<IActionResult> Login(LoginModel gate)
         {
 
             var response = await gateService.LoginAsync(gate);
@@ -38,18 +44,18 @@ namespace T2Access.API.Controllers
 
                 List<Claim> cliamList = new List<Claim>
                 {
-                    new Claim("GateId", _gate.Id.ToString()),
-                    new Claim("UserName", _gate.UserName),
-                    new Claim("NameAr", _gate.NameAr),
-                    new Claim("NameEn", _gate.NameEn),
-                    new Claim("Role", "Gate")
+                    new Claim("gateId", _gate.Id.ToString()),
+                    new Claim("userName", _gate.UserName),
+                    new Claim("nameAr", _gate.NameAr),
+                    new Claim("nameEn", _gate.NameEn),
+                    new Claim("roles", "Gate")
                 };
 
                 string Token;
 
                 try
                 {
-                    Token = AuthorizationFactory.GetAuthorization().GenerateToken(new JWTContainerModel()
+                    Token = authService.GenerateToken(new JWTContainerModel()
                     {
 
                         ExpireMinutes = DateTime.Now.AddMinutes(15).Minute,
@@ -60,15 +66,15 @@ namespace T2Access.API.Controllers
                 catch (Exception e)
                 {
                     Trace.WriteLine($" {e.GetType()}   :    {e.Message }  ");
-                    return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.NotAuthorized);
+                    return BadRequest(Resource.NotAuthorized);
 
                 }
 
-                return Request.CreateResponse(HttpStatusCode.OK, Token);
+                return Ok(Token);
             }
             else
             {
-                return Request.CreateResponse(HttpStatusCode.NotFound, Resource.UserNotExist);
+                return NotFound(Resource.UserNotExist);
             }
         }
 
@@ -78,98 +84,96 @@ namespace T2Access.API.Controllers
 
 
         [HttpPost]
-        [ResponseType(typeof(string))]
-        public async Task<HttpResponseMessage> SignUp(SignUpGateModel gate)
+        [Produces(typeof(string))]
+        public async Task<IActionResult> SignUp(SignUpGateModel gate)
         {
 
 
             var response = await gateService.CreateAsync(gate);
+
             return response.Success ?
-                Request.CreateResponse(HttpStatusCode.OK, response.Data) :
-                Request.CreateResponse(HttpStatusCode.NotFound, response.ErrorMessage);
-
-
-
+                Ok(response.Data) : 
+                (IActionResult)NotFound(response.ErrorMessage);
         }
 
 
         [HttpGet]
-        [CustomAuthorize(Roles = "Admin")]
-        [ResponseType(typeof(GateListResponse))]
-        public async Task<HttpResponseMessage> GetListWithFilter([FromUri]FilterGateModel filter)
+        [Authorize(Roles = "Admin")]
+        [Produces(typeof(GateListResponse))]
+        public async Task<IActionResult> GetListWithFilter(/*[FromUri]*/FilterGateModel filter)
         {
             if (filter == null)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.FilterMiss);
+                return BadRequest(Resource.FilterMiss);
 
             }
 
             var response = await gateService.GetListWithFilterAsync(filter);
 
             return response.Success
-                ? Request.CreateResponse(HttpStatusCode.OK, response.Data)
-                : Request.CreateResponse(HttpStatusCode.NotFound, response.ErrorMessage);
+                ? Ok(response.Data)
+                : (IActionResult)NotFound(response.ErrorMessage);
         }
 
 
         [HttpGet]
-        [CustomAuthorize(Roles = "Admin")]
-        [ResponseType(typeof(ServiceResponse<ListResponse<CheckedGateDto>>))]
-        public async Task<HttpResponseMessage> GetCheckedListByUserId([FromUri]FilterUserModel filter)
+        [Authorize(Roles = "Admin")]
+        [Produces(typeof(ServiceResponse<ListResponse<CheckedGateDto>>))]
+        public async Task<IActionResult> GetCheckedListByUserId([FromQuery]FilterUserModel filter)
         {
             if (filter == null)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, Resource.FilterMiss);
+                return BadRequest(Resource.FilterMiss);
 
             }
 
 
             var response = await gateService.GetCheckedListByUserIdAsync(filter);
             return response.Success ?
-                Request.CreateResponse(HttpStatusCode.OK, response.Data) :
-                Request.CreateResponse(HttpStatusCode.NotFound, response.ErrorMessage);
+                Ok(response.Data) :
+                (IActionResult)NotFound(response.ErrorMessage);
 
         }
 
 
         [HttpDelete()]
-        [CustomAuthorize(Roles = "Admin")]
-        [ResponseType(typeof(string))]
-        public async Task<HttpResponseMessage> Delete(Guid id)
+        [Authorize(Roles = "Admin")]
+        [Produces(typeof(string))]
+        public async Task<IActionResult> Delete(Guid id)
         {
             var response = await gateService.DeleteAsync(id);
             return (response.Success) ?
-                Request.CreateResponse(HttpStatusCode.OK, response.Data) :
-                Request.CreateResponse(HttpStatusCode.BadRequest, response.ErrorMessage);
+                Ok(response.Data) :
+               (IActionResult)BadRequest(response.ErrorMessage);
 
         }
 
 
         [HttpPut]
-        [CustomAuthorize(Roles = "Admin")]
-        [ResponseType(typeof(string))]
-        public async Task<HttpResponseMessage> Edit(Guid id, [FromBody] GateModel model)
+        [Authorize(Roles = "Admin")]
+        [Produces(typeof(string))]
+        public async Task<IActionResult> Edit(Guid id, [FromBody] GateModel model)
         {
             model.Id = id;
             var response = await gateService.EditAsync(model);
-            return (response.Success) ?
-                Request.CreateResponse(HttpStatusCode.OK, response.Data) :
-                Request.CreateResponse(HttpStatusCode.BadRequest, response.ErrorMessage);
+            return response.Success ?
+                Ok(response.Data) :
+               (IActionResult)BadRequest(response.ErrorMessage);
 
         }
 
 
         [HttpPut]
-        [CustomAuthorize(Roles = "Admin")]
-        [ResponseType(typeof(string))]
-        public async Task<HttpResponseMessage> ResetPassword(Guid id, [FromBody] ResetPasswordModel model)
+        [Authorize(Roles = "Admin")]
+        [Produces(typeof(string))]
+        public async Task<IActionResult> ResetPassword(Guid id, [FromBody] ResetPasswordModel model)
         {
             model.Id = id;
             var response = await gateService.ResetPasswordAsync(model);
 
-            return (response.Success) ?
-                Request.CreateResponse(HttpStatusCode.OK, response.Data) :
-                Request.CreateResponse(HttpStatusCode.BadRequest, response.ErrorMessage);
+            return response.Success ?
+                Ok(response.Data) :
+                (IActionResult)BadRequest(response.ErrorMessage);
 
         }
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-
+using System.Text;
 using Microsoft.IdentityModel.Tokens;
 
 using T2Access.Security.Tokenization.Models;
@@ -11,20 +11,15 @@ namespace T2Access.Security.Tokenization.Services
 {
     public class JWTService : IAuthService
     {
-        public string SecretKey { get; set; } = Constants.SECRET_KEY;
+        public string SecretKey { get; set; }
 
         private readonly string _issuer, _audienceId;
-        public JWTService()
-        {
-            _issuer = "T2";
-            _audienceId = "T2";
 
-        }
-        public JWTService(string secretKey, string issuer, string audienceId)
+        public JWTService(string secretKey = null , string issuer = null , string audienceId = null)
         {
-            SecretKey = secretKey;
-            _issuer = issuer;
-            _audienceId = audienceId;
+            SecretKey = secretKey ?? Constants.SECRET_KEY;
+            _issuer = issuer ?? "T2";
+            _audienceId = audienceId ?? "T2";
         }
 
 
@@ -45,7 +40,7 @@ namespace T2Access.Security.Tokenization.Services
 
         private SecurityKey GetSymmetricSecurityKey()
         {
-            byte[] symmetricKey = Convert.FromBase64String(SecretKey);
+            byte[] symmetricKey = Encoding.ASCII.GetBytes(SecretKey);
             return new SymmetricSecurityKey(symmetricKey);
         }
 

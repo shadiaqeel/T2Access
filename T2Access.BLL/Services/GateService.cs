@@ -16,7 +16,12 @@ namespace T2Access.BLL.Services
 {
     public class GateService : IGateService
     {
-        private readonly IGateManager gateManager = ManagerFactory.GetGateManager();
+        private readonly IGateManager gateManager ;
+
+        public GateService(IGateManager gateManager = null )
+        {
+            this.gateManager = gateManager ?? ManagerFactory.GetGateManager() ;
+        }
 
         public async Task<ServiceResponse<string>> CreateAsync(SignUpGateModel gateModel)
         {

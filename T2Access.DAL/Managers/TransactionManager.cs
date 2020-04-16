@@ -1,15 +1,29 @@
 ﻿using System;
 using System.Data.Common;
 using System.Threading.Tasks;
-
+using Microsoft.Extensions.Options;
 using T2Access.DAL.Helper;
+using T2Access.DAL.Options;
 
 namespace T2Access.DAL
 {
     public class TransactionManager : ITransactionManager
     {
 
-        private readonly IDatabaseExecuter databaseExecuter = DbExecuterFactory.GetExecuter();
+        private readonly IDatabaseExecuter databaseExecuter ;
+
+        //========================================================================================================
+
+        #region Constructors
+        public TransactionManager()
+        {
+            databaseExecuter = DbExecuterFactory.GetExecuter();
+        }
+        public TransactionManager(IOptionsMonitor<DALOptions> options)
+        {
+            databaseExecuter = DbExecuterFactory.GetExecuter(options);
+        } 
+        #endregion
         //========================================================================================================
 
 

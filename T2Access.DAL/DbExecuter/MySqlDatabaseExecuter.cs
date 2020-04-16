@@ -10,7 +10,16 @@ namespace T2Access.DAL.DbExecuter
 {
     internal class MySqlDatabaseExecuter : IDatabaseExecuter
     {
+        private string connectionString;
 
+        public MySqlDatabaseExecuter(string connectionString)
+        {
+            this.connectionString = connectionString;
+        }
+
+        public MySqlDatabaseExecuter()
+        {
+        }
 
         public void ExecuteQuery(string storedProcedure, Action<DbCommand> FillCmd, Action<DbDataReader> FillReader)
         {
@@ -19,7 +28,7 @@ namespace T2Access.DAL.DbExecuter
 
 
 
-            using (MySqlConnection connection = new MySqlConnection(Variables.MYSQLConnectionString))
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 connection.Open();
                 using (MySqlCommand cmd = new MySqlCommand(storedProcedure, connection))
@@ -50,7 +59,7 @@ namespace T2Access.DAL.DbExecuter
 
             int result = 0;
 
-            using (MySqlConnection connection = new MySqlConnection(Variables.MYSQLConnectionString))
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
 
                 connection.Open();
@@ -97,7 +106,7 @@ namespace T2Access.DAL.DbExecuter
         {
 
 
-            using (MySqlConnection connection = new MySqlConnection(Variables.MYSQLConnectionString))
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 await connection.OpenAsync();
                 using (MySqlCommand cmd = new MySqlCommand(storedProcedure, connection))
@@ -130,7 +139,7 @@ namespace T2Access.DAL.DbExecuter
 
             int result = 0;
 
-            using (MySqlConnection connection = new MySqlConnection(Variables.MYSQLConnectionString))
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
 
                 await connection.OpenAsync();

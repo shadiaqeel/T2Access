@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Microsoft.Extensions.Options;
 using T2Access.DAL.Helper;
 using T2Access.Models;
+using T2Access.DAL.Options;
 using T2Access.Security;
 
 namespace T2Access.DAL
@@ -14,7 +15,21 @@ namespace T2Access.DAL
     {
         private readonly IPasswordHasher passwordHasher = new PasswordHasher();
 
-        private readonly IDatabaseExecuter databaseExecuter = DbExecuterFactory.GetExecuter(Variables.DatabaseProvider);
+        private readonly IDatabaseExecuter databaseExecuter ;
+
+
+        //============================================================================================
+
+        #region Constructors
+        public UserManager()
+        {
+            databaseExecuter = DbExecuterFactory.GetExecuter();
+        }
+        public UserManager(IOptionsMonitor<DALOptions> options)
+        {
+            databaseExecuter = DbExecuterFactory.GetExecuter(options);
+        } 
+        #endregion
         //========================================================================================================
 
 
