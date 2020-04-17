@@ -112,7 +112,7 @@ namespace T2Access.DAL
 
                  cmd.AddParameterWithValue("Lastname", filter.LastName ?? "");
 
-                 cmd.AddParameterWithValue("Status", filter.Status != null ? filter.Status : -1);
+                 cmd.AddParameterWithValue("Status", filter.Status != null ? filter.Status : -1 );
 
              },
             async delegate (DbDataReader reader)

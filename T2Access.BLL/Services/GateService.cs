@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Linq.Dynamic;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 
 using T2Access.BLL.Extensions;
@@ -118,7 +118,7 @@ namespace T2Access.BLL.Services
             //sorting
             if (!string.IsNullOrEmpty(filter.Order))
             {
-                AddedGateList = AddedGateList.OrderBy(filter.Order);
+                AddedGateList = AddedGateList.AsQueryable().OrderBy(filter.Order);
             }
 
             //paging
@@ -164,7 +164,7 @@ namespace T2Access.BLL.Services
             //sorting
             if (!string.IsNullOrEmpty(filter.Order))
             {
-                AddedGateList = AddedGateList.OrderBy(filter.Order);
+                AddedGateList = AddedGateList.AsQueryable().OrderBy(filter.Order);
             }
 
             //paging

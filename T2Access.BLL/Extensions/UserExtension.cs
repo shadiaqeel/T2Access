@@ -21,7 +21,7 @@ namespace T2Access.BLL.Extensions
                 UserName = user.UserName,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                Password = user.Password
+                Password = user.Password,
 
             };
         }

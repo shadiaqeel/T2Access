@@ -25,7 +25,7 @@ namespace T2Access.Models
         public string LastName { get; set; }
 
         [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.Status))]
-        public int? Status { get; set; } = 0;
+        public int? Status { get; set; }
 
     }
     //=====================================================================================================

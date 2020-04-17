@@ -3,19 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30002.166
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "T2Access.API", "T2Access.API\T2Access.API.csproj", "{F7B32DA8-6D14-4B70-B9F4-A0F86263CEE4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "T2Access.API", "T2Access.API\T2Access.API.csproj", "{F7B32DA8-6D14-4B70-B9F4-A0F86263CEE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "T2Access.DAL", "T2Access.DAL\T2Access.DAL.csproj", "{C95A99A8-38DF-4AD9-83C3-207006D01716}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "T2Access.DAL", "T2Access.DAL\T2Access.DAL.csproj", "{C95A99A8-38DF-4AD9-83C3-207006D01716}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "T2Access.BLL", "T2Access.BLL\T2Access.BLL.csproj", "{35495E5A-D5AA-4DAC-BEB4-DE124A5CD4CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "T2Access.BLL", "T2Access.BLL\T2Access.BLL.csproj", "{35495E5A-D5AA-4DAC-BEB4-DE124A5CD4CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "T2Access.Models", "T2Access.Models\T2Access.Models.csproj", "{7BF8F293-1711-481B-AC40-2A92B2F980A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "T2Access.Models", "T2Access.Models\T2Access.Models.csproj", "{7BF8F293-1711-481B-AC40-2A92B2F980A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "T2Access.Security", "T2Access.Security\T2Access.Security.csproj", "{AD899786-5D03-46C3-AC6D-2C210CA3E989}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "T2Access.Security", "T2Access.Security\T2Access.Security.csproj", "{AD899786-5D03-46C3-AC6D-2C210CA3E989}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "T2Access.Services", "T2Access.Services\T2Access.Services.csproj", "{1044B59D-D505-4301-ACEE-2CD9C8568580}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "T2Access.Services", "T2Access.Services\T2Access.Services.csproj", "{1044B59D-D505-4301-ACEE-2CD9C8568580}"
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "T2Access.Database", "T2Access.Database\T2Access.Database.sqlproj", "{080338A0-28D4-450E-9588-CA8152370494}"
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "T2Access.Database", "T2Access.Database\T2Access.Database.sqlproj", "{37130324-F99B-4524-B806-C5529CA5A56B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "T2Access.Web", "T2Access.Web\T2Access.Web.csproj", "{0CCE334F-D22F-4925-BC48-0BFA672A3EF6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,12 +49,16 @@ Global
 		{1044B59D-D505-4301-ACEE-2CD9C8568580}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1044B59D-D505-4301-ACEE-2CD9C8568580}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1044B59D-D505-4301-ACEE-2CD9C8568580}.Release|Any CPU.Build.0 = Release|Any CPU
-		{080338A0-28D4-450E-9588-CA8152370494}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{080338A0-28D4-450E-9588-CA8152370494}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{080338A0-28D4-450E-9588-CA8152370494}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{080338A0-28D4-450E-9588-CA8152370494}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{080338A0-28D4-450E-9588-CA8152370494}.Release|Any CPU.Build.0 = Release|Any CPU
-		{080338A0-28D4-450E-9588-CA8152370494}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{37130324-F99B-4524-B806-C5529CA5A56B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37130324-F99B-4524-B806-C5529CA5A56B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37130324-F99B-4524-B806-C5529CA5A56B}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{37130324-F99B-4524-B806-C5529CA5A56B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37130324-F99B-4524-B806-C5529CA5A56B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37130324-F99B-4524-B806-C5529CA5A56B}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{0CCE334F-D22F-4925-BC48-0BFA672A3EF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CCE334F-D22F-4925-BC48-0BFA672A3EF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CCE334F-D22F-4925-BC48-0BFA672A3EF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CCE334F-D22F-4925-BC48-0BFA672A3EF6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

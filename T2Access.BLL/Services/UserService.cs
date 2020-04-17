@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Linq.Dynamic;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 
 using T2Access.BLL.Extensions;
@@ -175,7 +175,7 @@ namespace T2Access.BLL.Services
             //sorting 
             if (!string.IsNullOrEmpty(filter.Order))
             {
-                userList = userList.OrderBy(filter.Order);
+                userList = userList.AsQueryable().OrderBy(filter.Order);
             }
 
 
