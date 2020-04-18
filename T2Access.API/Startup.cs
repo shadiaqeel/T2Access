@@ -33,11 +33,26 @@ namespace T2Access.API
         {
 
 
-            services.AddLocalization(o =>
-                    {
-                        // We will put our translations in a folder called Resources
-                        o.ResourcesPath = "Resources";
-                    });
+            #region Localization
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+            services.Configure<RequestLocalizationOptions>(options =>
+            {
+                var supportedCultures = new[]
+                {
+                    new CultureInfo("en"),
+                    new CultureInfo("ar"),
+                };
+
+                options.DefaultRequestCulture = new RequestCulture(culture: "en", uiCulture: "en");
+                options.SupportedCultures = supportedCultures;
+                options.SupportedUICultures = supportedCultures;
+                options.RequestCultureProviders = new[]{ new RouteDataRequestCultureProvider{
+                        RouteDataStringKey = "lang",
+                        UIRouteDataStringKey = "lang"
+                }};
+            }); 
+            #endregion
 
 
             services.AddControllers();
@@ -85,29 +100,12 @@ namespace T2Access.API
 
             app.UseRouting();
 
+            app.UseRequestLocalization();
+
             app.UseAuthentication();
             app.UseAuthorization();
 
 
-
-            #region Localization
-            IList<CultureInfo> supportedCultures = new List<CultureInfo>
-              {
-                  new CultureInfo("en"),
-                  new CultureInfo("ar"),
-              };
-            var localizationOptions = new RequestLocalizationOptions
-            {
-                DefaultRequestCulture = new RequestCulture("en"),
-                SupportedCultures = supportedCultures,
-                SupportedUICultures = supportedCultures
-            };
-            localizationOptions.RequestCultureProviders.Insert(0, new RouteDataRequestCultureProvider()
-            {
-                RouteDataStringKey = "lang",
-                Options = localizationOptions
-            });
-            #endregion
 
 
 

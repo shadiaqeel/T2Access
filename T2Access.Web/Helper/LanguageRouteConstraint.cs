@@ -8,10 +8,10 @@ namespace T2Access.Web.Helper
         public bool Match(HttpContext httpContext, IRouter route, string routeKey, RouteValueDictionary values, RouteDirection routeDirection)
         {
 
-            if (!values.ContainsKey("culture"))
+            if (!values.ContainsKey("lang"))
                 return false;
 
-            var culture = values["culture"].ToString();
+            var culture = values["lang"].ToString();
             return culture == "en" || culture == "ar";
         }
     }

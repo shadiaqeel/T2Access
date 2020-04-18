@@ -1,9 +1,10 @@
-﻿@using T2Access.Web.Resources;
-@using T2Access.Web.Helper;
+﻿
 
 @{
 
-
+    //var lang = this.ViewContext.RouteData.Values["lang"].ToString();
+    //System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture(lang);
+    //System.Threading.Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.CreateSpecificCulture(lang);
     var dir = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.IsRightToLeft ? "rtl" : "ltr";
 
 

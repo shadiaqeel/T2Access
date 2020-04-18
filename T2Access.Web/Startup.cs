@@ -33,6 +33,9 @@ namespace T2Access.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+
+
             #region Localization
             services.AddLocalization(options => options.ResourcesPath = "Resources");
 
@@ -44,19 +47,19 @@ namespace T2Access.Web
                     new CultureInfo("ar"),
                 };
 
-                options.DefaultRequestCulture = new RequestCulture(culture: "en-US", uiCulture: "en-US");
+                options.DefaultRequestCulture = new RequestCulture(culture: "en", uiCulture: "en");
                 options.SupportedCultures = supportedCultures;
                 options.SupportedUICultures = supportedCultures;
-                options.RequestCultureProviders = new[]{ new T2Access.Web.Helper.RouteDataRequestCultureProvider{
-                    IndexOfCulture=1,
-                    IndexofUICulture=1
+                options.RequestCultureProviders = new[]{ new RouteDataRequestCultureProvider{
+                        RouteDataStringKey = "lang",
+                        UIRouteDataStringKey = "lang"
                 }};
             });
 
             services.Configure<RouteOptions>(options =>
             {
                 options.ConstraintMap.Add("lang", typeof(LanguageRouteConstraint));
-            }); 
+            });
             #endregion
 
 
@@ -123,10 +126,11 @@ namespace T2Access.Web
 
             app.UseRouting();
 
+
+            app.UseRequestLocalization();
+
             //Add User session
             app.UseSession();
-
-
 
 
             //Add Token to all incoming HTTP Request Header
@@ -146,30 +150,11 @@ namespace T2Access.Web
             app.UseAuthorization();
 
 
-            //#region Localization
-            //IList<CultureInfo> supportedCultures = new List<CultureInfo>
-            //  {
-            //      new CultureInfo("en"),
-            //      new CultureInfo("ar"),
-            //  };
-            //var localizationOptions = new RequestLocalizationOptions
-            //{
-            //    DefaultRequestCulture = new RequestCulture("en"),
-            //    SupportedCultures = supportedCultures,
-            //    SupportedUICultures = supportedCultures
-            //};
-            //localizationOptions.RequestCultureProviders.Insert(0, new RouteDataRequestCultureProvider()
-            //{
-            //    RouteDataStringKey = "lang",
-            //    Options = localizationOptions
-            //});
-            //#endregion
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{lang=ar}/{controller=account}/{action=login}/{id?}");
+                    pattern: "{lang=en}/{controller=account}/{action=login}/{id?}");
             });
         }
     }
