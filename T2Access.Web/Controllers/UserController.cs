@@ -13,7 +13,7 @@ using T2Access.Web.Models;
 
 namespace T2Access.Web.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class UserController : WebController
     {
         private readonly IHttpClientService _httpService;
@@ -51,26 +51,13 @@ namespace T2Access.Web.Controllers
             return View();
         }
 
-        public async Task<IActionResult> LoadData([FromBody]DTParameters param)
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> LoadData(DTParameters param)
         {
-            ////! Server Side Parameter
-            //var start = Convert.ToInt32(Request.Form["start"]);
-            //var length = Convert.ToInt32(Request.Form["length"]);
-            //var sortColumnName = Request.Form[$"columns[{Request.Form["order[0][column]"]}][name]"];
-            //var sortDirection = Request.Form["order[0][dir]"];
-            //////var searchValue = Request.Form["search[value]"];
+            //! Server Side 
 
-            ////! find search columns info
-            //var userName = Request.Form["columns[0][search][value]"];
-            //var firstName = Request.Form["columns[1][search][value]"];
-            //var lastName = Request.Form["columns[2][search][value]"];
-            //var status = Request.Form["columns[3][search][value]"];
-
-            //var order = $"{sortColumnName} {sortDirection}";
-
-
-          //  using (var response = await _httpService.GetAsync($"GetListWithFilter?UserName={userName}&FirstName={firstName}&LastName={lastName}&Status={status}&Skip={start}&PageSize={length}&Order={order}", token: HttpContext.Session.GetString("Token")))
-            using (var response = await _httpService.GetAsync($"GetListWithFilter?UserName={param.Columns[0].Search.Value}&FirstName={param.Columns[1].Search.Value}&LastName={param.Columns[2].Search.Value}&Status={param.Columns[3].Search.Value}&Skip={param.Start}&PageSize={param.Length}&Order={param.SortOrder}", token: HttpContext.Session.GetString("Token")))
+            using (var response = await _httpService.GetAsync($"GetListWithFilter?UserName={param.Columns[0].Search.Value}&FirstName={param.Columns[1].Search.Value }&LastName={param.Columns[2].Search.Value}&Status={param.Columns[3].Search.Value }&Skip={param.Start}&PageSize={param.Length}&Order={param.SortOrder}", token: HttpContext.Session.GetString("Token")))
             {
                 if (response.IsSuccessStatusCode)
                 {

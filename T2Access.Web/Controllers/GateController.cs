@@ -41,26 +41,12 @@ namespace T2Access.Web.Controllers
             return View();
         }
 
-        public async Task<IActionResult> GetAll([FromBody]DTParameters param)
+        [HttpPost]
+        public async Task<IActionResult> GetAll([FromForm]DTParameters param)
         {
             
-            ////Server Side Parameter
-            //var start = Convert.ToInt32(Request.Form["start"]);
-            //var length = Convert.ToInt32(Request.Form["length"]);
-            //var sortColumnName = Request.Form[$"columns[{Request.Form["order[0][column]"]}][name]"];
-            //var sortDirection = Request.Form["order[0][dir]"];
-            //////var searchValue = Request.Form["search[value]"];
+            //! Server Side Parameter
 
-
-
-            ////find search columns info
-            //var userName = Request.Form["columns[0][search][value]"];
-            //var NameAr = Request.Form["columns[1][search][value]"];
-            //var NameEn = Request.Form["columns[2][search][value]"];
-            //var status = Request.Form["columns[3][search][value]"];
-            //var order = $"{sortColumnName} {sortDirection}";
-
-           // using (var response = await _httpService.GetAsync($"GetListWithFilter?UserName={userName}&NameAr={NameAr}&NameEn={NameEn}&Status={status}&PageSize={length}&Skip={start}&Order={order}", token: HttpContext.Session.GetString("Token")))
             using (var response = await _httpService.GetAsync($"GetListWithFilter?UserName={param.Columns[0].Search.Value}&NameAr={param.Columns[1].Search.Value}&NameEn={param.Columns[2].Search.Value}&Status={param.Columns[3].Search.Value}&PageSize={param.Length}&Skip={param.Start}&Order={param.SortOrder}", token: HttpContext.Session.GetString("Token")))
             {
                 if (response.IsSuccessStatusCode)
@@ -212,15 +198,13 @@ namespace T2Access.Web.Controllers
         // ====================================== Get List Gate =============================================
 
         #region Get List
-        public IActionResult GetList()
-        {
-            return PartialView();
-        }
+        // public IActionResult List => PartialView();
 
-        public async Task<IActionResult> GetFiltered([FromBody]DTParameters param)
+        [HttpPost]
+        public async Task<IActionResult> GetFiltered(DTParameters param)
         {
             // TODO : ServerSide in GetFiltered method
-            using (var response = await _httpService.GetAsync($"GetListWithFilter?UserName={param.Columns[0].Search.Value}&NameAr={param.Columns[1].Search.Value}&NameEn={param.Columns[2].Search.Value}&Status={param.Columns[3].Search.Value}&PageSize={param.Length}&Skip={param.Start}&Order={param.SortOrder}", token: HttpContext.Session.GetString("Token")))
+            using (var response = await _httpService.GetAsync($"GetListWithFilter?NameAr={param.Columns[1].Search.Value}&NameEn={param.Columns[2].Search.Value}&PageSize={param.Length}&Skip={param.Start}&Order={param.SortOrder}", token: HttpContext.Session.GetString("Token")))
             {
                 if (response.IsSuccessStatusCode && Request.Headers["X-Requested-With"] == "XMLHttpRequest")
                 {
@@ -256,6 +240,7 @@ namespace T2Access.Web.Controllers
 
             return null;
         }
+
 
 
         public async Task<IActionResult> GetCheckedByUserId(Guid userId)

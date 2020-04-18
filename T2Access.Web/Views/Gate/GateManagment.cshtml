@@ -1,0 +1,228 @@
+﻿@model T2Access.Models.GateViewModel
+@using T2Access.Models.Resources
+@using T2Access.Models
+
+@{
+    ViewBag.Title = "GateManagment";
+}
+
+@section Styles {
+
+
+    <link href="~/Assets/lib/MDB/css/addons/datatables-select.min.css" rel="stylesheet" />
+    <link href="~/Assets/lib/MDB/css/addons/datatables.min.css" rel="stylesheet" />
+
+}
+
+
+<div class="row mt">
+    <div class="col-md-12">
+        <div class="content-panel   ">
+            <h4 style="display: inline;">@Resource.GateTable</h4>
+            <button class=" fa  fa-plus btn btn-success pull-away " data-toggle="modal" onclick="createModal()">    @Resource.CreateGate</button>
+            <br />
+            <table class="table table-striped table-advance table-hover" id="DTable" width="100%">
+                @*Search Area*@
+                <div class="row mt mb">
+
+                    <div class="dataTables_filter col-md-3"><input id="txtFilterByUserName" type="search" class="form-control form-control-sm" placeholder="@ModelResource.UserName" aria-controls="DTable"></div>
+                    <div class="dataTables_filter col-md-3"><input id="txtFilterByNameAr" type="search" class="form-control form-control-sm" placeholder="@ModelResource.FirstName" aria-controls="DTable"></div>
+                    <div class="dataTables_filter col-md-3 "><input id="txtFilterByNameEn" type="search" class="form-control form-control-sm" placeholder="@ModelResource.LastName" aria-controls="DTable"></div>
+                    <div class="dataTables_filter col-md-3">
+                        <select asp-for="Status" asp-items="Html.GetEnumSelectList(typeof(GateStatus?))" class="dropdown-toggle  form-control-sm " id="txtFilterByStatus">
+                            <option value="">@ModelResource.Status</option>
+                        </select>
+                        
+                        @*@Html.EnumDropDownListFor(model => model.Status, ModelResource.Status, htmlAttributes: new { @class = "dropdown-toggle  form-control-sm ", @id = "txtFilterByStatus" })*@
+                        <button id="btnSearch" class="fa  fa-search btn  btn-info  btn-lg  pull-away"></button>
+                    </div>
+                </div>
+                <thead>
+                    <tr>
+                        <th>
+
+                            <span class=" fa fa-user"></span>
+                            @Html.DisplayNameFor((model => model.UserName))
+                        </th>
+                        <th>
+                            @*<span class=" fa fa-font"></span>*@
+                            @Html.DisplayNameFor(model => model.NameAr)
+                        </th>
+                        <th>
+                            @*<span class=" fa fa-bold "></span>*@
+                            @Html.DisplayNameFor(model => model.NameEn)
+                        </th>
+                        <th>
+                            <span class=" fa fa-edit"></span>
+                            @Html.DisplayNameFor(model => model.Status)
+                        </th>
+                        <th>
+
+                            <span class=" fa fa-flash"></span>
+                            @Resource.Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="tbodyPartial">
+
+                    @*@Html.Action("GetAll")*@
+
+
+                </tbody>
+            </table>
+
+        </div>
+        <!-- /content-panel -->
+    </div>
+
+
+
+
+
+
+
+
+    @Html.Partial("_AddEditModal")
+
+    @section Scripts
+  {
+
+
+
+        <script src="~/lib/MDB/js/addons/datatables.min.js"></script>
+        <script src="~/lib/MDB/js/addons/datatables-select.min.js"></script>
+
+        <script>
+
+              var DTable;
+            $(document).ready(function () {
+                DTable = $("#DTable").DataTable({
+                    ajax: function (data, callback, settings) {
+
+                        $.post("@Url.Action("GetAll", "Gate")", data
+                            , function (result) {
+
+
+                                callback({
+                                    recordsFiltered: result.recordsTotal,
+                                    draw: result.draw,
+                                    data: JSON.parse(result.data)
+                                });
+
+                                //$("#tbodyPartial").html(result.view);
+
+                            });
+                    },
+                    dom: '<"top"l>rt<"button row mt"<"col-md-6"i><"col-md-6"p>><"clear">',
+                    serverSide: true,
+                    processing: true,
+                    bFilter: true,
+                    bInfo: true,
+                    bAutoWidth: true,
+                    aaSorting: true,
+                    order: [],
+                    columns: [
+                        { data: "UserName", name: "UserName" },
+                        { data: "NameAr", name: "NameAr" },
+                        { data: "NameEn", name: "NameEn" },
+                        {
+                            data: "Status", name: "Status", render: function (data) {
+                                var res = data.split("_");
+                            return '<span class="badge badge-' + res[0] + '">' + res[1] + '</span>';
+                            }
+                        },
+                        {
+                            data: null, "orderable": false, render: function (type, data, row) {
+
+                                return `<button title="@Resource.Edit" class="btn btn-primary btn-s  fa fa-pencil" data-toggle="modal" onclick='editModal({Id:"${row["Id"]}",UserName:"${row["UserName"]}",NameAr:"${row["NameAr"]}",NameEn:"${row["NameEn"]}",Status:"${row["Status"].split("_")[1]}"})'></button>
+                                    <button title="@Resource.Delete" class="btn btn-danger btn-s  fa fa-trash-o btnDelete" data-toggle="modal" data-id="${row["Id"]}" title="Delete Gate"></button>
+                                    <button title=" @Resource.Reset" class="btn btn-warning btn-s fa fa-key" data-toggle="modal" onclick='ResetPasswordModal({Id:"${row["Id"]}",UserName:"${row["UserName"]}"})'></button>
+`;
+                            }
+
+
+                        }
+
+
+                    ],
+                    language: {
+                        "lengthMenu": "@Resource.lengthMenu",
+                       "zeroRecords": "@Resource.NotFound",
+                        // "info": "Showing page _PAGE_ of _PAGES_",
+                        "info": "@Resource.SInfoTable",
+                        "infoEmpty": "@Resource.NoRecordAvailable",
+                        //"infoFiltered": "(filtered from _MAX_ total records)",
+                        "sInfoFiltered": "",
+                        "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading....</span> ',
+                        "paginate": {
+                        "next": "@Resource.Next",
+                        "previous" :"@Resource.Previous",
+                        "first" :"@Resource.First",
+                        "last" :"@Resource.Last"
+
+                    }
+                    }
+                });
+            });
+
+
+               //Apply Custom search on  jQuery Datatable
+        $('#btnSearch').click(function(){
+            //Apply search for User Name
+            DTable.columns(0).search($('#txtFilterByUserName').val().trim());
+
+            //Apply search for First Name
+            DTable.columns(1).search($('#txtFilterByNameAr').val().trim());
+
+            //Apply search for Last Name
+            DTable.columns(2).search($('#txtFilterByNameEn').val().trim());
+
+            //Apply search for Status
+            DTable.columns(3).search($('#txtFilterByStatus').val().trim());
+
+            DTable.draw();
+
+        });
+
+
+
+
+
+
+
+
+            var createUrl = "@Url.Action("Create", "Gate")";
+            var editGateUrl = "@Url.Action("Edit", "Gate")";
+            var deleteUrl = "@Url.Action("Delete", "Gate")";
+            var resetpasswordUrl = "@Url.Action("ResetPassword", "Gate")";
+            var ReLoginUrl = "@Url.Action("ReLogin", "Account")";
+            var TableUrl = "@Url.Action("GetAll", "Gate")";
+
+            var confirmMessage = "@Resource.ConfirmDelete";
+
+
+            var editModal = function (data) {
+                $("#addEditModalContent").load(editGateUrl, function () {
+                    console.log(data);
+
+                    $("#Id").val(data.Id);
+                    $("#UserName").val(data.UserName);
+                    $("#NameAr").val(data.NameAr);
+                    $("#NameEn").val(data.NameEn);
+                    debugger
+                    $("#Status").val(data.Status);
+
+                    $("#addEditModal").modal("show");
+
+
+                    bindForm(this);
+
+                 });
+            }
+
+
+
+        </script>
+
+
+    }

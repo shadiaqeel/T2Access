@@ -20,14 +20,14 @@ namespace T2Access.API.Controllers
     //  [Route("api/gate/{action}")]
     public class GateController : ApiBaseController
     {
-        private readonly IGateService gateService ;
-        private readonly IAuthService authService;
+        private readonly IGateService _gateService ;
+        private readonly IAuthService _authService;
 
 
-        public GateController(IGateService gateService = null)
+        public GateController(IGateService gateService  , IAuthService authService )
         {
-            this.gateService = gateService ?? new GateService();
-            this.authService = authService ?? throw new ArgumentNullException(nameof(authService));
+            _gateService = gateService ?? new GateService();
+            _authService = authService ?? throw new ArgumentNullException(nameof(authService));
 
         }
 
@@ -36,7 +36,7 @@ namespace T2Access.API.Controllers
         public async Task<IActionResult> Login(LoginModel gate)
         {
 
-            var response = await gateService.LoginAsync(gate);
+            var response = await _gateService.LoginAsync(gate);
 
             if (response.Success)
             {
@@ -55,7 +55,7 @@ namespace T2Access.API.Controllers
 
                 try
                 {
-                    Token = authService.GenerateToken(new JWTContainerModel()
+                    Token = _authService.GenerateToken(new JWTContainerModel()
                     {
 
                         ExpireMinutes = DateTime.Now.AddMinutes(15).Minute,
@@ -89,7 +89,7 @@ namespace T2Access.API.Controllers
         {
 
 
-            var response = await gateService.CreateAsync(gate);
+            var response = await _gateService.CreateAsync(gate);
 
             return response.Success ?
                 Ok(response.Data) : 
@@ -100,7 +100,7 @@ namespace T2Access.API.Controllers
         [HttpGet]
         [Authorize(Roles = "Admin")]
         [Produces(typeof(GateListResponse))]
-        public async Task<IActionResult> GetListWithFilter(/*[FromUri]*/FilterGateModel filter)
+        public async Task<IActionResult> GetListWithFilter([FromQuery]FilterGateModel filter)
         {
             if (filter == null)
             {
@@ -108,7 +108,7 @@ namespace T2Access.API.Controllers
 
             }
 
-            var response = await gateService.GetListWithFilterAsync(filter);
+            var response = await _gateService.GetListWithFilterAsync(filter);
 
             return response.Success
                 ? Ok(response.Data)
@@ -128,7 +128,7 @@ namespace T2Access.API.Controllers
             }
 
 
-            var response = await gateService.GetCheckedListByUserIdAsync(filter);
+            var response = await _gateService.GetCheckedListByUserIdAsync(filter);
             return response.Success ?
                 Ok(response.Data) :
                 (IActionResult)NotFound(response.ErrorMessage);
@@ -141,7 +141,7 @@ namespace T2Access.API.Controllers
         [Produces(typeof(string))]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var response = await gateService.DeleteAsync(id);
+            var response = await _gateService.DeleteAsync(id);
             return (response.Success) ?
                 Ok(response.Data) :
                (IActionResult)BadRequest(response.ErrorMessage);
@@ -155,7 +155,7 @@ namespace T2Access.API.Controllers
         public async Task<IActionResult> Edit(Guid id, [FromBody] GateModel model)
         {
             model.Id = id;
-            var response = await gateService.EditAsync(model);
+            var response = await _gateService.EditAsync(model);
             return response.Success ?
                 Ok(response.Data) :
                (IActionResult)BadRequest(response.ErrorMessage);
@@ -169,7 +169,7 @@ namespace T2Access.API.Controllers
         public async Task<IActionResult> ResetPassword(Guid id, [FromBody] ResetPasswordModel model)
         {
             model.Id = id;
-            var response = await gateService.ResetPasswordAsync(model);
+            var response = await _gateService.ResetPasswordAsync(model);
 
             return response.Success ?
                 Ok(response.Data) :

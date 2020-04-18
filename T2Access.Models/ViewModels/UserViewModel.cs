@@ -10,16 +10,16 @@ namespace T2Access.Models
     public enum UserStatus
     {
 
-        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.Active), GroupName = "blue")]
+        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.Active), Description = "blue")]
         [EnumMember(Value = nameof(ModelResource.Active))]
 
         Active = 0,
 
-        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.Admin), GroupName = "green")]
+        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.Admin), Description = "green")]
         [EnumMember(Value = nameof(ModelResource.Admin))]
         Admin = 1,
 
-        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.Block), GroupName = "red")]
+        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.Block), Description = "red")]
         [EnumMember(Value = nameof(ModelResource.Block))]
         Block = 2
 

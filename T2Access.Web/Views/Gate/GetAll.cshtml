@@ -1,0 +1,40 @@
+﻿@model IEnumerable<T2Access.Models.GateViewModel>
+
+@inject IJsonHelper Json;
+
+
+
+
+
+@if (Model != null)
+{
+    foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NameAr)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NameEn)
+            </td>
+            <td>
+
+                <span class="badge badge-@Html.DisplayFor(modelItem=>item.Status)">@Html.DisplayFor(modelItem => item.Status)</span>
+
+            </td>
+            <td>
+
+                <button title="@Resource.Edit" class="btn btn-primary btn-s  fa fa-pencil" data-toggle="modal" onclick='editModal(@Html.Raw(Json.Serialize(item)))'></button>
+                <button title="@Resource.Delete" class="btn btn-danger btn-s  fa fa-trash-o btnDelete" data-toggle="modal" data-id="@item.Id" title="Delete Gate"></button>
+                <button title=" @Resource.Reset" class="btn btn-warning btn-s fa fa-key" data-toggle="modal" onclick='ResetPasswordModal(@Html.Raw(Json.Serialize(item)))'></button>
+
+            </td>
+        </tr>
+    }
+
+}
+
+

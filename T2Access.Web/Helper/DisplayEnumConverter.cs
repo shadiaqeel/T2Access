@@ -36,7 +36,7 @@ namespace T2Access.Web.Helper
                 if (((DisplayAttribute)attrs[0]).ResourceType != null)
                 {
                     name = ((DisplayAttribute)attrs[0]).GetName();
-                    group = ((DisplayAttribute)attrs[0]).GetGroupName();
+                    group = ((DisplayAttribute)attrs[0]).GetDescription();
                 }
 
                 token = group + "_" + name;

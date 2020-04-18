@@ -11,9 +11,9 @@ namespace T2Access.Models
     //[JsonConverter(typeof(StringEnumConverter))]
     public enum GateStatus
     {
-        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.Active), GroupName = "blue")]
+        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.Active), Description = "blue")]
         Active = 0,
-        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.Block), GroupName = "red")]
+        [Display(ResourceType = typeof(ModelResource), Name = nameof(ModelResource.Block), Description = "red")]
         Block = 1
     }
 
