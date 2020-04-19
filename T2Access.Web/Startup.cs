@@ -26,6 +26,7 @@ using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
 using T2Access.Security.Tokenization.Services;
 using T2Access.Services.HttpClientService;
+using T2Access.Web.Extensions;
 using T2Access.Web.Helper;
 
 namespace T2Access.Web
@@ -82,67 +83,9 @@ namespace T2Access.Web
                .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
            
 
-
             services.AddSession();
 
-
-            #region AuthTokenization
-            var key = Configuration.GetSection("AppSettings").GetSection("AuthTokenization").GetValue<string>("SecretKey");
-            services.TryAddScoped<IAuthService>(x => new JWTService(
-                     key,
-                     Configuration.GetSection("AppSettings").GetSection("AuthTokenization").GetValue<string>("Issuer"),
-                     Configuration.GetSection("AppSettings").GetSection("AuthTokenization").GetValue<string>("AudienceId")));
-
-            services.AddAuthentication(x =>
-            {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddCookie(options => { 
-
-                // Cookie settings
-                options.Cookie.HttpOnly = true;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
-                // If the LoginPath isn't set, ASP.NET Core defaults 
-                // the path to /Account/Login.
-                options.LoginPath = "/account/login";
-                options.LogoutPath = "/account/logoff";
-                // If the AccessDeniedPath isn't set, ASP.NET Core defaults 
-                // the path to /Account/AccessDenied.
-                options.AccessDeniedPath = "/AccessDenied";
-                options.SlidingExpiration = true;
-
-            })
-            .AddJwtBearer(x =>
-            {
-                x.RequireHttpsMetadata = false;
-                x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateAudience = true, 
-                    ValidateIssuer = true, 
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key)),
-                    ValidAudience = Configuration.GetSection("AppSettings").GetSection("AuthTokenization").GetValue<string>("AudienceId"),
-                    ValidIssuer = Configuration.GetSection("AppSettings").GetSection("AuthTokenization").GetValue<string>("Issuer")
-            };
-                
-            });
-
-            services.ConfigureApplicationCookie(options =>
-            {
-                options.Events.OnRedirectToLogin = context =>
-                {
-                    context.Response.StatusCode = 501;
-                   // context.Response.Redirect("/account/login");
-                    return Task.CompletedTask;
-                };
-            });
-
-            #endregion
-
-
-
+            services.AddAuthServices(Configuration.GetSection("Authentication"));
 
 
             services.TryAddTransient<IHttpClientService>(x => new HttpClientService(new Uri(Configuration.GetSection("AppSettings").GetValue<string>("ServerBaseAddress"))));

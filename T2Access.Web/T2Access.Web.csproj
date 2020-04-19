@@ -17,8 +17,4 @@
     <ProjectReference Include="..\T2Access.Services\T2Access.Services.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Infrastructure\" />
-  </ItemGroup>
-
 </Project>

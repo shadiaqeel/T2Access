@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "T2Access.Services", "T2Acce
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "T2Access.Database", "T2Access.Database\T2Access.Database.sqlproj", "{37130324-F99B-4524-B806-C5529CA5A56B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "T2Access.Web", "T2Access.Web\T2Access.Web.csproj", "{0CCE334F-D22F-4925-BC48-0BFA672A3EF6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "T2Access.Web", "T2Access.Web\T2Access.Web.csproj", "{0CCE334F-D22F-4925-BC48-0BFA672A3EF6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
