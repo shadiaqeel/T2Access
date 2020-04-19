@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace T2Access.Services.HttpClientService
 {
-    public interface IHttpClientService 
+    public interface IHttpClientService
     {
         Uri BaseUri { get; set; }
 

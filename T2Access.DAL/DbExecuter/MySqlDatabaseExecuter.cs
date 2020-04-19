@@ -10,7 +10,7 @@ namespace T2Access.DAL.DbExecuter
 {
     internal class MySqlDatabaseExecuter : IDatabaseExecuter
     {
-        private string connectionString;
+        private readonly string connectionString;
 
         public MySqlDatabaseExecuter(string connectionString)
         {

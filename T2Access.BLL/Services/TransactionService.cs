@@ -14,9 +14,9 @@ namespace T2Access.BLL.Services
 
     public class TransactionService : ITransactionService
     {
-        private readonly ITransactionManager transactionManager ;
+        private readonly ITransactionManager transactionManager;
 
-        public TransactionService(ITransactionManager transactionManager = null )
+        public TransactionService(ITransactionManager transactionManager = null)
         {
             this.transactionManager = transactionManager ?? ManagerFactory.GetTransactionManager();
         }

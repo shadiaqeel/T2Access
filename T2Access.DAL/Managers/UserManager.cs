@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Microsoft.Extensions.Options;
+
 using T2Access.DAL.Helper;
-using T2Access.Models;
 using T2Access.DAL.Options;
+using T2Access.Models;
 using T2Access.Security;
 
 namespace T2Access.DAL
@@ -15,7 +17,7 @@ namespace T2Access.DAL
     {
         private readonly IPasswordHasher passwordHasher = new PasswordHasher();
 
-        private readonly IDatabaseExecuter databaseExecuter ;
+        private readonly IDatabaseExecuter databaseExecuter;
 
 
         //============================================================================================
@@ -28,7 +30,7 @@ namespace T2Access.DAL
         public UserManager(IOptionsMonitor<DALOptions> options)
         {
             databaseExecuter = DbExecuterFactory.GetExecuter(options);
-        } 
+        }
         #endregion
         //========================================================================================================
 
@@ -112,7 +114,7 @@ namespace T2Access.DAL
 
                  cmd.AddParameterWithValue("Lastname", filter.LastName ?? "");
 
-                 cmd.AddParameterWithValue("Status", filter.Status != null ? filter.Status : -1 );
+                 cmd.AddParameterWithValue("Status", filter.Status != null ? filter.Status : -1);
 
              },
             async delegate (DbDataReader reader)

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
@@ -51,7 +50,7 @@ namespace T2Access.API
                         RouteDataStringKey = "lang",
                         UIRouteDataStringKey = "lang"
                 }};
-            }); 
+            });
             #endregion
 
 
@@ -83,7 +82,7 @@ namespace T2Access.API
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key)
                 };
-            }); 
+            });
             #endregion
         }
 

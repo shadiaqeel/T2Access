@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 using T2Access.API.Resources;
 using T2Access.BLL.Services;
 using T2Access.Models;
@@ -10,7 +12,7 @@ namespace T2Access.API.Controllers
 {
     public class TransactionController : ApiBaseController
     {
-        private readonly ITransactionService transactionService ;
+        private readonly ITransactionService transactionService;
 
         //! ===========================================================================
 

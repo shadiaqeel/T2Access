@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace T2Access.Web.Models
 {
@@ -18,20 +15,11 @@ namespace T2Access.Web.Models
 
     public abstract class DTRow
     {
-        public virtual string DT_RowId
-        {
-            get { return null; }
-        }
+        public virtual string DT_RowId => null;
 
-        public virtual string DT_RowClass
-        {
-            get { return null; }
-        }
+        public virtual string DT_RowClass => null;
 
-        public virtual object DT_RowData
-        {
-            get { return null; }
-        }
+        public virtual object DT_RowData => null;
     }
 
     public class DTParameters
@@ -48,15 +36,9 @@ namespace T2Access.Web.Models
 
         public DTSearch Search { get; set; }
 
-        public string SortOrder
-        {
-            get
-            {
-                return Columns != null && Order != null && Order.Length > 0
+        public string SortOrder => Columns != null && Order != null && Order.Length > 0
                     ? (Columns[Order[0].Column].Data + (Order[0].Dir == DTOrderDir.DESC ? " " + Order[0].Dir : string.Empty))
                     : null;
-            }
-        }
 
         public int SearchOption { get; set; }
 

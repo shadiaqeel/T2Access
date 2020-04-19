@@ -1,5 +1,7 @@
 ﻿using System;
+
 using Microsoft.Extensions.Options;
+
 using T2Access.DAL.DbExecuter;
 using T2Access.DAL.Options;
 
@@ -11,7 +13,7 @@ namespace T2Access.DAL.Helper
 
         public static IDatabaseExecuter GetExecuter(IOptionsMonitor<DALOptions> options)
         {
-            
+
 
 
             switch (options.CurrentValue.DatabaseProvider.ToUpper())

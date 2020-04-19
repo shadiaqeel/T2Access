@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace T2Access.DAL.Options
 {
@@ -12,7 +10,7 @@ namespace T2Access.DAL.Options
     }
 
 
-    public  class ConnectionStringOption
+    public class ConnectionStringOption
     {
         public string ConnectionString { get; set; }
         public string ProviderName { get; set; }

@@ -1,13 +1,21 @@
 using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
+using System.IO;
+using System.Net;
 using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Localization.Routing;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
@@ -15,6 +23,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Serialization;
 using T2Access.Security.Tokenization.Services;
 using T2Access.Services.HttpClientService;
 using T2Access.Web.Helper;
@@ -63,9 +72,16 @@ namespace T2Access.Web
             #endregion
 
 
-            services.AddControllersWithViews()
+            services.AddControllersWithViews(options =>
+            {
+                // global authorize filter
+                options.Filters.Add(new AuthorizeFilter(new AuthorizationPolicyBuilder().RequireAuthenticatedUser().RequireRole("Admin").Build()));
+            })
                 .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
-               .AddDataAnnotationsLocalization();
+               .AddDataAnnotationsLocalization()
+               .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
+           
+
 
             services.AddSession();
 
@@ -82,26 +98,54 @@ namespace T2Access.Web
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-            .AddCookie(cfg => { cfg.SlidingExpiration = true; })
+            .AddCookie(options => { 
+
+                // Cookie settings
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+                // If the LoginPath isn't set, ASP.NET Core defaults 
+                // the path to /Account/Login.
+                options.LoginPath = "/account/login";
+                options.LogoutPath = "/account/logoff";
+                // If the AccessDeniedPath isn't set, ASP.NET Core defaults 
+                // the path to /Account/AccessDenied.
+                options.AccessDeniedPath = "/AccessDenied";
+                options.SlidingExpiration = true;
+
+            })
             .AddJwtBearer(x =>
             {
                 x.RequireHttpsMetadata = false;
                 x.SaveToken = true;
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateAudience = false, //Configuration.GetSection("AppSettings").GetSection("AuthTokenization").GetValue<string>("AudienceId")
-                    ValidateIssuer = false, //Configuration.GetSection("AppSettings").GetSection("AuthTokenization").GetValue<string>("Issuer")
+                    ValidateAudience = true, 
+                    ValidateIssuer = true, 
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key)),
+                    ValidAudience = Configuration.GetSection("AppSettings").GetSection("AuthTokenization").GetValue<string>("AudienceId"),
+                    ValidIssuer = Configuration.GetSection("AppSettings").GetSection("AuthTokenization").GetValue<string>("Issuer")
+            };
+                
+            });
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Events.OnRedirectToLogin = context =>
+                {
+                    context.Response.StatusCode = 501;
+                   // context.Response.Redirect("/account/login");
+                    return Task.CompletedTask;
                 };
             });
+
             #endregion
 
 
 
 
 
-            services.TryAddTransient<IHttpClientService>(x => new HttpClientService (new Uri (Configuration.GetSection("AppSettings").GetValue<string>("ServerBaseAddress"))));
+            services.TryAddTransient<IHttpClientService>(x => new HttpClientService(new Uri(Configuration.GetSection("AppSettings").GetValue<string>("ServerBaseAddress"))));
 
         }
 
@@ -126,7 +170,7 @@ namespace T2Access.Web
 
             app.UseRouting();
 
-
+            
             app.UseRequestLocalization();
 
             //Add User session
@@ -145,6 +189,26 @@ namespace T2Access.Web
             });
 
 
+
+            app.UseStatusCodePages(async context =>
+            {
+                var response = context.HttpContext.Response;
+
+                if (response.StatusCode == (int)HttpStatusCode.Unauthorized ||
+                    response.StatusCode == (int)HttpStatusCode.Forbidden)
+                {
+                    response.Redirect($"{context.HttpContext.Request.PathBase}/{CultureInfo.CurrentCulture.TwoLetterISOLanguageName}/account/login");/*?returnUrl={context.HttpContext.Request.Path}*/
+                    context.HttpContext.Session.SetString("returnUrl", context.HttpContext.Request.Path);
+                }
+
+
+
+            });
+
+
+
+
+
             //Add Token Authentication service
             app.UseAuthentication();
             app.UseAuthorization();
@@ -154,8 +218,11 @@ namespace T2Access.Web
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{lang=en}/{controller=account}/{action=login}/{id?}");
+                    pattern: "{lang=en}/{controller=user}/{action=index}/{id?}");
             });
         }
+
+
+
     }
 }

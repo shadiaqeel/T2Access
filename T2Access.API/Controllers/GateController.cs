@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Net;
-using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 using T2Access.API.Resources;
 using T2Access.BLL.Services;
 using T2Access.Models;
@@ -20,11 +20,11 @@ namespace T2Access.API.Controllers
     //  [Route("api/gate/{action}")]
     public class GateController : ApiBaseController
     {
-        private readonly IGateService _gateService ;
+        private readonly IGateService _gateService;
         private readonly IAuthService _authService;
 
 
-        public GateController(IGateService gateService  , IAuthService authService )
+        public GateController(IGateService gateService, IAuthService authService)
         {
             _gateService = gateService ?? new GateService();
             _authService = authService ?? throw new ArgumentNullException(nameof(authService));
@@ -92,7 +92,7 @@ namespace T2Access.API.Controllers
             var response = await _gateService.CreateAsync(gate);
 
             return response.Success ?
-                Ok(response.Data) : 
+                Ok(response.Data) :
                 (IActionResult)NotFound(response.ErrorMessage);
         }
 

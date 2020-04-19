@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using T2Access.Models;
 
 namespace T2Access.Web.Views.Shared.Components.GetGateList
 {
     public class GetGateListViewComponent : ViewComponent
     {
-        public GetGateListViewComponent(){}
+        public GetGateListViewComponent() { }
         public IViewComponentResult Invoke()
         {
-            return View("Default");
+            return View("Default" , new GateViewModel());
         }
 
     }

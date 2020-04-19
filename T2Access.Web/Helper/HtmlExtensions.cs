@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Net.Http;
-using System.Text;
-using System.Web;
+
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.Routing;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
 
 namespace T2Access.Web.Helper
@@ -28,17 +23,17 @@ namespace T2Access.Web.Helper
             string currentAction = routeValues["action"].ToString();
             string currentController = routeValues["controller"].ToString();
 
-            if (String.IsNullOrEmpty(actions))
+            if (string.IsNullOrEmpty(actions))
                 actions = currentAction;
 
-            if (String.IsNullOrEmpty(controllers))
+            if (string.IsNullOrEmpty(controllers))
                 controllers = currentController;
 
             string[] acceptedActions = actions.Trim().Split(',').Distinct().ToArray();
             string[] acceptedControllers = controllers.Trim().Split(',').Distinct().ToArray();
 
             return acceptedActions.Contains(currentAction) && acceptedControllers.Contains(currentController) ?
-                cssClass : String.Empty;
+                cssClass : string.Empty;
         }
 
 

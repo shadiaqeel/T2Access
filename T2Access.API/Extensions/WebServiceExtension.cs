@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+
 using T2Access.BLL.Services;
 using T2Access.DAL;
 using T2Access.DAL.Options;
@@ -32,7 +30,7 @@ namespace T2Access.API.Extensions
             if (DALOptionSection == null)
             {
                 throw new ArgumentNullException(nameof(DALOptionSection));
-            }       
+            }
             if (AuthOptionsSection == null)
             {
                 throw new ArgumentNullException(nameof(AuthOptionsSection));

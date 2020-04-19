@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Microsoft.Extensions.Options;
+
 using T2Access.DAL.Helper;
+using T2Access.DAL.Options;
 using T2Access.Models;
 using T2Access.Models.Dtos;
-using T2Access.DAL.Options;
 using T2Access.Security;
 
 namespace T2Access.DAL

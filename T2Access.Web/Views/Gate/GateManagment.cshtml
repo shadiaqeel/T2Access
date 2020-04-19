@@ -9,8 +9,8 @@
 @section Styles {
 
 
-    <link href="~/Assets/lib/MDB/css/addons/datatables-select.min.css" rel="stylesheet" />
-    <link href="~/Assets/lib/MDB/css/addons/datatables.min.css" rel="stylesheet" />
+    <link href="~/lib/MDB/css/addons/datatables-select.min.css" rel="stylesheet" />
+    <link href="~/lib/MDB/css/addons/datatables.min.css" rel="stylesheet" />
 
 }
 
@@ -32,7 +32,7 @@
                         <select asp-for="Status" asp-items="Html.GetEnumSelectList(typeof(GateStatus?))" class="dropdown-toggle  form-control-sm " id="txtFilterByStatus">
                             <option value="">@ModelResource.Status</option>
                         </select>
-                        
+
                         @*@Html.EnumDropDownListFor(model => model.Status, ModelResource.Status, htmlAttributes: new { @class = "dropdown-toggle  form-control-sm ", @id = "txtFilterByStatus" })*@
                         <button id="btnSearch" class="fa  fa-search btn  btn-info  btn-lg  pull-away"></button>
                     </div>

@@ -3,11 +3,14 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+
 using Newtonsoft.Json;
+
 using T2Access.Models;
 using T2Access.Models.Dtos;
 using T2Access.Services.HttpClientService;
@@ -16,16 +19,15 @@ using T2Access.Web.Models;
 namespace T2Access.Web.Controllers
 {
 
-    [Authorize]
-
+    //[Authorize(Roles ="Admin")]
     public class GateController : WebController
     {
-        private readonly IHttpClientService _httpService ;
+        private readonly IHttpClientService _httpService;
         private readonly ILogger<GateController> _logger;
 
 
         //============================================================================
-        public GateController(IHttpClientService httpService , ILogger<GateController> logger)
+        public GateController(IHttpClientService httpService, ILogger<GateController> logger)
         {
             _logger = logger;
             _httpService = httpService;
@@ -44,7 +46,7 @@ namespace T2Access.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> GetAll([FromForm]DTParameters param)
         {
-            
+
             //! Server Side Parameter
 
             using (var response = await _httpService.GetAsync($"GetListWithFilter?UserName={param.Columns[0].Search.Value}&NameAr={param.Columns[1].Search.Value}&NameEn={param.Columns[2].Search.Value}&Status={param.Columns[3].Search.Value}&PageSize={param.Length}&Skip={param.Start}&Order={param.SortOrder}", token: HttpContext.Session.GetString("Token")))
@@ -82,7 +84,7 @@ namespace T2Access.Web.Controllers
                 return PartialView("_Create");
             }
 
-            using (var response = await _httpService.PostAsync("Signup/", model, token: (string)HttpContext.Session.GetString("Token")))
+            using (var response = await _httpService.PostAsync("Signup/", model, token: HttpContext.Session.GetString("Token")))
             {
                 var result = await response.Content.ReadAsStringAsync();
 
@@ -107,7 +109,7 @@ namespace T2Access.Web.Controllers
         public async Task<IActionResult> Delete(Guid id)
         {
 
-            using (var response = await _httpService.DeleteAsync($"Delete?id={id}", (string)HttpContext.Session.GetString("Token")))
+            using (var response = await _httpService.DeleteAsync($"Delete?id={id}", HttpContext.Session.GetString("Token")))
             {
 
                 return response.IsSuccessStatusCode
@@ -136,7 +138,7 @@ namespace T2Access.Web.Controllers
                 return PartialView("_Edit");
             }
             model.UserName = null;
-            using var response = await _httpService.PutAsync($"Edit?id={model.Id}", model, token: (string)HttpContext.Session.GetString("Token"));
+            using var response = await _httpService.PutAsync($"Edit?id={model.Id}", model, token: HttpContext.Session.GetString("Token"));
             if (response.IsSuccessStatusCode)
             {
                 return Json(new { success = true, message = (await response.Content.ReadAsStringAsync()).Replace("\"", "") });
@@ -176,10 +178,10 @@ namespace T2Access.Web.Controllers
 
                 return Json(new { confirm = true });
             }
-            HttpContext.Session.SetString("ConfirmedOperation",false.ToString());
+            HttpContext.Session.SetString("ConfirmedOperation", false.ToString());
 
 
-            using (var response = await _httpService.PutAsync($"ResetPassword?id={model.Id}", model, token: (string)HttpContext.Session.GetString("Token")))
+            using (var response = await _httpService.PutAsync($"ResetPassword?id={model.Id}", model, token: HttpContext.Session.GetString("Token")))
             {
                 if (response.IsSuccessStatusCode)
                 {
@@ -242,16 +244,13 @@ namespace T2Access.Web.Controllers
         }
 
 
-
-        public async Task<IActionResult> GetCheckedByUserId(Guid userId)
+        [HttpPost]
+        public async Task<IActionResult> GetCheckedByUserId(Guid userId,[FromForm]DTParameters param)
         {
             //Server Side Parameter
-            var start = Convert.ToInt32(Request.Form["start"]);
-            var length = Convert.ToInt32(Request.Form["length"]);
-            var searchValue = Request.Form["search[value]"];
 
 
-            using (var response = await _httpService.GetAsync($"GetCheckedListByUserId?Id={userId}&Skip={start}&PageSize={length}&SearchValue={searchValue}", token: HttpContext.Session.GetString("Token")))
+            using (var response = await _httpService.GetAsync($"GetCheckedListByUserId?Id={userId}&Skip={param.Start}&PageSize={param.Length}&SearchValue={param.Search.Value}", token: HttpContext.Session.GetString("Token")))
             {
                 if (response.IsSuccessStatusCode && Request.Headers["X-Requested-With"] == "XMLHttpRequest")
                 {
@@ -282,7 +281,7 @@ namespace T2Access.Web.Controllers
                     // view = RenderViewToString(ControllerContext, "_ListBody", CheckedGates, true) 
                     #endregion
 
-                    return string.IsNullOrEmpty(searchValue)
+                    return string.IsNullOrEmpty(param.Search.Value)
                         ? Json(new { data = CheckedGates.ResponseList, draw = Request.Form["draw"], recordsTotal = CheckedGates.TotalEntities })
                         : Json(new { data = CheckedGates.ResponseList, draw = Request.Form["draw"], recordsTotal = CheckedGates.ResponseList.Count() });
                 }

@@ -19,7 +19,7 @@
 
 
     <!--===============================================================================================-->
-    <link rel="icon" type="image/png" href="~/Assets/Admin/img/favicon.PNG" />
+    <link rel="icon" type="image/png" href="~/images/admin/favicon.PNG" />
     <!--==========================================================================================================================================================================================
     <!-- Bootstrap core CSS -->
     <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
@@ -114,7 +114,6 @@
             <div id="sidebar" class="nav-collapse ">
                 <!-- sidebar menu start-->
                 <ul class="sidebar-menu" id="nav-accordion">
-                    <!--<p class="centered"><a href="profile.html"><img src="Assets/User/shadi.jpg" class="img-circle" width="100" height="100"></a></p>-->
                     <h5 class="centered">@Context.Session.GetString("FirstName")  @Context.Session.GetString("LastName")  </h5>
                     <li class="mt">
                         <a class="@Html.IsSelected("User","index", "active")" href="@Url.Action("Index", "User")">

@@ -2,18 +2,21 @@
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+
 using Newtonsoft.Json;
+
 using T2Access.Models;
 using T2Access.Services.HttpClientService;
 using T2Access.Web.Models;
 
 namespace T2Access.Web.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     public class UserController : WebController
     {
         private readonly IHttpClientService _httpService;
@@ -21,9 +24,9 @@ namespace T2Access.Web.Controllers
 
         //=======================================================================
 
-        public UserController(IHttpClientService httpService , ILogger<UserController> logger)
+        public UserController(IHttpClientService httpService, ILogger<UserController> logger)
         {
-            _logger = logger; 
+            _logger = logger;
             _httpService = httpService;
             _httpService.BaseUri = new Uri($"{_httpService.BaseUri}{Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName}/user/");
         }
@@ -62,7 +65,7 @@ namespace T2Access.Web.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     var users = await response.Content.ReadAsAsync<ListResponse<UserViewModel>>();
-                  //var users = JsonConvert.DeserializeObject<ListResponse<UserViewModel>>(await response.Content.ReadAsStringAsync());
+                    //var users = JsonConvert.DeserializeObject<ListResponse<UserViewModel>>(await response.Content.ReadAsStringAsync());
 
 
                     if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
@@ -200,7 +203,7 @@ namespace T2Access.Web.Controllers
                 return PartialView("_ResetPassword");
             }
 
-            if (!(bool)HttpContext.Session.GetString("ConfirmedOperation").Equals("true"))
+            if (!HttpContext.Session.GetString("ConfirmedOperation").Equals("true"))
             {
                 return Json(new { confirm = true });
             }

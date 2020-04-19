@@ -16,12 +16,12 @@ namespace T2Access.BLL.Services
     public class UserService : IUserService
     {
         private readonly IUserManager userManager;
-        private readonly IUserGateManager userGateManager ;
+        private readonly IUserGateManager userGateManager;
 
-        public UserService(IUserManager userManager = null   , IUserGateManager userGateManager = null  )
+        public UserService(IUserManager userManager = null, IUserGateManager userGateManager = null)
         {
             this.userManager = userManager ?? ManagerFactory.GetUserManager();
-            this.userGateManager = userGateManager ?? ManagerFactory.GetUserGateManager() ;
+            this.userGateManager = userGateManager ?? ManagerFactory.GetUserGateManager();
         }
 
 

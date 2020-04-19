@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+
 using Microsoft.IdentityModel.Tokens;
 
 using T2Access.Security.Tokenization.Models;
@@ -15,7 +16,7 @@ namespace T2Access.Security.Tokenization.Services
 
         private readonly string _issuer, _audienceId;
 
-        public JWTService(string secretKey = null , string issuer = null , string audienceId = null)
+        public JWTService(string secretKey = null, string issuer = null, string audienceId = null)
         {
             SecretKey = secretKey ?? Constants.SECRET_KEY;
             _issuer = issuer ?? "T2";

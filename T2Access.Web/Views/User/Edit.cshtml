@@ -1,6 +1,5 @@
 ﻿@model T2Access.Models.UserViewModel
-@using T2Access.Web.Resources
-@using T2Access.Web.Helper
+
 
 
 @{
@@ -138,7 +137,7 @@
                 ajax: function (data, callback, settings) {
 
                     // data.length = 10;
-                    $.get("@Url.Action("GetCheckedByUserId","Gate", new { UserId = Model.Id })", data, function (result) {
+                    $.post("@Url.Action("GetCheckedByUserId","Gate", new { UserId = Model.Id })", data, function (result) {
 
 
                         callback({
@@ -175,6 +174,7 @@
 
 
                     if ($.inArray(data.Id, selectedGuid) == -1) {
+                        
                         if (data["Checked"] && $.inArray(data.Id, unselectedGuid) == -1) {
                             //selectedGuid.push(data["Id"]);
                             $(row).addClass('selected');
@@ -193,8 +193,8 @@
                         checkboxes: { selectRow: true },
 
                     },
-                    { data: "nameAr", name: "NameAr", autoWidth: true },
-                    { data: "nameEn", name: "NameEn", autoWidth: true }
+                    { data: "NameAr", name: "NameAr", autoWidth: true },
+                    { data: "NameEn", name: "NameEn", autoWidth: true }
                 ],
                 preDrawCallback: function () {
 

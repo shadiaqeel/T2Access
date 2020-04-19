@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 using T2Access.API.Resources;
 using T2Access.BLL.Services;
 using T2Access.Models;
 using T2Access.Security.Tokenization.Models;
 using T2Access.Security.Tokenization.Services;
-using Microsoft.AspNetCore.Authorization;
-using Newtonsoft.Json;
 
 namespace T2Access.API.Controllers
 {
@@ -18,14 +19,14 @@ namespace T2Access.API.Controllers
 
     public class UserController : ApiBaseController
     {
-       // private readonly IUserService userService = new UserService();
-        private readonly IUserService userService ;
+        // private readonly IUserService userService = new UserService();
+        private readonly IUserService userService;
         private readonly IAuthService authService;
 
         //! ===========================================================================
-        public UserController(IUserService userService =null , IAuthService authService = null)
+        public UserController(IUserService userService = null, IAuthService authService = null)
         {
-            this.userService = userService ?? new UserService() ;
+            this.userService = userService ?? new UserService();
             this.authService = authService ?? throw new ArgumentNullException(nameof(authService));
         }
 
@@ -59,8 +60,8 @@ namespace T2Access.API.Controllers
             if (Enum.IsDefined(typeof(UserStatus), user.Status))
             {
 
-                cliamList.Add(new Claim("roles","User"));
-                cliamList.Add(new Claim("roles", ((UserStatus)user.Status).ToString() ));
+                cliamList.Add(new Claim("roles", "User"));
+                cliamList.Add(new Claim("roles", ((UserStatus)user.Status).ToString()));
                 //cliamList.Add(new Claim("Role", $"{(UserStatus)user.Status},User"));
             }
             else
@@ -90,7 +91,7 @@ namespace T2Access.API.Controllers
         {
 
             var response = await userService.CreateAsync(user);
-            return response.Success ? 
+            return response.Success ?
                 Ok(response.Data) :
                 (IActionResult)BadRequest(response.ErrorMessage);
         }
@@ -126,13 +127,13 @@ namespace T2Access.API.Controllers
         {
             if (id == null)
             {
-                return BadRequest (Resource.FilterMiss);
+                return BadRequest(Resource.FilterMiss);
             }
 
             var response = await userService.GetByIdAsync(id);
             return response.Success ?
                 Ok(response.Data) :
-               (IActionResult)NotFound (response);
+               (IActionResult)NotFound(response);
 
 
         }
