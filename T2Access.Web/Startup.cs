@@ -1,18 +1,11 @@
 using System;
-using System.Diagnostics;
 using System.Globalization;
-using System.IO;
 using System.Net;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Localization.Routing;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -22,9 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json.Serialization;
-using T2Access.Security.Tokenization.Services;
+
 using T2Access.Services.HttpClientService;
 using T2Access.Web.Extensions;
 using T2Access.Web.Helper;
@@ -81,7 +72,7 @@ namespace T2Access.Web
                 .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
                .AddDataAnnotationsLocalization()
                .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
-           
+
 
             services.AddSession();
 
@@ -113,7 +104,7 @@ namespace T2Access.Web
 
             app.UseRouting();
 
-            
+
             app.UseRequestLocalization();
 
             //Add User session

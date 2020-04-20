@@ -19,6 +19,8 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "T2Access.Database", "T2Acce
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "T2Access.Web", "T2Access.Web\T2Access.Web.csproj", "{0CCE334F-D22F-4925-BC48-0BFA672A3EF6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "T2Access.Web.SPA.VueJs", "T2Access.Web.SPA.VueJs\T2Access.Web.SPA.VueJs.csproj", "{BD5C46ED-9382-4172-B22C-422C3F80736A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +61,10 @@ Global
 		{0CCE334F-D22F-4925-BC48-0BFA672A3EF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0CCE334F-D22F-4925-BC48-0BFA672A3EF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0CCE334F-D22F-4925-BC48-0BFA672A3EF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD5C46ED-9382-4172-B22C-422C3F80736A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD5C46ED-9382-4172-B22C-422C3F80736A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD5C46ED-9382-4172-B22C-422C3F80736A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD5C46ED-9382-4172-B22C-422C3F80736A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

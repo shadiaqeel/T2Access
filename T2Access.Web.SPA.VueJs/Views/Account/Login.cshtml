@@ -1,0 +1,152 @@
+﻿
+@model LoginViewModel
+@{
+    ViewBag.Title = "LOGIN";
+    Layout = null;
+
+    var dir = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.IsRightToLeft ? "rtl" : "ltr";
+
+}
+
+<!DOCTYPE html>
+<html  lang="@this.ViewContext.RouteData.Values["lang"]" dir="@dir">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+
+
+
+
+
+    <!--===============================================================================================-->
+    <link rel="icon" type="image/png" href="~/images/login/icons/favicon.ico" />
+    <!--===============================================================================================-->
+    <!-- Bootstrap core CSS -->
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <!--------------external css----------------->
+    <link href="~/fonts/Linearicons-Free-v1.0.0/icon-font.min.css" rel="stylesheet" />
+    <link href="~/lib/animate/animate.css" rel="stylesheet" />
+    <link href="~/lib/css-hamburgers/hamburgers.css" rel="stylesheet" />
+    <link href="~/lib/animsition/css/animsition.css" rel="stylesheet" />
+    <link href="~/lib/select2/select2.css" rel="stylesheet" />
+    <link href="~/lib/daterangepicker/daterangepicker.css" rel="stylesheet" />
+    <!--===============================================================================================-->
+    <link href="~/css/login/util.css" rel="stylesheet" />
+    <link href="~/css/login/main.css" rel="stylesheet" />
+    <!--===============================================================================================-->
+
+
+</head>
+<body class=" body-login">
+
+
+
+    <div class="limiter">
+        <div class="container-login100 " style="background-image: linear-gradient(-225deg, #B7F8DB 0%, #50A7C2 100%);">
+            <div class="wrap-login100 animated fadeInDown">
+                <div class="login100-form-title" style="background-image: url(/images/login/bg-01.jpg);">
+                    <span class="login100-form-title-1" style="text-transform:uppercase">
+                        @Resource.SignIn
+
+                    </span>
+                </div>
+                <form asp-controller="Account" asp-action="Login" method="post" asp-route-returnurl="@ViewData["ReturnUrl"]" class="login100-form validate-form" role="form">
+
+                    @Html.AntiForgeryToken()
+
+
+
+                    @Html.ValidationSummary(true, "", new { @class = "alert alert-danger col-md-12 ", @role = "alert", @style = "font-size: smaller;" })
+
+
+
+
+                    <div class="wrap-input100 validate-input m-b-26 " data-validate="Username is required">
+                        @*<span class="label-input100">@Resource.Username : </span>*@
+
+                        @Html.TextBoxFor(m => m.Username, new { @class = "input100", @placeholder = @Resource.Username })
+                        <i class="fa fa-user fa-login"></i>
+                        <span class="focus-input100"></span>
+
+                        @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
+
+                    </div>
+
+
+
+
+
+
+
+
+                    <div class="wrap-input100 validate-input m-b-18" data-validate="Password is required">
+                        @*<span class="label-input100">@Resource.Password : </span>*@
+                        @Html.PasswordFor(m => m.Password, new { @class = "input100", @placeholder = @Resource.Password })
+                        <span class="focus-input100"></span>
+                        <i class="fa fa-lock fa-login"></i>
+
+                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+
+                    </div>
+
+
+                    @*<div class="flex-sb-m w-full p-b-30">
+                            <div class="contact100-form-checkbox">
+                                @Html.CheckBoxFor(m => m.RememberMe, new { @class = "input-checkbox100" })
+                                @Html.LabelFor(m => m.RememberMe, new { @class = "label-checkbox100" })
+                            </div>
+
+                            <div>
+                                <a href="#" class="txt1">
+                                    Forgot Password?
+                                </a>
+                            </div>
+                        </div>*@
+
+
+
+
+                    <div class="container-login100-form-btn m-t-17 ">
+                        <button class="login100-form-btn">
+                            @Resource.SignIn
+                        </button>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="dropDownSelect1"></div>
+
+
+
+
+
+    <!--===============================================================================================-->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/umd/popper.min.js"></script>
+
+    @*@Scripts.Render("~/bundles/modernizr")*@
+    <!--=================================================================================================-->
+
+    <script src="~/lib/animsition/js/animsition.min.js"></script>
+    <script src="~/lib/select2/select2.min.js"></script>
+    <script src="~/lib/daterangepicker/moment.min.js"></script>
+    <script src="~/lib/daterangepicker/daterangepicker.js"></script>
+    <script src="~/lib/countdowntime/countdowntime.js"></script>
+    <script src="~/js/login/main.js"></script>
+    <!--===============================================================================================-->
+
+
+
+
+
+
+</body>
+</html>
