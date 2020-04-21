@@ -1,20 +1,25 @@
 <template>
-    <div>
-        <Home msg="Hello world!" />
-    </div>
+  <component :is="layout">
+    <router-view></router-view>
+  </component>
 </template>
 
 <script>
-    import Home from './components/Home.vue';
+import MenuLayout from "./components/layouts/MenuLayout.vue";
 
-    export default {
-        name: 'app',
-        components: {
-            Home
-        }
+export default {
+  name: "App",
+  data() {
+    return {
+      layout: "menu-layout"
     };
+  },
+  components: {
+    MenuLayout
+  }
+};
 </script>
 
-<style>
+<style lang="scss" >
 </style>
 

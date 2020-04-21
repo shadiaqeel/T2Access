@@ -17,7 +17,6 @@ using T2Access.Services.HttpClientService;
 using T2Access.Web.SPA.VueJs.Extensions;
 using T2Access.Web.SPA.VueJs.Providers;
 
-using Westwind.AspNetCore.LiveReload;
 
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
 
@@ -34,7 +33,6 @@ namespace T2Access.Web.SPA.VueJs
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddLiveReload(config => { });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
@@ -72,8 +70,9 @@ namespace T2Access.Web.SPA.VueJs
             //            });
 
 
-            services.AddSpaStaticFiles(config => { config.RootPath = "wwwroot/"; });
-            //  services.AddSpaStaticFiles(config => { config.RootPath = "ClientApp/dist"; });
+            //services.AddSpaStaticFiles(config => { config.RootPath = "wwwroot/"; });
+            services.AddSpaStaticFiles(options => options.RootPath = "ClientApp/dist");
+
 
 
             // Example with dependency injection for a data provider.
@@ -89,7 +88,6 @@ namespace T2Access.Web.SPA.VueJs
         {
             if (env.IsDevelopment())
             {
-                app.UseLiveReload();
                 app.UseDeveloperExceptionPage();
             }
             else
@@ -111,10 +109,8 @@ namespace T2Access.Web.SPA.VueJs
 
             //app.UseDefaultFiles();
             app.UseStaticFiles();
-            if (!env.IsDevelopment())
-            {
-                app.UseSpaStaticFiles();
-            }
+
+
             app.UseRouting();
             app.UseCors("CorsPolicy");
 
@@ -160,6 +156,9 @@ namespace T2Access.Web.SPA.VueJs
             app.UseAuthorization();
 
 
+            app.UseSpaStaticFiles();
+
+
 
 
 
@@ -178,26 +177,21 @@ namespace T2Access.Web.SPA.VueJs
             });
 
 
-            
             app.UseSpa(spa =>
             {
-                 spa.Options.SourcePath = "ClientApp";
+                spa.Options.SourcePath = "ClientApp";
 
                 if (env.IsDevelopment())
                 {
 
+                    // Launch development server for Vue.js
+                    // spa.UseVueDevelopmentServer(npmScript: "serve" );
 
-                    spa.ApplicationBuilder.UseWebpackDevMiddleware(
-                            new WebpackDevMiddlewareOptions
-                            {
-                                HotModuleReplacement = true,
 
-                                ConfigFile = "webpack.config.js",
-                                ProjectPath = System.IO.Path.Combine(env.ContentRootPath, "ClientApp/")
-
-                            });
                 }
             });
+
+
 
 
 
