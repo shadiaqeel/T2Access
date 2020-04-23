@@ -83,7 +83,6 @@ namespace T2Access.Web.SPA.VueJs
 
         }
 
-        [Obsolete]
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -151,23 +150,25 @@ namespace T2Access.Web.SPA.VueJs
             });
 
 
+
             //Add Token Authentication service
             app.UseAuthentication();
             app.UseAuthorization();
-
 
             app.UseSpaStaticFiles();
 
 
 
 
+            //pattern: "{lang=en}/{area}/{controller=Home}/{action=Index}/{id?}");
 
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
-                  name: "areas",
-                  pattern: "{lang=en}/{area}/{controller=Home}/{action=Index}/{id?}");
+                  name: "spa-admin",
+                  pattern: "{lang=en}/admin/{*anything}",
+                  defaults: new { area = "admin", controller = "Home", action = "Index" });
 
                 endpoints.MapControllerRoute(
                   name: "default",
@@ -176,20 +177,23 @@ namespace T2Access.Web.SPA.VueJs
 
             });
 
-
             app.UseSpa(spa =>
-            {
-                spa.Options.SourcePath = "ClientApp";
+                                {
+                                    spa.Options.SourcePath = "ClientApp";
 
-                if (env.IsDevelopment())
-                {
+                                    if (env.IsDevelopment())
+                                    {
 
-                    // Launch development server for Vue.js
-                    // spa.UseVueDevelopmentServer(npmScript: "serve" );
+                                        // Launch development server for Vue.js
+                                        //spa.UseVueDevelopmentServer(npmScript: "build");
 
 
-                }
-            });
+                                    }
+                                });
+
+
+
+
 
 
 

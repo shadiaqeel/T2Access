@@ -1,11 +1,10 @@
 <template >
-<div>Account</div>
+  <h4 style="display: inline;">Create User</h4>
 </template>
 
 <script>
-
 export default {
-	name: 'Account'
+  name: "CreateUser"
 };
 </script>
 

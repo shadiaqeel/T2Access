@@ -16,10 +16,7 @@
           <!--logo-->
           <a href="#" class="logo">
             <b>
-              t
-              <span id="t">t</span>
-              <span>Ac</span>cess
-            </b>
+              t<span id="t">t</span><span>Ac</span>cess</b>
           </a>
         </div>
 
@@ -45,17 +42,16 @@
               </router-link>
             </li>
             <li class="sub-menu">
-              <router-link :to="{ name: 'Account' }">
+              <a :class="[currentPage.includes('user','gate')?'active':'']">
                 <i class="fa fa-desktop"></i>
                 <span>Accounts Managment</span>
-              </router-link>
-
+              </a>
               <ul class="sub">
-                <li class>
-                  <a href="#">Users</a>
+                <li :class="[currentPage.includes('user')?'active':'']">
+                  <router-link :to="{ name: 'user' }">Users</router-link>
                 </li>
-                <li class>
-                  <a href="#">Gates</a>
+                <li :class="[currentPage.includes('gate')?'active':'']">
+                  <router-link :to="{ name: 'gate' }">Gates</router-link>
                 </li>
               </ul>
             </li>
@@ -64,14 +60,11 @@
       </aside>
     </section>
     <section id="main-content">
-      <section class="wrapper"></section>
+      <section class="wrapper">
+   
+              <slot />
 
-
-
-      <slot />
-
-
-
+      </section>
       <!--main content end-->
       <!--footer start-->
       <footer class="site-footer navbar-fixed-bottom footer">
@@ -86,13 +79,22 @@
   </div>
 </template>
 
+
+
+
+
 <script>
 export default {
   name: "MenuLayout",
+  computed: {
+    currentPage() {
+      return this.$route.path;
+    }
+  },
   mounted() {
     let externalScript = document.createElement("script");
-    externalScript.setAttribute("src", "~/js/admin/en/scripts.js");
-    document.head.appendChild(externalScript);
+    externalScript.setAttribute("src", "/js/admin/en/scripts.js");
+    document.body.appendChild(externalScript);
   }
 };
 </script>
