@@ -14,7 +14,7 @@ using T2Access.Models;
 using T2Access.Services.HttpClientService;
 using T2Access.Web.Models;
 
-namespace T2Access.Web.Controllers
+    namespace T2Access.Web.Controllers
 {
     //[Authorize(Roles = "Admin")]
     public class UserController : WebController

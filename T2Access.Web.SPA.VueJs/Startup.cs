@@ -165,17 +165,22 @@ namespace T2Access.Web.SPA.VueJs
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                  name: "spa-admin",
-                  pattern: "{lang=en}/admin/{*anything}",
-                  defaults: new { area = "admin", controller = "Home", action = "Index" });
+            endpoints.MapControllerRoute(
+                name: "spa-admin-api",
+                pattern: "{lang=en}/admin/{controller=Home}/{action=index}",
+                defaults: new { area = "admin"});
 
-                endpoints.MapControllerRoute(
-                  name: "default",
-                  pattern: "{lang=en}/{controller=account}/{action=login}/{id?}");
+            endpoints.MapControllerRoute(
+              name: "spa-admin-fallback",
+              pattern: "{lang=en}/admin/{*anything}",
+              defaults: new { area = "admin", controller = "Home", action = "Index" });
+
+            endpoints.MapControllerRoute(
+              name: "default",
+              pattern: "{lang=en}/{controller=account}/{action=login}/{id?}");
 
 
-            });
+        });
 
             app.UseSpa(spa =>
                                 {

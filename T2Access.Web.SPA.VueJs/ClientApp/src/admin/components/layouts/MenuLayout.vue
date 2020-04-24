@@ -12,11 +12,15 @@
             class="fa fa-bars tooltips"
             data-placement="right"
             data-original-title="Toggle Navigation"
+            @click="isCollapse = !isCollapse"
           ></div>
           <!--logo-->
           <a href="#" class="logo">
             <b>
-              t<span id="t">t</span><span>Ac</span>cess</b>
+              t
+              <span id="t">t</span>
+              <span>Ac</span>cess
+            </b>
           </a>
         </div>
 
@@ -31,39 +35,48 @@
       <!--header end-->
       <!--MAIN SIDEBAR MENU -->
       <!--sidebar start-->
+
       <aside>
-        <div id="sidebar" class="nav-collapse">
-          <!-- sidebar menu start-->
-          <ul class="sidebar-menu" id="nav-accordion">
-            <li class="mt">
-              <router-link :to="{ name: 'home' }">
-                <i class="fa fa-dashboard"></i>
-                <span>Dashboard</span>
-              </router-link>
-            </li>
-            <li class="sub-menu">
-              <a :class="[currentPage.includes('user','gate')?'active':'']">
-                <i class="fa fa-desktop"></i>
-                <span>Accounts Managment</span>
-              </a>
-              <ul class="sub">
-                <li :class="[currentPage.includes('user')?'active':'']">
-                  <router-link :to="{ name: 'user' }">Users</router-link>
-                </li>
-                <li :class="[currentPage.includes('gate')?'active':'']">
-                  <router-link :to="{ name: 'gate' }">Gates</router-link>
-                </li>
-              </ul>
-            </li>
-          </ul>
+        <div class="nav-collapse">
+          <el-menu
+            :router="true"
+            :default-active="currentPage"
+            class="el-menu-vertical-demo"
+            @open="handleOpen"
+            @close="handleClose"
+            :collapse="isCollapse"
+            background-color="#2f323a"
+            text-color="#fff"
+            active-text-color="#4ecdc4"
+            style=" 
+    position: fixed;
+    height: 100%;
+    margin-top: 60px;
+  "
+          >
+            <br />
+
+            <el-menu-item :index="getRoute('home').href">
+              <i class="el-icon-s-home"></i>
+              <span slot="title">Dashboard</span>
+            </el-menu-item>
+            <el-submenu index="2">
+              <template slot="title">
+                <i class="el-icon-monitor"></i>
+                <span slot="title">Accounts Managment</span>
+              </template>
+              <el-menu-item-group>
+                <el-menu-item :index="getRoute('user').href">Users</el-menu-item>
+                <el-menu-item :index="getRoute('gate').href">Gates</el-menu-item>
+              </el-menu-item-group>
+            </el-submenu>
+          </el-menu>
         </div>
       </aside>
     </section>
-    <section id="main-content">
+    <section id="main-content" :style="mainContentStyle">
       <section class="wrapper">
-   
-              <slot />
-
+        <slot />
       </section>
       <!--main content end-->
       <!--footer start-->
@@ -86,15 +99,42 @@
 <script>
 export default {
   name: "MenuLayout",
+  data() {
+    return {
+      isCollapse: false
+    };
+  },
   computed: {
     currentPage() {
       return this.$route.path;
+    },
+    mainContentStyle() {
+      if (this.isCollapse)
+        return {
+          "margin-left": "63px"
+        };
+      else
+        return {
+          "margin-left": "204.2px"
+        };
     }
   },
   mounted() {
-    let externalScript = document.createElement("script");
-    externalScript.setAttribute("src", "/js/admin/en/scripts.js");
-    document.body.appendChild(externalScript);
+    // let externalScript = document.createElement("script");
+    // externalScript.setAttribute("src", "/js/admin/en/scripts.js");
+    // document.body.appendChild(externalScript);
+  },
+  methods: {
+    handleOpen(key, keyPath) {
+      console.log(key, keyPath);
+    },
+    handleClose(key, keyPath) {
+      console.log(key, keyPath);
+    },
+
+    getRoute(_name) {
+      return this.$router.resolve({ name: _name });
+    }
   }
 };
 </script>
@@ -102,5 +142,13 @@ export default {
 <style lang="scss" >
 @import "../../styles/style.css";
 @import "../../styles/style-responsive.css";
+
+.el-menu-vertical-demo:not(.el-menu--collapse) {
+  width: 205px;
+  height: 100%;
+  min-height: 400px;
+  margin-top: 60px;
+  position: fixed;
+}
 </style>
 

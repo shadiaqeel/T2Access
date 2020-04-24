@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace T2Access.Web.SPA.VueJs.Areas.admin.Controllers
+using T2Access.Web.SPA.VueJs.Models;
+
+namespace T2Access.Web.SPA.VueJs.Areas.Admin
 {
-  //  [Authorize(Roles ="Admin")]
-    public class HomeController : Controller
+    public class HomeController : AdminController
     {
         public IActionResult Index()
         {

@@ -1,7 +1,7 @@
 //"use strict";
 
 //const fs = require('fs')
-//const path = require("path");
+const path = require("path");
 
 
 
@@ -40,7 +40,7 @@
 
 
 module.exports = {
-   
+
 
     // where to output built files
     outputDir: 'dist',
@@ -61,15 +61,17 @@ module.exports = {
 
     // babel-loader skips `node_modules` deps by default.
     // explicitly transpile a dependency with this option.
-    transpileDependencies: [/* string or regex */],
+    transpileDependencies: [ /* string or regex */ ],
 
     // generate sourceMap for production build?
     productionSourceMap: false,
 
     // tweak internal webpack configuration.
     // see https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md
-    chainWebpack: () => { },
-    configureWebpack: () => { },
+    chainWebpack: config => {
+        config.resolve.alias.set('admin', path.join(__dirname, './src/admin'));
+    },
+    configureWebpack: () => {},
 
     // CSS related options
     css: {
@@ -98,11 +100,11 @@ module.exports = {
 
     // configure webpack-dev-server behavior
     devServer: {
-        port: "8888", 
+        port: "8888",
         https: false,
-        host: "localhost", 
-        open: "true", 
-        proxy: null 
+        host: "localhost",
+        open: "true",
+        proxy: null
     },
 
     // options for 3rd party plugins

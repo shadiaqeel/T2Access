@@ -2,26 +2,25 @@
   <div id="data-table">
     <h3 class="title-section" v-if="title">{{ title }}</h3>
     <el-table
-      ref="multipleTable"
       v-loading="loader"
       :data="data"
       :height="height"
+      stripe
       @select-all="handleSelectionChange"
       @select="handleSelectionChange"
     >
-      <div v-if="columns" class="columns" v-for="(column, index) in columns" :key="index">
-        <el-table-column
-          :type="column.type"
-          :label="column.label"
-          :property="column.name"
-          :show-overflow-tooltip="column.showOverflowTooltip"
-        ></el-table-column>
+      <div v-if="columns">
+        <div class="columns" v-for="(column, index) in columns" :key="index">
+          <el-table-column
+            :type="column.type"
+            :label="column.label"
+            :property="column.name"
+            :show-overflow-tooltip="column.showOverflowTooltip"
+          ></el-table-column>
+        </div>
       </div>
-      <div v-else>
-        <slot />
-      </div>
+      <slot v-else />
     </el-table>
-
     <el-pagination
       class="pagination"
       v-if="pagination"
@@ -49,7 +48,7 @@ export default {
 
     data: {
       type: Array,
-      required: false //true
+      required: true
     },
 
     totalInServer: {
@@ -59,12 +58,12 @@ export default {
 
     columns: {
       type: Array,
-      required: true
+      required: false
     },
 
     pagination: {
       type: Boolean,
-      default: false // true
+      default: true
     },
 
     paginationLayout: {
