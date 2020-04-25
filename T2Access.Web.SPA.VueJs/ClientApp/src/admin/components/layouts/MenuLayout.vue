@@ -35,9 +35,8 @@
       <!--header end-->
       <!--MAIN SIDEBAR MENU -->
       <!--sidebar start-->
-
       <aside>
-        <div class="nav-collapse">
+        <div id="menu" :class="[{ active: isCollapse },'nav-collapse']">
           <el-menu
             :router="true"
             :default-active="currentPage"
@@ -45,6 +44,7 @@
             @open="handleOpen"
             @close="handleClose"
             :collapse="isCollapse"
+            collapse-transition
             background-color="#2f323a"
             text-color="#fff"
             active-text-color="#4ecdc4"
@@ -56,7 +56,7 @@
           >
             <br />
 
-            <el-menu-item :index="getRoute('home').href">
+            <el-menu-item index="/home" :route="{name:'home'}">
               <i class="el-icon-s-home"></i>
               <span slot="title">Dashboard</span>
             </el-menu-item>
@@ -66,8 +66,8 @@
                 <span slot="title">Accounts Managment</span>
               </template>
               <el-menu-item-group>
-                <el-menu-item :index="getRoute('user').href">Users</el-menu-item>
-                <el-menu-item :index="getRoute('gate').href">Gates</el-menu-item>
+                <el-menu-item index="/user" :route="{name:'user'}">Users</el-menu-item>
+                <el-menu-item index="/gate" :route="{name:'gate'}">Gates</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
           </el-menu>
@@ -101,7 +101,8 @@ export default {
   name: "MenuLayout",
   data() {
     return {
-      isCollapse: false
+      isCollapse: false,
+      isActive: false
     };
   },
   computed: {
@@ -131,9 +132,11 @@ export default {
     handleClose(key, keyPath) {
       console.log(key, keyPath);
     },
-
     getRoute(_name) {
       return this.$router.resolve({ name: _name });
+    },
+    toggle: function() {
+      this.isActive = !this.isActive;
     }
   }
 };
@@ -149,6 +152,30 @@ export default {
   min-height: 400px;
   margin-top: 60px;
   position: fixed;
+}
+
+// $screen-md-min
+@media only screen and (max-width: 768px) {
+  #menu .el-menu {
+    display: none;
+  }
+
+  #menu.active {
+    margin: 70px 0;
+    visibility: visible;
+    opacity: 0.98;
+    transition: all 0.5s ease-out;
+
+    .el-menu-vertical .el-menu-item {
+      text-align: center;
+      float: none;
+      display: block;
+      height: 100%;
+      width: 100%;
+      border-top: 1px solid #eaeaeb;
+      font-size: 18px;
+    }
+  }
 }
 </style>
 

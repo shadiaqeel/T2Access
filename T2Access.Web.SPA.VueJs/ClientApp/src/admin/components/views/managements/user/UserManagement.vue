@@ -19,13 +19,16 @@
         <el-input size="small" placeholder="Last Name" v-model="filter.lastname"></el-input>
       </div>
       <div class="dataTables_filter col-md-3">
-        <!-- <select
-            asp-items="Html.GetEnumSelectList<T2Access.Models.UserStatus>()"
-            class="dropdown-toggle form-control-sm"
-            id="txtFilterByStatus"
-          >
-            <option value>Status</option>
-        </select>-->
+        <el-select size="small" style="width:150px" 
+         v-model="filter.status" value-key="filter.status" clearable  placeholder="Status">
+          
+                    <el-option
+            v-for="(status, index) in userStatus"
+            :key="index"
+            :label="status.label"
+            :value="index"
+          ></el-option>
+        </el-select>
 
         <button id="btnSearch" class="fa fa-search btn btn-info btn-lg pull-away"></button>
       </div>
@@ -36,14 +39,21 @@
       :total-in-server="tableOptions.totalInServer"
       :current-page="tableOptions.currentPage"
       :numPerPage="tableOptions.pageSize"
-      :loader="false"
+      :loader="loader"
       @current-page="loadPage"
       @size-table="size"
     >
-      <el-table-column label="User Name" property="userName" sortable></el-table-column>
-      <el-table-column label="First Name" property="firstName" sortable></el-table-column>
-      <el-table-column label="Last Name" property="lastName" sortable></el-table-column>
-      <el-table-column label="Status" property="status" sortable></el-table-column>
+      <el-table-column min-width="100" label="User Name" property="userName" sortable></el-table-column>
+      <el-table-column min-width="100" label="First Name" property="firstName" sortable></el-table-column>
+      <el-table-column min-width="100" label="Last Name" property="lastName" sortable></el-table-column>
+      <el-table-column min-width="100" label="Status" property="status" sortable>
+        <template slot-scope="scope">
+          <el-tag
+            :type="userStatus[scope.row.status].type"
+            disable-transitions
+          >{{userStatus[scope.row.status].label}}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="Actions" property="actions">
         <template slot-scope="scope">
           <el-button
@@ -51,7 +61,7 @@
             type="primary"
             class="btn"
             icon="el-icon-edit"
-            @click="handleEdit(scope.row)"
+            @click="handleEdit(scope.row.id)"
           ></el-button>
           <el-button
             size="mini"
@@ -69,6 +79,9 @@
 <script>
 import { mapGetters } from "vuex";
 import { Notification } from "admin/utils/helper/notification";
+import { userStatus } from "admin/types/status";
+import UserService from 'admin/services/user-service';
+
 
 import Datatable from "admin/components/elements/Datatable";
 
@@ -79,11 +92,14 @@ export default {
   },
   data() {
     return {
+      userStatus : userStatus,
       loader: false,
+      isFiltered : false,
       filter: {
-        username: "",
-        firstname: "",
-        lastname: ""
+        username: '',
+        firstname: '',
+        lastname: '',
+        status : ''
       }
     };
   },
@@ -114,23 +130,32 @@ export default {
         .dispatch("changePageSize", sizeTable)
         .finally(() => this.loadPage(this.tableOptions.currentPage));
     },
-    handleEdit(row) {
-      console.log(row);
+    handleEdit(id) {
+      this.$router.push({ name: "EditUser", params: { userId: id } });
     },
     handleDelete(id) {
-      this.$store
-        .dispatch("deleteUser", id)
-        .then(message => {
-          Notification.success(this, message);
-        })
-        .catch(e => {
-          Notification.error(this, e);
-        });
-      console.log(id);
+      this.$confirm(
+        "This will permanently delete the file. Continue?",
+        "Warning",
+        {
+          confirmButtonText: "OK",
+          cancelButtonText: "Cancel",
+          type: "warning"
+        }
+      ).then(() => {
+        this.$store
+          .dispatch("deleteUser", id)
+          .then(message => {
+            Notification.success(this, message);
+          })
+          .catch(message => {
+            Notification.error(this, message);
+          });
+      });
     }
   }
 };
 </script>
 
-<style lang="sass" scoped>
+<style lang="scss" scoped>
 </style>

@@ -31,6 +31,14 @@ const routes = [{
                 component: () =>
                     import ('../components/views/managements/user/Create')
 
+            },
+            {
+                name: 'EditUser',
+                path: 'edit/:userId',
+                component: () =>
+                    import ('../components/views/managements/user/Edit'),
+                props: true
+
             }
         ]
     },

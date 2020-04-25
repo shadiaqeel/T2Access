@@ -6,6 +6,8 @@
       :data="data"
       :height="height"
       stripe
+      style="width: 100%"
+      highlight-current-row
       @select-all="handleSelectionChange"
       @select="handleSelectionChange"
     >

@@ -66,15 +66,14 @@ namespace T2Access.Web.SPA.VueJs.Areas.Admin
 
         public async Task<IActionResult> Delete(Guid id)
         {
-            // using (var response = await _httpService.DeleteAsync($"Delete?id={id}", HttpContext.Session.GetString("Token")))
-            // {
-            //     var result = await response.Content.ReadAsStringAsync();
+            using (var response = await _httpService.DeleteAsync($"Delete?id={id}", HttpContext.Session.GetString("Token")))
+            {
+                var result = await response.Content.ReadAsStringAsync();
 
-            //     return response.IsSuccessStatusCode
-            //         ? Json(new { success = true, message = result.Replace("\"", "") })
-            //         : Json(new { success = false, message = result.Replace("\"", "") });
-            // }
-            return BadRequest("shadi");
+                return response.IsSuccessStatusCode
+                    ? Json(new { success = true, message = result.Replace("\"", "") })
+                    : Json(new { success = false, message = result.Replace("\"", "") });
+            }
         }
 
 

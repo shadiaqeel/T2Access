@@ -2,8 +2,8 @@ import Axios from 'axios';
 
 
 const UserService = {
-    fetch: async(to, from) => Axios.get(
-        `/admin/user/get?start=${from}&length=${to}`
+    fetch: async(params) => Axios.post(
+        `/admin/user/loaddata`, params
     ),
     delete: async(id) => Axios.delete(
         `/admin/user/delete/${id}`

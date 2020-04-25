@@ -17,6 +17,7 @@ const to = () => from() + state.tableOptions.pageSize;
 
 const INITIAL_STATE = {
     users: [],
+    user: null,
     tableOptions: {
         currentPage: 1,
         totalInServer: 0,
@@ -30,6 +31,8 @@ const state = Object.assign({}, INITIAL_STATE);
 
 const getters = {
     users: state => state.users,
+
+    getUser: (state) => (Id) => { return state.users.find(user => user.id === Id) },
 
     hasUsers: state => state.users.length !== 0,
 
@@ -62,17 +65,22 @@ const actions = {
     fetchUsers: async({ commit }, page) => {
         commit(SET_CURRENT_PAGE, page);
 
-        const response = await UserService.fetch(to(), from());
-        commit(SET_USERS, response.data.users);
-        commit(SET_TOTAL_IN_SERVER, response.data.recordsTotal);
+        const response = await UserService.fetch({start:from(), length : from());
+        if (response.status == 200) {
+            commit(SET_USERS, response.data.users);
+            commit(SET_TOTAL_IN_SERVER, response.data.recordsTotal);
+        }
     },
     deleteUser: async({ commit }, userID) => {
 
-        await UserService.delete(userID);
-
-        commit(DELETE_USER, userID);
-
-
+        const response = await UserService.delete(userID);
+        return new Promise((resolve, reject) => {
+            if (response.data.success) {
+                commit(DELETE_USER, userID);
+                resolve(response.data.message);
+            } else
+                reject(response.data.message);
+        });
     },
 
     changePageSize: ({ commit }, pageSize) => {
