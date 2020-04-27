@@ -1,6 +1,8 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Diagnostics;
+
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -12,6 +14,7 @@ using Newtonsoft.Json;
 
 using T2Access.Services.HttpClientService;
 using T2Access.Web.SPA.VueJs.Models;
+using T2Access.Web.SPA.VueJs.Areas.Admin.Models;
 using T2Access.Models;
 
 namespace T2Access.Web.SPA.VueJs.Areas.Admin
@@ -31,12 +34,12 @@ namespace T2Access.Web.SPA.VueJs.Areas.Admin
         }
 
         //public async Task<IActionResult> Get(DTParameters param)
-        public async Task<IActionResult> Get(string start, string length)
+        [HttpPost]
+        public async Task<IActionResult> LoadData([FromBody]DTUserParameters param)
         {
             //! Server Side 
 
-            //using (var response = await _httpService.GetAsync($"GetListWithFilter?UserName={param.Columns[0].Search.Value}&FirstName={param.Columns[1].Search.Value }&LastName={param.Columns[2].Search.Value}&Status={param.Columns[3].Search.Value }&Skip={param.Start}&PageSize={param.Length}&Order={param.SortOrder}", token: HttpContext.Session.GetString("Token")))
-            using (var response = await _httpService.GetAsync($"GetListWithFilter?Skip={start}&PageSize={length}", token: HttpContext.Session.GetString("Token")))
+            using (var response = await _httpService.GetAsync($"GetListWithFilter?UserName={param.Filter?.Username}&FirstName={param.Filter?.Firstname }&LastName={param.Filter?.Lastname}&Status={param.Filter?.Status }&Skip={param.Start}&PageSize={param.Length}", token: HttpContext.Session.GetString("Token")))
             {
                 if (response.IsSuccessStatusCode)
                 {
@@ -62,7 +65,36 @@ namespace T2Access.Web.SPA.VueJs.Areas.Admin
             }
         }
 
-                // ====================================== Delete User =============================================
+ // ====================================== Create User =============================================
+        #region Create
+
+        [HttpPost]
+        // [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([FromBody]SignUpUserModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            using (var response = await _httpService.PostAsync(" Signup/", model, token: HttpContext.Session.GetString("Token")))
+            {
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return Ok(result.Replace("\"", ""));
+                }
+                else
+                {
+
+                    return BadRequest(result.Replace("\"", ""));
+                }
+            }
+        }
+        #endregion
+
+    // ====================================== Delete User =============================================
 
         public async Task<IActionResult> Delete(Guid id)
         {
@@ -78,5 +110,57 @@ namespace T2Access.Web.SPA.VueJs.Areas.Admin
 
 
 
-    }
+    
+
+
+
+
+
+     // ====================================== Edit User =============================================
+
+        #region Edit
+        public async Task<IActionResult> GetById (Guid id)
+        {
+            using (var response = await _httpService.GetAsync($"GetById/?id={id}", token: HttpContext.Session.GetString("Token")))
+            {
+                var result = JsonConvert.DeserializeObject<UserViewModel>(await response.Content.ReadAsStringAsync());
+
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return Ok(result);
+                }
+
+                    return BadRequest(result);
+            }
+            return BadRequest();
+        }
+
+        [HttpPost]
+        // [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(UserViewModel model)
+        {
+            model.UserName = null;
+
+            using (var response = await _httpService.PutAsync($"Edit?id={model.Id}", model, token: HttpContext.Session.GetString("Token")))
+            {
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return Ok(result.Replace("\"", ""));
+
+                }
+                else
+                {
+                    Trace.WriteLine($"  Error Model :    {model}  ");
+
+                    return BadRequest(model);
+                    // ViewBag.ErrorMessage = result.Replace("\"", "");
+
+                }
+            }
+        }
+        #endregion
+        }
 }

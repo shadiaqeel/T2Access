@@ -5,6 +5,15 @@ const UserService = {
     fetch: async(params) => Axios.post(
         `/admin/user/loaddata`, params
     ),
+    fetchUser: async(id) => Axios.get(
+        `/admin/user/getbyid/${id}`,
+    ),
+    create: async(params) => Axios.post(
+        `/admin/user/create`, params
+    ),
+    edit: async(user) => Axios.post(
+        `/admin/user/edit`, user
+    ),
     delete: async(id) => Axios.delete(
         `/admin/user/delete/${id}`
     )

@@ -1,8 +1,10 @@
 import {
     SET_USERS,
+    SET_USER,
     // CREATE_USER,
     DELETE_USER,
     // EDIT_USER,
+    SET_EDITUSER,
     SET_CURRENT_PAGE,
     SET_PAGE_SIZE,
     SET_TOTAL_IN_SERVER
@@ -17,7 +19,7 @@ const to = () => from() + state.tableOptions.pageSize;
 
 const INITIAL_STATE = {
     users: [],
-    user: null,
+    editUser: null,
     tableOptions: {
         currentPage: 1,
         totalInServer: 0,
@@ -32,7 +34,7 @@ const state = Object.assign({}, INITIAL_STATE);
 const getters = {
     users: state => state.users,
 
-    getUser: (state) => (Id) => { return state.users.find(user => user.id === Id) },
+    editUser: state => state.editUser,
 
     hasUsers: state => state.users.length !== 0,
 
@@ -43,6 +45,13 @@ const getters = {
 const mutations = {
     [SET_USERS]: (state, users) => {
         state.users = users;
+    },
+    [SET_USER]: (state, user) => {
+        state.users.push(user);
+        state.tableOptions.totalInServer += 1;
+    },
+    [SET_EDITUSER]: (state, user) => {
+        state.editUser = user;
     },
     [SET_TOTAL_IN_SERVER]: (state, totalInServer) => {
         state.tableOptions.totalInServer = totalInServer;
@@ -64,12 +73,25 @@ const mutations = {
 const actions = {
     fetchUsers: async({ commit }, page) => {
         commit(SET_CURRENT_PAGE, page);
+        await UserService.fetch({ start: from(), length: to() }).then(res => {
+            if (res.status == 200) {
+                commit(SET_USERS, res.data.users);
+                commit(SET_TOTAL_IN_SERVER, res.data.recordsTotal);
 
-        const response = await UserService.fetch({start:from(), length : from());
-        if (response.status == 200) {
-            commit(SET_USERS, response.data.users);
-            commit(SET_TOTAL_IN_SERVER, response.data.recordsTotal);
-        }
+            }
+        });
+    },
+    fetchUser: async({ commit }, userId) => {
+
+        await UserService.fetchUser(userId).then(res => {
+            console.log(res);
+            if (res.status == 200) {
+                commit(SET_EDITUSER, res.data);
+
+
+            }
+        });
+
     },
     deleteUser: async({ commit }, userID) => {
 

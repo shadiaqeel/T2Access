@@ -12,7 +12,7 @@
             class="fa fa-bars tooltips"
             data-placement="right"
             data-original-title="Toggle Navigation"
-            @click="isCollapse = !isCollapse"
+            @click="isActive = !isActive"
           ></div>
           <!--logo-->
           <a href="#" class="logo">
@@ -27,7 +27,7 @@
         <div class="top-menu">
           <ul class="nav pull-right top-menu">
             <li>
-              <button class="logout fa fa-sign-out btn">logout</button>
+              <a class="logout fa fa-sign-out btn" href="/logout">logout</a>
             </li>
           </ul>
         </div>
@@ -36,14 +36,19 @@
       <!--MAIN SIDEBAR MENU -->
       <!--sidebar start-->
       <aside>
-        <div id="menu" :class="[{ active: isCollapse },'nav-collapse']">
+        <div
+          id="menu"
+          :class="[{ active: !isCollapse || isActive },'nav-collapse']"
+          @mouseover="isCollapse = false"
+          @mouseleave="isCollapse = true"
+        >
           <el-menu
             :router="true"
             :default-active="currentPage"
             class="el-menu-vertical-demo"
             @open="handleOpen"
             @close="handleClose"
-            :collapse="isCollapse"
+            :collapse=" !isActive && isCollapse"
             collapse-transition
             background-color="#2f323a"
             text-color="#fff"
@@ -56,25 +61,25 @@
           >
             <br />
 
-            <el-menu-item index="/home" :route="{name:'home'}">
+            <el-menu-item index="home" :route="{name:'home'}">
               <i class="el-icon-s-home"></i>
               <span slot="title">Dashboard</span>
             </el-menu-item>
-            <el-submenu index="2">
+            <el-submenu index="account">
               <template slot="title">
                 <i class="el-icon-monitor"></i>
                 <span slot="title">Accounts Managment</span>
               </template>
               <el-menu-item-group>
-                <el-menu-item index="/user" :route="{name:'user'}">Users</el-menu-item>
-                <el-menu-item index="/gate" :route="{name:'gate'}">Gates</el-menu-item>
+                <el-menu-item index="user" :route="{name:'user'}">Users</el-menu-item>
+                <el-menu-item index="gate" :route="{name:'gate'}">Gates</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
           </el-menu>
         </div>
       </aside>
     </section>
-    <section id="main-content" :style="mainContentStyle">
+    <section id="main-content" :class="{ active: !isCollapse || isActive }">
       <section class="wrapper">
         <slot />
       </section>
@@ -102,22 +107,12 @@ export default {
   data() {
     return {
       isCollapse: false,
-      isActive: false
+      isActive: true
     };
   },
   computed: {
     currentPage() {
-      return this.$route.path;
-    },
-    mainContentStyle() {
-      if (this.isCollapse)
-        return {
-          "margin-left": "63px"
-        };
-      else
-        return {
-          "margin-left": "204.2px"
-        };
+      return this.$route.name;
     }
   },
   mounted() {
@@ -154,6 +149,15 @@ export default {
   position: fixed;
 }
 
+#main-content {
+  margin-left: 63px;
+  transition: all 0.3s ease-in-out;
+}
+
+#main-content.active {
+  margin-left: 204.2px;
+  transition: all 0.3s ease-in-out;
+}
 // $screen-md-min
 @media only screen and (max-width: 768px) {
   #menu .el-menu {

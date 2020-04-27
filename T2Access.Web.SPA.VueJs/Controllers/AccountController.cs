@@ -114,7 +114,7 @@ namespace T2Access.Web.SPA.VueJs.Controllers
         }
 
 
-        public IActionResult LogOut()
+        public IActionResult logout()
         {
             HttpContext.Session.Clear();
 

@@ -6,6 +6,7 @@
       :data="data"
       :height="height"
       stripe
+      :border="border"
       style="width: 100%"
       highlight-current-row
       @select-all="handleSelectionChange"
@@ -22,6 +23,21 @@
         </div>
       </div>
       <slot v-else />
+
+      <infinite-loading
+        v-if="infiniteLoading"
+        slot="append"
+        @infinite="infiniteHandler"
+        force-use-infinite-wrapper=".el-table__body-wrapper"
+        :spinner="spinner"
+      >
+        <div slot="no-more">{{noMoreMessage}}</div>
+        <div slot="no-results">{{noResultsMessage}}</div>
+        <div slot="error" slot-scope="{ trigger }">
+          Opps, something went wrong :(
+          <a href="javascript:;" @click="trigger">Retry</a>
+        </div>
+      </infinite-loading>
     </el-table>
     <el-pagination
       class="pagination"
@@ -39,9 +55,11 @@
 </template>
 
 <script>
+import InfiniteLoading from "vue-infinite-loading";
+
 export default {
   name: "DataTable",
-
+  components: { InfiniteLoading },
   props: {
     title: {
       type: String,
@@ -65,7 +83,7 @@ export default {
 
     pagination: {
       type: Boolean,
-      default: true
+      default: false
     },
 
     paginationLayout: {
@@ -91,6 +109,26 @@ export default {
     numPerPage: {
       type: Number,
       default: 10
+    },
+    border: {
+      type: Boolean,
+      default: false
+    },
+    infiniteLoading: {
+      type: Boolean,
+      default: false
+    },
+    spinner: {
+      type: String,
+      default: "default"
+    },
+    noMoreMessage: {
+      type: String,
+      default: "No more message"
+    },
+    noResultsMessage: {
+      type: String,
+      default: "No more message"
     }
   },
 
@@ -109,10 +147,10 @@ export default {
   },
 
   methods: {
-    handleSelectionChange(selected) {
+    handleSelectionChange(selected, row) {
       this.selectedData = selected;
 
-      this.$emit("selected-fields", selected);
+      this.$emit("selected-fields", selected, row);
     },
 
     prevPage(page) {
@@ -129,6 +167,9 @@ export default {
 
     updatePage(page) {
       this.$emit("current-page", page);
+    },
+    infiniteHandler($state) {
+      this.$emit("infinite-handler", $state);
     }
   }
 };

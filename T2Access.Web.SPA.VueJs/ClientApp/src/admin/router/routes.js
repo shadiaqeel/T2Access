@@ -61,6 +61,7 @@ const routes = [{
             }
         ]
     },
+    { name: 'logout', path: '/account/logout'},
     { name: '404', path: '/404', component: NotFound },
     { name: 'catchAll', path: '*', redirect: '/404' }
 ];

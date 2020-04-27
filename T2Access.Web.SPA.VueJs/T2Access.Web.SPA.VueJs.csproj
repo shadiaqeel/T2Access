@@ -34,7 +34,6 @@
   <ItemGroup>
     <Folder Include="ClientApp\src\admin\store\" />
     <Folder Include="ClientApp\src\admin\types\models\" />
-    <Folder Include="ClientApp\src\admin\views\" />
   </ItemGroup>
   
   

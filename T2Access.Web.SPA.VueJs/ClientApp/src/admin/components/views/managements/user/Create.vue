@@ -1,12 +1,246 @@
 <template >
-  <h4 style="display: inline;">Create User</h4>
+  <div>
+    <h4 style="display: inline;">Create User</h4>
+    <div style="margin: 30px 40px;  ">
+      <el-form
+        label-position="top"
+        label-width="180px"
+        ref="newUserForm"
+        :model="newUser"
+        :rules="rules"
+        status-icon
+        hide-required-asterisk
+        size="medium"
+      >
+        <el-form-item label="User Name" style="width:100%;" prop="username">
+          <el-input v-model="newUser.username"></el-input>
+        </el-form-item>
+        <div class="row">
+          <el-form-item label="First Name" class="col-md-6" prop="firstname">
+            <el-input v-model="newUser.firstname"></el-input>
+          </el-form-item>
+          <el-form-item label="Last Name" class="col-md-6" prop="lastname">
+            <el-input v-model="newUser.lastname"></el-input>
+          </el-form-item>
+        </div>
+        <div class="row">
+          <el-form-item label="Password" class="col-md-6" prop="password">
+            <el-input v-model="newUser.password" show-password></el-input>
+          </el-form-item>
+          <el-form-item label="Confirm Password" class="col-md-6" prop="confirmPassword">
+            <el-input v-model="newUser.confirmPassword" show-password></el-input>
+          </el-form-item>
+        </div>
+
+        <el-divider>
+          <i class="el-icon-star-on"></i>
+        </el-divider>
+
+        <el-card :body-style="{padding:'0px'}">
+          <div slot="header" class="clearfix">
+            <span>Gate Table</span>
+          </div>
+
+          <Datatable
+            :data="gateList"
+            :height="250"
+            style="width: 100%"
+            :loader="loader"
+            :infiniteLoading="true"
+            @infinite-handler="infiniteHandler"
+            spinner="waveDots"
+            @selected-fields="handleSelectionChange"
+          >
+            <el-table-column type="selection" width="55" property="checked"></el-table-column>
+
+            <el-table-column min-width="100" label="Arabic Name" property="nameAr" sortable></el-table-column>
+
+            <el-table-column min-width="100" label="Engilsh Name" property="nameEn" sortable></el-table-column>
+          </Datatable>
+        </el-card>
+
+        <div class="mt centered">
+          <el-form-item>
+            <el-button type="primary" @click="submitForm('newUserForm')">Create</el-button>
+            <el-button @click="$router.push({name:'user'})">Exit</el-button>
+          </el-form-item>
+        </div>
+      </el-form>
+    </div>
+  </div>
 </template>
 
 <script>
+import Datatable from "admin/components/elements/Datatable";
+
+import gateSerivce from "admin/services/gate-service";
+import userSerivce from "admin/services/user-service";
+
 export default {
-  name: "CreateUser"
+  name: "CreateUser",
+  components: {
+    Datatable
+  },
+  data() {
+    var validatePass = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("Please input the password"));
+      } else {
+        if (this.newUser.checkPass !== "") {
+          this.$refs.newUserForm.validateField("confirmPassword");
+        }
+        callback();
+      }
+    };
+    var validatePass2 = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("Please input the password again"));
+      } else if (value !== this.newUser.password) {
+        callback(new Error("Two inputs don't match!"));
+      } else {
+        callback();
+      }
+    };
+
+    return {
+      page: 1,
+      loader: false,
+      gateList: [],
+      selectedList: [],
+      newUser: {
+        username: "",
+        firstname: "",
+        lastname: "",
+        password: "",
+        confirmPassword: "",
+        addedGateList: ""
+      },
+      rules: {
+        username: [
+          {
+            required: true,
+            message: "Please input user name",
+            trigger: "blur"
+          },
+          {
+            min: 8,
+            max: 20,
+            message: "Length should be 8 to 20",
+            trigger: "blur"
+          }
+        ],
+        firstname: [
+          {
+            required: true,
+            message: "Please input first name",
+            trigger: "blur"
+          },
+          {
+            min: 3,
+            max: 20,
+            message: "Length should be 3 to 20",
+            trigger: "blur"
+          }
+        ],
+        lastname: [
+          {
+            required: true,
+            message: "Please input last name",
+            trigger: "blur"
+          },
+          {
+            min: 5,
+            max: 20,
+            message: "Length should be 5 to 20",
+            trigger: "blur"
+          }
+        ],
+        password: [
+          {
+            min: 8,
+            max: 20,
+            message: "Length should be 8 to 20",
+            trigger: "blur"
+          },
+          { validator: validatePass, trigger: "blur" }
+        ],
+        confirmPassword: [
+          {
+            min: 8,
+            max: 20,
+            message: "Length should be 8 to 20",
+            trigger: "blur"
+          },
+          { validator: validatePass2, trigger: "blur" }
+        ]
+      }
+    };
+  },
+  created() {
+    //this.loadGateList();
+  },
+  methods: {
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+     
+            this.newUser.addedGateList = this.selectedList.map(gate => gate.id).toString();
+            console.log(this.newUser);
+            userSerivce
+              .create(this.newUser)
+              .then(res => {
+                if (res.status == 200) 
+                {
+                    this.$router.push({ name: "user" });}
+                console.log(res);
+              })
+              .catch(e => {
+                console.log(e);
+              });
+          
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    infiniteHandler($state) {
+      console.log($state);
+      var start = (this.page - 1) * 10;
+      var length = start + 10;
+      gateSerivce
+        .fetch({
+          start: start,
+          length: length
+        })
+        .then(res => {
+          if (res.status == 200 && res.data.list.length) {
+            this.page += 1;
+            this.gateList = this.gateList.concat(res.data.list);
+            $state.loaded();
+          } else if (!this.gateList.length) {
+            $state.reset();
+            setTimeout(() => {
+              $state.complete();
+            }, 1);
+          } else {
+            $state.loaded();
+            $state.complete();
+          }
+        })
+        .catch(e => {
+          console.log(e);
+          $state.error();
+        });
+    },
+    handleSelectionChange(selectedList, item) {
+      this.selectedList = selectedList;
+      console.log(selectedList);
+      console.log(item);
+    }
+  }
 };
 </script>
 
-<style lang="sass" scoped>
+<style lang="scss" scoped>
 </style>
