@@ -3,7 +3,7 @@
     <h3 class="title-section" v-if="title">{{ title }}</h3>
     <el-table
       :row-key="rowKey"
-      ref="dataTable"
+      ref="table"
       v-loading="loader"
       :data="data"
       :height="height"
@@ -11,8 +11,9 @@
       :border="border"
       style="width: 100%"
       highlight-current-row
-      @select-all="handleSelectionChange"
-      @select="handleSelectionChange"
+      @select-all="handleSelectAll"
+      @select="handleSelect"
+      @selection-change="handleSelectionChange"
       @current-change="handleCurrentChange"
       @row-click="handleRowClick"
     >
@@ -153,12 +154,6 @@ export default {
   },
 
   methods: {
-    handleSelectionChange(selected, row) {
-      this.selectedData = selected;
-
-      this.$emit("selected-fields", selected, row);
-    },
-
     prevPage(page) {
       this.$emit("current-page", page);
     },
@@ -179,6 +174,20 @@ export default {
     },
     handleCurrentChange(val) {
       this.$emit("current-change", val);
+    },
+    handleSelect(selected, row) {
+      this.selectedData = selected;
+
+      this.$emit("select", selected, row);
+    },
+    handleSelectionChange(selected, row) {
+      this.selectedData = selected;
+
+      this.$emit("selection-change", selected, row);
+    },
+    handleSelectAll(selected) {
+      this.selectedData = selected;
+      this.$emit("select-all", selected);
     },
     handleRowClick(row, column, event) {
       this.$emit("row-click", row, column, event);

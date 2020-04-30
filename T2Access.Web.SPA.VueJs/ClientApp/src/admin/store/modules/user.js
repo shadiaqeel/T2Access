@@ -27,8 +27,7 @@ const INITIAL_STATE = {
 };
 
 
-const state = Object.assign({}, INITIAL_STATE);
-
+const state = {...INITIAL_STATE }
 
 const getters = {
     users: state => state.users,

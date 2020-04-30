@@ -195,7 +195,7 @@ export default {
           .finally(() => this.loadPage(this.tableOptionsState.currentPage));
     },
     handleEdit(row) {
-      this.$store.commit("gate/" + SET_EDITGATE, Object.assign({}, row));
+      this.$store.commit(`gate/${SET_EDITGATE}`, { ...row });
       this.$router.push({ name: "EditGate", params: { gateId: row.id } });
     },
     handleDelete(id) {

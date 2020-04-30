@@ -122,7 +122,7 @@ namespace T2Access.Web.SPA.VueJs
             //Add Token to all incoming HTTP Request Header
             app.Use(async (context, next) =>
             {
-                var token = context.Session.GetString("Token");
+                string token = context.Session.GetString("Token");
                 if (!string.IsNullOrEmpty(token))
                 {
                     context.Request.Headers.Add("Authorization", "Bearer " + token);
@@ -153,7 +153,6 @@ namespace T2Access.Web.SPA.VueJs
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseSpaStaticFiles();
 
 
 
@@ -175,10 +174,15 @@ namespace T2Access.Web.SPA.VueJs
 
                 endpoints.MapControllerRoute(
                   name: "default",
-                  pattern: "{lang=en}/{controller=account}/{action=login}/{id?}");
+                  pattern: "{lang=en}/{controller=account}/{action=login}");
+                  //defaults: new { controller = "Account", action = "Login" });
+            
 
 
             });
+
+            app.UseSpaStaticFiles();
+
 
             app.UseSpa(spa =>
                                 {

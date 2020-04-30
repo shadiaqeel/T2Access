@@ -118,7 +118,8 @@ namespace T2Access.Web.SPA.VueJs.Controllers
         {
             HttpContext.Session.Clear();
 
-            return RedirectToAction("Login", "Account");
+
+            return Redirect($"/{Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName}/Account/login");
         }
 
 

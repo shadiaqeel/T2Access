@@ -138,7 +138,7 @@ namespace T2Access.Web.SPA.VueJs.Areas.Admin
 
         [HttpPost]
         // [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(UserViewModel model)
+        public async Task<IActionResult> Edit([FromBody]UserViewModel model)
         {
             if (!ModelState.IsValid)
             {

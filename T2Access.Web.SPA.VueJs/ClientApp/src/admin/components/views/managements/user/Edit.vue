@@ -2,7 +2,7 @@
   <div>
     <h4 style="display: inline;">Edit User</h4>
     <div style="margin: 30px 40px;  " v-if="editUser">
-      <el-form label-position="left" label-width="100px" :model="editUser">
+      <el-form label-position="left" label-width="100px" :model="editUser" ref="editUser">
         <el-form-item label="User Name" style="width:100%;" :error="modelstate['UserName']">
           <el-input :disabled="true" v-model="editUser.userName"></el-input>
         </el-form-item>
@@ -35,7 +35,7 @@
           </div>
 
           <Datatable
-            ref="Table"
+            ref="dataTable"
             :data="gateList"
             rowKey="id"
             :height="250"
@@ -46,7 +46,9 @@
             spinner="waveDots"
             highlight-current-row
             @row-click="handleRowClick"
-            @selected-fields="handleSelectionChange"
+            @selection-change="handleSelectionChange"
+            @select-all="handleSelectAll"
+            @select="handleSelect"
           >
             <el-table-column
               type="selection"
@@ -103,8 +105,9 @@ export default {
     return {
       userStatus: userStatus,
       modelstate: {},
-      AddedGateList: [],
-      RemovedGateList: [],
+      selectedGateList: [],
+      addedGateList: [],
+      removedGateList: [],
       gateList: [],
       page: 1,
       loader: false
@@ -124,20 +127,23 @@ export default {
       return this.$store
         .dispatch("user/fetchById", this.$route.params.userId)
         .catch(e => {
+          console.error(e);
           this.$router.push({ name: "user" });
         });
     },
     submitForm(formName) {
+      console.groupCollapsed("Submit Form");
       this.modelstate = {};
-
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.editUser.addedGateList = this.AddedGateList;
-          this.editUser.removedGateList = this.RemovedGateList.map(
-            gate => gate.id
-          ).toString();
+          console.time("Edit User");
+
           userSerivce
-            .create(this.editUser)
+            .edit({
+              ...this.editUser,
+              addedGateList: this.addedGateList.toString(),
+              removedGateList: this.removedGateList.toString()
+            })
             .then(res => {
               if (res.status == 200) {
                 this.$notify({
@@ -147,19 +153,24 @@ export default {
                 });
                 this.$router.push({ name: "user" });
               }
+              console.log(res);
             })
             .catch(error => {
+              console.log("error");
+
               if (error.response.status == 400) {
                 this.modelstate = JSON.parse(
                   JSON.stringify(error.response.data)
                 );
               }
             });
+          console.timeEnd("Edit User");
         } else {
           console.log("error submit!!");
           return false;
         }
       });
+      console.groupEnd("Submit Form");
     },
     infiniteHandler($state) {
       var start = (this.page - 1) * 10;
@@ -178,34 +189,97 @@ export default {
             $state.loaded();
           } else if (!this.gateList.length) {
             $state.reset();
-            setTimeout(() => {
-              $state.complete();
-            }, 1);
+            $state.complete();
           } else {
             $state.loaded();
             $state.complete();
           }
         })
         .catch(e => {
-          console.log(e);
+          console.error(e);
           $state.error();
         });
     },
-    handleSelectionChange(selectedList, item) {
-      this.selectedList = selectedList;
-      console.log(selectedList);
-      console.log(item);
+    handleSelectionChange(selection, item) {
+      this.selectedGateList = selection;
+    },
+    handleSelect(selection, row) {
+      setTimeout(() => {
+        this.selectGate(row);
+      }, 0);
+    },
+    handleSelectAll(selection) {
+      console.groupCollapsed("handle Select All");
+      console.table(selection);
+
+      console.time("handle Select All");
+      this.loader = true;
+      this.removedGateList = [];
+      this.addedGateList = [];
+
+      if (selection?.length) {
+        selection.forEach(gate => {
+          if (!gate.checked) this.addedGateList.push(gate.id);
+        });
+      } else {
+        this.gateList.forEach(gate => {
+          if (gate.checked) {
+            this.removedGateList.push(gate.id);
+          }
+        });
+      }
+      this.loader = false;
+
+      console.groupCollapsed("Arrays");
+      console.table(this.$refs["dataTable"].$refs["table"].selection);
+      console.table(this.addedGateList);
+      console.table(this.removedGateList);
+      console.groupEnd("Arrays");
+      console.timeEnd("handle Select All");
+      console.groupEnd("handle Select All");
     },
     handleRowClick(row, column, event) {
-      this.$refs["Table"].$refs["dataTable"].toggleRowSelection(row);
-      console.log(this.$refs["Table"].$refs["dataTable"].selection);
+      this.$refs["dataTable"].$refs["table"].toggleRowSelection(row);
+      setTimeout(() => {
+        this.selectGate(row);
+      }, 0);
     },
     toggleSelection(rows) {
       if (rows) {
         rows.forEach(row => {
-          this.$refs["Table"].$refs["dataTable"].toggleRowSelection(row);
+          this.$refs["dataTable"].$refs["table"].toggleRowSelection(row);
         });
       }
+    },
+    selectGate(row) {
+      console.groupCollapsed("Select Gate");
+
+      console.time("select Gate");
+
+      const isCheck = this.selectedGateList.includes(row);
+
+      if (isCheck) {
+        if (row.checked) {
+          this.removedGateList.splice(this.removedGateList.indexOf(row.id));
+        } else {
+          this.addedGateList.push(row.id);
+        }
+      } else {
+        if (row.checked) {
+          this.removedGateList.push(row.id);
+        } else {
+          this.addedGateList.splice(this.addedGateList.indexOf(row.id));
+        }
+      }
+
+      console.timeEnd("select Gate");
+
+      console.groupCollapsed("Arrays");
+      console.table(this.selectedGateList);
+      console.table(this.addedGateList);
+      console.table(this.removedGateList);
+      console.groupEnd("Arrays");
+      console.groupEnd("Select Gate");
     }
   }
 };

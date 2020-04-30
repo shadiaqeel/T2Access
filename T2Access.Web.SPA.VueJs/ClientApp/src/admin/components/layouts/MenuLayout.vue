@@ -17,7 +17,9 @@
           <!--logo-->
           <a href="#" class="logo">
             <b>
-              t<span id="t">t</span><span>Ac</span>cess
+              t
+              <span id="t">t</span>
+              <span>Ac</span>cess
             </b>
           </a>
         </div>
@@ -25,7 +27,7 @@
         <div class="top-menu">
           <ul class="nav pull-right top-menu">
             <li>
-              <a class="logout fa fa-sign-out btn" href="/logout">logout</a>
+              <a class="logout fa fa-sign-out btn" href="/en/account/logout">logout</a>
             </li>
           </ul>
         </div>
