@@ -1,27 +1,13 @@
 <template >
   <el-dialog
-    title="ADD GATE"
+    title="Edit GATE"
     :visible.sync="dialogFormVisible"
     @closed="$router.push({name:'gate'})"
     :center="true"
   >
-    <el-form
-      :model="newGate"
-      label-position="top"
-      label-width="180px"
-      ref="newGateForm"
-      size="medium"
-      :rules="rules"
-      status-icon
-      hide-required-asterisk
-    >
-      <el-form-item
-        label="User Name"
-        :label-width="formLabelWidth"
-        prop="username"
-        :error="modelstate['UserName']"
-      >
-        <el-input v-model="newGate.username" autocomplete="off"></el-input>
+    <el-form :model="editGate" label-position="top" ref="editGateForm" size="medium" :rules="rules">
+      <el-form-item label="User Name" :label-width="formLabelWidth" :error="modelstate['UserName']">
+        <el-input :disabled="true" v-model="editGate.userName" autocomplete="off" prop="username"></el-input>
       </el-form-item>
       <div class="row">
         <div class="col-md-6">
@@ -31,7 +17,7 @@
             prop="nameAr"
             :error="modelstate['NameAr']"
           >
-            <el-input v-model="newGate.nameAr" autocomplete="off"></el-input>
+            <el-input v-model="editGate.nameAr" autocomplete="off"></el-input>
           </el-form-item>
         </div>
         <div class="col-md-6">
@@ -41,80 +27,53 @@
             prop="nameEn"
             :error="modelstate['NameEn']"
           >
-            <el-input v-model="newGate.nameEn" autocomplete="off"></el-input>
+            <el-input v-model="editGate.nameEn" autocomplete="off"></el-input>
           </el-form-item>
         </div>
       </div>
       <div class="row">
         <div class="col-md-6">
-          <el-form-item
-            label="Password"
-            :label-width="formLabelWidth"
-            prop="password"
-            :error="modelstate['Password']"
-          >
-            <el-input v-model="newGate.password" show-password></el-input>
-          </el-form-item>
-        </div>
-
-        <div class="col-md-6">
-          <el-form-item
-            label="Confirm Password"
-            :label-width="formLabelWidth"
-            prop="confirmPassword"
-            :error="modelstate['ConfirmPassword']"
-          >
-            <el-input v-model="newGate.confirmPassword" show-password></el-input>
+          <el-form-item label="Status" :label-width="formLabelWidth">
+            <el-select
+              size="small"
+              style="width:150px"
+              v-model="editGate.status"
+              value-key="filter.status"
+              @clear="editGate.status = null"
+              placeholder="Status"
+            >
+              <el-option
+                v-for="(status, index) in gateStatus"
+                :key="index"
+                :label="status.label"
+                :value="index"
+              ></el-option>
+            </el-select>
           </el-form-item>
         </div>
       </div>
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="dialogFormVisible = false">Cancel</el-button>
-      <el-button type="primary" @click="submitForm('newGateForm')">Add</el-button>
+      <el-button type="primary" @click="submitForm('editGateForm')">Edit</el-button>
     </span>
   </el-dialog>
 </template>
 
 <script>
-import gateSerivce from "admin/services/gate-service";
+import { gateStatus } from "admin/types/status";
+import { mapGetters } from "vuex";
+// import gateSerivce from "admin/services/gate-service";
 
 export default {
-  name: "CreateGate",
+  name: "EditGate",
+  props: ["userId"],
   data() {
-    var validatePass = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("Please input the password"));
-      } else {
-        if (this.newGate.checkPass !== "") {
-          this.$refs.newGateForm.validateField("confirmPassword");
-        }
-        callback();
-      }
-    };
-    var validatePass2 = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("Please input the password again"));
-      } else if (value !== this.newGate.password) {
-        callback(
-          new Error("The password and confirmation password do not match!")
-        );
-      } else {
-        callback();
-      }
-    };
-
     return {
+      gateStatus: gateStatus,
       dialogFormVisible: true,
       formLabelWidth: "120px",
       modelstate: {},
-      newGate: {
-        username: "",
-        nameAr: "",
-        nameEn: "",
-        password: "",
-        ConfirmPassword: ""
-      },
       rules: {
         username: [
           {
@@ -123,7 +82,7 @@ export default {
             trigger: "blur"
           },
           {
-            min: 7,
+            min: 8,
             max: 20,
             message: "Length should be 8 to 20",
             trigger: "blur"
@@ -149,7 +108,7 @@ export default {
             trigger: "blur"
           },
           {
-            min: 3,
+            min: 5,
             max: 20,
             message: "Length should be 5 to 20",
             trigger: "blur"
@@ -176,39 +135,32 @@ export default {
       }
     };
   },
+  computed: {
+    ...mapGetters("gate", ["editGate"])
+  },
   methods: {
     submitForm(formName) {
       this.modelstate = {};
 
       this.$refs[formName].validate(valid => {
         if (valid) {
-          gateSerivce
-            .create(this.newGate)
-            .then(res => {
-              if (res.status == 200) {
-                console.log(res);
-                this.$notify({
-                  group: "main",
-                  type: "success",
-                  text: res.data
-                });
-                this.dialogFormVisible = false;
-              }
+          console.log(this.editGate);
+          this.$store
+            .dispatch("gate/edit", this.editGate)
+            .then(message => {
+              this.$notify({
+                group: "main",
+                type: "success",
+                text: message
+              });
+              this.dialogFormVisible = false;
             })
             .catch(error => {
-              console.log(error.response);
-
               if (error.response.status == 400) {
                 this.modelstate = JSON.parse(
                   JSON.stringify(error.response.data)
                 );
               }
-
-              this.$notify({
-                group: "main",
-                type: "error",
-                text: error
-              });
             });
         } else {
           this.$notify({

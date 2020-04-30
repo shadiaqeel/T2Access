@@ -1,13 +1,11 @@
 using System;
 using System.Globalization;
-using System.IO;
 using System.Net;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -165,22 +163,22 @@ namespace T2Access.Web.SPA.VueJs
 
             app.UseEndpoints(endpoints =>
             {
-            endpoints.MapControllerRoute(
-                name: "spa-admin-api",
-                pattern: "{lang=en}/admin/{controller=Home}/{action=index}",
-                defaults: new { area = "admin"});
+                endpoints.MapControllerRoute(
+                    name: "spa-admin-api",
+                    pattern: "{lang=en}/admin/{controller=Home}/{action=index}",
+                    defaults: new { area = "admin" });
 
-            endpoints.MapControllerRoute(
-              name: "spa-admin-fallback",
-              pattern: "{lang=en}/admin/{*anything}",
-              defaults: new { area = "admin", controller = "Home", action = "Index" });
+                endpoints.MapControllerRoute(
+                  name: "spa-admin-fallback",
+                  pattern: "{lang=en}/admin/{*anything}",
+                  defaults: new { area = "admin", controller = "Home", action = "Index" });
 
-            endpoints.MapControllerRoute(
-              name: "default",
-              pattern: "{lang=en}/{controller=account}/{action=login}/{id?}");
+                endpoints.MapControllerRoute(
+                  name: "default",
+                  pattern: "{lang=en}/{controller=account}/{action=login}/{id?}");
 
 
-        });
+            });
 
             app.UseSpa(spa =>
                                 {

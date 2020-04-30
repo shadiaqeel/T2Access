@@ -8,9 +8,11 @@ export const EDIT_USER = 'EDIT_USER';
 
 // Gate Module
 export const SET_GATE = 'SET_GATE';
+export const SET_GATES = 'SET_GATES';
 export const CREATE_GATE = 'CREATE_GATE';
 export const DELETE_GATE = 'DELETE_GATE';
 export const EDIT_GATE = 'EDIT_GATE';
+export const SET_EDITGATE = 'SET_EDITGATE';
 
 
 // Shared 

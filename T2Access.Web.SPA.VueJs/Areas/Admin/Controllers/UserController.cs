@@ -16,6 +16,7 @@ using T2Access.Services.HttpClientService;
 using T2Access.Web.SPA.VueJs.Models;
 using T2Access.Web.SPA.VueJs.Areas.Admin.Models;
 using T2Access.Models;
+using T2Access.Web.SPA.VueJs.Extensions;
 
 namespace T2Access.Web.SPA.VueJs.Areas.Admin
 {
@@ -74,7 +75,7 @@ namespace T2Access.Web.SPA.VueJs.Areas.Admin
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(ModelState.GetModelStateErrors());
             }
 
             using (var response = await _httpService.PostAsync(" Signup/", model, token: HttpContext.Session.GetString("Token")))
@@ -133,13 +134,16 @@ namespace T2Access.Web.SPA.VueJs.Areas.Admin
 
                     return BadRequest(result);
             }
-            return BadRequest();
         }
 
         [HttpPost]
         // [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(UserViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState.GetModelStateErrors());
+            }
             model.UserName = null;
 
             using (var response = await _httpService.PutAsync($"Edit?id={model.Id}", model, token: HttpContext.Session.GetString("Token")))

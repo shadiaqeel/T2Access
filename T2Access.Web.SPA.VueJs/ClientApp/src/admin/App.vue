@@ -1,6 +1,7 @@
 <template>
   <component :is="layout">
     <router-view></router-view>
+    <notifications position="bottom right" group="main" animation-type="velocity" />
   </component>
 </template>
 

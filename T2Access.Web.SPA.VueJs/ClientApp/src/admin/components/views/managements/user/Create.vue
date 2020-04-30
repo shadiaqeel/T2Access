@@ -12,22 +12,47 @@
         hide-required-asterisk
         size="medium"
       >
-        <el-form-item label="User Name" style="width:100%;" prop="username">
+        <el-form-item
+          label="User Name"
+          style="width:100%;"
+          prop="username"
+          :error="modelstate['UserName']"
+        >
           <el-input v-model="newUser.username"></el-input>
         </el-form-item>
         <div class="row">
-          <el-form-item label="First Name" class="col-md-6" prop="firstname">
+          <el-form-item
+            label="First Name"
+            class="col-md-6"
+            prop="firstname"
+            :error="modelstate['FirstName']"
+          >
             <el-input v-model="newUser.firstname"></el-input>
           </el-form-item>
-          <el-form-item label="Last Name" class="col-md-6" prop="lastname">
+          <el-form-item
+            label="Last Name"
+            class="col-md-6"
+            prop="lastname"
+            :error="modelstate['LastName']"
+          >
             <el-input v-model="newUser.lastname"></el-input>
           </el-form-item>
         </div>
         <div class="row">
-          <el-form-item label="Password" class="col-md-6" prop="password">
+          <el-form-item
+            label="Password"
+            class="col-md-6"
+            prop="password"
+            :error="modelstate['Password']"
+          >
             <el-input v-model="newUser.password" show-password></el-input>
           </el-form-item>
-          <el-form-item label="Confirm Password" class="col-md-6" prop="confirmPassword">
+          <el-form-item
+            label="Confirm Password"
+            class="col-md-6"
+            prop="confirmPassword"
+            :error="modelstate['ConfirmPassword']"
+          >
             <el-input v-model="newUser.confirmPassword" show-password></el-input>
           </el-form-item>
         </div>
@@ -44,6 +69,7 @@
           <Datatable
             :data="gateList"
             :height="250"
+            rowKey="id"
             style="width: 100%"
             :loader="loader"
             :infiniteLoading="true"
@@ -51,7 +77,12 @@
             spinner="waveDots"
             @selected-fields="handleSelectionChange"
           >
-            <el-table-column type="selection" width="55" property="checked"></el-table-column>
+            <el-table-column
+              type="selection"
+              :reserve-selection="true"
+              width="55"
+              property="checked"
+            ></el-table-column>
 
             <el-table-column min-width="100" label="Arabic Name" property="nameAr" sortable></el-table-column>
 
@@ -86,7 +117,7 @@ export default {
       if (value === "") {
         callback(new Error("Please input the password"));
       } else {
-        if (this.newUser.checkPass !== "") {
+        if (this.newUser.confirmPassword !== "") {
           this.$refs.newUserForm.validateField("confirmPassword");
         }
         callback();
@@ -96,7 +127,9 @@ export default {
       if (value === "") {
         callback(new Error("Please input the password again"));
       } else if (value !== this.newUser.password) {
-        callback(new Error("Two inputs don't match!"));
+        callback(
+          new Error("The password and confirmation password do not match!")
+        );
       } else {
         callback();
       }
@@ -107,6 +140,7 @@ export default {
       loader: false,
       gateList: [],
       selectedList: [],
+      modelstate: {},
       newUser: {
         username: "",
         firstname: "",
@@ -181,23 +215,32 @@ export default {
   },
   methods: {
     submitForm(formName) {
+      this.modelstate = {};
+
       this.$refs[formName].validate(valid => {
         if (valid) {
-     
-            this.newUser.addedGateList = this.selectedList.map(gate => gate.id).toString();
-            console.log(this.newUser);
-            userSerivce
-              .create(this.newUser)
-              .then(res => {
-                if (res.status == 200) 
-                {
-                    this.$router.push({ name: "user" });}
-                console.log(res);
-              })
-              .catch(e => {
-                console.log(e);
-              });
-          
+          this.newUser.addedGateList = this.selectedList
+            .map(gate => gate.id)
+            .toString();
+          userSerivce
+            .create(this.newUser)
+            .then(res => {
+              if (res.status == 200) {
+                this.$notify({
+                  group: "main",
+                  type: "success",
+                  text: res.data
+                });
+                this.$router.push({ name: "user" });
+              }
+            })
+            .catch(error => {
+              if (error.response.status == 400) {
+                this.modelstate = JSON.parse(
+                  JSON.stringify(error.response.data)
+                );
+              }
+            });
         } else {
           console.log("error submit!!");
           return false;
@@ -205,13 +248,11 @@ export default {
       });
     },
     infiniteHandler($state) {
-      console.log($state);
       var start = (this.page - 1) * 10;
-      var length = start + 10;
       gateSerivce
         .fetch({
           start: start,
-          length: length
+          length: 10
         })
         .then(res => {
           if (res.status == 200 && res.data.list.length) {

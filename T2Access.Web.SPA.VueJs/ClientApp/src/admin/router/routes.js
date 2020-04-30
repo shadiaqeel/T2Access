@@ -47,21 +47,26 @@ const routes = [{
         component: ContentPanel,
         display: 'GateManagement',
         children: [{
-                name: 'gate',
-                path: '',
-                component: () =>
-                    import ('../components/views/managements/gate/GateManagement'),
-            },
-            {
+            name: 'gate',
+            path: '',
+            component: () =>
+                import ('../components/views/managements/gate/GateManagement'),
+            children: [{
                 name: 'createGate',
                 path: 'create',
                 component: () =>
                     import ('../components/views/managements/gate/Create')
 
-            }
-        ]
+            }, {
+                name: 'EditGate',
+                path: 'edit/:gateId',
+                props: true,
+                component: () =>
+                    import ('../components/views/managements/gate/Edit')
+            }]
+        }]
     },
-    { name: 'logout', path: '/account/logout'},
+    { name: 'logout', path: '/account/logout' },
     { name: '404', path: '/404', component: NotFound },
     { name: 'catchAll', path: '*', redirect: '/404' }
 ];

@@ -2,6 +2,12 @@
 import Vue from 'vue';
 import Vuex from 'vuex'
 import router from './router/index';
+// import { Notification } from "admin/utils/helper/notification";
+import Notifications from 'vue-notification'
+import velocity from 'velocity-animate'
+
+
+
 
 
 Vue.config.performance = true
@@ -29,9 +35,12 @@ import './styles/main.sass';
 
 Vue.use(ElementUI, { locale });
 Vue.use(Vuex);
+Vue.use(Notifications, { velocity })
+
 
 // Configurations
 Vue.prototype.$http = axios;
+// Vue.prototype.$notification = Notification;
 // Vue.prototype.$loading = Loading.service({ fullscreen: true });
 // Vue.prototype.$myStore = store;
 

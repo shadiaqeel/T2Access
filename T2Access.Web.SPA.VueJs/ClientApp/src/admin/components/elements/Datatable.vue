@@ -2,6 +2,8 @@
   <div id="data-table">
     <h3 class="title-section" v-if="title">{{ title }}</h3>
     <el-table
+      :row-key="rowKey"
+      ref="dataTable"
       v-loading="loader"
       :data="data"
       :height="height"
@@ -11,6 +13,8 @@
       highlight-current-row
       @select-all="handleSelectionChange"
       @select="handleSelectionChange"
+      @current-change="handleCurrentChange"
+      @row-click="handleRowClick"
     >
       <div v-if="columns">
         <div class="columns" v-for="(column, index) in columns" :key="index">
@@ -45,7 +49,7 @@
       :total="totalInServer"
       :page-size="numDataPerPage"
       @current-change="updatePage"
-      :current-page.sync="actualPage"
+      :currentPage="currentPage"
       :layout="paginationLayout"
       @prev-click="prevPage"
       @next-click="nextPage"
@@ -70,7 +74,9 @@ export default {
       type: Array,
       required: true
     },
-
+    rowKey: {
+      required: false
+    },
     totalInServer: {
       type: Number,
       default: 0
@@ -170,6 +176,12 @@ export default {
     },
     infiniteHandler($state) {
       this.$emit("infinite-handler", $state);
+    },
+    handleCurrentChange(val) {
+      this.$emit("current-change", val);
+    },
+    handleRowClick(row, column, event) {
+      this.$emit("row-click", row, column, event);
     }
   }
 };

@@ -14,8 +14,7 @@ import UserService from '../../services/user-service';
 
 
 
-const from = () => (state.tableOptions.currentPage - 1) * state.tableOptions.pageSize;
-const to = () => from() + state.tableOptions.pageSize;
+
 
 const INITIAL_STATE = {
     users: [],
@@ -71,9 +70,9 @@ const mutations = {
 };
 
 const actions = {
-    fetchUsers: async({ commit }, page) => {
+    fetchPage: async({ commit }, page) => {
         commit(SET_CURRENT_PAGE, page);
-        await UserService.fetch({ start: from(), length: to() }).then(res => {
+        await UserService.fetch({ start: (state.tableOptions.currentPage - 1) * state.tableOptions.pageSize, length: state.tableOptions.pageSize }).then(res => {
             if (res.status == 200) {
                 commit(SET_USERS, res.data.users);
                 commit(SET_TOTAL_IN_SERVER, res.data.recordsTotal);
@@ -81,9 +80,9 @@ const actions = {
             }
         });
     },
-    fetchUser: async({ commit }, userId) => {
+    fetchById: async({ commit }, userId) => {
 
-        await UserService.fetchUser(userId).then(res => {
+        await UserService.fetchById(userId).then(res => {
             console.log(res);
             if (res.status == 200) {
                 commit(SET_EDITUSER, res.data);
@@ -93,7 +92,7 @@ const actions = {
         });
 
     },
-    deleteUser: async({ commit }, userID) => {
+    delete: async({ commit }, userID) => {
 
         const response = await UserService.delete(userID);
         return new Promise((resolve, reject) => {
@@ -114,6 +113,7 @@ const actions = {
 
 
 export default {
+    namespaced: true,
     state,
     getters,
     mutations,

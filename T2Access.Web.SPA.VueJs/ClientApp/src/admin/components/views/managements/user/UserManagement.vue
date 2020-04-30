@@ -55,7 +55,7 @@
 
     <Datatable
       :data="isFiltered?users:usersState"
-      :pagination ="true"
+      :pagination="true"
       :total-in-server="isFiltered? tableOptions.totalInServer : tableOptionsState.totalInServer "
       :current-page="isFiltered? tableOptions.currentPage : tableOptionsState.currentPage"
       :numPerPage="isFiltered? tableOptions.pageSize : tableOptionsState.pageSize"
@@ -63,13 +63,31 @@
       @current-page="loadPage"
       @size-table="size"
     >
-      <el-table-column min-width="100" label="User Name" property="userName" sortable></el-table-column>
+      <el-table-column
+        min-width="100"
+        align="center"
+        label="User Name"
+        property="userName"
+        sortable
+      ></el-table-column>
 
-      <el-table-column min-width="100" label="First Name" property="firstName" sortable></el-table-column>
+      <el-table-column
+        min-width="100"
+        align="center"
+        label="First Name"
+        property="firstName"
+        sortable
+      ></el-table-column>
 
-      <el-table-column min-width="100" label="Last Name" property="lastName" sortable></el-table-column>
+      <el-table-column
+        min-width="100"
+        align="center"
+        label="Last Name"
+        property="lastName"
+        sortable
+      ></el-table-column>
 
-      <el-table-column min-width="100" label="Status" property="status" sortable>
+      <el-table-column min-width="100" align="center" label="Status" property="status" sortable>
         <template slot-scope="scope">
           <el-tag
             :type="userStatus[scope.row.status].type"
@@ -102,7 +120,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { Notification } from "admin/utils/helper/notification";
+// import { Notification } from "admin/utils/helper/notification";
 import { userStatus } from "admin/types/status";
 import UserService from "admin/services/user-service";
 
@@ -133,14 +151,14 @@ export default {
     };
   },
   computed: {
-    ...mapGetters({
+    ...mapGetters("user", {
       usersState: "users",
       hasUsers: "hasUsers",
       tableOptionsState: "tableOptions"
     })
   },
   created() {
-   // if (!this.hasUsers) 
+    // if (!this.hasUsers)
     this.loadPage(this.tableOptionsState.currentPage);
   },
   methods: {
@@ -148,6 +166,7 @@ export default {
       this.loader = true;
 
       if (this.isFiltered) {
+        this.tableOptions.currentPage = page;
         var start =
           (this.tableOptions.currentPage - 1) * this.tableOptions.pageSize;
         var length = start + this.tableOptions.pageSize;
@@ -162,10 +181,14 @@ export default {
         });
       } else {
         this.$store
-          .dispatch("fetchUsers", page)
+          .dispatch("user/fetchPage", page)
 
           .catch(() => {
-            Notification.error(this, "Error fetching Users.");
+            this.$notify({
+              group: "main",
+              type: "error",
+              text: "Error fetching Users."
+            });
           })
           .finally(() => {
             this.loader = false;
@@ -173,9 +196,13 @@ export default {
       }
     },
     async size(sizeTable) {
-      this.$store
-        .dispatch("changePageSize", sizeTable)
-        .finally(() => this.loadPage(this.tableOptionsState.currentPage));
+      if (this.isFiltered) {
+        this.tableOptions.pageSize = sizeTable;
+        this.loadPage(this.tableOptions.currentPage);
+      } else
+        this.$store
+          .dispatch("user/changePageSize", sizeTable)
+          .finally(() => this.loadPage(this.tableOptionsState.currentPage));
     },
     handleEdit(id) {
       this.$router.push({ name: "EditUser", params: { userId: id } });
@@ -191,27 +218,33 @@ export default {
         }
       ).then(() => {
         this.$store
-          .dispatch("deleteUser", id)
+          .dispatch("user/delete", id)
           .then(message => {
-            Notification.success(this, message);
+            this.$notify({
+              group: "main",
+              type: "success",
+              text: message
+            });
           })
           .catch(message => {
-            Notification.error(this, message);
+            this.$notify({
+              group: "main",
+              type: "error",
+              text: message
+            });
           });
       });
     },
     async handleFilter() {
-      console.log(this.filter);
-
       if (
         this.filter.username ||
         this.filter.firstname ||
         this.filter.lastname ||
-        this.filter.status !=null
+        this.filter.status != null
       ) {
         this.isFiltered = true;
 
-        console.log("filter1");
+        this.tableOptions.currentPage = 1;
 
         var start =
           (this.tableOptions.currentPage - 1) * this.tableOptions.pageSize;

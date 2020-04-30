@@ -17,9 +17,7 @@
           <!--logo-->
           <a href="#" class="logo">
             <b>
-              t
-              <span id="t">t</span>
-              <span>Ac</span>cess
+              t<span id="t">t</span><span>Ac</span>cess
             </b>
           </a>
         </div>
