@@ -154,6 +154,7 @@ namespace T2Access.Web.SPA.VueJs
             app.UseAuthorization();
 
 
+            app.UseSpaStaticFiles();
 
 
 
@@ -169,7 +170,7 @@ namespace T2Access.Web.SPA.VueJs
 
                 endpoints.MapControllerRoute(
                   name: "spa-admin-fallback",
-                  pattern: "{lang=en}/admin/{*anything}",
+                  pattern: "{lang = en}/admin/{*anything}",
                   defaults: new { area = "admin", controller = "Home", action = "Index" });
 
                 endpoints.MapControllerRoute(
@@ -181,7 +182,6 @@ namespace T2Access.Web.SPA.VueJs
 
             });
 
-            app.UseSpaStaticFiles();
 
 
             app.UseSpa(spa =>

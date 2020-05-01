@@ -1,26 +1,31 @@
 <template>
   <div>
-    <h4 style="display: inline;">Gate Table</h4>
+    <h4 style="display: inline;">{{$t('gate.table')}}</h4>
 
     <router-link
       :to="{ name: 'createGate' }"
       class="fa fa-plus btn btn-lg btn-success pull-away"
-    >Add Gate</router-link>
+    >{{$t('gate.add')}}</router-link>
     <router-view></router-view>
 
     <!-- Search Area -->
 
     <div class="row mt mb">
       <div class="dataTables_filter col-md-3">
-        <el-input size="small" clearable placeholder="User Name" v-model="filter.username"></el-input>
+        <el-input
+          size="small"
+          clearable
+          :placeholder="$t('gate.username')"
+          v-model="filter.username"
+        ></el-input>
       </div>
 
       <div class="dataTables_filter col-md-3">
-        <el-input size="small" clearable placeholder="Arabic Name" v-model="filter.nameAr"></el-input>
+        <el-input size="small" clearable :placeholder="$t('gate.nameAr')" v-model="filter.nameAr"></el-input>
       </div>
 
       <div class="dataTables_filter col-md-3">
-        <el-input size="small" clearable placeholder="Engilsh Name" v-model="filter.nameEn"></el-input>
+        <el-input size="small" clearable :placeholder="$t('gate.nameEn')" v-model="filter.nameEn"></el-input>
       </div>
 
       <div class="dataTables_filter col-md-3">
@@ -31,12 +36,12 @@
           value-key="filter.status"
           clearable
           @clear="filter.status = null"
-          placeholder="Status"
+          :placeholder="$t('gate.status')"
         >
           <el-option
             v-for="(status, index) in gateStatus"
             :key="index"
-            :label="status.label"
+            :label="$t(`gate.gateStatus.${status.label}`)"
             :value="index"
           ></el-option>
         </el-select>
@@ -64,22 +69,22 @@
       @current-page="loadPage"
       @size-table="size"
     >
-      <el-table-column min-width="100" label="User Name" property="userName" sortable></el-table-column>
+      <el-table-column min-width="100" :label="$t('gate.username')" property="userName" sortable></el-table-column>
 
-      <el-table-column min-width="100" label="Arabic Name" property="nameAr" sortable></el-table-column>
+      <el-table-column min-width="100" :label="$t('gate.nameAr')" property="nameAr" sortable></el-table-column>
 
-      <el-table-column min-width="100" label="Engilsh Name" property="nameEn" sortable></el-table-column>
+      <el-table-column min-width="100" :label="$t('gate.nameEn')" property="nameEn" sortable></el-table-column>
 
-      <el-table-column min-width="100" label="Status" property="status" sortable>
+      <el-table-column min-width="100" :label="$t('gate.status')" property="status" sortable>
         <template slot-scope="scope">
           <el-tag
             :type="gateStatus[scope.row.status].type"
             disable-transitions
-          >{{ gateStatus[scope.row.status].label }}</el-tag>
+          >{{ $t(`gate.gateStatus.${gateStatus[scope.row.status].label}`) }}</el-tag>
         </template>
       </el-table-column>
 
-      <el-table-column label="Actions" property="actions">
+      <el-table-column :label="$t('actions')" property="actions">
         <template slot-scope="scope">
           <el-button
             size="mini"

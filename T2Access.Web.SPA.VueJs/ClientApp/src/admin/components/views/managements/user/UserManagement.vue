@@ -1,25 +1,40 @@
 <template>
   <div>
-    <h4 style="display: inline;">User Table</h4>
-
+    <h4 style="display: inline;"></h4>
+    {{$t('user.table')}}
     <router-link
       :to="{ name: 'createUser' }"
       class="fa fa-plus btn btn-lg btn-success pull-away"
-    >New User</router-link>
+    >{{$t('user.new')}}</router-link>
 
     <!-- Search Area -->
 
     <div class="row mt mb">
       <div class="dataTables_filter col-md-3">
-        <el-input size="small" clearable placeholder="User Name" v-model="filter.username"></el-input>
+        <el-input
+          size="small"
+          clearable
+          :placeholder="$t('user.username')"
+          v-model="filter.username"
+        ></el-input>
       </div>
 
       <div class="dataTables_filter col-md-3">
-        <el-input size="small" clearable placeholder="First Name" v-model="filter.firstname"></el-input>
+        <el-input
+          size="small"
+          clearable
+          :placeholder="$t('user.firstname')"
+          v-model="filter.firstname"
+        ></el-input>
       </div>
 
       <div class="dataTables_filter col-md-3">
-        <el-input size="small" clearable placeholder="Last Name" v-model="filter.lastname"></el-input>
+        <el-input
+          size="small"
+          clearable
+          :placeholder="$t('user.lastname')"
+          v-model="filter.lastname"
+        ></el-input>
       </div>
 
       <div class="dataTables_filter col-md-3">
@@ -30,12 +45,12 @@
           value-key="filter.status"
           clearable
           @clear="filter.status = null"
-          placeholder="Status"
+          :placeholder="$t('user.status')"
         >
           <el-option
             v-for="(status, index) in userStatus"
             :key="index"
-            :label="status.label"
+            :label="$t(`user.userStatus.${status.label}`)"
             :value="index"
           ></el-option>
         </el-select>
@@ -66,7 +81,7 @@
       <el-table-column
         min-width="100"
         align="center"
-        label="User Name"
+        :label="$t('user.username')"
         property="userName"
         sortable
       ></el-table-column>
@@ -74,7 +89,7 @@
       <el-table-column
         min-width="100"
         align="center"
-        label="First Name"
+        :label="$t('user.firstname')"
         property="firstName"
         sortable
       ></el-table-column>
@@ -82,21 +97,27 @@
       <el-table-column
         min-width="100"
         align="center"
-        label="Last Name"
+        :label="$t('user.lastname')"
         property="lastName"
         sortable
       ></el-table-column>
 
-      <el-table-column min-width="100" align="center" label="Status" property="status" sortable>
+      <el-table-column
+        min-width="100"
+        align="center"
+        :label="$t('user.status')"
+        property="status"
+        sortable
+      >
         <template slot-scope="scope">
           <el-tag
             :type="userStatus[scope.row.status].type"
             disable-transitions
-          >{{ userStatus[scope.row.status].label }}</el-tag>
+          >{{ $t(`user.userStatus.${userStatus[scope.row.status].label}`) }}</el-tag>
         </template>
       </el-table-column>
 
-      <el-table-column label="Actions" property="actions">
+      <el-table-column :label="$t('actions')" property="actions">
         <template slot-scope="scope">
           <el-button
             size="mini"

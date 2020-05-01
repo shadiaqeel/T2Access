@@ -1,7 +1,9 @@
 // Core imports
-import Vue from 'vue';
+import Vue from 'vue'
 import Vuex from 'vuex'
-import router from './router/index';
+import router from './router/index'
+import i18n from './plugins/i18n'
+
 // import { Notification } from "admin/utils/helper/notification";
 import Notifications from 'vue-notification'
 import velocity from 'velocity-animate'
@@ -9,7 +11,7 @@ import velocity from 'velocity-animate'
 
 
 
-
+Vue.config.productionTip = false
 Vue.config.performance = true
 
 
@@ -26,14 +28,16 @@ import axios from 'axios';
 import ElementUI from 'element-ui';
 //import { Loading } from 'element-ui';
 
-import locale from 'element-ui/lib/locale/lang/en';
-//import locale from 'element-ui/lib/locale/lang/ar';
+import localeEn from 'element-ui/lib/locale/lang/en';
+import localeAr from 'element-ui/lib/locale/lang/ar';
 
 // CSS imports
 import './styles/main.sass';
 
 
-Vue.use(ElementUI, { locale });
+Vue.use(ElementUI, {
+    localeEn
+});
 Vue.use(Vuex);
 Vue.use(Notifications, { velocity })
 
@@ -55,5 +59,6 @@ new Vue({
     el: '#app',
     store,
     router,
+    i18n,
     ...App
 });

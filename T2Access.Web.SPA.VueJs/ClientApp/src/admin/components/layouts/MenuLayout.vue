@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :dir="locale.dir">
     <!--<link rel="icon" type="image/png" href="~/images/admin/favicon.PNG" />-->
     <!--<link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />-->
 
@@ -26,8 +26,28 @@
 
         <div class="top-menu">
           <ul class="nav pull-right top-menu">
+            <li style=" margin: 0px 20px;">
+              <el-dropdown trigger="click">
+                <span class="el-dropdown-link">
+                  {{locale.display}}
+                  <i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <!-- <el-button size="mini" type="info">
+                  lang
+                  <i class="el-icon-arrow-down el-icon--right"></i>
+                </el-button>-->
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item v-for="(locale,index) in locales" :key="index">
+                    <!-- <router-link
+                      :to="{ name: $route.name , params:{locale: locale.code } }"
+                    >{{locale.name}}</router-link>-->
+                    <a :href="getLink(locale.code)">{{locale.name}}</a>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </li>
             <li>
-              <a class="logout fa fa-sign-out btn" href="/en/account/logout">logout</a>
+              <a class="logout fa fa-sign-out btn" href="/en/account/logout">{{$t('nav.logout')}}</a>
             </li>
           </ul>
         </div>
@@ -61,18 +81,24 @@
           >
             <br />
 
-            <el-menu-item index="home" :route="{name:'home'}">
+            <el-menu-item index="home" :route="{name:'home' , params:{locale: locale.code}}">
               <i class="el-icon-s-home"></i>
-              <span slot="title">Dashboard</span>
+              <span slot="title">{{$t('nav.dashboard')}}</span>
             </el-menu-item>
             <el-submenu index="account">
               <template slot="title">
                 <i class="el-icon-monitor"></i>
-                <span slot="title">Accounts Managment</span>
+                <span slot="title">{{$t('nav.acountsManagment')}}</span>
               </template>
               <el-menu-item-group>
-                <el-menu-item index="user" :route="{name:'user'}">Users</el-menu-item>
-                <el-menu-item index="gate" :route="{name:'gate'}">Gates</el-menu-item>
+                <el-menu-item
+                  index="user"
+                  :route="{name:'user' , params:{locale:locale.code}}"
+                >{{$t('nav.users')}}</el-menu-item>
+                <el-menu-item
+                  index="gate"
+                  :route="{name:'gate' , params:{locale:locale.code}}"
+                >{{$t('nav.gates')}}</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
           </el-menu>
@@ -102,17 +128,24 @@
 
 
 <script>
+import { SUPPORTED_LOCALES } from "admin/constants/locales";
+
 export default {
   name: "MenuLayout",
   data() {
     return {
       isCollapse: false,
-      isActive: true
+      isActive: true,
+      path: "/",
+      locales: SUPPORTED_LOCALES
     };
   },
   computed: {
     currentPage() {
       return this.$route.name;
+    },
+    locale() {
+      return this.$store.getters.locale;
     }
   },
   mounted() {
@@ -132,8 +165,21 @@ export default {
     },
     toggle: function() {
       this.isActive = !this.isActive;
+    },
+    getLink(code) {
+      return this.$router.resolve({
+        name: this.$route.name,
+        params: { locale: code }
+      }).href;
     }
   }
+  // watch: {
+  //   $route(to) {
+  //     this.path = this.locale.base
+  //       ? to.path.substring(this.locale.base.length)
+  //       : to.path;
+  //   }
+  // }
 };
 </script>
 

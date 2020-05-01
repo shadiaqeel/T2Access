@@ -1,11 +1,10 @@
 import NotFound from '../components/views/NotFound';
-
 import ContentPanel from '../components/layouts/ContentPanel';
 
-const routePrefix = 'en/admin'
+const routePrefix = 'admin'
 
 const routes = [{
-        path: `/${routePrefix}/`,
+        path: `${routePrefix}/`,
         component: ContentPanel,
         display: 'Home',
         children: [{
@@ -16,7 +15,7 @@ const routes = [{
         }]
     },
     {
-        path: `/${routePrefix}/user`,
+        path: `${routePrefix}/user`,
         component: ContentPanel,
         display: 'UserManagement',
         children: [{
@@ -43,7 +42,7 @@ const routes = [{
         ]
     },
     {
-        path: `/${routePrefix}/gate`,
+        path: `${routePrefix}/gate`,
         component: ContentPanel,
         display: 'GateManagement',
         children: [{

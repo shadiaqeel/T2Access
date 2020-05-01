@@ -109,7 +109,12 @@ module.exports = {
 
     // options for 3rd party plugins
     pluginOptions: {
-        // ...
+      i18n: {
+        locale: 'en',
+        fallbackLocale: 'en',
+        localeDir: 'locales',
+        enableInSFC: false
+      }
     },
     pages: {
         admin: {

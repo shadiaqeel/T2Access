@@ -1,0 +1,37 @@
+{
+    "user": {
+        "username": "User Name",
+        "firstname": "First Name",
+        "lastname": "Last Name",
+        "status": "Status",
+        "userStatus": {
+            "regular": "Regular",
+            "admin": "Admin",
+            "block": "Block"
+        },
+        "table": "User Table",
+        "new": "New User"
+
+    },
+    "gate": {
+        "username": "User Name",
+        "nameAr": "Arabic Name",
+        "nameEn": "Engilsh Name",
+        "status": "Status",
+        "gateStatus": {
+            "regular": "Regular",
+            "block": "Block"
+        },
+        "table": "Gate Table",
+        "add": "Add Gate"
+    },
+    "actions": "Actions",
+    "nav": {
+        "logout": "logout",
+        "dashboard": "Dashboard",
+        "acountsManagment": "Acounts Managment",
+        "users": "Users",
+        "gates": "Gates"
+    }
+
+}
