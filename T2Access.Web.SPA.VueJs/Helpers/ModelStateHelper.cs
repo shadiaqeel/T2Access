@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace T2Access.Web.SPA.VueJs.Extensions
+namespace T2Access.Web.SPA.VueJs.Helpers
 {
     public static class ModelStateHelper
     {

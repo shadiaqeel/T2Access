@@ -1,4 +1,4 @@
-<template >
+<template>
   <div>
     <h4 style="display: inline;">Create User</h4>
     <div style="margin: 30px 40px;  ">
@@ -53,7 +53,10 @@
             prop="confirmPassword"
             :error="modelstate['ConfirmPassword']"
           >
-            <el-input v-model="newUser.confirmPassword" show-password></el-input>
+            <el-input
+              v-model="newUser.confirmPassword"
+              show-password
+            ></el-input>
           </el-form-item>
         </div>
 
@@ -61,12 +64,13 @@
           <i class="el-icon-star-on"></i>
         </el-divider>
 
-        <el-card :body-style="{padding:'0px'}">
+        <el-card :body-style="{ padding: '0px' }">
           <div slot="header" class="clearfix">
             <span>Gate Table</span>
           </div>
 
           <Datatable
+            ref="dataTable"
             :data="gateList"
             :height="250"
             rowKey="id"
@@ -75,7 +79,11 @@
             :infiniteLoading="true"
             @infinite-handler="infiniteHandler"
             spinner="waveDots"
-            @selected-fields="handleSelectionChange"
+            highlight-current-row
+            @row-click="handleRowClick"
+            @selection-change="handleSelectionChange"
+            @select-all="handleSelectAll"
+            @select="handleSelect"
           >
             <el-table-column
               type="selection"
@@ -84,16 +92,28 @@
               property="checked"
             ></el-table-column>
 
-            <el-table-column min-width="100" label="Arabic Name" property="nameAr" sortable></el-table-column>
+            <el-table-column
+              min-width="100"
+              label="Arabic Name"
+              property="nameAr"
+              sortable
+            ></el-table-column>
 
-            <el-table-column min-width="100" label="Engilsh Name" property="nameEn" sortable></el-table-column>
+            <el-table-column
+              min-width="100"
+              label="Engilsh Name"
+              property="nameEn"
+              sortable
+            ></el-table-column>
           </Datatable>
         </el-card>
 
         <div class="mt centered">
           <el-form-item>
-            <el-button type="primary" @click="submitForm('newUserForm')">Create</el-button>
-            <el-button @click="$router.push({name:'user'})">Exit</el-button>
+            <el-button type="primary" @click="submitForm('newUserForm')"
+              >Create</el-button
+            >
+            <el-button @click="$router.push({ name: 'user' })">Exit</el-button>
           </el-form-item>
         </div>
       </el-form>
@@ -102,33 +122,33 @@
 </template>
 
 <script>
-import Datatable from "admin/components/elements/Datatable";
+import Datatable from 'admin/components/elements/Datatable';
 
-import gateSerivce from "admin/services/gate-service";
-import userSerivce from "admin/services/user-service";
+import gateSerivce from 'admin/services/gate-service';
+import userSerivce from 'admin/services/user-service';
 
 export default {
-  name: "CreateUser",
+  name: 'CreateUser',
   components: {
     Datatable
   },
   data() {
     var validatePass = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("Please input the password"));
+      if (value === '') {
+        callback(new Error('Please input the password'));
       } else {
-        if (this.newUser.confirmPassword !== "") {
-          this.$refs.newUserForm.validateField("confirmPassword");
+        if (this.newUser.confirmPassword !== '') {
+          this.$refs.newUserForm.validateField('confirmPassword');
         }
         callback();
       }
     };
     var validatePass2 = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("Please input the password again"));
+      if (value === '') {
+        callback(new Error('Please input the password again'));
       } else if (value !== this.newUser.password) {
         callback(
-          new Error("The password and confirmation password do not match!")
+          new Error('The password and confirmation password do not match!')
         );
       } else {
         callback();
@@ -142,76 +162,76 @@ export default {
       selectedList: [],
       modelstate: {},
       newUser: {
-        username: "",
-        firstname: "",
-        lastname: "",
-        password: "",
-        confirmPassword: "",
-        addedGateList: ""
+        username: '',
+        firstname: '',
+        lastname: '',
+        password: '',
+        confirmPassword: '',
+        addedGateList: ''
       },
       rules: {
         username: [
           {
             required: true,
-            message: "Please input user name",
-            trigger: "blur"
+            message: 'Please input user name',
+            trigger: 'blur'
           },
           {
             min: 8,
             max: 20,
-            message: "Length should be 8 to 20",
-            trigger: "blur"
+            message: 'Length should be 8 to 20',
+            trigger: 'blur'
           }
         ],
         firstname: [
           {
             required: true,
-            message: "Please input first name",
-            trigger: "blur"
+            message: 'Please input first name',
+            trigger: 'blur'
           },
           {
             min: 3,
             max: 20,
-            message: "Length should be 3 to 20",
-            trigger: "blur"
+            message: 'Length should be 3 to 20',
+            trigger: 'blur'
           }
         ],
         lastname: [
           {
             required: true,
-            message: "Please input last name",
-            trigger: "blur"
+            message: 'Please input last name',
+            trigger: 'blur'
           },
           {
             min: 5,
             max: 20,
-            message: "Length should be 5 to 20",
-            trigger: "blur"
+            message: 'Length should be 5 to 20',
+            trigger: 'blur'
           }
         ],
         password: [
           {
             min: 8,
             max: 20,
-            message: "Length should be 8 to 20",
-            trigger: "blur"
+            message: 'Length should be 8 to 20',
+            trigger: 'blur'
           },
-          { validator: validatePass, trigger: "blur" }
+          { validator: validatePass, trigger: 'blur' }
         ],
         confirmPassword: [
           {
             min: 8,
             max: 20,
-            message: "Length should be 8 to 20",
-            trigger: "blur"
+            message: 'Length should be 8 to 20',
+            trigger: 'blur'
           },
-          { validator: validatePass2, trigger: "blur" }
+          { validator: validatePass2, trigger: 'blur' }
         ]
       }
     };
   },
   created() {
-    //this.loadGateList();
+    // this.loadGateList();
   },
   methods: {
     submitForm(formName) {
@@ -227,11 +247,11 @@ export default {
             .then(res => {
               if (res.status == 200) {
                 this.$notify({
-                  group: "main",
-                  type: "success",
+                  group: 'main',
+                  type: 'success',
                   text: res.data
                 });
-                this.$router.push({ name: "user" });
+                this.$router.push({ name: 'user' });
               }
             })
             .catch(error => {
@@ -242,7 +262,7 @@ export default {
               }
             });
         } else {
-          console.log("error submit!!");
+          console.log('error submit!!');
           return false;
         }
       });
@@ -274,14 +294,83 @@ export default {
           $state.error();
         });
     },
-    handleSelectionChange(selectedList, item) {
-      this.selectedList = selectedList;
-      console.log(selectedList);
-      console.log(item);
+    handleSelectionChange(selection, item) {
+      this.selectedGateList = selection;
+    },
+    handleSelect(selection, row) {
+      // setTimeout(() => {
+      //   this.selectGate(row);
+      // }, 0);
+    },
+    handleSelectAll(selection) {
+      console.groupCollapsed('handle Select All');
+      console.table(selection);
+
+      console.time('handle Select All');
+      this.loader = true;
+      this.selectedList = [];
+
+      if (selection?.length) {
+        selection.forEach(gate => {
+          this.selectedList.push(gate.id);
+        });
+      }
+
+      this.loader = false;
+
+      console.groupCollapsed('Arrays');
+      console.table(this.$refs['dataTable'].$refs['table'].selection);
+      console.table(this.addedGateList);
+      console.table(this.removedGateList);
+      console.groupEnd('Arrays');
+      console.timeEnd('handle Select All');
+      console.groupEnd('handle Select All');
+    },
+    handleRowClick(row, column, event) {
+      this.$refs['dataTable'].$refs['table'].toggleRowSelection(row);
+      // setTimeout(() => {
+      //   this.selectGate(row);
+      // }, 0);
+    },
+    toggleSelection(rows) {
+      if (rows) {
+        rows.forEach(row => {
+          this.$refs['dataTable'].$refs['table'].toggleRowSelection(row);
+        });
+      }
     }
+    // selectGate(row) {
+    //   console.groupCollapsed("Select Gate");
+
+    //   console.time("select Gate");
+
+    //   const isCheck = this.selectedGateList.includes(row);
+
+    //   if (isCheck) {
+    //     if (row.checked) {
+    //       this.removedGateList.splice(this.removedGateList.indexOf(row.id));
+    //     } else {
+    //       this.addedGateList.push(row.id);
+    //     }
+    //   } else {
+    //     if (row.checked) {
+    //       this.removedGateList.push(row.id);
+    //     } else {
+    //       this.addedGateList.splice(this.addedGateList.indexOf(row.id));
+    //     }
+    //   }
+
+    //   console.timeEnd("select Gate");
+
+    //   console.groupCollapsed("Arrays");
+    //   console.table(this.selectedGateList);
+    //   console.table(this.addedGateList);
+    //   console.table(this.removedGateList);
+    //   console.groupEnd("Arrays");
+    //   console.groupEnd("Select Gate");
+    // }
   }
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

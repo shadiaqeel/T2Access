@@ -1,8 +1,8 @@
-<template >
+<template>
   <el-dialog
-    title="ADD GATE"
+    :title="$t('gate.add')"
     :visible.sync="dialogFormVisible"
-    @closed="$router.push({name:'gate'})"
+    @closed="$router.push({ name: 'gate' })"
     :center="true"
   >
     <el-form
@@ -16,7 +16,7 @@
       hide-required-asterisk
     >
       <el-form-item
-        label="User Name"
+        :label="$t('gate.username')"
         :label-width="formLabelWidth"
         prop="username"
         :error="modelstate['UserName']"
@@ -26,7 +26,7 @@
       <div class="row">
         <div class="col-md-6">
           <el-form-item
-            label="Arabic Name"
+            :label="$t('gate.nameAr')"
             :label-width="formLabelWidth"
             prop="nameAr"
             :error="modelstate['NameAr']"
@@ -36,7 +36,7 @@
         </div>
         <div class="col-md-6">
           <el-form-item
-            label="Engilsh Name"
+            :label="$t('gate.nameEn')"
             :label-width="formLabelWidth"
             prop="nameEn"
             :error="modelstate['NameEn']"
@@ -48,7 +48,7 @@
       <div class="row">
         <div class="col-md-6">
           <el-form-item
-            label="Password"
+            :label="$t('password')"
             :label-width="formLabelWidth"
             prop="password"
             :error="modelstate['Password']"
@@ -59,45 +59,52 @@
 
         <div class="col-md-6">
           <el-form-item
-            label="Confirm Password"
+            :label="$t('confirmPassword')"
             :label-width="formLabelWidth"
             prop="confirmPassword"
             :error="modelstate['ConfirmPassword']"
           >
-            <el-input v-model="newGate.confirmPassword" show-password></el-input>
+            <el-input
+              v-model="newGate.confirmPassword"
+              show-password
+            ></el-input>
           </el-form-item>
         </div>
       </div>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="dialogFormVisible = false">Cancel</el-button>
-      <el-button type="primary" @click="submitForm('newGateForm')">Add</el-button>
+      <el-button @click="dialogFormVisible = false">{{
+        $t('cancel')
+      }}</el-button>
+      <el-button type="primary" @click="submitForm('newGateForm')">{{
+        $t('add')
+      }}</el-button>
     </span>
   </el-dialog>
 </template>
 
 <script>
-import gateSerivce from "admin/services/gate-service";
+import gateSerivce from 'admin/services/gate-service';
 
 export default {
-  name: "CreateGate",
+  name: 'CreateGate',
   data() {
     var validatePass = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("Please input the password"));
+      if (value === '') {
+        callback(new Error('Please input the password'));
       } else {
-        if (this.newGate.checkPass !== "") {
-          this.$refs.newGateForm.validateField("confirmPassword");
+        if (this.newGate.checkPass !== '') {
+          this.$refs.newGateForm.validateField('confirmPassword');
         }
         callback();
       }
     };
     var validatePass2 = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("Please input the password again"));
+      if (value === '') {
+        callback(new Error('Please input the password again'));
       } else if (value !== this.newGate.password) {
         callback(
-          new Error("The password and confirmation password do not match!")
+          new Error('The password and confirmation password do not match!')
         );
       } else {
         callback();
@@ -106,61 +113,61 @@ export default {
 
     return {
       dialogFormVisible: true,
-      formLabelWidth: "120px",
+      formLabelWidth: '120px',
       modelstate: {},
       newGate: {
-        username: "",
-        nameAr: "",
-        nameEn: "",
-        password: "",
-        ConfirmPassword: ""
+        username: '',
+        nameAr: '',
+        nameEn: '',
+        password: '',
+        ConfirmPassword: ''
       },
       rules: {
         username: [
           {
             required: true,
-            message: "Please input user name",
-            trigger: "blur"
+            message: 'Please input user name',
+            trigger: 'blur'
           },
           {
             min: 7,
             max: 20,
-            message: "Length should be 8 to 20",
-            trigger: "blur"
+            message: 'Length should be 8 to 20',
+            trigger: 'blur'
           }
         ],
         nameAr: [
           {
             required: true,
-            message: "Please input first name",
-            trigger: "blur"
+            message: 'Please input first name',
+            trigger: 'blur'
           },
           {
             min: 3,
             max: 20,
-            message: "Length should be 3 to 20",
-            trigger: "blur"
+            message: 'Length should be 3 to 20',
+            trigger: 'blur'
           }
         ],
         nameEn: [
           {
             required: true,
-            message: "Please input last name",
-            trigger: "blur"
+            message: 'Please input last name',
+            trigger: 'blur'
           },
           {
             min: 3,
             max: 20,
-            message: "Length should be 5 to 20",
-            trigger: "blur"
+            message: 'Length should be 5 to 20',
+            trigger: 'blur'
           }
         ],
         password: [
           {
             min: 8,
             max: 20,
-            message: "Length should be 8 to 20",
-            trigger: "blur"
+            message: 'Length should be 8 to 20',
+            trigger: 'blur'
           }
           // { validator: validatePass, trigger: "blur" }
         ],
@@ -168,8 +175,8 @@ export default {
           {
             min: 8,
             max: 20,
-            message: "Length should be 8 to 20",
-            trigger: "blur"
+            message: 'Length should be 8 to 20',
+            trigger: 'blur'
           }
           // { validator: validatePass2, trigger: "blur" }
         ]
@@ -188,8 +195,8 @@ export default {
               if (res.status == 200) {
                 console.log(res);
                 this.$notify({
-                  group: "main",
-                  type: "success",
+                  group: 'main',
+                  type: 'success',
                   text: res.data
                 });
                 this.dialogFormVisible = false;
@@ -205,16 +212,16 @@ export default {
               }
 
               this.$notify({
-                group: "main",
-                type: "error",
+                group: 'main',
+                type: 'error',
                 text: error
               });
             });
         } else {
           this.$notify({
-            group: "main",
-            type: "error",
-            text: "error submit!!"
+            group: 'main',
+            type: 'error',
+            text: 'error submit!!'
           });
 
           return false;
@@ -225,5 +232,4 @@ export default {
 };
 </script>
 
-<style lang="sass" scoped>
-</style>
+<style lang="sass" scoped></style>

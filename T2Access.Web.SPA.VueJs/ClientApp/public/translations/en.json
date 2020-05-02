@@ -1,4 +1,9 @@
 {
+    "password":"Password",
+    "confirmPassword":"Confirm Password",
+    "add":"Add",
+    "edit":"Edit",
+    "cancel":"Cancel",
     "user": {
         "username": "User Name",
         "firstname": "First Name",

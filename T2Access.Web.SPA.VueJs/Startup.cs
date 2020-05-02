@@ -5,14 +5,17 @@ using System.Net;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Localization.Routing;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 
 using T2Access.Services.HttpClientService;
-using T2Access.Web.SPA.VueJs.Extensions;
+using T2Access.Web.SPA.VueJs.Helpers;
 using T2Access.Web.SPA.VueJs.Providers;
 
 
@@ -33,6 +36,32 @@ namespace T2Access.Web.SPA.VueJs
         {
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+
+            #region Localization
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+            services.Configure<RequestLocalizationOptions>(options =>
+            {
+                var supportedCultures = new[]
+                {
+                    new CultureInfo("en"),
+                    new CultureInfo("ar"),
+                };
+
+                options.DefaultRequestCulture = new RequestCulture(culture: "en", uiCulture: "en");
+                options.SupportedCultures = supportedCultures;
+                options.SupportedUICultures = supportedCultures;
+                options.RequestCultureProviders = new[]{ new RouteDataRequestCultureProvider{
+                        RouteDataStringKey = "lang",
+                        UIRouteDataStringKey = "lang"
+                }};
+            });
+
+            services.Configure<RouteOptions>(options =>
+            {
+                options.ConstraintMap.Add("lang", typeof(LanguageRouteConstraint));
+            });
+            #endregion
 
             services.AddSession();
 
@@ -163,40 +192,48 @@ namespace T2Access.Web.SPA.VueJs
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
+
+
+
+
+                endpoints.MapAreaControllerRoute(
                     name: "spa-admin-api",
-                    pattern: "{lang=en}/admin/{controller=Home}/{action=index}",
+                    areaName:"Admin",
+                    pattern: "{lang=en}/Admin/{controller=Home}/{action=index}/{id?}",
                     defaults: new { area = "admin" });
 
-                endpoints.MapControllerRoute(
-                  name: "spa-admin-fallback",
-                  pattern: "{lang = en}/admin/{*anything}",
-                  defaults: new { area = "admin", controller = "Home", action = "Index" });
 
+                endpoints.MapAreaControllerRoute(
+                   name: "spa-admin-fallback",
+                   areaName: "Admin",
+                   pattern: "{lang = en}/Admin/{*anything}",
+                   defaults: new { controller = "Home", action = "Index" });
+
+                
+                
                 endpoints.MapControllerRoute(
                   name: "default",
                   pattern: "{lang=en}/{controller=account}/{action=login}");
-                  //defaults: new { controller = "Account", action = "Login" });
-            
-
+                //defaults: new { controller = "Account", action = "Login" });
 
             });
 
 
 
             app.UseSpa(spa =>
-                                {
-                                    spa.Options.SourcePath = "ClientApp";
+                 { 
+                   spa.Options.SourcePath = "ClientApp";
 
-                                    if (env.IsDevelopment())
-                                    {
+                   if (env.IsDevelopment())
+                   {
 
-                                        // Launch development server for Vue.js
-                                        //spa.UseVueDevelopmentServer(npmScript: "build");
+                       // Launch development server for Vue.js
+                       //spa.UseVueDevelopmentServer(npmScript: "build");
 
 
-                                    }
-                                });
+                   }
+                 }
+               );
 
 
 

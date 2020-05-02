@@ -16,7 +16,7 @@ using T2Access.Services.HttpClientService;
 using T2Access.Web.SPA.VueJs.Models;
 using T2Access.Web.SPA.VueJs.Areas.Admin.Models;
 using T2Access.Models;
-using T2Access.Web.SPA.VueJs.Extensions;
+using T2Access.Web.SPA.VueJs.Helpers;
 
 namespace T2Access.Web.SPA.VueJs.Areas.Admin
 {
@@ -40,7 +40,7 @@ namespace T2Access.Web.SPA.VueJs.Areas.Admin
         {
             //! Server Side 
 
-            using (var response = await _httpService.GetAsync($"GetListWithFilter?UserName={param.Filter?.Username}&FirstName={param.Filter?.Firstname }&LastName={param.Filter?.Lastname}&Status={param.Filter?.Status }&Skip={param.Start}&PageSize={param.Length}", token: HttpContext.Session.GetString("Token")))
+            using (var response = await _httpService.GetAsync($"GetListWithFilter?UserName={param.Filter?.Username}&FirstName={param.Filter?.Firstname }&LastName={param.Filter?.Lastname}&Status={param.Filter?.Status }&Skip={param.Start}&PageSize={param.Length}&Order={param.Filter?.SortOrder}", token: HttpContext.Session.GetString("Token")))
             {
                 if (response.IsSuccessStatusCode)
                 {

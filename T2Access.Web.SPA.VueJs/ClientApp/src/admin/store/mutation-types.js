@@ -14,8 +14,7 @@ export const DELETE_GATE = 'DELETE_GATE';
 export const EDIT_GATE = 'EDIT_GATE';
 export const SET_EDITGATE = 'SET_EDITGATE';
 
-
-// Shared 
+// Shared
 export const SET_TOTAL_IN_SERVER = 'SET_TOTAL_IN_SERVER';
 export const SET_PAGE_SIZE = 'SET_PAGE_SIZE';
 export const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';

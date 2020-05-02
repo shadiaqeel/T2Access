@@ -32,6 +32,7 @@ namespace T2Access.Web.SPA.VueJs.Areas.Admin.Models
          public string Username { get; set; }
          public string Firstname { get; set; }
          public string Lastname { get; set; }
+         public string SortOrder { get; set; }
          public int? Status { get; set; }
      }
 
@@ -41,6 +42,7 @@ namespace T2Access.Web.SPA.VueJs.Areas.Admin.Models
          public string Username { get; set; }
          public string Namear { get; set; }
          public string Nameen { get; set; }
+         public string SortOrder { get; set; }
          public int? Status { get; set; }
      }
      

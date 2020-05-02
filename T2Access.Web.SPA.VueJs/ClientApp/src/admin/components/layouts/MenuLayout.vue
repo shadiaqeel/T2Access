@@ -1,5 +1,5 @@
 <template>
-  <div :dir="locale.dir">
+  <div>
     <!--<link rel="icon" type="image/png" href="~/images/admin/favicon.PNG" />-->
     <!--<link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />-->
 
@@ -15,13 +15,15 @@
             @click="isActive = !isActive"
           ></div>
           <!--logo-->
-          <a href="#" class="logo">
+          <router-link
+            :to="{ name: 'home', params: { locale: locale.code } }"
+            class="logo"
+          >
             <b>
-              t
-              <span id="t">t</span>
-              <span>Ac</span>cess
+              <!-- prettier-ignore -->
+              t<span id="t">t</span><span>Ac</span>cess
             </b>
-          </a>
+          </router-link>
         </div>
 
         <div class="top-menu">
@@ -29,7 +31,7 @@
             <li style=" margin: 0px 20px;">
               <el-dropdown trigger="click">
                 <span class="el-dropdown-link">
-                  {{locale.display}}
+                  {{ locale.display }}
                   <i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                 <!-- <el-button size="mini" type="info">
@@ -37,17 +39,22 @@
                   <i class="el-icon-arrow-down el-icon--right"></i>
                 </el-button>-->
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item v-for="(locale,index) in locales" :key="index">
+                  <el-dropdown-item
+                    v-for="(locale, index) in locales"
+                    :key="index"
+                  >
                     <!-- <router-link
                       :to="{ name: $route.name , params:{locale: locale.code } }"
                     >{{locale.name}}</router-link>-->
-                    <a :href="getLink(locale.code)">{{locale.name}}</a>
+                    <a :href="getLink(locale.code)">{{ locale.name }}</a>
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </li>
             <li>
-              <a class="logout fa fa-sign-out btn" href="/en/account/logout">{{$t('nav.logout')}}</a>
+              <a class="logout fa fa-sign-out btn" href="/en/account/logout">{{
+                $t('nav.logout')
+              }}</a>
             </li>
           </ul>
         </div>
@@ -58,7 +65,7 @@
       <aside>
         <div
           id="menu"
-          :class="[{ active: !isCollapse || isActive },'nav-collapse']"
+          :class="[{ active: !isCollapse || isActive }, 'nav-collapse']"
           @mouseover="isCollapse = false"
           @mouseleave="isCollapse = true"
         >
@@ -68,7 +75,7 @@
             class="el-menu-vertical-demo"
             @open="handleOpen"
             @close="handleClose"
-            :collapse=" !isActive && isCollapse"
+            :collapse="!isActive && isCollapse"
             collapse-transition
             background-color="#2f323a"
             text-color="#fff"
@@ -81,24 +88,29 @@
           >
             <br />
 
-            <el-menu-item index="home" :route="{name:'home' , params:{locale: locale.code}}">
+            <el-menu-item
+              index="home"
+              :route="{ name: 'home', params: { locale: locale.code } }"
+            >
               <i class="el-icon-s-home"></i>
-              <span slot="title">{{$t('nav.dashboard')}}</span>
+              <span slot="title">{{ $t('nav.dashboard') }}</span>
             </el-menu-item>
             <el-submenu index="account">
               <template slot="title">
                 <i class="el-icon-monitor"></i>
-                <span slot="title">{{$t('nav.acountsManagment')}}</span>
+                <span slot="title">{{ $t('nav.acountsManagment') }}</span>
               </template>
               <el-menu-item-group>
                 <el-menu-item
                   index="user"
-                  :route="{name:'user' , params:{locale:locale.code}}"
-                >{{$t('nav.users')}}</el-menu-item>
+                  :route="{ name: 'user', params: { locale: locale.code } }"
+                  >{{ $t('nav.users') }}</el-menu-item
+                >
                 <el-menu-item
                   index="gate"
-                  :route="{name:'gate' , params:{locale:locale.code}}"
-                >{{$t('nav.gates')}}</el-menu-item>
+                  :route="{ name: 'gate', params: { locale: locale.code } }"
+                  >{{ $t('nav.gates') }}</el-menu-item
+                >
               </el-menu-item-group>
             </el-submenu>
           </el-menu>
@@ -115,7 +127,8 @@
         <div class="text-center">
           <p>
             &copy; Copyrights
-            <strong>T2 - business research and development</strong> All Rights Reserved
+            <strong>T2 - business research and development</strong> All Rights
+            Reserved
           </p>
         </div>
       </footer>
@@ -123,20 +136,16 @@
   </div>
 </template>
 
-
-
-
-
 <script>
-import { SUPPORTED_LOCALES } from "admin/constants/locales";
+import { SUPPORTED_LOCALES } from 'admin/constants/locales';
 
 export default {
-  name: "MenuLayout",
+  name: 'MenuLayout',
   data() {
     return {
       isCollapse: false,
       isActive: true,
-      path: "/",
+      path: '/',
       locales: SUPPORTED_LOCALES
     };
   },
@@ -183,9 +192,9 @@ export default {
 };
 </script>
 
-<style lang="scss" >
-@import "../../styles/style.css";
-@import "../../styles/style-responsive.css";
+<style lang="scss">
+@import '../../styles/style.css';
+@import '../../styles/style-responsive.css';
 
 .el-menu-vertical-demo:not(.el-menu--collapse) {
   width: 205px;
@@ -228,4 +237,3 @@ export default {
   }
 }
 </style>
-

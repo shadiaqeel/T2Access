@@ -1,4 +1,9 @@
 {
+    "password": "كلمة السر",
+    "confirmPassword": "تأكيد كلمة السر",
+    "add": "اضافه",
+    "edit": "تعديل",
+    "cancel": "الغاء",
     "user": {
         "username": "اسم المستخدم",
         "firstname": "الاسم الأول",

@@ -1,12 +1,7 @@
 //"use strict";
 
 //const fs = require('fs')
-const path = require("path");
-
-
-
-
-
+const path = require('path');
 
 //// We search for app.js or app.ts files inside ClientApp/src/{miniSpaName} folder and make those as entries. Convention over configuration
 //var appEntryFiles = {}
@@ -32,103 +27,92 @@ const path = require("path");
 //    path.resolve(__dirname, applicationBasePath + 'common/design/site.scss'),
 //]
 
-
-
-
-
-
-
-
 module.exports = {
+  // where to output built files
+  outputDir: 'dist',
 
+  // where to put static assets (js/css/img/font/...)
+  assetsDir: 'assets',
 
-    // where to output built files
-    outputDir: 'dist',
+  filenameHashing: false,
 
-    // where to put static assets (js/css/img/font/...)
-    assetsDir: 'assets',
+  // whether to use eslint-loader for lint on save.
+  // valid values: true | false | 'error'
+  // when set to 'error', lint errors will cause compilation to fail.
+  lintOnSave: true,
 
-    filenameHashing: false,
+  // use the full build with in-browser compiler?
+  // https://vuejs.org/v2/guide/installation.html#Runtime-Compiler-vs-Runtime-only
+  runtimeCompiler: false,
 
-    // whether to use eslint-loader for lint on save.
-    // valid values: true | false | 'error'
-    // when set to 'error', lint errors will cause compilation to fail.
-    lintOnSave: true,
+  // babel-loader skips `node_modules` deps by default.
+  // explicitly transpile a dependency with this option.
+  transpileDependencies: [
+    /* string or regex */
+  ],
 
-    // use the full build with in-browser compiler?
-    // https://vuejs.org/v2/guide/installation.html#Runtime-Compiler-vs-Runtime-only
-    runtimeCompiler: false,
+  // generate sourceMap for production build?
+  productionSourceMap: false,
 
-    // babel-loader skips `node_modules` deps by default.
-    // explicitly transpile a dependency with this option.
-    transpileDependencies: [ /* string or regex */ ],
+  // tweak internal webpack configuration.
+  // see https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md
+  chainWebpack: config => {
+    config.resolve.alias.set('admin', path.join(__dirname, './src/admin'));
+  },
+  configureWebpack: () => {},
 
-    // generate sourceMap for production build?
-    productionSourceMap: false,
+  // CSS related options
+  css: {
+    // extract CSS in components into a single CSS file (only in production)
+    // can also be an object of options to pass to extract-text-webpack-plugin
+    extract: true,
 
-    // tweak internal webpack configuration.
-    // see https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md
-    chainWebpack: config => {
-        config.resolve.alias.set('admin', path.join(__dirname, './src/admin'));
-    },
-    configureWebpack: () => {},
+    // Enable CSS modules for all css / pre-processor files.
+    // This option does not affect *.vue files.
+    // modules: false,
 
-    // CSS related options
-    css: {
-        // extract CSS in components into a single CSS file (only in production)
-        // can also be an object of options to pass to extract-text-webpack-plugin
-        extract: true,
+    // enable CSS source maps?
+    sourceMap: false,
 
-        // Enable CSS modules for all css / pre-processor files.
-        // This option does not affect *.vue files.
-        // modules: false,
+    // pass custom options to pre-processor loaders. e.g. to pass options to
+    // sass-loader, use { sass: { ... } }
+    loaderOptions: {}
+  },
 
-        // enable CSS source maps?
-        sourceMap: false,
+  // use thread-loader for babel & TS in production build
+  // enabled by default if the machine has more than 1 cores
+  parallel: require('os').cpus().length > 1,
 
-        // pass custom options to pre-processor loaders. e.g. to pass options to
-        // sass-loader, use { sass: { ... } }
-        loaderOptions: {}
-    },
+  // options for the PWA plugin.
+  // see https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-pwa
 
-    // use thread-loader for babel & TS in production build
-    // enabled by default if the machine has more than 1 cores
-    parallel: require("os").cpus().length > 1,
+  // configure webpack-dev-server behavior
+  devServer: {
+    port: '8888',
+    https: false,
+    host: 'localhost',
+    open: 'true',
+    proxy: null
+  },
 
-    // options for the PWA plugin.
-    // see https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-pwa
-
-    // configure webpack-dev-server behavior
-    devServer: {
-        port: "8888",
-        https: false,
-        host: "localhost",
-        open: "true",
-        proxy: null
-    },
-
-    // options for 3rd party plugins
-    pluginOptions: {
-      i18n: {
-        locale: 'en',
-        fallbackLocale: 'en',
-        localeDir: 'locales',
-        enableInSFC: false
-      }
-    },
-    pages: {
-        admin: {
-            // entry for the page
-            entry: "./src/admin/app.js",
-            filename: "html/admin.html"
-
-        },
-        common: {
-            entry: "./src/common/design/site.scss",
-            filename: "html/common.html"
-
-
-        }
+  // options for 3rd party plugins
+  pluginOptions: {
+    i18n: {
+      locale: 'en',
+      fallbackLocale: 'en',
+      localeDir: 'locales',
+      enableInSFC: false
     }
-
+  },
+  pages: {
+    admin: {
+      // entry for the page
+      entry: './src/admin/app.js',
+      filename: 'html/admin.html'
+    },
+    common: {
+      entry: './src/common/design/site.scss',
+      filename: 'html/common.html'
+    }
+  }
 };

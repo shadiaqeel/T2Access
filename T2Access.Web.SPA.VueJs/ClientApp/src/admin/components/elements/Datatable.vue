@@ -1,4 +1,4 @@
-<template >
+<template>
   <div id="data-table">
     <h3 class="title-section" v-if="title">{{ title }}</h3>
     <el-table
@@ -16,6 +16,7 @@
       @selection-change="handleSelectionChange"
       @current-change="handleCurrentChange"
       @row-click="handleRowClick"
+      @sort-change="handleSortChange"
     >
       <div v-if="columns">
         <div class="columns" v-for="(column, index) in columns" :key="index">
@@ -36,8 +37,8 @@
         force-use-infinite-wrapper=".el-table__body-wrapper"
         :spinner="spinner"
       >
-        <div slot="no-more">{{noMoreMessage}}</div>
-        <div slot="no-results">{{noResultsMessage}}</div>
+        <div slot="no-more">{{ noMoreMessage }}</div>
+        <div slot="no-results">{{ noResultsMessage }}</div>
         <div slot="error" slot-scope="{ trigger }">
           Opps, something went wrong :(
           <a href="javascript:;" @click="trigger">Retry</a>
@@ -60,10 +61,10 @@
 </template>
 
 <script>
-import InfiniteLoading from "vue-infinite-loading";
+import InfiniteLoading from 'vue-infinite-loading';
 
 export default {
-  name: "DataTable",
+  name: 'DataTable',
   components: { InfiniteLoading },
   props: {
     title: {
@@ -95,7 +96,7 @@ export default {
 
     paginationLayout: {
       type: String,
-      default: "total, sizes, prev, pager, next"
+      default: 'total, sizes, prev, pager, next'
     },
 
     height: {
@@ -127,15 +128,15 @@ export default {
     },
     spinner: {
       type: String,
-      default: "default"
+      default: 'default'
     },
     noMoreMessage: {
       type: String,
-      default: "No more message"
+      default: 'No more message'
     },
     noResultsMessage: {
       type: String,
-      default: "No more message"
+      default: 'No more message'
     }
   },
 
@@ -155,42 +156,45 @@ export default {
 
   methods: {
     prevPage(page) {
-      this.$emit("current-page", page);
+      this.$emit('current-page', page);
     },
 
     nextPage(page) {
-      this.$emit("current-page", page);
+      this.$emit('current-page', page);
     },
 
     sizeChange(size) {
-      this.$emit("size-table", size);
+      this.$emit('size-table', size);
     },
 
     updatePage(page) {
-      this.$emit("current-page", page);
+      this.$emit('current-page', page);
     },
     infiniteHandler($state) {
-      this.$emit("infinite-handler", $state);
+      this.$emit('infinite-handler', $state);
     },
     handleCurrentChange(val) {
-      this.$emit("current-change", val);
+      this.$emit('current-change', val);
     },
     handleSelect(selected, row) {
       this.selectedData = selected;
 
-      this.$emit("select", selected, row);
+      this.$emit('select', selected, row);
     },
     handleSelectionChange(selected, row) {
       this.selectedData = selected;
 
-      this.$emit("selection-change", selected, row);
+      this.$emit('selection-change', selected, row);
     },
     handleSelectAll(selected) {
       this.selectedData = selected;
-      this.$emit("select-all", selected);
+      this.$emit('select-all', selected);
     },
     handleRowClick(row, column, event) {
-      this.$emit("row-click", row, column, event);
+      this.$emit('row-click', row, column, event);
+    },
+    handleSortChange(column, prop, order) {
+      this.$emit('sort-change', column, prop, order);
     }
   }
 };

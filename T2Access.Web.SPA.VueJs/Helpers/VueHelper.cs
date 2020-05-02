@@ -11,7 +11,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
-namespace T2Access.Web.SPA.VueJs.Extensions
+namespace T2Access.Web.SPA.VueJs.Helpers
 {
     public static class VueHelper
     {

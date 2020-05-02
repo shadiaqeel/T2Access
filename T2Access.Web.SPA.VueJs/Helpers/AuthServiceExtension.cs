@@ -7,7 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 
 using T2Access.Security.Tokenization.Services;
 
-namespace T2Access.Web.SPA.VueJs.Extensions
+namespace T2Access.Web.SPA.VueJs.Helpers
 {
     public static class AuthServiceExtension
     {

@@ -9,36 +9,33 @@ Vue.use(Vuex);
 
 //const debugMode = process.env.NODE_ENV !== 'production';
 
-
-
 const state = {
-    locale: {
-        code: 'en',
-        base: '',
-        flag: 'us',
-        name: 'English',
-        translations: '/translations/en.json'
-    }
-}
+  locale: {
+    code: 'en',
+    base: '',
+    flag: 'us',
+    name: 'English',
+    translations: '/translations/en.json'
+  }
+};
 const getters = {
-    locale: state => state.locale,
-
-}
+  locale: state => state.locale
+};
 
 const mutations = {
-    setLocale(state, locale) {
-        state.locale = locale;
-    }
-}
+  setLocale(state, locale) {
+    state.locale = locale;
+  }
+};
 
 export default new Vuex.Store({
-    state,
-    getters,
-    mutations,
-    modules: {
-        user,
-        gate
-    },
-    // strict: debugMode,
-    // plugins: debugMode ? [logger()] : []
+  state,
+  getters,
+  mutations,
+  modules: {
+    user,
+    gate
+  }
+  // strict: debugMode,
+  // plugins: debugMode ? [logger()] : []
 });

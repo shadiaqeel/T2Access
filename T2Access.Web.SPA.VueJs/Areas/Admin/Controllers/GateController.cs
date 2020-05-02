@@ -18,7 +18,7 @@ using T2Access.Services.HttpClientService;
 using T2Access.Web.SPA.VueJs.Models;
 using T2Access.Web.SPA.VueJs.Areas.Admin.Models;
 using T2Access.Models;
-using T2Access.Web.SPA.VueJs.Extensions;
+using T2Access.Web.SPA.VueJs.Helpers;
 using T2Access.Models.Dtos;
 
 namespace T2Access.Web.SPA.VueJs.Areas.Admin
@@ -48,7 +48,7 @@ namespace T2Access.Web.SPA.VueJs.Areas.Admin
         public async Task<IActionResult> LoadData([FromBody]DTGateParameters param)
         {
             // TODO : ServerSide in GetFiltered method
-            using (var response = await _httpService.GetAsync($"GetListWithFilter?UserName={param.Filter?.Username}&NameAr={param.Filter?.Namear}&NameEn={param.Filter?.Nameen}&Status={param.Filter?.Status} &PageSize={param.Length}&Skip={param.Start}", token: HttpContext.Session.GetString("Token")))  // &Order={param.SortOrder}
+            using (var response = await _httpService.GetAsync($"GetListWithFilter?UserName={param.Filter?.Username}&NameAr={param.Filter?.Namear}&NameEn={param.Filter?.Nameen}&Status={param.Filter?.Status} &PageSize={param.Length}&Skip={param.Start}&Order={param.Filter?.SortOrder}", token: HttpContext.Session.GetString("Token")))  // &Order={param.SortOrder}
             {
 
                 var filterdGates = JsonConvert.DeserializeObject<ListResponse<GateViewModel>>(await response.Content.ReadAsStringAsync());

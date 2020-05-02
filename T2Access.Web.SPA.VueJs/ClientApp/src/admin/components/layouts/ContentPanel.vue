@@ -1,35 +1,17 @@
-<template >
-  <component :is="layout">
-    <div class="row mt">
-      <div class="col-md-12">
-        <div class="content-panel">
-          <transition>
-            <keep-alive>
-              <router-view></router-view>
-            </keep-alive>
-          </transition>
-        </div>
+<template>
+  <div class="row mt">
+    <div class="col-md-12">
+      <div class="content-panel">
+        <router-view></router-view>
       </div>
     </div>
-    <notifications position="bottom right" group="main" animation-type="velocity" />
-  </component>
+  </div>
 </template>
 
 <script>
-import MenuLayout from "./MenuLayout.vue";
-
 export default {
-  name: "ContentPanel",
-  data() {
-    return {
-      layout: "menu-layout"
-    };
-  },
-  components: {
-    MenuLayout
-  }
+  name: 'ContentPanel'
 };
 </script>
 
-<style lang="sass" scoped>
-</style>
+<style lang="sass" scoped></style>

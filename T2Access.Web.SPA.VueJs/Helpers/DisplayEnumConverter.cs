@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 
-namespace T2Access.Web.SPA.VueJs
+namespace T2Access.Web.SPA.VueJs.Helpers
 {
     public class DisplayEnumConverter : StringEnumConverter
     {

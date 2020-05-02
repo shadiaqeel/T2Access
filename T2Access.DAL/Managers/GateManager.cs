@@ -18,6 +18,7 @@ namespace T2Access.DAL
     {
         private readonly IPasswordHasher passwordHasher = new PasswordHasher();
         private readonly IDatabaseExecuter databaseExecuter;
+        private readonly IUserGateManager userGateManager;
 
 
         //========================================================================================================
@@ -25,10 +26,12 @@ namespace T2Access.DAL
         #region Constructors
         public GateManager()
         {
+            this.userGateManager = ManagerFactory.GetUserGateManager(Variables.DatabaseProvider);
             databaseExecuter = DbExecuterFactory.GetExecuter();
         }
-        public GateManager(IOptionsMonitor<DALOptions> options)
+        public GateManager(IOptionsMonitor<DALOptions> options , IUserGateManager userGateManager = null)
         {
+            this.userGateManager = userGateManager ?? ManagerFactory.GetUserGateManager(Variables.DatabaseProvider);
             databaseExecuter = DbExecuterFactory.GetExecuter(options);
         }
 
@@ -76,7 +79,6 @@ namespace T2Access.DAL
         public async Task DeleteAsync(Gate gate)
         {
 
-            var userGateManager = ManagerFactory.GetUserGateManager(Variables.DatabaseProvider);
             // Remove all corresponding recorders for the Gate in UserGate Table  
             await userGateManager.DeleteAsync(new UserGate() { GateId = gate.Id });
 
