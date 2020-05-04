@@ -49,6 +49,32 @@
         "missInput": "Please input {input}",
         "missMatchPass": "The password and confirmation password do not match!"
     },
-    "confirmDelete": "This will permanently delete the {0}. Continue?"
+    "confirmDelete": "This will permanently delete the {0}. Continue?",
+    "el": {
+
+        "pagination": {
+            "goto": "Go to",
+            "pagesize": "/page",
+            "total": "Total {total}",
+            "pageClassifier": ""
+        },
+        "messagebox": {
+            "title": "Message",
+            "confirm": "OK",
+            "cancel": "Cancel",
+            "error": "Illegal input"
+        },
+        "table": {
+            "emptyText": "No Data",
+            "confirmFilter": "Confirm",
+            "resetFilter": "Reset",
+            "clearFilter": "All",
+            "sumText": "Sum"
+        },
+        "popconfirm": {
+            "confirmButtonText": "Yes",
+            "cancelButtonText": "No"
+        }
+    }
 
 }

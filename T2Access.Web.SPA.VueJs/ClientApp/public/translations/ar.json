@@ -57,7 +57,38 @@
         "missMatchPass": "كلمة السر و تاكيد كلمة  السر غير متطابقان"
 
     },
-    "confirmDelete": "هل تريد حذف ال{0} نهائيا ؟"
+    "confirmDelete": "هل تريد حذف ال{0} نهائيا ؟",
+    "el": {
+        "colorpicker": {
+            "confirm": "موافق",
+            "clear": "إزالة"
+        },
+        "pagination": {
+            "goto": "أذهب إلى",
+            "pagesize": "/صفحة",
+            "total": "الكل {total}",
+            "pageClassifier": ""
+        },
+        "messagebox": {
+            "title": "العنوان",
+            "confirm": "موافق",
+            "cancel": "إلغاء",
+            "error": "مدخل غير صحيح"
+        },
+        "upload": {
+            "delete": "حذف",
+            "preview": "عرض",
+            "continue": "إستمرار"
+        },
+        "table": {
+            "emptyText": "لايوجد بيانات",
+            "confirmFilter": "تأكيد",
+            "resetFilter": "حذف",
+            "clearFilter": "الكل",
+            "sumText": "المجموع"
+        }
+    }
+
 
 
 

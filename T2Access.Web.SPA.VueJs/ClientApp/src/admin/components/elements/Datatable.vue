@@ -5,9 +5,6 @@
       :row-key="rowKey"
       ref="table"
       v-loading="loader"
-      element-loading-text="Loading..."
-      element-loading-spinner="el-icon-loading"
-      element-loading-background="rgba(0, 0, 0, 0.8)"
       :data="data"
       :height="height"
       stripe

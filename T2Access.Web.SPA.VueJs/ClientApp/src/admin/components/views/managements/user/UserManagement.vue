@@ -2,7 +2,8 @@
   <div>
     <h5 style="display: inline;">{{ $t('user.table') }}</h5>
     <router-link :to="{ name: 'createUser' }" class="btn btn-lg btn-success pull-away">
-      <i class="el-icon-plus">{{ $t('user.new') }}</i>
+      <i class="el-icon-plus"></i>
+      {{ $t('user.new') }}
     </router-link>
 
     <!-- @*Divider*@ -->

@@ -61,19 +61,14 @@
       <!--MAIN SIDEBAR MENU -->
       <!--sidebar start-->
       <aside>
-        <div
-          id="menu"
-          :class="[{ active: !isCollapse || isActive }, 'nav-collapse']"
-          @mouseover="isCollapse = false"
-          @mouseleave="isCollapse = true"
-        >
+        <div id="menu" :class="[{ active:  isActive }, 'nav-collapse']">
           <el-menu
             :router="true"
             :default-active="currentPage"
             class="el-menu-vertical-demo"
             @open="handleOpen"
             @close="handleClose"
-            :collapse="!isActive && isCollapse"
+            :collapse="!isActive "
             collapse-transition
             background-color="#2f323a"
             text-color="#fff"
@@ -110,7 +105,7 @@
         </div>
       </aside>
     </section>
-    <section id="main-content" :class="{ active: !isCollapse || isActive }">
+    <section id="main-content" :class="{ active:  isActive }">
       <section class="wrapper">
         <slot />
       </section>
@@ -144,7 +139,6 @@ export default {
   name: "MenuLayout",
   data() {
     return {
-      isCollapse: false,
       isActive: true,
       path: "/",
       locales: SUPPORTED_LOCALES
@@ -224,6 +218,13 @@ html[dir="ltr"] {
     }
   }
   #menu {
+    .el-menu {
+      border-right: none;
+    }
+    .el-menu--collapse {
+      width: 65px;
+    }
+
     i.el-submenu__icon-arrow.el-icon-arrow-down {
       right: 6px;
     }
@@ -257,6 +258,12 @@ html[dir="rtl"] {
   }
 
   #menu {
+    .el-menu {
+      border-right: none;
+    }
+    .el-menu--collapse {
+      width: 65px;
+    }
     i.el-submenu__icon-arrow.el-icon-arrow-down {
       right: auto;
       left: 20px;
