@@ -15,13 +15,12 @@
             @click="isActive = !isActive"
           ></div>
           <!--logo-->
-          <router-link
-            :to="{ name: 'home', params: { locale: locale.code } }"
-            class="logo"
-          >
+          <router-link :to="{ name: 'home', params: { locale: locale.code } }" class="logo">
             <b>
               <!-- prettier-ignore -->
-              t<span id="t">t</span><span>Ac</span>cess
+              t
+              <span id="t">t</span>
+              <span>Ac</span>cess
             </b>
           </router-link>
         </div>
@@ -39,10 +38,7 @@
                   <i class="el-icon-arrow-down el-icon--right"></i>
                 </el-button>-->
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item
-                    v-for="(locale, index) in locales"
-                    :key="index"
-                  >
+                  <el-dropdown-item v-for="(locale, index) in locales" :key="index">
                     <!-- <router-link
                       :to="{ name: $route.name , params:{locale: locale.code } }"
                     >{{locale.name}}</router-link>-->
@@ -52,9 +48,11 @@
               </el-dropdown>
             </li>
             <li>
-              <a class="logout fa fa-sign-out btn" href="/en/account/logout">{{
+              <a class="logout fa fa-sign-out btn" :href="`/${locale.code}/account/logout`">
+                {{
                 $t('nav.logout')
-              }}</a>
+                }}
+              </a>
             </li>
           </ul>
         </div>
@@ -88,10 +86,7 @@
           >
             <br />
 
-            <el-menu-item
-              index="home"
-              :route="{ name: 'home', params: { locale: locale.code } }"
-            >
+            <el-menu-item index="home" :route="{ name: 'home', params: { locale: locale.code } }">
               <i class="el-icon-s-home"></i>
               <span slot="title">{{ $t('nav.dashboard') }}</span>
             </el-menu-item>
@@ -104,13 +99,11 @@
                 <el-menu-item
                   index="user"
                   :route="{ name: 'user', params: { locale: locale.code } }"
-                  >{{ $t('nav.users') }}</el-menu-item
-                >
+                >{{ $t('nav.users') }}</el-menu-item>
                 <el-menu-item
                   index="gate"
                   :route="{ name: 'gate', params: { locale: locale.code } }"
-                  >{{ $t('nav.gates') }}</el-menu-item
-                >
+                >{{ $t('nav.gates') }}</el-menu-item>
               </el-menu-item-group>
             </el-submenu>
           </el-menu>
@@ -136,16 +129,24 @@
   </div>
 </template>
 
+
+
+
+// ****************************************************************************************************************
+// *************************************************** { script } *************************************************
+// ****************************************************************************************************************
+
+
 <script>
-import { SUPPORTED_LOCALES } from 'admin/constants/locales';
+import { SUPPORTED_LOCALES } from "admin/constants/locales";
 
 export default {
-  name: 'MenuLayout',
+  name: "MenuLayout",
   data() {
     return {
       isCollapse: false,
       isActive: true,
-      path: '/',
+      path: "/",
       locales: SUPPORTED_LOCALES
     };
   },
@@ -176,25 +177,22 @@ export default {
       this.isActive = !this.isActive;
     },
     getLink(code) {
-      return this.$router.resolve({
-        name: this.$route.name,
-        params: { locale: code }
-      }).href;
+      if (this.locale.code != code)
+        return this.$router.resolve({
+          name: this.$route.name,
+          params: { locale: code }
+        }).href;
+      else "";
     }
   }
-  // watch: {
-  //   $route(to) {
-  //     this.path = this.locale.base
-  //       ? to.path.substring(this.locale.base.length)
-  //       : to.path;
-  //   }
-  // }
 };
 </script>
 
+// ****************************************************************************************************************
+// *************************************************** { style } **************************************************
+// ****************************************************************************************************************
 <style lang="scss">
-@import '../../styles/style.css';
-@import '../../styles/style-responsive.css';
+$main-color: #4ecdc4;
 
 .el-menu-vertical-demo:not(.el-menu--collapse) {
   width: 205px;
@@ -202,17 +200,79 @@ export default {
   min-height: 400px;
   margin-top: 60px;
   position: fixed;
+  text-align: justify;
 }
 
-#main-content {
-  margin-left: 63px;
-  transition: all 0.3s ease-in-out;
+html[dir="ltr"] {
+  @import "../../styles/en/style";
+
+  #main-content {
+    margin-left: 63px;
+    transition: all 0.3s ease-in-out;
+
+    height: 100%;
+    left: 0;
+    right: 0;
+    position: absolute;
+    min-height: 100%;
+    &.active {
+      margin-left: 204.2px;
+      transition: all 0.3s ease-in-out;
+    }
+    .pull-away {
+      float: right;
+    }
+  }
+  #menu {
+    i.el-submenu__icon-arrow.el-icon-arrow-down {
+      right: 6px;
+    }
+  }
 }
 
-#main-content.active {
-  margin-left: 204.2px;
-  transition: all 0.3s ease-in-out;
+html[dir="rtl"] {
+  @import "../../styles/ar/style";
+
+  #main-content {
+    margin-right: 63px;
+    transition: all 0.3s ease-in-out;
+    height: 100%;
+    left: 0;
+    right: 0;
+    position: absolute;
+    min-height: 100%;
+    &.active {
+      margin-right: 204.2px;
+      transition: all 0.3s ease-in-out;
+    }
+    .content-panel {
+      text-align: justify;
+    }
+    .el-button + .el-button {
+      margin-right: 10px;
+    }
+    .pull-away {
+      float: left;
+    }
+  }
+
+  #menu {
+    i.el-submenu__icon-arrow.el-icon-arrow-down {
+      right: auto;
+      left: 20px;
+    }
+  }
 }
+
+//  #main-content {
+//   margin-left: 63px;
+//   transition: all 0.3s ease-in-out;
+// }
+
+// #main-content.active {
+//   margin-left: 204.2px;
+//   transition: all 0.3s ease-in-out;
+// }
 // $screen-md-min
 @media only screen and (max-width: 768px) {
   #menu .el-menu {

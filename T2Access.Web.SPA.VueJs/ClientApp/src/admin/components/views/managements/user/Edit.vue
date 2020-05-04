@@ -1,15 +1,21 @@
 <template>
   <div>
-    <h4 style="display: inline;">Edit User</h4>
+    <el-divider content-position="center">
+      <h4 style="display: inline;">{{$t('user.edit')}}</h4>
+    </el-divider>
     <div style="margin: 30px 40px;  " v-if="editUser">
       <el-form
-        label-position="left"
+        label-position="top"
         label-width="100px"
         :model="editUser"
         ref="editUser"
+        :rules="rules"
+        status-icon
+        hide-required-asterisk
+        size="medium"
       >
         <el-form-item
-          label="User Name"
+          :label="$t('user.username')"
           style="width:100%;"
           :error="modelstate['UserName']"
         >
@@ -17,30 +23,32 @@
         </el-form-item>
         <div class="row">
           <el-form-item
-            label="First Name"
+            :label="$t('user.firstname')"
             class="col-md-6"
+            prop="firstName"
             :error="modelstate['FirstName']"
           >
             <el-input v-model="editUser.firstName"></el-input>
           </el-form-item>
           <el-form-item
-            label="Last Name"
+            :label="$t('user.lastname')"
             class="col-md-6"
+            prop="lastName"
             :error="modelstate['LastName']"
           >
             <el-input v-model="editUser.lastName"></el-input>
           </el-form-item>
         </div>
-        <el-form-item label="Status">
+        <el-form-item :label="$t('user.status')">
           <el-select
             v-model="editUser.status"
             value-key="editUser.status"
-            placeholder="Status"
+            :placeholder="$t('user.username')"
           >
             <el-option
               v-for="(status, index) in userStatus"
               :key="index"
-              :label="status.label"
+              :label="$t(`user.userStatus.${status.label}`)"
               :value="index"
             ></el-option>
           </el-select>
@@ -82,7 +90,7 @@
             <el-table-column
               min-width="100"
               align="center"
-              label="Arabic Name"
+              :label="$t('gate.nameAr')"
               property="nameAr"
               sortable
             ></el-table-column>
@@ -90,7 +98,7 @@
             <el-table-column
               min-width="100"
               align="center"
-              label="Engilsh Name"
+              :label="$t('gate.nameEn')"
               property="nameEn"
               sortable
             ></el-table-column>
@@ -99,10 +107,8 @@
 
         <div class="mt centered">
           <el-form-item>
-            <el-button type="primary" @click="submitForm('editUser')"
-              >Edit</el-button
-            >
-            <el-button @click="$router.push({ name: 'user' })">Exit</el-button>
+            <el-button type="primary" @click="submitForm('editUser')">{{$t('edit')}}</el-button>
+            <el-button @click="$router.push({ name: 'user' })">{{$t('cancel')}}</el-button>
           </el-form-item>
         </div>
       </el-form>
@@ -111,16 +117,16 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 // import { Notification } from "admin/utils/helper/notification";
-import { userStatus } from 'admin/types/status';
-import Datatable from 'admin/components/elements/Datatable';
-import gateSerivce from 'admin/services/gate-service';
-import userSerivce from 'admin/services/user-service';
+import { userStatus } from "admin/types/status";
+import Datatable from "admin/components/elements/Datatable";
+import gateSerivce from "admin/services/gate-service";
+import userSerivce from "admin/services/user-service";
 
 export default {
-  name: 'EditUser',
-  props: ['userId'],
+  name: "EditUser",
+  props: ["userId"],
   components: {
     Datatable
   },
@@ -133,12 +139,44 @@ export default {
       removedGateList: [],
       gateList: [],
       page: 1,
-      loader: false
+      loader: false,
+      rules: {
+        firstName: [
+          {
+            required: true,
+            message: this.$t("validate.missInput", {
+              input: this.$t("user.firstname").toLowerCase()
+            }),
+            trigger: "blur"
+          },
+          {
+            min: 3,
+            max: 20,
+            message: this.$t("validate.length", { from: "3", to: "20" }),
+            trigger: "blur"
+          }
+        ],
+        lastName: [
+          {
+            required: true,
+            message: this.$t("validate.missInput", {
+              input: this.$t("user.lastname").toLowerCase()
+            }),
+            trigger: "blur"
+          },
+          {
+            min: 5,
+            max: 20,
+            message: this.$t("validate.length", { from: "5", to: "20" }),
+            trigger: "blur"
+          }
+        ]
+      }
     };
   },
 
   computed: {
-    ...mapGetters('user', ['editUser'])
+    ...mapGetters("user", ["editUser"])
   },
   mounted() {
     if (!this.user) {
@@ -148,18 +186,18 @@ export default {
   methods: {
     fetchById() {
       return this.$store
-        .dispatch('user/fetchById', this.$route.params.userId)
+        .dispatch("user/fetchById", this.$route.params.userId)
         .catch(e => {
           console.error(e);
-          this.$router.push({ name: 'user' });
+          this.$router.push({ name: "user" });
         });
     },
     submitForm(formName) {
-      console.groupCollapsed('Submit Form');
+      console.groupCollapsed("Submit Form");
       this.modelstate = {};
       this.$refs[formName].validate(valid => {
         if (valid) {
-          console.time('Edit User');
+          console.time("Edit User");
 
           userSerivce
             .edit({
@@ -170,16 +208,16 @@ export default {
             .then(res => {
               if (res.status == 200) {
                 this.$notify({
-                  group: 'main',
-                  type: 'success',
+                  group: "main",
+                  type: "success",
                   text: res.data
                 });
-                this.$router.push({ name: 'user' });
+                this.$router.push({ name: "user" });
               }
               console.log(res);
             })
             .catch(error => {
-              console.log('error');
+              console.log("error");
 
               if (error.response.status == 400) {
                 this.modelstate = JSON.parse(
@@ -187,13 +225,13 @@ export default {
                 );
               }
             });
-          console.timeEnd('Edit User');
+          console.timeEnd("Edit User");
         } else {
-          console.log('error submit!!');
+          console.log("error submit!!");
           return false;
         }
       });
-      console.groupEnd('Submit Form');
+      console.groupEnd("Submit Form");
     },
     infiniteHandler($state) {
       var start = (this.page - 1) * 10;
@@ -232,10 +270,10 @@ export default {
       }, 0);
     },
     handleSelectAll(selection) {
-      console.groupCollapsed('handle Select All');
+      console.groupCollapsed("handle Select All");
       console.table(selection);
 
-      console.time('handle Select All');
+      console.time("handle Select All");
       this.loader = true;
       this.removedGateList = [];
       this.addedGateList = [];
@@ -253,16 +291,16 @@ export default {
       }
       this.loader = false;
 
-      console.groupCollapsed('Arrays');
-      console.table(this.$refs['dataTable'].$refs['table'].selection);
+      console.groupCollapsed("Arrays");
+      console.table(this.$refs["dataTable"].$refs["table"].selection);
       console.table(this.addedGateList);
       console.table(this.removedGateList);
-      console.groupEnd('Arrays');
-      console.timeEnd('handle Select All');
-      console.groupEnd('handle Select All');
+      console.groupEnd("Arrays");
+      console.timeEnd("handle Select All");
+      console.groupEnd("handle Select All");
     },
     handleRowClick(row, column, event) {
-      this.$refs['dataTable'].$refs['table'].toggleRowSelection(row);
+      this.$refs["dataTable"].$refs["table"].toggleRowSelection(row);
       setTimeout(() => {
         this.selectGate(row);
       }, 0);
@@ -270,14 +308,14 @@ export default {
     toggleSelection(rows) {
       if (rows) {
         rows.forEach(row => {
-          this.$refs['dataTable'].$refs['table'].toggleRowSelection(row);
+          this.$refs["dataTable"].$refs["table"].toggleRowSelection(row);
         });
       }
     },
     selectGate(row) {
-      console.groupCollapsed('Select Gate');
+      console.groupCollapsed("Select Gate");
 
-      console.time('select Gate');
+      console.time("select Gate");
 
       const isCheck = this.selectedGateList.includes(row);
 
@@ -295,14 +333,14 @@ export default {
         }
       }
 
-      console.timeEnd('select Gate');
+      console.timeEnd("select Gate");
 
-      console.groupCollapsed('Arrays');
+      console.groupCollapsed("Arrays");
       console.table(this.selectedGateList);
       console.table(this.addedGateList);
       console.table(this.removedGateList);
-      console.groupEnd('Arrays');
-      console.groupEnd('Select Gate');
+      console.groupEnd("Arrays");
+      console.groupEnd("Select Gate");
     }
   }
 };

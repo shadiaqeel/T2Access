@@ -5,6 +5,9 @@
       :row-key="rowKey"
       ref="table"
       v-loading="loader"
+      element-loading-text="Loading..."
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(0, 0, 0, 0.8)"
       :data="data"
       :height="height"
       stripe
@@ -56,15 +59,16 @@
       @prev-click="prevPage"
       @next-click="nextPage"
       @size-change="sizeChange"
+      background
     ></el-pagination>
   </div>
 </template>
 
 <script>
-import InfiniteLoading from 'vue-infinite-loading';
+import InfiniteLoading from "vue-infinite-loading";
 
 export default {
-  name: 'DataTable',
+  name: "DataTable",
   components: { InfiniteLoading },
   props: {
     title: {
@@ -96,7 +100,7 @@ export default {
 
     paginationLayout: {
       type: String,
-      default: 'total, sizes, prev, pager, next'
+      default: "total, sizes, prev, pager, next, jumper"
     },
 
     height: {
@@ -128,15 +132,15 @@ export default {
     },
     spinner: {
       type: String,
-      default: 'default'
+      default: "default"
     },
     noMoreMessage: {
       type: String,
-      default: 'No more message'
+      default: "No more message"
     },
     noResultsMessage: {
       type: String,
-      default: 'No more message'
+      default: "No more message"
     }
   },
 
@@ -156,45 +160,45 @@ export default {
 
   methods: {
     prevPage(page) {
-      this.$emit('current-page', page);
+      this.$emit("current-page", page);
     },
 
     nextPage(page) {
-      this.$emit('current-page', page);
+      this.$emit("current-page", page);
     },
 
     sizeChange(size) {
-      this.$emit('size-table', size);
+      this.$emit("size-table", size);
     },
 
     updatePage(page) {
-      this.$emit('current-page', page);
+      this.$emit("current-page", page);
     },
     infiniteHandler($state) {
-      this.$emit('infinite-handler', $state);
+      this.$emit("infinite-handler", $state);
     },
     handleCurrentChange(val) {
-      this.$emit('current-change', val);
+      this.$emit("current-change", val);
     },
     handleSelect(selected, row) {
       this.selectedData = selected;
 
-      this.$emit('select', selected, row);
+      this.$emit("select", selected, row);
     },
     handleSelectionChange(selected, row) {
       this.selectedData = selected;
 
-      this.$emit('selection-change', selected, row);
+      this.$emit("selection-change", selected, row);
     },
     handleSelectAll(selected) {
       this.selectedData = selected;
-      this.$emit('select-all', selected);
+      this.$emit("select-all", selected);
     },
     handleRowClick(row, column, event) {
-      this.$emit('row-click', row, column, event);
+      this.$emit("row-click", row, column, event);
     },
     handleSortChange(column, prop, order) {
-      this.$emit('sort-change', column, prop, order);
+      this.$emit("sort-change", column, prop, order);
     }
   }
 };

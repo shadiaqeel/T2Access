@@ -21,13 +21,16 @@ import store from './store/store';
 // import { sync } from 'vuex-router-sync';
 import axios from 'axios';
 import ElementUI from 'element-ui';
+
 //import { Loading } from 'element-ui';
 
 import locale from 'element-ui/lib/locale/lang/en';
-import localeAr from 'element-ui/lib/locale/lang/ar';
+//import locale from 'element-ui/lib/locale/lang/ar';
 
 // CSS imports
+import "normalize.css";
 import './styles/main.sass';
+
 
 Vue.use(ElementUI, { locale });
 Vue.use(Vuex);
@@ -43,9 +46,9 @@ Vue.prototype.$http = axios;
 // sync(store, router);
 
 new Vue({
-  el: '#app',
-  store,
-  router,
-  i18n,
-  ...App
+    el: '#app',
+    store,
+    router,
+    i18n,
+    ...App
 });

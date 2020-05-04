@@ -1,22 +1,18 @@
 <template>
   <component :is="layout">
     <router-view></router-view>
-    <notifications
-      position="bottom right"
-      group="main"
-      animation-type="velocity"
-    />
+    <notifications position="bottom right" group="main" animation-type="velocity" />
   </component>
 </template>
 
 <script>
-import MenuLayout from 'admin/components/layouts/MenuLayout.vue';
+import MenuLayout from "admin/components/layouts/MenuLayout.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   data() {
     return {
-      layout: 'menu-layout'
+      layout: "menu-layout"
     };
   },
   components: {
@@ -25,4 +21,5 @@ export default {
 };
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+</style>

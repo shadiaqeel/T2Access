@@ -1,11 +1,9 @@
 <template>
   <div>
     <h5 style="display: inline;">{{ $t('user.table') }}</h5>
-    <router-link
-      :to="{ name: 'createUser' }"
-      class="fa fa-plus btn btn-lg btn-success pull-away"
-      >{{ $t('user.new') }}</router-link
-    >
+    <router-link :to="{ name: 'createUser' }" class="btn btn-lg btn-success pull-away">
+      <i class="el-icon-plus">{{ $t('user.new') }}</i>
+    </router-link>
 
     <!-- @*Divider*@ -->
     <el-divider></el-divider>
@@ -58,11 +56,11 @@
         </el-select>
 
         <el-button
-          size="mini"
-          class="btn pull-away"
-          type="info"
-          plain
+          size="mini "
+          class="pull-away"
           icon="el-icon-search"
+          style="border-radius:auto"
+          round
           @click="handleFilter()"
         ></el-button>
       </div>
@@ -97,41 +95,19 @@
       @size-table="size"
       @sort-change="handleSortChange"
     >
-      <el-table-column
-        min-width="100"
-        :label="$t('user.username')"
-        property="userName"
-        sortable
-      ></el-table-column>
+      <el-table-column min-width="100" :label="$t('user.username')" property="userName" sortable></el-table-column>
 
-      <el-table-column
-        min-width="100"
-        :label="$t('user.firstname')"
-        property="firstName"
-        sortable
-      ></el-table-column>
+      <el-table-column min-width="100" :label="$t('user.firstname')" property="firstName" sortable></el-table-column>
 
-      <el-table-column
-        min-width="100"
-        :label="$t('user.lastname')"
-        property="lastName"
-        sortable
-      ></el-table-column>
+      <el-table-column min-width="100" :label="$t('user.lastname')" property="lastName" sortable></el-table-column>
 
-      <el-table-column
-        min-width="100"
-        :label="$t('user.status')"
-        property="status"
-        sortable
-      >
+      <el-table-column min-width="100" :label="$t('user.status')" property="status" sortable>
         <template slot-scope="scope">
-          <el-tag
-            :type="userStatus[scope.row.status].type"
-            disable-transitions
-            >{{
-              $t(`user.userStatus.${userStatus[scope.row.status].label}`)
-            }}</el-tag
-          >
+          <el-tag :type="userStatus[scope.row.status].type" disable-transitions>
+            {{
+            $t(`user.userStatus.${userStatus[scope.row.status].label}`)
+            }}
+          </el-tag>
         </template>
       </el-table-column>
 
@@ -158,15 +134,15 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 // import { Notification } from "admin/utils/helper/notification";
-import { userStatus } from 'admin/types/status';
-import UserService from 'admin/services/user-service';
+import { userStatus } from "admin/types/status";
+import UserService from "admin/services/user-service";
 
-import Datatable from 'admin/components/elements/Datatable';
+import Datatable from "admin/components/elements/Datatable";
 
 export default {
-  name: 'UserManagement',
+  name: "UserManagement",
   components: {
     Datatable
   },
@@ -191,10 +167,10 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('user', {
-      usersState: 'users',
-      hasUsers: 'hasUsers',
-      tableOptionsState: 'tableOptions'
+    ...mapGetters("user", {
+      usersState: "users",
+      hasUsers: "hasUsers",
+      tableOptionsState: "tableOptions"
     })
   },
   created() {
@@ -221,13 +197,13 @@ export default {
         });
       } else {
         this.$store
-          .dispatch('user/fetchPage', page)
+          .dispatch("user/fetchPage", page)
 
           .catch(() => {
             this.$notify({
-              group: 'main',
-              type: 'error',
-              text: 'Error fetching Users.'
+              group: "main",
+              type: "error",
+              text: "Error fetching Users."
             });
           })
           .finally(() => {
@@ -241,53 +217,55 @@ export default {
         this.loadPage(this.tableOptions.currentPage);
       } else
         this.$store
-          .dispatch('user/changePageSize', sizeTable)
+          .dispatch("user/changePageSize", sizeTable)
           .finally(() => this.loadPage(this.tableOptionsState.currentPage));
     },
     handleEdit(id) {
-      this.$router.push({ name: 'EditUser', params: { userId: id } });
+      this.$router.push({ name: "EditUser", params: { userId: id } });
     },
     handleDelete(id) {
       this.$confirm(
-        'This will permanently delete the file. Continue?',
-        'Warning',
+        this.$t("confirmDelete", [this.$t("user.user")]),
+        this.$t("delete"),
         {
-          confirmButtonText: 'OK',
-          cancelButtonText: 'Cancel',
-          type: 'warning'
+          confirmButtonText: this.$t("ok"),
+          cancelButtonText: this.$t("cancel"),
+          type: "warning",
+          center: true,
+          showClose: false
         }
       ).then(() => {
         this.$store
-          .dispatch('user/delete', id)
+          .dispatch("user/delete", id)
           .then(message => {
             this.$notify({
-              group: 'main',
-              type: 'success',
+              group: "main",
+              type: "success",
               text: message
             });
           })
           .catch(message => {
             this.$notify({
-              group: 'main',
-              type: 'error',
+              group: "main",
+              type: "error",
               text: message
             });
           });
       });
     },
     handleSortChange({ prop, order }) {
-      console.groupCollapsed('handle Sort Change');
+      console.groupCollapsed("handle Sort Change");
       console.log({ prop, order });
       //if(sort.order =="descending" ) //DESC
 
       if (order) this.filter.sortOrder = prop;
-      else if (order == 'descending') this.filter.sortOrder = `${prop} DESC`;
+      else if (order == "descending") this.filter.sortOrder = `${prop} DESC`;
       else this.filter.sortOrder = null;
 
       this.handleFilter();
       console.log(this.filter.sortOrder);
 
-      console.groupEnd('handle Sort Change');
+      console.groupEnd("handle Sort Change");
     },
     handleFilter() {
       if (
@@ -316,7 +294,7 @@ export default {
           }
         });
       } else {
-        console.log('filter2');
+        console.log("filter2");
 
         this.isFiltered = false;
       }

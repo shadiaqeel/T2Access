@@ -104,8 +104,8 @@ namespace T2Access.Web.SPA.VueJs.Areas.Admin
                 var result = await response.Content.ReadAsStringAsync();
 
                 return response.IsSuccessStatusCode
-                    ? Json(new { success = true, message = result.Replace("\"", "") })
-                    : Json(new { success = false, message = result.Replace("\"", "") });
+                    ? Ok( result.Replace("\"", "") )
+                    :  (IActionResult)BadRequest(result.Replace("\"", ""));
             }
         }
 

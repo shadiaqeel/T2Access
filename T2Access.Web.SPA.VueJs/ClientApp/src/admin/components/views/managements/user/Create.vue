@@ -1,6 +1,9 @@
 <template>
   <div>
-    <h4 style="display: inline;">Create User</h4>
+    <el-divider content-position="center">
+      <h4 style="display: inline;">{{$t('user.new')}}</h4>
+    </el-divider>
+
     <div style="margin: 30px 40px;  ">
       <el-form
         label-position="top"
@@ -13,7 +16,7 @@
         size="medium"
       >
         <el-form-item
-          label="User Name"
+          :label="$t('user.username')"
           style="width:100%;"
           prop="username"
           :error="modelstate['UserName']"
@@ -22,7 +25,7 @@
         </el-form-item>
         <div class="row">
           <el-form-item
-            label="First Name"
+            :label="$t('user.firstname')"
             class="col-md-6"
             prop="firstname"
             :error="modelstate['FirstName']"
@@ -30,7 +33,7 @@
             <el-input v-model="newUser.firstname"></el-input>
           </el-form-item>
           <el-form-item
-            label="Last Name"
+            :label="$t('user.lastname')"
             class="col-md-6"
             prop="lastname"
             :error="modelstate['LastName']"
@@ -40,7 +43,7 @@
         </div>
         <div class="row">
           <el-form-item
-            label="Password"
+            :label="$t('password')"
             class="col-md-6"
             prop="password"
             :error="modelstate['Password']"
@@ -48,15 +51,12 @@
             <el-input v-model="newUser.password" show-password></el-input>
           </el-form-item>
           <el-form-item
-            label="Confirm Password"
+            :label="$t('confirmPassword')"
             class="col-md-6"
             prop="confirmPassword"
             :error="modelstate['ConfirmPassword']"
           >
-            <el-input
-              v-model="newUser.confirmPassword"
-              show-password
-            ></el-input>
+            <el-input v-model="newUser.confirmPassword" show-password></el-input>
           </el-form-item>
         </div>
 
@@ -66,7 +66,7 @@
 
         <el-card :body-style="{ padding: '0px' }">
           <div slot="header" class="clearfix">
-            <span>Gate Table</span>
+            <span>{{$t('gate.table')}}</span>
           </div>
 
           <Datatable
@@ -90,30 +90,31 @@
               :reserve-selection="true"
               width="55"
               property="checked"
+              align="center"
             ></el-table-column>
 
             <el-table-column
               min-width="100"
-              label="Arabic Name"
+              :label="$t('gate.nameAr')"
               property="nameAr"
               sortable
+              align="center"
             ></el-table-column>
 
             <el-table-column
               min-width="100"
-              label="Engilsh Name"
+              :label="$t('gate.nameEn')"
               property="nameEn"
               sortable
+              align="center"
             ></el-table-column>
           </Datatable>
         </el-card>
 
         <div class="mt centered">
           <el-form-item>
-            <el-button type="primary" @click="submitForm('newUserForm')"
-              >Create</el-button
-            >
-            <el-button @click="$router.push({ name: 'user' })">Exit</el-button>
+            <el-button type="primary" @click="submitForm('newUserForm')">{{$t('create')}}</el-button>
+            <el-button @click="$router.push({ name: 'user' })">{{$t('cancel')}}</el-button>
           </el-form-item>
         </div>
       </el-form>
@@ -122,34 +123,44 @@
 </template>
 
 <script>
-import Datatable from 'admin/components/elements/Datatable';
+import Datatable from "admin/components/elements/Datatable";
 
-import gateSerivce from 'admin/services/gate-service';
-import userSerivce from 'admin/services/user-service';
+import gateSerivce from "admin/services/gate-service";
+import userSerivce from "admin/services/user-service";
 
 export default {
-  name: 'CreateUser',
+  name: "CreateUser",
   components: {
     Datatable
   },
   data() {
     var validatePass = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('Please input the password'));
+      if (value === "") {
+        callback(
+          new Error(
+            this.$t("validate.missInput", {
+              input: this.$t("password").toLowerCase()
+            })
+          )
+        );
       } else {
-        if (this.newUser.confirmPassword !== '') {
-          this.$refs.newUserForm.validateField('confirmPassword');
+        if (this.newUser.confirmPassword !== "") {
+          this.$refs.newUserForm.validateField("confirmPassword");
         }
         callback();
       }
     };
     var validatePass2 = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('Please input the password again'));
-      } else if (value !== this.newUser.password) {
+      if (value === "") {
         callback(
-          new Error('The password and confirmation password do not match!')
+          new Error(
+            this.$t("validate.missInput", {
+              input: this.$t("confirmPassword").toLowerCase()
+            })
+          )
         );
+      } else if (value !== this.newUser.password) {
+        callback(new Error(this.$t("validate.missMatchPass")));
       } else {
         callback();
       }
@@ -162,70 +173,76 @@ export default {
       selectedList: [],
       modelstate: {},
       newUser: {
-        username: '',
-        firstname: '',
-        lastname: '',
-        password: '',
-        confirmPassword: '',
-        addedGateList: ''
+        username: "",
+        firstname: "",
+        lastname: "",
+        password: "",
+        confirmPassword: "",
+        addedGateList: ""
       },
       rules: {
         username: [
           {
             required: true,
-            message: 'Please input user name',
-            trigger: 'blur'
+            message: this.$t("validate.missInput", {
+              input: this.$t("user.username").toLowerCase()
+            }),
+            trigger: "blur"
           },
           {
             min: 8,
             max: 20,
-            message: 'Length should be 8 to 20',
-            trigger: 'blur'
+            message: this.$t("validate.length", { from: "8", to: "20" }),
+            trigger: "blur"
           }
         ],
         firstname: [
           {
             required: true,
-            message: 'Please input first name',
-            trigger: 'blur'
+            message: this.$t("validate.missInput", {
+              input: this.$t("user.firstname").toLowerCase()
+            }),
+            trigger: "blur"
           },
           {
             min: 3,
             max: 20,
-            message: 'Length should be 3 to 20',
-            trigger: 'blur'
+            message: this.$t("validate.length", { from: "3", to: "20" }),
+            trigger: "blur"
           }
         ],
         lastname: [
           {
             required: true,
-            message: 'Please input last name',
-            trigger: 'blur'
+            message: this.$t("validate.missInput", {
+              input: this.$t("user.lastname").toLowerCase()
+            }),
+            trigger: "blur"
           },
           {
             min: 5,
             max: 20,
-            message: 'Length should be 5 to 20',
-            trigger: 'blur'
+            message: this.$t("validate.length", { from: "5", to: "20" }),
+            trigger: "blur"
           }
         ],
         password: [
           {
             min: 8,
             max: 20,
-            message: 'Length should be 8 to 20',
-            trigger: 'blur'
+            message: this.$t("validate.length", { from: "5", to: "20" }),
+            trigger: "blur"
           },
-          { validator: validatePass, trigger: 'blur' }
+          { validator: validatePass, trigger: "blur" }
         ],
         confirmPassword: [
           {
             min: 8,
             max: 20,
-            message: 'Length should be 8 to 20',
-            trigger: 'blur'
+            message: this.$t("validate.length", { from: "8", to: "20" }),
+            trigger: "blur"
           },
-          { validator: validatePass2, trigger: 'blur' }
+          { validator: validatePass2, trigger: "blur" }
         ]
       }
     };
@@ -247,11 +264,11 @@ export default {
             .then(res => {
               if (res.status == 200) {
                 this.$notify({
-                  group: 'main',
-                  type: 'success',
+                  group: "main",
+                  type: "success",
                   text: res.data
                 });
-                this.$router.push({ name: 'user' });
+                this.$router.push({ name: "user" });
               }
             })
             .catch(error => {
@@ -262,7 +279,7 @@ export default {
               }
             });
         } else {
-          console.log('error submit!!');
+          console.error("error submit!!");
           return false;
         }
       });
@@ -297,16 +314,11 @@ export default {
     handleSelectionChange(selection, item) {
       this.selectedGateList = selection;
     },
-    handleSelect(selection, row) {
-      // setTimeout(() => {
-      //   this.selectGate(row);
-      // }, 0);
-    },
     handleSelectAll(selection) {
-      console.groupCollapsed('handle Select All');
+      console.groupCollapsed("handle Select All");
       console.table(selection);
 
-      console.time('handle Select All');
+      console.time("handle Select All");
       this.loader = true;
       this.selectedList = [];
 
@@ -318,57 +330,24 @@ export default {
 
       this.loader = false;
 
-      console.groupCollapsed('Arrays');
-      console.table(this.$refs['dataTable'].$refs['table'].selection);
+      console.groupCollapsed("Arrays");
+      console.table(this.$refs["dataTable"].$refs["table"].selection);
       console.table(this.addedGateList);
       console.table(this.removedGateList);
-      console.groupEnd('Arrays');
-      console.timeEnd('handle Select All');
-      console.groupEnd('handle Select All');
+      console.groupEnd("Arrays");
+      console.timeEnd("handle Select All");
+      console.groupEnd("handle Select All");
     },
     handleRowClick(row, column, event) {
-      this.$refs['dataTable'].$refs['table'].toggleRowSelection(row);
-      // setTimeout(() => {
-      //   this.selectGate(row);
-      // }, 0);
+      this.$refs["dataTable"].$refs["table"].toggleRowSelection(row);
     },
     toggleSelection(rows) {
       if (rows) {
         rows.forEach(row => {
-          this.$refs['dataTable'].$refs['table'].toggleRowSelection(row);
+          this.$refs["dataTable"].$refs["table"].toggleRowSelection(row);
         });
       }
     }
-    // selectGate(row) {
-    //   console.groupCollapsed("Select Gate");
-
-    //   console.time("select Gate");
-
-    //   const isCheck = this.selectedGateList.includes(row);
-
-    //   if (isCheck) {
-    //     if (row.checked) {
-    //       this.removedGateList.splice(this.removedGateList.indexOf(row.id));
-    //     } else {
-    //       this.addedGateList.push(row.id);
-    //     }
-    //   } else {
-    //     if (row.checked) {
-    //       this.removedGateList.push(row.id);
-    //     } else {
-    //       this.addedGateList.splice(this.addedGateList.indexOf(row.id));
-    //     }
-    //   }
-
-    //   console.timeEnd("select Gate");
-
-    //   console.groupCollapsed("Arrays");
-    //   console.table(this.selectedGateList);
-    //   console.table(this.addedGateList);
-    //   console.table(this.removedGateList);
-    //   console.groupEnd("Arrays");
-    //   console.groupEnd("Select Gate");
-    // }
   }
 };
 </script>

@@ -1,10 +1,14 @@
 {
-    "password":"Password",
-    "confirmPassword":"Confirm Password",
-    "add":"Add",
-    "edit":"Edit",
-    "cancel":"Cancel",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "add": "Add",
+    "edit": "Edit",
+    "cancel": "Cancel",
+    "create": "Create",
+    "delete": "Comfirm Delete",
+    "ok": "Ok",
     "user": {
+        "user": "user",
         "username": "User Name",
         "firstname": "First Name",
         "lastname": "Last Name",
@@ -15,10 +19,12 @@
             "block": "Block"
         },
         "table": "User Table",
-        "new": "New User"
+        "new": "New User",
+        "edit": "Edit User"
 
     },
     "gate": {
+        "gate": "gate",
         "username": "User Name",
         "nameAr": "Arabic Name",
         "nameEn": "Engilsh Name",
@@ -37,6 +43,12 @@
         "acountsManagment": "Acounts Managment",
         "users": "Users",
         "gates": "Gates"
-    }
+    },
+    "validate": {
+        "length": "Length should be {from} to {to}",
+        "missInput": "Please input {input}",
+        "missMatchPass": "The password and confirmation password do not match!"
+    },
+    "confirmDelete": "This will permanently delete the {0}. Continue?"
 
 }
