@@ -7,12 +7,17 @@ import {
     SET_EDITUSER,
     SET_CURRENT_PAGE,
     SET_PAGE_SIZE,
-    SET_TOTAL_IN_SERVER
+    SET_TOTAL_IN_SERVER,
+    SET_CURRENTUSER
 } from '../mutation-types';
 
 import UserService from '../../services/user-service';
 
 const INITIAL_STATE = {
+    currentUser: {
+        firstname: '',
+        lastname: ''
+    },
     users: [],
     editUser: null,
     tableOptions: {
@@ -25,6 +30,8 @@ const INITIAL_STATE = {
 const state = {...INITIAL_STATE };
 
 const getters = {
+    currentUser: state => state.currentUser,
+
     users: state => state.users,
 
     editUser: state => state.editUser,
@@ -35,6 +42,9 @@ const getters = {
 };
 
 const mutations = {
+    [SET_CURRENTUSER]: (state, currentUser) => {
+        state.currentUser = currentUser;
+    },
     [SET_USERS]: (state, users) => {
         state.users = users;
     },
@@ -57,11 +67,25 @@ const mutations = {
         state.tableOptions.currentPage = currentPage;
     },
     [DELETE_USER]: (state, userId) => {
-        state.users.splice(state.users.map(item => item.id).indexOf(userId), 1);
+        // state.users.splice(state.users.map(item => item.id).indexOf(userId), 1);
+        state.users.splice(state.users.findIndex(item => item.id == userId), 1);
+
     }
 };
 
 const actions = {
+
+    getUserInfo: async({ commit }) => {
+        console.log("getUserInfo")
+        await UserService.getUserInfo().then(res => {
+            console.log(res);
+
+            if (res.status == 200) {
+                commit(SET_CURRENTUSER, res.data);
+            }
+        })
+    },
+
     fetchPage: async({ commit }, page) => {
         commit(SET_CURRENT_PAGE, page);
         await UserService.fetch({

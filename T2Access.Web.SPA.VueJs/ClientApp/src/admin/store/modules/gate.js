@@ -59,7 +59,8 @@ const mutations = {
         state.tableOptions.currentPage = currentPage;
     },
     [DELETE_GATE]: (state, gateId) => {
-        state.gates.splice(state.gates.map(item => item.id).indexOf(gateId), 1);
+        // state.gates.splice(state.gates.map(item => item.id).indexOf(gateId), 1);
+        state.gates.splice(state.gates.findIndex(item => item.id == gateId), 1);
     }
 };
 

@@ -104,7 +104,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column :label="$t('actions')" property="actions" align="center">
+      <el-table-column min-width="150" :label="$t('actions')" property="actions" align="center">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -119,6 +119,13 @@
             type="danger"
             icon="el-icon-delete"
             @click="handleDelete(scope.row.id)"
+          ></el-button>
+          <el-button
+            size="mini"
+            class="btn"
+            type="warning"
+            icon="el-icon-key"
+            @click="handleResetPassword(scope.row)"
           ></el-button>
         </template>
       </el-table-column>
@@ -245,6 +252,16 @@ export default {
             this.$notify({ group: "main", type: "error", text: message });
           });
       });
+    },
+    handleResetPassword(row) {
+      console.group("handle Reset Password");
+      console.log(row);
+      this.$router.push({
+        name: "ResetPasswordGate",
+        params: { gate: { id: row.id, userName: row.userName } }
+      });
+
+      console.groupEnd("handle Reset Password");
     },
     handleSortChange({ prop, order }) {
       console.groupCollapsed("handle Sort Change");

@@ -107,7 +107,11 @@
 
         <div class="mt centered">
           <el-form-item>
-            <el-button type="primary" @click="submitForm('editUser')">{{$t('edit')}}</el-button>
+            <el-button
+              :loading="isLoading"
+              type="primary"
+              @click="submitForm('editUser')"
+            >{{$t('edit')}}</el-button>
             <el-button @click="$router.push({ name: 'user' })">{{$t('cancel')}}</el-button>
           </el-form-item>
         </div>
@@ -140,6 +144,7 @@ export default {
       gateList: [],
       page: 1,
       loader: false,
+      isLoading: false,
       rules: {
         firstName: [
           {
@@ -194,6 +199,8 @@ export default {
     },
     submitForm(formName) {
       console.groupCollapsed("Submit Form");
+
+      this.isLoading = true;
       this.modelstate = {};
       this.$refs[formName].validate(valid => {
         if (valid) {
@@ -224,6 +231,9 @@ export default {
                   JSON.stringify(error.response.data)
                 );
               }
+            })
+            .finally(() => {
+              this.isLoading = false;
             });
           console.timeEnd("Edit User");
         } else {

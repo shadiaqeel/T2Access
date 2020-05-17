@@ -114,7 +114,7 @@ namespace T2Access.Web.SPA.VueJs.Controllers
         }
 
 
-        public IActionResult logout()
+        public IActionResult Logout()
         {
             HttpContext.Session.Clear();
 
@@ -122,6 +122,19 @@ namespace T2Access.Web.SPA.VueJs.Controllers
             return Redirect($"/{Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName}/Account/login");
         }
 
+        // ====================================== Current User Information ============================
+
+            [HttpGet]
+        public IActionResult GetUserInfo()
+        {
+
+            return Ok(new
+            {
+                firstname = HttpContext.Session.GetString("FirstName"),
+                lastname = HttpContext.Session.GetString("LastName")
+            });
+
+        }
 
         // ====================================== Relogin =============================================
 

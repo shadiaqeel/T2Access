@@ -182,10 +182,38 @@ namespace T2Access.Web.SPA.VueJs.Areas.Admin
             }
 
 
+        }
+
+        // ====================================== Reset User Password =============================================
+
+        #region Reset Password 
+
+
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword([FromBody]ResetPasswordModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState.GetModelStateErrors());
+            }
 
 
 
+            using (var response = await _httpService.PutAsync($"ResetPassword?id={model.Id}", model, token: HttpContext.Session.GetString("Token")))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    return Ok(await response.Content.ReadAsStringAsync());
+                }
+                else
+                {
+
+                    return BadRequest(await response.Content.ReadAsStringAsync());
+                }
+            }
 
         }
+        #endregion
     }
 }

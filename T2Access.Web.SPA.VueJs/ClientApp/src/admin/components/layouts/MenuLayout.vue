@@ -1,8 +1,5 @@
 <template>
   <div>
-    <!--<link rel="icon" type="image/png" href="~/images/admin/favicon.PNG" />-->
-    <!--<link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />-->
-
     <section id="container">
       <!-- TOP BAR CONTENT & NOTIFICATIONS -->
       <!--header start-->
@@ -12,7 +9,7 @@
             class="fa fa-bars tooltips"
             data-placement="right"
             data-original-title="Toggle Navigation"
-            @click="isActive = !isActive"
+            @click="isCollapse = !isCollapse"
           ></div>
           <!--logo-->
           <router-link :to="{ name: 'home', params: { locale: locale.code } }" class="logo">
@@ -61,14 +58,14 @@
       <!--MAIN SIDEBAR MENU -->
       <!--sidebar start-->
       <aside>
-        <div id="menu" :class="[{ active:  isActive }, 'nav-collapse']">
+        <div id="menu" :class="[{ active:  isCollapse }, 'nav-collapse']">
           <el-menu
             :router="true"
             :default-active="currentPage"
             class="el-menu-vertical-demo"
             @open="handleOpen"
             @close="handleClose"
-            :collapse="!isActive "
+            :collapse="!isCollapse "
             collapse-transition
             background-color="#2f323a"
             text-color="#fff"
@@ -79,7 +76,17 @@
     margin-top: 60px;
   "
           >
-            <br />
+            <div class="centered">
+              <br />
+              <el-avatar :size="50" icon="el-icon-user-solid"></el-avatar>
+              <br />
+              <transition name="list">
+                <div v-show="isCollapse" class="user-info">
+                  <h5 class="mt">{{currentUser.firstname}} {{currentUser.lastname}}</h5>
+                  <hr />
+                </div>
+              </transition>
+            </div>
 
             <el-menu-item index="home" :route="{ name: 'home', params: { locale: locale.code } }">
               <i class="el-icon-s-home"></i>
@@ -94,7 +101,7 @@
                 <el-menu-item
                   index="user"
                   :route="{ name: 'user', params: { locale: locale.code } }"
-                >{{ $t('nav.users') }}</el-menu-item>
+                >{{ $t('nav.users')}}</el-menu-item>
                 <el-menu-item
                   index="gate"
                   :route="{ name: 'gate', params: { locale: locale.code } }"
@@ -105,7 +112,7 @@
         </div>
       </aside>
     </section>
-    <section id="main-content" :class="{ active:  isActive }">
+    <section id="main-content" :class="{ active:  isCollapse }">
       <section class="wrapper">
         <slot />
       </section>
@@ -139,7 +146,7 @@ export default {
   name: "MenuLayout",
   data() {
     return {
-      isActive: true,
+      isCollapse: true,
       path: "/",
       locales: SUPPORTED_LOCALES
     };
@@ -150,12 +157,18 @@ export default {
     },
     locale() {
       return this.$store.getters.locale;
+    },
+    currentUser() {
+      console.log(this.$store.getters);
+      return this.$store.getters["user/currentUser"];
     }
   },
   mounted() {
     // let externalScript = document.createElement("script");
     // externalScript.setAttribute("src", "/js/admin/en/scripts.js");
     // document.body.appendChild(externalScript);
+
+    this.$store.dispatch("user/getUserInfo");
   },
   methods: {
     handleOpen(key, keyPath) {
@@ -168,7 +181,7 @@ export default {
       return this.$router.resolve({ name: _name });
     },
     toggle: function() {
-      this.isActive = !this.isActive;
+      this.isCollapse = !this.isCollapse;
     },
     getLink(code) {
       if (this.locale.code != code)
@@ -271,6 +284,24 @@ html[dir="rtl"] {
   }
 }
 
+.user-info h5 {
+  color: white;
+}
+
+.list-enter,
+.list-leave-to {
+  visibility: hidden;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+}
+
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.3s ease-in-out;
+}
+
 //  #main-content {
 //   margin-left: 63px;
 //   transition: all 0.3s ease-in-out;
@@ -281,26 +312,27 @@ html[dir="rtl"] {
 //   transition: all 0.3s ease-in-out;
 // }
 // $screen-md-min
-@media only screen and (max-width: 768px) {
-  #menu .el-menu {
-    display: none;
-  }
 
-  #menu.active {
-    margin: 70px 0;
-    visibility: visible;
-    opacity: 0.98;
-    transition: all 0.5s ease-out;
+// @media only screen and (max-width: 768px) {
+//   #menu .el-menu {
+//     display: none;
+//   }
 
-    .el-menu-vertical .el-menu-item {
-      text-align: center;
-      float: none;
-      display: block;
-      height: 100%;
-      width: 100%;
-      border-top: 1px solid #eaeaeb;
-      font-size: 18px;
-    }
-  }
-}
+//   #menu.active {
+//     margin: 70px 0;
+//     visibility: visible;
+//     opacity: 0.98;
+//     transition: all 0.5s ease-out;
+
+//     .el-menu-vertical .el-menu-item {
+//       text-align: center;
+//       float: none;
+//       display: block;
+//       height: 100%;
+//       width: 100%;
+//       border-top: 1px solid #eaeaeb;
+//       font-size: 18px;
+//     }
+//   }
+// }
 </style>

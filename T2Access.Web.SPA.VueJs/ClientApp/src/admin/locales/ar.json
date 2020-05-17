@@ -1,3 +1,90 @@
 {
-    "message": "مرحبا"
+    "password": "كلمة السر",
+    "confirmPassword": "تأكيد كلمة السر",
+    "add": "اضافه",
+    "edit": "تعديل",
+    "cancel": "الغاء",
+    "create": "انشاء",
+    "delete": "حذف",
+    "ok": "تأكيد",
+    "reset": "اعادة تعيين",
+    "user": {
+        "user": "مستخدم",
+        "username": "اسم المستخدم",
+        "firstname": "الاسم الأول",
+        "lastname": "الاسم الأخير",
+        "status": "الحاله",
+        "userStatus": {
+            "regular": "نشط",
+            "admin": "مشرف",
+            "block": "محظور"
+        },
+        "table": "جدول المستخدميين",
+        "new": "مستخدم جديد  ",
+        "edit": "تعديل المستخدم"
+
+
+
+    },
+    "gate": {
+        "gate": "بوابه",
+        "username": "اسم المستخدم",
+        "nameAr": "الاسم بالعربي",
+        "nameEn": "الاسم بالانجليزي",
+        "status": "الحاله",
+        "gateStatus": {
+            "regular": "نشط",
+            "block": "محظور"
+        },
+        "table": "جدول البوابات",
+        "add": "  اضافة بوابه "
+
+
+
+
+
+    },
+    "actions": "اجراءات",
+    "nav": {
+        "logout": "تسجيل الخروج",
+        "dashboard": "الصفحه الرئيسيه",
+        "acountsManagment": "إدارة الحسابات",
+        "users": "المستخدمين",
+        "gates": "البوابات"
+    },
+    "validate": {
+        "length": "يجب ان يكون طول المدخل من {from} الى {to}",
+        "missInput": "الرجاء ادخل  {input}",
+        "missMatchPass": "كلمة السر و تاكيد كلمة  السر غير متطابقان"
+
+    },
+    "confirmDelete": "هل تريد حذف ال{0} نهائيا ؟",
+    "el": {
+
+        "pagination": {
+            "goto": "أذهب إلى",
+            "pagesize": "/صفحة",
+            "total": "الكل {total}",
+            "pageClassifier": ""
+        },
+        "messagebox": {
+            "title": "العنوان",
+            "confirm": "موافق",
+            "cancel": "إلغاء",
+            "error": "مدخل غير صحيح"
+        },
+
+        "table": {
+            "emptyText": "لايوجد بيانات",
+            "confirmFilter": "تأكيد",
+            "resetFilter": "حذف",
+            "clearFilter": "الكل",
+            "sumText": "المجموع"
+        }
+    }
+
+
+
+
+
 }

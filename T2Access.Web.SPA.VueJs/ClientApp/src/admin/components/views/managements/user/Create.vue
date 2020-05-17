@@ -113,7 +113,11 @@
 
         <div class="mt centered">
           <el-form-item>
-            <el-button type="primary" @click="submitForm('newUserForm')">{{$t('create')}}</el-button>
+            <el-button
+              :loading="isLoading"
+              type="primary"
+              @click="submitForm('newUserForm')"
+            >{{$t('create')}}</el-button>
             <el-button @click="$router.push({ name: 'user' })">{{$t('cancel')}}</el-button>
           </el-form-item>
         </div>
@@ -169,6 +173,7 @@ export default {
     return {
       page: 1,
       loader: false,
+      isLoading: false,
       gateList: [],
       selectedList: [],
       modelstate: {},
@@ -253,12 +258,11 @@ export default {
   methods: {
     submitForm(formName) {
       this.modelstate = {};
+      this.isLoading = true;
 
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.newUser.addedGateList = this.selectedList
-            .map(gate => gate.id)
-            .toString();
+          this.newUser.addedGateList = this.selectedList.toString();
           userSerivce
             .create(this.newUser)
             .then(res => {
@@ -277,9 +281,14 @@ export default {
                   JSON.stringify(error.response.data)
                 );
               }
+            })
+            .finally(() => {
+              this.isLoading = false;
             });
         } else {
           console.error("error submit!!");
+          this.isLoading = false;
+
           return false;
         }
       });
@@ -314,6 +323,11 @@ export default {
     handleSelectionChange(selection, item) {
       this.selectedGateList = selection;
     },
+    handleSelect(selection, row) {
+      setTimeout(() => {
+        this.selectGate(row);
+      }, 0);
+    },
     handleSelectAll(selection) {
       console.groupCollapsed("handle Select All");
       console.table(selection);
@@ -333,13 +347,15 @@ export default {
       console.groupCollapsed("Arrays");
       console.table(this.$refs["dataTable"].$refs["table"].selection);
       console.table(this.addedGateList);
-      console.table(this.removedGateList);
       console.groupEnd("Arrays");
       console.timeEnd("handle Select All");
       console.groupEnd("handle Select All");
     },
     handleRowClick(row, column, event) {
       this.$refs["dataTable"].$refs["table"].toggleRowSelection(row);
+      setTimeout(() => {
+        this.selectGate(row);
+      }, 0);
     },
     toggleSelection(rows) {
       if (rows) {
@@ -347,6 +363,29 @@ export default {
           this.$refs["dataTable"].$refs["table"].toggleRowSelection(row);
         });
       }
+    },
+    selectGate(row) {
+      console.groupCollapsed("Select Gate");
+
+      console.time("select Gate");
+
+      const isCheck = this.selectedGateList.includes(row);
+
+      if (isCheck) {
+        if (row.checked) {
+          this.addedGateList.push(row.id);
+        }
+      } else {
+        this.addedGateList.splice(this.addedGateList.indexOf(row.id));
+      }
+
+      console.timeEnd("select Gate");
+      console.groupCollapsed("Arrays");
+      console.table(this.selectedGateList);
+      console.table(this.addedGateList);
+      console.table(this.removedGateList);
+      console.groupEnd("Arrays");
+      console.groupEnd("Select Gate");
     }
   }
 };

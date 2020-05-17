@@ -59,7 +59,11 @@
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="dialogFormVisible = false">{{$t('cancel')}}</el-button>
-      <el-button type="primary" @click="submitForm('editGateForm')">{{$t('edit')}}</el-button>
+      <el-button
+        :loading="isLoading"
+        type="primary"
+        @click="submitForm('editGateForm')"
+      >{{$t('edit')}}</el-button>
     </span>
   </el-dialog>
 </template>
@@ -77,6 +81,7 @@ export default {
       gateStatus: gateStatus,
       dialogFormVisible: true,
       formLabelWidth: "120px",
+      isLoading: false,
       modelstate: {},
       rules: {
         username: [
@@ -127,7 +132,7 @@ export default {
   methods: {
     submitForm(formName) {
       this.modelstate = {};
-
+      this.isLoading = true;
       this.$refs[formName].validate(valid => {
         if (valid) {
           console.log(this.editGate);
@@ -147,6 +152,9 @@ export default {
                   JSON.stringify(error.response.data)
                 );
               }
+            })
+            .finally(() => {
+              this.isLoading = false;
             });
         } else {
           this.$notify({
@@ -154,6 +162,7 @@ export default {
             type: "error",
             text: "error submit!!"
           });
+          this.isLoading = false;
 
           return false;
         }

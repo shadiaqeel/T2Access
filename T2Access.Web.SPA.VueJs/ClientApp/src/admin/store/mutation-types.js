@@ -1,5 +1,6 @@
 // User Module
 export const SET_USERS = 'SET_USERS';
+export const SET_CURRENTUSER = 'SET_CURRENTUSER';
 export const SET_USER = 'SET_USER';
 export const SET_EDITUSER = 'SET_EDITUSER';
 export const CREATE_USER = 'CREATE_USER';

@@ -1,3 +1,77 @@
 {
-    "message": "hello  !!"
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "add": "Add",
+    "edit": "Edit",
+    "cancel": "Cancel",
+    "create": "Create",
+    "delete": "Comfirm Delete",
+    "ok": "Ok",
+    "reset": "Reset",
+    "user": {
+        "user": "user",
+        "username": "User Name",
+        "firstname": "First Name",
+        "lastname": "Last Name",
+        "status": "Status",
+        "userStatus": {
+            "regular": "Regular",
+            "admin": "Admin",
+            "block": "Block"
+        },
+        "table": "User Table",
+        "new": "New User",
+        "edit": "Edit User"
+
+    },
+    "gate": {
+        "gate": "gate",
+        "username": "User Name",
+        "nameAr": "Arabic Name",
+        "nameEn": "Engilsh Name",
+        "status": "Status",
+        "gateStatus": {
+            "regular": "Regular",
+            "block": "Block"
+        },
+        "table": "Gate Table",
+        "add": "Add Gate"
+    },
+    "actions": "Actions",
+    "nav": {
+        "logout": "logout",
+        "dashboard": "Dashboard",
+        "acountsManagment": "Acounts Managment",
+        "users": "Users",
+        "gates": "Gates"
+    },
+    "validate": {
+        "length": "Length should be {from} to {to}",
+        "missInput": "Please input {input}",
+        "missMatchPass": "The password and confirmation password do not match!"
+    },
+    "confirmDelete": "This will permanently delete the {0}. Continue?",
+    "el": {
+
+        "pagination": {
+            "goto": "Go to",
+            "pagesize": "/page",
+            "total": "Total {total}",
+            "pageClassifier": ""
+        },
+        "messagebox": {
+            "title": "Message",
+            "confirm": "OK",
+            "cancel": "Cancel",
+            "error": "Illegal input"
+        },
+        "table": {
+            "emptyText": "No Data",
+            "confirmFilter": "Confirm",
+            "resetFilter": "Reset",
+            "clearFilter": "All",
+            "sumText": "Sum"
+        }
+    }
+
 }
